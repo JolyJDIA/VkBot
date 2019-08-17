@@ -51,6 +51,11 @@
             <artifactId>annotations</artifactId>
             <version>LATEST</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
 
