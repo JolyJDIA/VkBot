@@ -15,6 +15,8 @@ import jolyjdia.bot.commands.HelpCommands;
 import jolyjdia.bot.commands.RankCommand;
 import jolyjdia.bot.commands.UpTimeCommand;
 import jolyjdia.bot.translator.YandexTraslate;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
