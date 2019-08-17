@@ -2,7 +2,6 @@ package api;
 
 import api.entity.User;
 import api.file.FileCustom;
-import api.module.Reload;
 import api.permission.PermissionGroup;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public final class ProfileList extends FileCustom implements Reload, JsonDeserializer<Map<Integer, Map<Integer, User>>> {
+public final class ProfileList extends FileCustom implements JsonDeserializer<Map<Integer, Map<Integer, User>>> {
     private final Gson gson;
     private final Map<Integer, Map<Integer, User>> map = new HashMap<>();
 
@@ -32,13 +31,6 @@ public final class ProfileList extends FileCustom implements Reload, JsonDeseria
                 .registerTypeAdapter(Map.class, this)
                 .setPrettyPrinting()
                 .create();
-        this.load();
-    }
-
-    @Override
-    public void reload() {
-        this.save();
-        this.map.clear();
         this.load();
     }
 
