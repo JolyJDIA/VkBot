@@ -11,7 +11,7 @@ public class EditTitleChatCommand extends Command {
     public EditTitleChatCommand() {
         super("/settitle <Название>", "изменить название беседы");
         setAlias("edittitle", "settitle");
-        setPermission("shallop.settitle", "У вас нет прав");
+        setPermission("roflanbot.settitle", "У вас нет прав");
     }
 
     @Override

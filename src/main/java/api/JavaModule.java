@@ -13,6 +13,7 @@ public class JavaModule {
     protected JavaModule() {
         modules.add(this);
     }
+
     public void onLoad() {}
     public void onReload() {}
 

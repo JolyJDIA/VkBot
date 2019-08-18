@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class TranslateCommand extends Command {
     private static final Pattern COMPILE = Pattern.compile("^[A-Za-z]+$");
 
-    public TranslateCommand() {
+    TranslateCommand() {
         super("/translate <Текст>",
                 "перевод текстов(Автоопределение языка)"
         );
