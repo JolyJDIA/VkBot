@@ -1,7 +1,6 @@
 package jolyjdia.bot;
 
 import api.ProfileList;
-import api.command.RegisterCommandList;
 import api.event.CallbackApiLongPollHandler;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -10,13 +9,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.groups.LongPollSettings;
 import jolyjdia.bot.calculate.Respondent;
-import jolyjdia.bot.commands.EditTitleChatCommand;
-import jolyjdia.bot.commands.HelpCommands;
-import jolyjdia.bot.commands.RankCommand;
-import jolyjdia.bot.commands.UpTimeCommand;
 import jolyjdia.bot.translator.YandexTraslate;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.PropertyConfigurator;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
@@ -66,10 +59,6 @@ public class Bot {
         handler.run();
     }
     private static void registerAll() {
-        RegisterCommandList.registerCommand(new HelpCommands());
-        RegisterCommandList.registerCommand(new UpTimeCommand());
-        RegisterCommandList.registerCommand(new EditTitleChatCommand());
-        RegisterCommandList.registerCommand(new RankCommand());
         new Respondent().onLoad();
         new YandexTraslate().onLoad();
 

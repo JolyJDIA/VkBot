@@ -5,17 +5,22 @@ import org.jetbrains.annotations.Contract;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class JavaModule {
+
+public class JavaModule {
     private static final Set<JavaModule> modules = new HashSet<>();
 
+    @Contract(pure = true)
     protected JavaModule() {
         modules.add(this);
     }
-    public abstract void onLoad();
+    public void onLoad() {}
+    public void onReload() {}
 
     @Contract(pure = true)
     public static int getModulesSize() {
         return modules.size();
     }
-
+    public static void reloadModule() {
+        modules.forEach(JavaModule::onReload);
+    }
 }

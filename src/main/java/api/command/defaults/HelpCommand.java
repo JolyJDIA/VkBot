@@ -1,4 +1,4 @@
-package jolyjdia.bot.commands;
+package api.command.defaults;
 
 import api.command.Command;
 import api.command.RegisterCommandList;
@@ -7,8 +7,8 @@ import api.utils.ObedientBot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-public class HelpCommands extends Command {
-    public HelpCommands() {
+public class HelpCommand extends Command {
+    public HelpCommand() {
         super("/info | info math",
                 "просмотреть информацию"
         );

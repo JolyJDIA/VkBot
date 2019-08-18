@@ -1,4 +1,4 @@
-package jolyjdia.bot.commands;
+package api.command.defaults;
 
 import api.command.Command;
 import api.entity.User;

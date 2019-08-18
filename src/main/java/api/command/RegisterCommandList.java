@@ -1,5 +1,6 @@
 package api.command;
 
+import api.command.defaults.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,6 +10,13 @@ import java.util.Set;
 
 public class RegisterCommandList {
     private static final Set<Command> commands = new HashSet<>();//Классы уникальные
+    static {
+        registerCommand(new HelpCommand());
+        registerCommand(new ReloadCommand());
+        registerCommand(new RankCommand());
+        registerCommand(new EditTitleChatCommand());
+        registerCommand(new UpTimeCommand());
+    }
 
     public static void registerCommand(Command listener) {
         commands.add(listener);
