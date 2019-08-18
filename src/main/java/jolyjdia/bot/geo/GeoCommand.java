@@ -3,33 +3,37 @@ package jolyjdia.bot.geo;
 import api.command.Command;
 import api.entity.User;
 import api.utils.ObedientBot;
-import com.maxmind.geoip.Country;
-import com.maxmind.geoip.Location;
-import com.maxmind.geoip.LookupService;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.record.Country;
+import com.maxmind.geoip2.record.Location;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GeoCommand extends Command {
     private static final Pattern IPv4 =
             Pattern.compile("^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]{1,2})(\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]{1,2})){3}$");
-    private final LookupService serviceIp;
-    private final LookupService serviceCity;
 
-    GeoCommand(LookupService serviceIp, LookupService serviceCity) {
+    private final DatabaseReader reader;
+    GeoCommand(DatabaseReader reader) {
         super("/geo <IP>",
                 "узнать местоположение по айпи");
         setAlias("geo");
         setPermission("roflanbot.geo", "У вас нет прав");
-        this.serviceIp = serviceIp;
-        this.serviceCity = serviceCity;
+        this.reader = reader;
+
     }
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if (noPermission(sender)) {
-            return;
+          //  return;
         }
         if(args.length == 2) {
             Matcher matcher = IPv4.matcher(args[1]);
@@ -43,18 +47,23 @@ public class GeoCommand extends Command {
         }
     }
     @NotNull
-    private final String getInfo(@NonNls String host) {
-        @NonNls String text = "Информация по IP: " + host+ '\n';
+    public final String getInfo(String host) {
+        InetAddress ipAddress;
         try {
-            Country country = serviceIp.getCountry(host);
-            Location ip = serviceCity.getLocation(host);
-            text += "Страна: " + country.getCode() + ", " + country.getName() + '\n';
-            text += "Город: " + ip.city + '\n';
-            text += "Широта: " + ip.latitude+ '\n';
-            text += "Долгота: " + ip.longitude;
-        } catch (RuntimeException e) {
-            text += "\nНекоторый данные не удалось загрузить(";
+            ipAddress = InetAddress.getByName(host);
+            CityResponse response = reader.city(ipAddress);
+            Country country = response.getCountry();
+            Location location = response.getLocation();
+            @NonNls String info = "Страна: "+ country.getName()+ ", "+country.getIsoCode()+'\n';
+            info += "Город: "+ response.getCity().getName()+ '\n';
+            info += "Широта: "+ location.getLatitude()+ '\n';
+            info += "долгота: "+ location.getLongitude();
+            return info;
+        } catch (UnknownHostException | GeoIp2Exception e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return text;
+        return "Некоторый данные не удалось загрузить(";
     }
 }
