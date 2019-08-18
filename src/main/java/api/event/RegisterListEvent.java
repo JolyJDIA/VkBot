@@ -11,7 +11,7 @@ public class RegisterListEvent {
     private static final Set<Listener> listeners = new HashSet<>();//Классы уникальные
 
     public static void registerEvent(Listener listener) {
-        RegisterListEvent.listeners.add(listener);
+        listeners.add(listener);
     }
 
     @Contract(pure = true)
