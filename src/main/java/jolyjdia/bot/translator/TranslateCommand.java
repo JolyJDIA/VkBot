@@ -25,11 +25,12 @@ public class TranslateCommand extends Command {
     public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length >= 2) {
             Language lang = COMPILE.matcher(args[1]).matches() ? Language.RUSSIAN : Language.ENGLISH;
-            String translate = null;
+            @NonNls String translate = "язык " + lang.name() + "?\n" + "Перевод:\n";
             try {
-                translate = YandexTraslate.translate(lang, StringBind.toString(args));
+                translate += YandexTraslate.translate(lang, StringBind.toString(args));
             } catch (IOException e) {
                 ObedientBot.sendMessage("Ошибка", sender.getPeerId());
+                return;
             }
             ObedientBot.sendMessage(translate, sender.getPeerId());
         } else {
