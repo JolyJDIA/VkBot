@@ -18,16 +18,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class GeoCommand extends Command {
-/*
-    private static final Pattern IPv4 =
-            Pattern.compile("^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]{1,2})(\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]{1,2})){3}$");
-*/
-
     private final DatabaseReader reader;
     GeoCommand(DatabaseReader reader) {
-        super("/geo <IP>",
+        super("geo", "<IP>",
                 "узнать местоположение по айпи");
-        setAlias("geo");
         setPermission("roflanbot.geo", "У вас нет прав");
         this.reader = reader;
 
@@ -40,7 +34,7 @@ public class GeoCommand extends Command {
         if(args.length == 2) {
             ObedientBot.sendMessage(getInfo(args[1]), sender.getPeerId());
         } else {
-            ObedientBot.sendMessage(getUsageMessage(), sender.getPeerId());
+            ObedientBot.sendMessage(getArguments(), sender.getPeerId());
         }
     }
     @NotNull

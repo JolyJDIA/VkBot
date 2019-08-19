@@ -14,6 +14,8 @@ public class RegisterCommandList {
         registerCommand(new HelpCommand());
         registerCommand(new ReloadCommand());
         registerCommand(new RankCommand());
+        registerCommand(new SetPrefixCommand());
+        registerCommand(new SetSuffixCommand());
         registerCommand(new EditTitleChatCommand());
         registerCommand(new UpTimeCommand());
     }

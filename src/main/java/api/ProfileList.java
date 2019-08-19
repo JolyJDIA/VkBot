@@ -80,8 +80,14 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             e.printStackTrace();
         }
     }
+    private boolean hasUser(User user) {
+        return map.containsKey(user.getPeerId()) && map.get(user.getPeerId()).containsKey(user.getUserId());
+    }
     private boolean hasUser(int peerId, int userId) {
         return map.containsKey(peerId) && map.get(peerId).containsKey(userId);
+    }
+    private User getUser(User user) {
+        return map.get(user.getPeerId()).get(user.getUserId());
     }
 
     private User getUser(int peerId, int userId) {
@@ -100,6 +106,19 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         this.save();
         return user;
     }
+    public void setRank(User user, String rank) {
+        if(user == null) {
+            return;
+        }
+        Map<Integer, User> users = map.computeIfAbsent(user.getPeerId(), k -> new HashMap<>());
+        int userId = user.getUserId();
+        if (users.containsKey(userId)) {
+            users.get(userId).setGroup(rank);
+        } else {
+            users.put(userId, new User(user.getPeerId(), userId, rank));
+        }
+        this.save();
+    }
 
     public void setRank(int peerId, int userId, String rank) {
         Map<Integer, User> users = map.computeIfAbsent(peerId, k -> new HashMap<>());
@@ -107,6 +126,19 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             users.get(userId).setGroup(rank);
         } else {
             users.put(userId, new User(peerId, userId, rank));
+        }
+        this.save();
+    }
+    public void setPrefix(User user, String prefix) {
+        if(user == null) {
+            return;
+        }
+        int userId = user.getUserId();
+        Map<Integer, User> users = map.computeIfAbsent(user.getPeerId(), k -> new HashMap<>());
+        if (users.containsKey(userId)) {
+            users.get(userId).setPrefix(prefix);
+        } else {
+            users.put(userId, new User(user.getPeerId(), userId, PermissionGroup.DEFAULT, prefix));
         }
         this.save();
     }
@@ -120,6 +152,19 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         }
         this.save();
     }
+    public void setSuffix(User user, String suffix) {
+        if(user == null) {
+            return;
+        }
+        int userId = user.getUserId();
+        Map<Integer, User> users = map.computeIfAbsent(user.getPeerId(), k -> new HashMap<>());
+        if (users.containsKey(userId)) {
+            users.get(userId).setSuffix(suffix);
+        } else {
+            users.put(userId, new User(user.getPeerId(), userId, PermissionGroup.DEFAULT).setSuffix(suffix));
+        }
+        this.save();
+    }
 
     public void setSuffix(int peerId, int userId, String suffix) {
         Map<Integer, User> users = map.computeIfAbsent(peerId, k -> new HashMap<>());
@@ -128,6 +173,13 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         } else {
             users.put(userId, new User(peerId, userId, PermissionGroup.DEFAULT).setSuffix(suffix));
         }
+        this.save();
+    }
+    public void remove(User user) {
+        if (!map.containsKey(user.getPeerId())) {
+            return;
+        }
+        map.get(user.getPeerId()).remove(user.getUserId());
         this.save();
     }
 

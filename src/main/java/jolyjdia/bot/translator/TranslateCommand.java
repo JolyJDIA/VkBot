@@ -15,10 +15,11 @@ public class TranslateCommand extends Command {
     private static final Pattern COMPILE = Pattern.compile("^[A-Za-z]+$");
 
     TranslateCommand() {
-        super("/translate <Текст>",
+        super("translate",
+                "<Текст>",
                 "перевод текстов(Автоопределение языка)"
         );
-        setAlias("перевод", "translate");
+        setAlias("перевод");
     }
 
     @Override
@@ -34,7 +35,7 @@ public class TranslateCommand extends Command {
             }
             ObedientBot.sendMessage(translate, sender.getPeerId());
         } else {
-            ObedientBot.sendMessage("Использование: " + getUsageMessage(), sender.getPeerId());
+            ObedientBot.sendMessage("Использование: " + getArguments(), sender.getPeerId());
         }
     }
 }

@@ -10,21 +10,34 @@ import org.jetbrains.annotations.Contract;
 import java.util.Set;
 
 public abstract class Command {
-    private final String description;
-    private final String usageMessage;
+    private final String name;
+    private String description;
+    private String arguments;
     private Set<String> alias;
     private String permission;
     private String noPermissionMessage;
 
     @Contract(pure = true)
-    protected Command() {
-        this("", "");
+    protected Command(String name) {
+        this.name = name;
     }
 
     @Contract(pure = true)
-    protected Command(String usageMessage, String description) {
+    protected Command(String name, String arguments, String description) {
+        this.name = name;
         this.description = description;
-        this.usageMessage = usageMessage;
+        this.arguments = arguments;
+    }
+    @Contract(pure = true)
+    protected Command(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+    /**
+     * @return Название команды
+     */
+    public String getName() {
+        return name;
     }
 
     /**
@@ -48,8 +61,8 @@ public abstract class Command {
      * @return Использование команды
      */
     @Contract(pure = true)
-    public final String getUsageMessage() {
-        return usageMessage;
+    public final String getArguments() {
+        return arguments;
     }
     /**
      * @return Описание команды
@@ -60,7 +73,7 @@ public abstract class Command {
     }
 
     /**
-     * @return Возвращает множество активных псевдонимов этой команды
+     * @return Множество активных псевдонимов этой команды
      */
     @Contract(pure = true)
     public final Set<String> getAlias() {

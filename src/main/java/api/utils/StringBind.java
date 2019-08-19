@@ -1,7 +1,16 @@
 package api.utils;
 
+import api.entity.User;
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
+import com.vk.api.sdk.objects.messages.ConversationMember;
+import com.vk.api.sdk.objects.messages.responses.GetConversationMembersResponse;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public final class StringBind {
     @Contract(pure = true)
@@ -21,6 +30,28 @@ public final class StringBind {
             }
             builder.append(' ');
         }
+    }
+    @Nullable
+    public static Integer getUserId(@NotNull String s, @NotNull User sender) {
+        System.out.println(s);
+        try {
+            int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
+
+            GetConversationMembersResponse g = Bot.getVkApiClient().
+                    messages().getConversationMembers(Bot.getGroupActor(), sender.getPeerId()).execute();
+            if (g == null) {
+                ObedientBot.sendMessage("Упс, что-то пошло не так;( Обратитесь к администратору", sender.getPeerId());
+                return null;
+            }
+            Optional<ConversationMember> member = g.getItems().stream().filter(m ->
+                    m.getMemberId() == id).findFirst();
+            return member.map(ConversationMember::getMemberId).orElse(null);
+        } catch (ApiException | ClientException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            ObedientBot.sendMessage("Некорректный адрес пользователя", sender.getPeerId());
+        }
+        return null;
     }
     /**
      * @param a

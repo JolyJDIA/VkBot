@@ -9,10 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class HelpCommand extends Command {
     public HelpCommand() {
-        super("/info | info math",
-                "просмотреть информацию"
-        );
-        setAlias("info", "help", "?", "cmds");
+        super("help", "просмотреть информацию");
+        setAlias("info", "?", "cmds");
     }
 
     @Override
@@ -20,17 +18,21 @@ public class HelpCommand extends Command {
         if (args.length == 1) {
             StringBuilder builder = new StringBuilder();
             RegisterCommandList.getRegisteredCommands().stream()
-                    .filter(cmd -> !(cmd.getUsageMessage().isEmpty() && cmd.getDescription().isEmpty()))
-                    .forEach(cmd -> builder
-                            .append(cmd.getUsageMessage())
-                            .append(" - ")
-                            .append(cmd.getDescription())
-                            .append('\n'));
+                    .filter(cmd -> !cmd.getDescription().isEmpty())
+                    .forEach(cmd -> {
+                                builder.append('/').append(cmd.getName()).append(' ');
+                                if (cmd.getArguments() != null && !cmd.getArguments().isEmpty()) {
+                                    builder.append(cmd.getArguments());
+                                }
+                                builder.append(" - ")
+                                        .append(cmd.getDescription())
+                                        .append('\n');
+                            });
             ObedientBot.sendMessage(builder.toString(), sender.getPeerId());
         } else if (args.length == 2 && args[1].equalsIgnoreCase("math")) {
             ObedientBot.sendMessage("Потом", sender.getPeerId());
         } else {
-            ObedientBot.sendMessage("Использование: " + getUsageMessage(), sender.getPeerId());
+            ObedientBot.sendMessage("Использование: " + getArguments(), sender.getPeerId());
         }
     }
 }

@@ -9,10 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ReloadCommand extends Command {
     public ReloadCommand() {
-        super("/reload",
-                "перезагрузка"
-        );
-        setAlias("reload", "rl");
+        super("reload", "перезагрузка");
+        setAlias("rl");
         setPermission("roflanbot.reload", "У вас нет прав");
     }
 
