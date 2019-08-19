@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SetSuffixCommand extends Command {
     public SetSuffixCommand() {
-        super("setsuffix", "[Адрес пользователя] <Суффикс>", "изменить суффикс пользователя");
+        super("setsuffix", "[пользователь] <суффикс>", "изменить суффикс пользователя");
     }
 
     @Override

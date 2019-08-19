@@ -63,6 +63,7 @@ public class Bot {
         new Respondent().onLoad();
         new YandexTraslate().onLoad();
         new GeoLoad().onLoad();
+       // new NeuralNetrwork().onLoad();
 
     }
 

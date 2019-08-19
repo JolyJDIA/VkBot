@@ -20,6 +20,7 @@ import com.vk.api.sdk.objects.board.TopicComment;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.wall.Wallpost;
 import jolyjdia.bot.Bot;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,15 +32,9 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         super(client, actor);
     }
 
-    /**
-     * Новое сообщение в чате
-     * @param groupId Айди группы(бота)
-     * @param msg Класс сообщения
-     */
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
-        String text = msg.getText();
-        System.out.println(msg);
+        @NonNls String text = msg.getText();//УБрать аннотацию
         if(!text.isEmpty() && (text.charAt(0) == '/' || text.charAt(0) == '!')) {//Проверяю первый символ(startsWith abort)
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
             User user = Bot.getProfileList().get(msg.getPeerId(), msg.getFromId());
@@ -51,16 +46,16 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                             && c.getAlias().stream().anyMatch(e -> e.equalsIgnoreCase(args[0])))
                     .findFirst()
                     .ifPresent(c -> c.execute(user, args));
-            long end = System.currentTimeMillis() - start;
-            System.out.println(end);
+            @NonNls long end = System.currentTimeMillis() - start;
+            System.out.println("КОМАНДА ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
             return;
         }
+        System.out.println(text +"  "+msg.getPeerId());
         NewMessageEvent event = new NewMessageEvent(msg);
         fireEvent(event);
     }
 
     /**
-     * Ответ на сообщение
      * @param groupId
      * @param msg
      */
@@ -70,11 +65,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         fireEvent(event);
     }
 
-    /**
-     * Редактирование сообщения
-     * @param groupId
-     * @param msg
-     */
     @Override
     public final void messageEdit(Integer groupId, Message msg) {
         EditMessageEvent event = new EditMessageEvent(msg);

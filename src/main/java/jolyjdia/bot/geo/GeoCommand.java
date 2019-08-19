@@ -20,7 +20,7 @@ import java.net.UnknownHostException;
 public class GeoCommand extends Command {
     private final DatabaseReader reader;
     GeoCommand(DatabaseReader reader) {
-        super("geo", "<IP>",
+        super("geo", "<IP-адрес>",
                 "узнать местоположение по айпи");
         setPermission("roflanbot.geo", "У вас нет прав");
         this.reader = reader;

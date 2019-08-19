@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SetPrefixCommand extends Command {
     public SetPrefixCommand() {
-        super("setprefix", "[Адрес пользователя] <Суффикс>", "изменить префикс пользователя");
+        super("setprefix", "[пользователь] <префикс>", "изменить префикс пользователя");
     }
 
     @Override

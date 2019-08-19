@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class EditTitleChatCommand extends Command {
     public EditTitleChatCommand() {
         super("settitle",
-                "<Название>", "изменить название беседы");
+                "<название>", "изменить название беседы");
         setAlias("edittitle");
         setPermission("roflanbot.settitle", "У вас нет прав");
     }

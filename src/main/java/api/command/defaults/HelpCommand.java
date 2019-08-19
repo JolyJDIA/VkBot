@@ -18,15 +18,13 @@ public class HelpCommand extends Command {
         if (args.length == 1) {
             StringBuilder builder = new StringBuilder();
             RegisterCommandList.getRegisteredCommands().stream()
-                    .filter(cmd -> !cmd.getDescription().isEmpty())
+                    .filter(cmd -> cmd.getDescription() != null && !cmd.getDescription().isEmpty())
                     .forEach(cmd -> {
                                 builder.append('/').append(cmd.getName()).append(' ');
                                 if (cmd.getArguments() != null && !cmd.getArguments().isEmpty()) {
                                     builder.append(cmd.getArguments());
                                 }
-                                builder.append(" - ")
-                                        .append(cmd.getDescription())
-                                        .append('\n');
+                                builder.append(" - ").append(cmd.getDescription()).append('\n');
                             });
             ObedientBot.sendMessage(builder.toString(), sender.getPeerId());
         } else if (args.length == 2 && args[1].equalsIgnoreCase("math")) {

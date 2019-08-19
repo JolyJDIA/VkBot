@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class RankCommand extends Command {
     public RankCommand() {
-        super("setrank", "<Адрес пользователя> <Группа>", "изменить ранг пользователя");
+        super("setrank", "<пользователь> <группа>", "изменить ранг пользователя");
         setPermission("roflanbot.rank", "У вас нет прав");
     }
 
