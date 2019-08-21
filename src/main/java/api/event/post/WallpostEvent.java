@@ -4,7 +4,7 @@ import api.event.Event;
 import com.vk.api.sdk.objects.wall.Wallpost;
 import org.jetbrains.annotations.Contract;
 
-public class WallpostEvent extends Event {
+public class WallpostEvent implements Event {
     private final Wallpost wallpost;
     @Contract(pure = true)
     public WallpostEvent(Wallpost wallpost) {

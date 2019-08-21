@@ -4,7 +4,7 @@ import api.event.Event;
 import com.vk.api.sdk.objects.board.TopicComment;
 import org.jetbrains.annotations.Contract;
 
-public class BoardEvent extends Event {
+public class BoardEvent implements Event {
     private final TopicComment topicComment;
     @Contract(pure = true)
     public BoardEvent(TopicComment topicComment) {
