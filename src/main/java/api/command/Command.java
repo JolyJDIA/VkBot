@@ -36,7 +36,7 @@ public abstract class Command {
     /**
      * @return Название команды
      */
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
@@ -93,7 +93,7 @@ public abstract class Command {
         return permission;
     }
     /**
-     * Нет прав
+     * Разрешение имеется
      * @param user Пользователь
      * @return true, если пользователь может использовать, в противном случае false
      */
@@ -110,7 +110,7 @@ public abstract class Command {
     }
 
     /**
-     * Нет прав
+     * Разрешение отсутствует
      * @param user Пользователь
      * @return true Если у пользователя нет разрешения
      */
@@ -119,10 +119,10 @@ public abstract class Command {
             return false;
         }
         PermissionGroup group = PermissionManager.getPermGroup(user.getGroup());
-        boolean access = !group.hasPermission(permission);
-        if(access) {
+        boolean noAccess = group.notPermission(permission);
+        if(noAccess) {
             ObedientBot.sendMessage(noPermissionMessage, user.getPeerId());
         }
-        return access;
+        return noAccess;
     }
 }

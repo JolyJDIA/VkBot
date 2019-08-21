@@ -14,6 +14,9 @@ public class SetSuffixCommand extends Command {
 
     @Override
     public final void execute(User sender, @NotNull String[] args) {
+        if (noPermission(sender)) {
+            return;
+        }
         if(args.length == 2) {
             Bot.getProfileList().setSuffix(sender, args[1]);
             ObedientBot.sendMessage("Вы успешно изменили суффикс", sender.getPeerId());

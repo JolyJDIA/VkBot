@@ -20,19 +20,18 @@ public class RegisterCommandList {
         registerCommand(new UpTimeCommand());
     }
 
-    public static void registerCommand(Command listener) {
-        commands.add(listener);
+    public static void registerCommand(Command command) {
+        commands.add(command);
     }
 
-    @Contract(" -> new")
-    @NotNull
-    public static Set<Command> getRegisteredCommands() {
+    @Contract(pure = true)
+    public static Collection<Command> getRegisteredCommands() {
         return commands;
     }
     public static void unregisterAll() {
         commands.clear();
     }
-    public static void registerAll(@NotNull Collection<? extends Command> commands) {
+    public static void registerAll(@NotNull Iterable<? extends Command> commands) {
         commands.forEach(RegisterCommandList::registerCommand);
     }
 }

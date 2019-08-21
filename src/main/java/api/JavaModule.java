@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Contract;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class JavaModule {
     private static final Set<JavaModule> modules = new HashSet<>();
 

@@ -13,14 +13,14 @@ import java.util.regex.Pattern;
 
 public class Respondent extends JavaModule implements Listener {
 
-	private static final Pattern MATH = Pattern.compile("[a-zA-Z\\d+\\-*/()^<]*");
+	private static final Pattern MATH = Pattern.compile("[a-zA-Z\\d+\\-*/()^< ]*");
 
 	@Override
 	public final void onLoad() {
         RegisterListEvent.registerEvent(this);
     }
 	@EventHandler
-	public void onSend(@NotNull NewMessageEvent e) {
+	public static void onSend(@NotNull NewMessageEvent e) {
 		Message msg = e.getMessage();
 		if(MATH.matcher(msg.getText()).matches()) {
 			String answer = new Calculator(msg.getText()).evaluate();

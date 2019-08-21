@@ -17,7 +17,7 @@ import java.util.Set;
 
 public final class ProfileList extends FileCustom implements JsonDeserializer<Map<Integer, Map<Integer, User>>> {
     private final Gson gson;
-    private final Map<Integer, Map<Integer, User>> map = new HashMap<>();
+    private final HashMap<Integer, Map<Integer, User>> map = new HashMap<>();
 
     public ProfileList(@NotNull File file) {
         super(file);
@@ -80,13 +80,13 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             e.printStackTrace();
         }
     }
-    private boolean hasUser(User user) {
+    private boolean hasUser(@NotNull User user) {
         return map.containsKey(user.getPeerId()) && map.get(user.getPeerId()).containsKey(user.getUserId());
     }
     private boolean hasUser(int peerId, int userId) {
         return map.containsKey(peerId) && map.get(peerId).containsKey(userId);
     }
-    private User getUser(User user) {
+    private User getUser(@NotNull User user) {
         return map.get(user.getPeerId()).get(user.getUserId());
     }
 
@@ -175,7 +175,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         }
         this.save();
     }
-    public void remove(User user) {
+    public void remove(@NotNull User user) {
         if (!map.containsKey(user.getPeerId())) {
             return;
         }

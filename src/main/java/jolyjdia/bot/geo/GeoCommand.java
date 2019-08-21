@@ -28,7 +28,7 @@ public class GeoCommand extends Command {
     }
     @Override
     public final void execute(User sender, @NotNull String[] args) {
-        if (noPermission(sender)) {
+        if (!hasPermission(sender)) {
             return;
         }
         if(args.length == 2) {
