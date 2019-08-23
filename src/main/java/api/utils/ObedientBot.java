@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NonNls;
 
 @NonNls
 public final class ObedientBot {
+
     @Contract(pure = true)
     private ObedientBot() {}
     public static void sendMessage(String msg, int peerId) {

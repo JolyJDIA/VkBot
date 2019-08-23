@@ -10,10 +10,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 public final class StringBind {
+
     @Contract(pure = true)
     private StringBind() {}
 
@@ -30,12 +30,11 @@ public final class StringBind {
                 return builder.toString();
             }
             builder.append(' ');
-            Arrays.toString(a);
         }
     }
+
     @Nullable
-    public static Integer getUserId(@NotNull String s, @NotNull User sender) {
-        System.out.println(s);
+    public static Integer getUserId(String s, @NotNull User sender) {
         try {
             int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
 

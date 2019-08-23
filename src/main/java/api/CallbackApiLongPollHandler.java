@@ -11,6 +11,7 @@ import api.event.board.BoardPostRestoreEvent;
 import api.event.messages.EditMessageEvent;
 import api.event.messages.NewMessageEvent;
 import api.event.messages.ReplyMessageEvent;
+import api.event.messages.SendCommandEvent;
 import api.event.post.NewPostWallEvent;
 import api.event.post.RepostWallEvent;
 import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
@@ -47,10 +49,12 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                     .findFirst()
                     .ifPresent(c -> c.execute(user, args));
             @NonNls long end = System.currentTimeMillis() - start;
-            System.out.println("КОМАНДА ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
+            System.out.println("КОМАНДА "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
+
+            SendCommandEvent event = new SendCommandEvent(msg);
+            fireEvent(event);
             return;
         }
-        System.out.println(text +"  "+msg.getPeerId());
         NewMessageEvent event = new NewMessageEvent(msg);
         fireEvent(event);
     }

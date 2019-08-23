@@ -5,7 +5,6 @@ import api.entity.User;
 import api.utils.ObedientBot;
 import api.utils.StringBind;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.NotNull;
 
 public class SetSuffixCommand extends Command {
     public SetSuffixCommand() {
@@ -13,7 +12,7 @@ public class SetSuffixCommand extends Command {
     }
 
     @Override
-    public final void execute(User sender, @NotNull String[] args) {
+    public final void execute(User sender, String[] args) {
         if (noPermission(sender)) {
             return;
         }

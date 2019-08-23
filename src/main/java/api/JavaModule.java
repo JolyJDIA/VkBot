@@ -8,7 +8,6 @@ import java.util.Set;
 public class JavaModule {
     private static final Set<JavaModule> modules = new HashSet<>();
 
-    @Contract(pure = true)
     protected JavaModule() {
         modules.add(this);
     }

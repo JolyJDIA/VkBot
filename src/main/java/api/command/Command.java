@@ -6,11 +6,13 @@ import api.permission.PermissionManager;
 import api.utils.ObedientBot;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
 public abstract class Command {
-    private final String name;
+    @NonNls private final String name;
     private String description;
     private String arguments;
     private Set<String> alias;
@@ -28,6 +30,7 @@ public abstract class Command {
         this.description = description;
         this.arguments = arguments;
     }
+
     @Contract(pure = true)
     protected Command(String name, String description) {
         this.name = name;
@@ -36,6 +39,7 @@ public abstract class Command {
     /**
      * @return Название команды
      */
+    @Contract(pure = true)
     public final String getName() {
         return name;
     }
@@ -60,6 +64,7 @@ public abstract class Command {
     /**
      * @return Использование команды
      */
+
     @Contract(pure = true)
     public final String getArguments() {
         return arguments;
@@ -124,5 +129,10 @@ public abstract class Command {
             ObedientBot.sendMessage(noPermissionMessage, user.getPeerId());
         }
         return noAccess;
+    }
+    @Contract(pure = true)
+    @NotNull
+    protected final String getUseCommand() {
+        return '/' + name + (arguments != null && !arguments.isEmpty() ? ' ' + arguments : "");
     }
 }

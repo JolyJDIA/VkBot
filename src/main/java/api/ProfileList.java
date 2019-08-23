@@ -19,7 +19,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     private final Gson gson;
     private final HashMap<Integer, Map<Integer, User>> map = new HashMap<>();
 
-    public ProfileList(@NotNull File file) {
+    public ProfileList(File file) {
         super(file);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
@@ -34,8 +34,8 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         this.load();
     }
 
-    @NotNull
     @Contract(pure = true)
+    @NotNull
     public Set<Integer> getChats() {
         return map.keySet();
     }
@@ -46,9 +46,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             pw.print("{");
             pw.print("}");
             pw.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,9 +70,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
             pw.print(gson.toJson(map));
             pw.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException | FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

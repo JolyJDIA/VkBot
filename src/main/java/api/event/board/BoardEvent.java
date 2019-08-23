@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Contract;
 
 public class BoardEvent implements Event {
     private final TopicComment topicComment;
+
     @Contract(pure = true)
     public BoardEvent(TopicComment topicComment) {
         this.topicComment = topicComment;

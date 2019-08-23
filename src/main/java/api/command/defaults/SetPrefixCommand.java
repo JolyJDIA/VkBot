@@ -5,7 +5,6 @@ import api.entity.User;
 import api.utils.ObedientBot;
 import api.utils.StringBind;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.NotNull;
 
 public class SetPrefixCommand extends Command {
     public SetPrefixCommand() {
@@ -13,7 +12,7 @@ public class SetPrefixCommand extends Command {
     }
 
     @Override
-    public final void execute(User sender, @NotNull String[] args) {
+    public final void execute(User sender, String[] args) {
         if (noPermission(sender)) {
             return;
         }

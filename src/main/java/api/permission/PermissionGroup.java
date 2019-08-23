@@ -17,29 +17,29 @@ public class PermissionGroup {
     private String prefix;
     private String suffix;
 
-    @Contract(pure = true)
     public PermissionGroup(String... permission) {
         this.permission = Sets.newHashSet(permission);
     }
+    @Contract(pure = true)
     public PermissionGroup(HashSet<String> permission) {
         this.permission = permission;
     }
-    @Contract(pure = true)
     public PermissionGroup(String prefix, String... permission) {
         this(permission);
         this.suffix = prefix;
     }
-    @Contract(pure = true)
     public PermissionGroup(String prefix, String suffix, String... permission) {
         this(permission);
         this.prefix = prefix;
         this.suffix = suffix;
     }
+
     @Contract(pure = true)
     public PermissionGroup(String prefix, HashSet<String> permission) {
         this(permission);
         this.suffix = prefix;
     }
+
     @Contract(pure = true)
     public PermissionGroup(String prefix, String suffix, HashSet<String> permission) {
         this(permission);
@@ -89,6 +89,7 @@ public class PermissionGroup {
     public final String getPrefix() {
         return prefix;
     }
+
     @Contract(pure = true)
     public final String getSuffix() {
         return suffix;

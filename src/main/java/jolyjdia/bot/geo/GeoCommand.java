@@ -16,9 +16,13 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GeoCommand extends Command {
     private final DatabaseReader reader;
+    private static final Pattern IPV4 =
+            Pattern.compile("^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]{1,2})(\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]{1,2})){3}$");
     GeoCommand(DatabaseReader reader) {
         super("geo", "<IP-адрес>",
                 "узнать местоположение по айпи");
@@ -27,11 +31,16 @@ public class GeoCommand extends Command {
 
     }
     @Override
-    public final void execute(User sender, @NotNull String[] args) {
-        if (!hasPermission(sender)) {
+    public final void execute(User sender, String[] args) {
+        if (noPermission(sender)) {
             return;
         }
         if(args.length == 2) {
+            Matcher matcher = IPV4.matcher(args[1]);
+            if(!matcher.matches()) {
+                ObedientBot.sendMessage("Это не айпи 0_o", sender.getPeerId());
+                return;
+            }
             ObedientBot.sendMessage(getInfo(args[1]), sender.getPeerId());
         } else {
             ObedientBot.sendMessage(getArguments(), sender.getPeerId());
@@ -48,8 +57,8 @@ public class GeoCommand extends Command {
             String cityName = response.getCity().getName();
             @NonNls String info = "Страна: ";
             try {
-                String name = YandexTraslate.translate(Language.RUSSIAN, countryName + ' ' + cityName);
-                String[] array = name.split(" ");
+                String name = YandexTraslate.translate(Language.RUSSIAN, countryName + ':' + cityName);
+                String[] array = name.split(":");
                 info += array[0];
                 info += "\nГород: "+array[1];
             } catch (IOException e) {
@@ -59,13 +68,10 @@ public class GeoCommand extends Command {
             info += "\nШирота: " + location.getLatitude() +
                     "\nдолгота: " + location.getLongitude();
             return info;
-        } catch (UnknownHostException e) {
-            return "Это не айпи 0_o";
+        } catch (UnknownHostException | GeoIp2Exception e) {
+            return "Некоторый данные не удалось загрузить(";
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (GeoIp2Exception e) {
-            e.printStackTrace();
+            return "IOException";
         }
-        return "Некоторый данные не удалось загрузить(";
     }
 }

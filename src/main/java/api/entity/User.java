@@ -26,7 +26,6 @@ public class User implements Serializable {
         this(peerId, userId, group);
         this.prefix = prefix;
     }
-
     @Contract(pure = true)
     public User(int peerId, int userId, String group, String prefix, String suffix) {
         this(peerId, userId, group, prefix);
@@ -38,13 +37,11 @@ public class User implements Serializable {
         return group;
     }
 
-
     @Contract("_ -> this")
     public final User setGroup(String group) {
         this.group = group;
         return this;
     }
-
     @Contract("_ -> this")
     public final User setPeerId(int peerId) {
         this.peerId = peerId;
@@ -68,15 +65,14 @@ public class User implements Serializable {
         return this;
     }
 
+
     @Contract(pure = true)
     public final String getPrefix() {
         return prefix;
     }
 
-    @Contract("_ -> this")
-    public final User setPrefix(String prefix) {
+    public final void setPrefix(String prefix) {
         this.prefix = prefix;
-        return this;
     }
     @Contract(pure = true)
     public final int getUserId() {

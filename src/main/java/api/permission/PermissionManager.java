@@ -18,7 +18,6 @@ public class PermissionManager {
         addGroup(PermissionGroup.MODER, "МОДЕР", "roflanbot.settitle");
         addGroup(PermissionGroup.ADMIN, "АДМИН", "*");
     }
-
     @Contract(pure = true)
     public static Map<String, PermissionGroup> getLookup() {
         return map;

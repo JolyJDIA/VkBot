@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Contract;
 
 public class WallpostEvent implements Event {
     private final Wallpost wallpost;
+
     @Contract(pure = true)
     public WallpostEvent(Wallpost wallpost) {
         this.wallpost = wallpost;

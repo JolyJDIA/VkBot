@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Contract;
 
 public class MessageEvent implements Event {
     private final Message msg;
+
     @Contract(pure = true)
     public MessageEvent(Message msg) {
         this.msg = msg;
