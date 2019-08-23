@@ -34,7 +34,7 @@ public final class StringBind {
     }
 
     @Nullable
-    public static Integer getUserId(String s, @NotNull User sender) {
+    public static Integer getUserId(@NotNull String s, @NotNull User sender) {
         try {
             int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
 

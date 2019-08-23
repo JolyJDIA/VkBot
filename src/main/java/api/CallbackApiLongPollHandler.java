@@ -49,7 +49,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                     .findFirst()
                     .ifPresent(c -> c.execute(user, args));
             @NonNls long end = System.currentTimeMillis() - start;
-            System.out.println("КОМАНДА "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
+            System.out.println("КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
 
             SendCommandEvent event = new SendCommandEvent(msg);
             fireEvent(event);
