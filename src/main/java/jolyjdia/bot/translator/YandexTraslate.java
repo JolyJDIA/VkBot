@@ -16,7 +16,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-
 @NonNls
 public class YandexTraslate extends JavaModule {
     @NonNls private static final String KEY =

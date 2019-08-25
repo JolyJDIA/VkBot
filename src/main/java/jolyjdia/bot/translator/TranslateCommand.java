@@ -26,9 +26,9 @@ public class TranslateCommand extends Command {
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length >= 2) {
             Language lang = COMPILE.matcher(args[1]).matches() ? Language.RUSSIAN : Language.ENGLISH;
-            @NonNls String translate = "Перевод на язык "+lang.name()+":\n";
+            @NonNls String translate;
             try {
-                translate += YandexTraslate.translate(lang, StringBind.toString(args));
+                translate = YandexTraslate.translate(lang, StringBind.toString(args));
             } catch (IOException e) {
                 ObedientBot.sendMessage("Ошибка", sender.getPeerId());
                 return;
