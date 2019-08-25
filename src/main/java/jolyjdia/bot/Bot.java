@@ -15,7 +15,6 @@ import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -33,8 +32,6 @@ public class Bot {
             if(inputStream != null) {
                 properties.load(inputStream);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,7 +43,6 @@ public class Bot {
         if (settings == null) {
             return;
         }
-
         if (!settings.getIsEnabled()) {
             vkApiClient.groups()
                     .setLongPollSettings(groupActor, GROUP_ID)

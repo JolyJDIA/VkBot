@@ -6,14 +6,16 @@ import jolyjdia.bot.translator.language.Language;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import javax.net.ssl.HttpsURLConnection;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
+
 
 @NonNls
 public class YandexTraslate extends JavaModule {
@@ -23,21 +25,30 @@ public class YandexTraslate extends JavaModule {
     public final void onLoad() {
         RegisterCommandList.registerCommand(new TranslateCommand());
     }
-    @NotNull
-    public static String translate(@NotNull @NonNls Language lang, String input) throws IOException {
+    private static URL url;
+    static {
+        try {
+            url = new URL(KEY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+    @NotNull public static String translate(@NotNull @NonNls Language lang, String input) throws IOException {
         @NonNls StringBuilder builder = new StringBuilder();
-        URL url = new URL(KEY);
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
+        URLConnection connection = url.openConnection();
         connection.setDoOutput(true);
         try (DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream())) {
             dataOutputStream.writeBytes("text=" + URLEncoder.encode(input, StandardCharsets.UTF_8) + "&lang=" + lang);
-            InputStream response = connection.getInputStream();
-            try (Scanner scanner = new Scanner(response)) {
-                String json = scanner.nextLine();
+            try (InputStream response = connection.getInputStream(); ByteArrayOutputStream result = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = response.read(buffer)) != -1) {
+                    result.write(buffer, 0, length);
+                }
+                String json = result.toString(StandardCharsets.UTF_8);
                 builder.append(json, json.indexOf('[') + 2, json.indexOf(']') - 1);
+
             }
-            response.close();
         }
         return builder.toString();
     }
