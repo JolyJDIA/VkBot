@@ -19,6 +19,7 @@ public class RegisterCommandList {
         registerCommand(new EditTitleChatCommand());
         registerCommand(new UpTimeCommand());
         registerCommand(new TickPerSecondCommand());
+        registerCommand(new BroadcastMessages());
     }
 
     public static void registerCommand(Command command) {

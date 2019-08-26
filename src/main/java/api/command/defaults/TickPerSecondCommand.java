@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class TickPerSecondCommand extends Command {
     public TickPerSecondCommand() {
-        super("tps", "[NEW] задержка бота");
-        setAlias("lag");
+        super("gc", "[NEW] производительность");
+        setAlias("lag", "tps");
     }
     @Override
     public final void execute(User sender, @NotNull String[] args) {

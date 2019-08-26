@@ -2,7 +2,6 @@ package api;
 
 import api.entity.User;
 import api.file.FileCustom;
-import api.permission.PermissionGroup;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.Contract;
@@ -14,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public final class ProfileList extends FileCustom implements JsonDeserializer<Map<Integer, Map<Integer, User>>> {
     private final Gson gson;
@@ -98,79 +98,50 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         } else {
             user = new User(peerId, userId);
             users.put(userId, user);
+            this.save();
+        }
+        return user;
+    }
+    public void addIfAbsentAndConsumer(@NotNull User entity, @NotNull Consumer<? super User> consumer) {
+        Map<Integer, User> users = map.computeIfAbsent(entity.getPeerId(), k -> new HashMap<>());
+        int userId = entity.getUserId();
+        if(users.containsKey(userId)) {
+            consumer.accept(entity);
+        } else {
+            consumer.accept(entity);
+            users.put(userId, entity);
         }
         this.save();
-        return user;
+    }
+    public void setRank(int peerId, int userId, String rank) {
+        addIfAbsentAndConsumer(new User(peerId, userId), userId1 -> userId1.setGroup(rank));
+    }
+    public void setPrefix(int peerId, int userId, String prefix) {
+        addIfAbsentAndConsumer(new User(peerId, userId), userId1 -> userId1.setPrefix(prefix));
+    }
+    public void setSuffix(int peerId, int userId, String suffix) {
+        addIfAbsentAndConsumer(new User(peerId, userId), userId1 -> userId1.setSuffix(suffix));
     }
     public void setRank(User user, String rank) {
         if(user == null) {
             return;
         }
-        Map<Integer, User> users = map.computeIfAbsent(user.getPeerId(), k -> new HashMap<>());
-        int userId = user.getUserId();
-        if (users.containsKey(userId)) {
-            users.get(userId).setGroup(rank);
-        } else {
-            users.put(userId, new User(user.getPeerId(), userId, rank));
-        }
-        this.save();
-    }
-
-    public void setRank(int peerId, int userId, String rank) {
-        Map<Integer, User> users = map.computeIfAbsent(peerId, k -> new HashMap<>());
-        if (users.containsKey(userId)) {
-            users.get(userId).setGroup(rank);
-        } else {
-            users.put(userId, new User(peerId, userId, rank));
-        }
-        this.save();
+        addIfAbsentAndConsumer(user, userId -> userId.setGroup(rank));
     }
     public void setPrefix(User user, String prefix) {
         if(user == null) {
             return;
         }
-        int userId = user.getUserId();
-        Map<Integer, User> users = map.computeIfAbsent(user.getPeerId(), k -> new HashMap<>());
-        if (users.containsKey(userId)) {
-            users.get(userId).setPrefix(prefix);
-        } else {
-            users.put(userId, new User(user.getPeerId(), userId, PermissionGroup.DEFAULT, prefix));
-        }
-        this.save();
+        addIfAbsentAndConsumer(user, userId -> userId.setPrefix(prefix));
     }
 
-    public void setPrefix(int peerId, int userId, String prefix) {
-        Map<Integer, User> users = map.computeIfAbsent(peerId, k -> new HashMap<>());
-        if (users.containsKey(userId)) {
-            users.get(userId).setPrefix(prefix);
-        } else {
-            users.put(userId, new User(peerId, userId, PermissionGroup.DEFAULT, prefix));
-        }
-        this.save();
-    }
     public void setSuffix(User user, String suffix) {
-        if(user == null) {
+        if (user == null) {
             return;
         }
-        int userId = user.getUserId();
-        Map<Integer, User> users = map.computeIfAbsent(user.getPeerId(), k -> new HashMap<>());
-        if (users.containsKey(userId)) {
-            users.get(userId).setSuffix(suffix);
-        } else {
-            users.put(userId, new User(user.getPeerId(), userId).setSuffix(suffix));
-        }
-        this.save();
+        addIfAbsentAndConsumer(user, userId -> userId.setPrefix(suffix));
     }
 
-    public void setSuffix(int peerId, int userId, String suffix) {
-        Map<Integer, User> users = map.computeIfAbsent(peerId, k -> new HashMap<>());
-        if (users.containsKey(userId)) {
-            users.get(userId).setSuffix(suffix);
-        } else {
-            users.put(userId, new User(peerId, userId).setSuffix(suffix));
-        }
-        this.save();
-    }
     public void remove(@NotNull User user) {
         if (!map.containsKey(user.getPeerId())) {
             return;
