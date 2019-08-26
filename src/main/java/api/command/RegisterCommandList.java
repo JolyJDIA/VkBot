@@ -18,6 +18,7 @@ public class RegisterCommandList {
         registerCommand(new SetSuffixCommand());
         registerCommand(new EditTitleChatCommand());
         registerCommand(new UpTimeCommand());
+        registerCommand(new TickPerSecondCommand());
     }
 
     public static void registerCommand(Command command) {

@@ -2,6 +2,7 @@ package jolyjdia.bot;
 
 import api.CallbackApiLongPollHandler;
 import api.ProfileList;
+import api.TickPerSeconds;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -61,6 +62,7 @@ public class Bot {
         new YandexTraslate().onLoad();
         new GeoLoad().onLoad();
         new Puzzle().onLoad();
+        TickPerSeconds.doStart();
        // new NeuralNetrwork().onLoad();
 
     }

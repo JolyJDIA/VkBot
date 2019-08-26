@@ -1,5 +1,6 @@
 package api.entity;
 
+import api.permission.PermissionGroup;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,14 +11,18 @@ public class User implements Serializable {
     private static final long serialVersionUID = 3641738823927881630L;
     private transient int peerId;
     private transient int userId;
-    private String group;
+    private String group = PermissionGroup.DEFAULT;
     private String prefix = "";
     private String suffix = "";
 
     @Contract(pure = true)
-    public User(int peerId, int userId, String group) {
+    public User(int peerId, int userId) {
         this.peerId = peerId;
         this.userId = userId;
+    }
+    @Contract(pure = true)
+    public User(int peerId, int userId, String group) {
+        this(peerId, userId);
         this.group = group;
     }
 
@@ -26,6 +31,7 @@ public class User implements Serializable {
         this(peerId, userId, group);
         this.prefix = prefix;
     }
+
     @Contract(pure = true)
     public User(int peerId, int userId, String group, String prefix, String suffix) {
         this(peerId, userId, group, prefix);

@@ -90,13 +90,13 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         return map.get(peerId).get(userId);
     }
 
-    public User add(int peerId, int userId, String group) {
+    public User addIfAbsentAndReturn(int peerId, int userId) {
         Map<Integer, User> users = map.computeIfAbsent(peerId, k -> new HashMap<>());
         User user;
         if (users.containsKey(userId)) {
-            user = users.get(userId).setGroup(group);
+            user = users.get(userId);
         } else {
-            user = new User(peerId, userId, group);
+            user = new User(peerId, userId);
             users.put(userId, user);
         }
         this.save();
@@ -157,7 +157,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         if (users.containsKey(userId)) {
             users.get(userId).setSuffix(suffix);
         } else {
-            users.put(userId, new User(user.getPeerId(), userId, PermissionGroup.DEFAULT).setSuffix(suffix));
+            users.put(userId, new User(user.getPeerId(), userId).setSuffix(suffix));
         }
         this.save();
     }
@@ -167,7 +167,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         if (users.containsKey(userId)) {
             users.get(userId).setSuffix(suffix);
         } else {
-            users.put(userId, new User(peerId, userId, PermissionGroup.DEFAULT).setSuffix(suffix));
+            users.put(userId, new User(peerId, userId).setSuffix(suffix));
         }
         this.save();
     }
@@ -188,10 +188,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     }
 
     public User get(int peerId, int userId) {
-        if (!this.hasUser(peerId, userId)) {
-            return this.add(peerId, userId, PermissionGroup.DEFAULT);
-        }
-        return this.getUser(peerId, userId);
+        return this.addIfAbsentAndReturn(peerId, userId);
     }
 
     /**

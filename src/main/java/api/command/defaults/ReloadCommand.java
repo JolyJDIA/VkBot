@@ -17,7 +17,7 @@ public class ReloadCommand extends Command {
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length == 1) {
             JavaModule.reloadModule();
-            ObedientBot.sendMessage("Перезагрузка завершена", sender.getPeerId());
+            ObedientBot.sendMessage("Перезагрузка завершена"+Thread.currentThread(), sender.getPeerId());
         }
     }
 }
