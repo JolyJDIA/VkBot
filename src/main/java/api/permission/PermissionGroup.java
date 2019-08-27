@@ -1,6 +1,5 @@
 package api.permission;
 
-import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -17,34 +16,9 @@ public class PermissionGroup {
     private String prefix;
     private String suffix;
 
-    public PermissionGroup(String... permission) {
-        this.permission = Sets.newHashSet(permission);
-    }
     @Contract(pure = true)
     public PermissionGroup(HashSet<String> permission) {
         this.permission = permission;
-    }
-    public PermissionGroup(String prefix, String... permission) {
-        this(permission);
-        this.suffix = prefix;
-    }
-    public PermissionGroup(String prefix, String suffix, String... permission) {
-        this(permission);
-        this.prefix = prefix;
-        this.suffix = suffix;
-    }
-
-    @Contract(pure = true)
-    public PermissionGroup(String prefix, HashSet<String> permission) {
-        this(permission);
-        this.suffix = prefix;
-    }
-
-    @Contract(pure = true)
-    public PermissionGroup(String prefix, String suffix, HashSet<String> permission) {
-        this(permission);
-        this.prefix = prefix;
-        this.suffix = suffix;
     }
 
     public final void addPermission(String permission) {
@@ -93,5 +67,13 @@ public class PermissionGroup {
     @Contract(pure = true)
     public final String getSuffix() {
         return suffix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 }

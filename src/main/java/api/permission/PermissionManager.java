@@ -1,5 +1,6 @@
 package api.permission;
 
+import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
@@ -8,13 +9,7 @@ import java.util.Map;
 public class PermissionManager {
     private static final HashMap<String, PermissionGroup> map = new HashMap<>();
     static {
-        recalculateGroup();
-    }
-    /**
-     * Инициализация стандартных рангов
-     */
-    public static void recalculateGroup() {
-        addGroup(PermissionGroup.DEFAULT,"ПОЛЬЗОВАТЕЛЬ", "");
+        addGroup(PermissionGroup.DEFAULT,"ПОЛЬЗОВАТЕЛЬ");
         addGroup(PermissionGroup.MODER, "МОДЕР", "roflanbot.settitle");
         addGroup(PermissionGroup.ADMIN, "АДМИН", "*");
     }
@@ -28,7 +23,9 @@ public class PermissionManager {
     }
 
     public static final void addGroup(String name, String prefix, String... permissions) {
-        map.put(name, new PermissionGroup(prefix, permissions));
+        PermissionGroup group = new PermissionGroup(Sets.newHashSet(permissions));
+        group.setSuffix(prefix);
+        map.put(name, group);
     }
 }
 
