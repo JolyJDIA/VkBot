@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class BroadcastMessages extends Command {
 
     public BroadcastMessages() {
-        super("broadcastMessage", "<Сообещние>", "отправить сообщение всем беседам");
+        super("broadcastMessage", "<Сообщение>", "отправить сообщение всем беседам");
         setAlias("globalMsg");
         setPermission("roflanbot.broadcastMessage", "У вас нет прав");
     }
