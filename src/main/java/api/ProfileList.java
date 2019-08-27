@@ -106,7 +106,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         Map<Integer, User> users = map.computeIfAbsent(entity.getPeerId(), k -> new HashMap<>());
         int userId = entity.getUserId();
         if(users.containsKey(userId)) {
-            consumer.accept(entity);
+            consumer.accept(users.get(userId));
         } else {
             consumer.accept(entity);
             users.put(userId, entity);
