@@ -69,11 +69,11 @@ public class PermissionGroup {
         return suffix;
     }
 
-    public void setPrefix(String prefix) {
+    public final void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
-    public void setSuffix(String suffix) {
+    public final void setSuffix(String suffix) {
         this.suffix = suffix;
     }
 }
