@@ -6,6 +6,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -82,12 +83,20 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     private boolean hasUser(int peerId, int userId) {
         return map.containsKey(peerId) && map.get(peerId).containsKey(userId);
     }
+    @Nullable
     private User getUser(@NotNull User user) {
-        return map.get(user.getPeerId()).get(user.getUserId());
+        if (hasUser(user)) {
+            return map.get(user.getPeerId()).get(user.getUserId());
+        }
+        return null;
     }
 
+    @Nullable
     private User getUser(int peerId, int userId) {
-        return map.get(peerId).get(userId);
+        if (hasUser(peerId, userId)) {
+            return map.get(peerId).get(userId);
+        }
+        return null;
     }
 
     public User addIfAbsentAndReturn(int peerId, int userId) {

@@ -37,49 +37,6 @@ public class User implements Serializable {
         this(peerId, userId, group, prefix);
         this.suffix = suffix;
     }
-
-    @Contract(pure = true)
-    public final String getGroup() {
-        return group;
-    }
-
-    @Contract("_ -> this")
-    public final User setGroup(String group) {
-        this.group = group;
-        return this;
-    }
-    @Contract("_ -> this")
-    public final User setPeerId(int peerId) {
-        this.peerId = peerId;
-        return this;
-    }
-
-    @Contract("_ -> this")
-    public final User setUserId(int userId) {
-        this.userId = userId;
-        return this;
-    }
-
-    @Contract(pure = true)
-    public final String getSuffix() {
-        return suffix;
-    }
-
-    @Contract("_ -> this")
-    public final User setSuffix(String suffix) {
-        this.suffix = suffix;
-        return this;
-    }
-
-
-    @Contract(pure = true)
-    public final String getPrefix() {
-        return prefix;
-    }
-
-    public final void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
     @Contract(pure = true)
     public final int getUserId() {
         return userId;
@@ -89,6 +46,32 @@ public class User implements Serializable {
     public final int getPeerId() {
         return peerId;
     }
+
+    @Contract(pure = true)
+    public final String getGroup() {
+        return group;
+    }
+
+    @Contract(pure = true)
+    public final String getSuffix() {
+        return suffix;
+    }
+
+    @Contract(pure = true)
+    public final String getPrefix() {
+        return prefix;
+    }
+
+    public final void setGroup(String group) {
+        this.group = group;
+    }
+    public final void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+    public final void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
     private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
         this.peerId = stream.readInt();
         this.userId = stream.readInt();
