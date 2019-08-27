@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class Respondent extends JavaModule implements Listener {
 
-	private static final Pattern MATH = Pattern.compile("[a-zA-Z\\d+\\-*/()^< ]*");
+	private static final Pattern MATH = Pattern.compile("[a-zA-Z.\\d+\\-*/()^< ]*");
 
 	@Override
 	public final void onLoad() {
