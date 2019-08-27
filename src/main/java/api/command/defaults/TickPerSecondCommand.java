@@ -1,9 +1,9 @@
 package api.command.defaults;
 
-import api.TickPerSeconds;
 import api.command.Command;
 import api.entity.User;
 import api.utils.ObedientBot;
+import api.utils.TickPerSeconds;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

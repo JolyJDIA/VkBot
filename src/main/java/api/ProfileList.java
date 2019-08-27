@@ -35,8 +35,9 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         this.load();
     }
 
-    @Contract(pure = true)
+
     @NotNull
+    @Contract(pure = true)
     public Set<Integer> getChats() {
         return map.keySet();
     }
@@ -145,7 +146,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     }
 
     public void setSuffix(User user, String suffix) {
-        if (user == null) {
+        if(user == null) {
             return;
         }
         addIfAbsentAndConsumer(user, userId -> userId.setPrefix(suffix));
