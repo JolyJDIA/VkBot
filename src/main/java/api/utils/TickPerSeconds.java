@@ -2,13 +2,15 @@ package api.utils;
 
 import org.jetbrains.annotations.Contract;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public final class TickPerSeconds extends TimerTask {
     private static TickPerSeconds ourInstance;
     private long lastPoll = System.nanoTime();
-    private static final long[] tpsRecent = new long[10];
+    private static final List<Long> tpsRecent = new ArrayList<>();
     private TickPerSeconds() {}
 
     public static void doStart() {
@@ -24,9 +26,8 @@ public final class TickPerSeconds extends TimerTask {
         for (long f : tpsRecent) {
             avg += f;
         }
-        return avg / tpsRecent.length;
+        return avg / tpsRecent.size();
     }
-    private int current;
 
     @Override
     public void run() {
@@ -36,11 +37,10 @@ public final class TickPerSeconds extends TimerTask {
             timeSpent = 1;
         }
         long tps = 50000000L / timeSpent;
-        if(current > 9) {
-            current = 0;
+        if(tpsRecent.size() > 9) {
+            tpsRecent.clear();
         }
-        tpsRecent[current] = tps;
-        ++current;
+        tpsRecent.add(tps);
         lastPoll = startTime;
     }
 }

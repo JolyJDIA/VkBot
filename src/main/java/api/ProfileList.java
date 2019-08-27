@@ -124,13 +124,13 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         this.save();
     }
     public void setRank(int peerId, int userId, String rank) {
-        addIfAbsentAndConsumer(new User(peerId, userId), userId1 -> userId1.setGroup(rank));
+        addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setGroup(rank));
     }
     public void setPrefix(int peerId, int userId, String prefix) {
-        addIfAbsentAndConsumer(new User(peerId, userId), userId1 -> userId1.setPrefix(prefix));
+        addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setPrefix(prefix));
     }
     public void setSuffix(int peerId, int userId, String suffix) {
-        addIfAbsentAndConsumer(new User(peerId, userId), userId1 -> userId1.setSuffix(suffix));
+        addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setSuffix(suffix));
     }
     public void setRank(User user, String rank) {
         if(user == null) {
