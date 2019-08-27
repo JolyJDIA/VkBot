@@ -20,7 +20,7 @@ public class TickPerSecondCommand extends Command {
             @NonNls String sb =
                     "TPS: " + TickPerSeconds.getAverageTPS() +
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
-                    "\nСъедено памяти  : " + humanReadableByteCount(totalMemory - freeMemory) +
+                    "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory);
             ObedientBot.sendMessage(sb, sender.getPeerId());
 
