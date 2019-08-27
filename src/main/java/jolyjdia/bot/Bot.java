@@ -63,8 +63,6 @@ public class Bot {
         new GeoLoad().onLoad();
         new Puzzle().onLoad();
         TickPerSeconds.doStart();
-       // new NeuralNetrwork().onLoad();
-
     }
 
     @Contract(pure = true)
