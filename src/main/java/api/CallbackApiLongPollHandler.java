@@ -39,7 +39,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         @NonNls String text = msg.getText();//УБрать аннотацию
         if(!text.isEmpty() && (text.charAt(0) == '/' || text.charAt(0) == '!')) {//Проверяю первый символ(startsWith abort)
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
-            User user = Bot.getProfileList().get(msg.getPeerId(), msg.getFromId());
+            User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
 
             long start = System.currentTimeMillis();
             RegisterCommandList.getRegisteredCommands().stream()//Хотел параллель(Не надо)

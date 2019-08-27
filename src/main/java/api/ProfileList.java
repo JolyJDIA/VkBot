@@ -158,10 +158,6 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         this.save();
     }
 
-    public User get(int peerId, int userId) {
-        return this.addIfAbsentAndReturn(peerId, userId);
-    }
-
     /**
      * @param jsonElement
      * @param type
