@@ -14,7 +14,7 @@ public class TestNeuralNetworkCommand extends Command {
     }
 
     @Override
-    public void execute(User sender, @NotNull String[] args) {
+    public final void execute(User sender, @NotNull String[] args) {
         if(args.length > 2) {
             String text = StringBind.toString(args);
             ObedientBot.sendMessage(main.getNetworkBuilder().answerNeural(text), sender.getPeerId());

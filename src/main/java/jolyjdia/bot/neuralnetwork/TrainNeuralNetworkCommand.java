@@ -2,6 +2,7 @@ package jolyjdia.bot.neuralnetwork;
 
 import api.command.Command;
 import api.entity.User;
+import api.utils.ObedientBot;
 import api.utils.StringBind;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,8 @@ public class TrainNeuralNetworkCommand extends Command {
             NeuralNetrwork.getDocVec().learnString(text[0]);
             NeuralNetrwork.getDocVec().learnString(text[1]);
             main.setNetworkBuilder(new NeuralNetworkBuilder(NeuralNetrwork.getDocVec()));
+        //    NeuralNetrwork.getDocVec().saveModelY("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\doc");
+            ObedientBot.sendMessage("Вроде понял", sender.getPeerId());
         }
     }
 }

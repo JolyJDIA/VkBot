@@ -25,17 +25,17 @@ public abstract class Command {
     }
 
     @Contract(pure = true)
-    protected Command(String name, String arguments, String description) {
-        this.name = name;
+    protected Command(String name, String description) {
+        this(name);
         this.description = description;
-        this.arguments = arguments;
     }
 
     @Contract(pure = true)
-    protected Command(String name, String description) {
-        this.name = name;
-        this.description = description;
+    protected Command(String name, String arguments, String description) {
+        this(name, description);
+        this.arguments = arguments;
     }
+
     /**
      * @return Название команды
      */

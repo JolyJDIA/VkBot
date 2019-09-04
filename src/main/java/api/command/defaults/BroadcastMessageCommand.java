@@ -7,9 +7,9 @@ import api.utils.StringBind;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
-public class BroadcastMessages extends Command {
+public class BroadcastMessageCommand extends Command {
     private static final int ADMIN = 310289867;
-    public BroadcastMessages() {
+    public BroadcastMessageCommand() {
         super("broadcastMessage");
         setAlias("globalMsg");
     }

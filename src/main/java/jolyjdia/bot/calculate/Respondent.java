@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.regex.Pattern;
 
 public class Respondent extends JavaModule implements Listener {
-
 	private static final Pattern MATH = Pattern.compile("[a-zA-Z.\\d+\\-*/()^< ]*");
 
 	@Override
@@ -23,7 +22,11 @@ public class Respondent extends JavaModule implements Listener {
 	public static void onSend(@NotNull NewMessageEvent e) {
 		Message msg = e.getMessage();
 		if(MATH.matcher(msg.getText()).matches()) {
-			String answer = new Calculator(msg.getText()).evaluate();
+			long start = System.nanoTime();
+			Calculator calc = new Calculator(msg.getText());
+			String answer = calc.solveExpression();
+			long end = System.nanoTime() - start;
+			System.out.println(end);
 			if(answer.isEmpty()) {
 			    return;
             }

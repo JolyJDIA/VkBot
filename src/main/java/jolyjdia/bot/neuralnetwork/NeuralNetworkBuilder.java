@@ -8,6 +8,8 @@ import jolyjdia.bot.neuralnetwork.nn.model.Model;
 import jolyjdia.bot.neuralnetwork.nn.util.NetworkBuilder;
 import jolyjdia.bot.neuralnetwork.word2vec.LearnDocVec;
 import jolyjdia.bot.neuralnetwork.word2vec.Word2VEC;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -25,11 +27,12 @@ public class NeuralNetworkBuilder {
         double initParamsStdDev = 0.08;
 
         Random rng = new Random();
-        this.model = NetworkBuilder.makeLstm(
+        this.model = NetworkBuilder.makeFeedForward(
                 data.inputSize,
                 20,
                 1,
                 20,
+                data.getModelOutputUnitToUse(),
                 data.getModelOutputUnitToUse(),
                 initParamsStdDev,
                 rng);
@@ -42,22 +45,17 @@ public class NeuralNetworkBuilder {
                 .setDataSet(data)
                 .setReportEveryNthEpoch(reportEveryNthEpoch)
                 .setRandom(rng)
-                .setMinLoss(0.04).build();
+                .setMinLoss(0.4).build();
 
     }
-    public static double distance(double[] a, double[] b) {
-        double dotProduct = 0;
-        double normASum = 0;
-        double normBSum = 0;
-
-        for (int i = 0; i < a.length; ++i) {
-            dotProduct += a[i] * b[i];
-            normASum += a[i] * a[i];
-            normBSum += b[i] * b[i];
+    @Contract(pure = true)
+    public static double distance(@NotNull double[] vectorA, double[] vectorB) {
+        double dist = 0;
+        for (int i = 0; i < vectorA.length; ++i) {
+            double sub = vectorA[i] - vectorB[i];
+            dist += sub * sub;
         }
-
-        double eucledianDist = Math.sqrt(normASum) * Math.sqrt(normBSum);
-        return dotProduct / eucledianDist;
+        return Math.sqrt(dist);
     }
     public final String answerNeural(String msg) {
         String text = "";
