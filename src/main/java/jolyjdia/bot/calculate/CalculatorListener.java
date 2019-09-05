@@ -27,11 +27,8 @@ public class CalculatorListener implements Listener {
             return;
         }
         if (MATH.matcher(msg.getText()).matches()) {
-            long start = System.currentTimeMillis();
             Calculator calc = new Calculator(msg.getText());
             String answer = calc.solveExpression();
-            long end = System.currentTimeMillis() - start;
-            System.out.println(end);
             if (answer.isEmpty()) {
                 return;
             }
@@ -42,6 +39,7 @@ public class CalculatorListener implements Listener {
         if (!history.containsKey(peerId)) {
             return;
         }
+        System.out.println(element);
         switch (element) {
             case "=" -> {
                 StringBuilder builder = new StringBuilder();
@@ -70,6 +68,11 @@ public class CalculatorListener implements Listener {
                 List<String> list = history.get(peerId);
                 list.add(element);
                 history.put(peerId, list);
+                StringBuilder builder = new StringBuilder();
+                for (String h : history.get(peerId)) {
+                    builder.append(h);
+                }
+                ObedientBot.sendMessage(builder.toString(), peerId);
             }
         }
     }
