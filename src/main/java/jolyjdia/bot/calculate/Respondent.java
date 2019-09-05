@@ -22,11 +22,8 @@ public class Respondent extends JavaModule implements Listener {
 	public static void onSend(@NotNull NewMessageEvent e) {
 		Message msg = e.getMessage();
 		if(MATH.matcher(msg.getText()).matches()) {
-			long start = System.nanoTime();
 			Calculator calc = new Calculator(msg.getText());
 			String answer = calc.solveExpression();
-			long end = System.nanoTime() - start;
-			System.out.println(end);
 			if(answer.isEmpty()) {
 			    return;
             }
