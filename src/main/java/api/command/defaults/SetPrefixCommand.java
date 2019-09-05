@@ -10,23 +10,31 @@ public class SetPrefixCommand extends Command {
     public SetPrefixCommand() {
         super("setprefix", "[пользователь] <префикс>", "изменить префикс пользователя");
     }
-
     @Override
     public final void execute(User sender, String[] args) {
         if (noPermission(sender)) {
             return;
         }
-        if (args.length == 2) {
-            Bot.getProfileList().setPrefix(sender, args[1]);
-            ObedientBot.sendMessage("Вы успешно изменили префикс", sender.getPeerId());
-        } else if (args.length == 3) {
-            Integer id = StringBind.getUserId(args[1], sender);
+        String prefix = args[1];
+        Integer id = null;
+        if(args.length == 3) {
+            id = StringBind.getUserId(args[1], sender);
             if (id == null) {
-                ObedientBot.sendMessage("Пользователя нет в беседе", sender.getPeerId());
                 return;
             }
-            Bot.getProfileList().setPrefix(sender.getPeerId(), id, args[2]);
-            ObedientBot.sendMessage("Вы успешно изменили префикс", sender.getPeerId());
+            prefix = args[2];
+        } else if(args.length != 2) {
+            return;
         }
+        if(prefix.length() > 16) {
+            ObedientBot.sendMessage("Слышь, дружок-пирожок, - большой префикс", sender.getPeerId());
+            return;
+        }
+        if(id != null) {
+            Bot.getProfileList().setPrefix(sender.getPeerId(), id, prefix);
+        } else {
+            Bot.getProfileList().setPrefix(sender, prefix);
+        }
+        ObedientBot.sendMessage("Вы успешно изменили префикс", sender.getPeerId());
     }
 }

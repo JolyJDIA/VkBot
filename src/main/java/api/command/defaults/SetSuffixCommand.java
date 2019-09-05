@@ -16,17 +16,26 @@ public class SetSuffixCommand extends Command {
         if (noPermission(sender)) {
             return;
         }
-        if(args.length == 2) {
-            Bot.getProfileList().setSuffix(sender, args[1]);
-            ObedientBot.sendMessage("Вы успешно изменили суффикс", sender.getPeerId());
-        } else if(args.length == 3) {
-            Integer id = StringBind.getUserId(args[1], sender);
-            if(id == null) {
-                ObedientBot.sendMessage("Пользователя нет в беседе", sender.getPeerId());
+        String suffix = args[1];
+        Integer id = null;
+        if(args.length == 3) {
+            id = StringBind.getUserId(args[1], sender);
+            if (id == null) {
                 return;
             }
-            Bot.getProfileList().setSuffix(sender.getPeerId(), id, args[2]);
-            ObedientBot.sendMessage("Вы успешно изменили суффикс", sender.getPeerId());
+            suffix = args[2];
+        } else if(args.length != 2) {
+            return;
         }
+        if(suffix.length() > 16) {
+            ObedientBot.sendMessage("Слышь, дружок-пирожок, - большой суффикс", sender.getPeerId());
+            return;
+        }
+        if(id != null) {
+            Bot.getProfileList().setSuffix(sender.getPeerId(), id, suffix);
+        } else {
+            Bot.getProfileList().setSuffix(sender, suffix);
+        }
+        ObedientBot.sendMessage("Вы успешно изменили суффикс", sender.getPeerId());
     }
 }

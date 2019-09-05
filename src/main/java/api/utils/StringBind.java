@@ -37,7 +37,6 @@ public final class StringBind {
     public static Integer getUserId(@NotNull String s, @NotNull User sender) {
         try {
             int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
-
             GetConversationMembersResponse g = Bot.getVkApiClient().
                     messages().getConversationMembers(Bot.getGroupActor(), sender.getPeerId()).execute();
             if (g == null) {
@@ -48,9 +47,7 @@ public final class StringBind {
                     m.getMemberId() == id).findFirst();
             return member.map(ConversationMember::getMemberId).orElse(null);
         } catch (ApiException | ClientException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            ObedientBot.sendMessage("Некорректный адрес пользователя", sender.getPeerId());
+            ObedientBot.sendMessage("Пользователя нет в беседе", sender.getPeerId());
         }
         return null;
     }

@@ -21,6 +21,7 @@ public class RegisterCommandList {
         registerCommand(new TickPerSecondCommand());
         registerCommand(new BroadcastMessageCommand());
         registerCommand(new CalendarCommand());
+        registerCommand(new InfoUserCommand());
     }
 
     public static void registerCommand(Command command) {

@@ -47,15 +47,15 @@ public class Calculator {
     }
 
     private final double condenseExpression(String operator, int indexVal) {
-        double x;
-        double y;
+        double x = 0;
+        double y = 0;
         try {//Mather
             x = Double.parseDouble(formattedUserInput.get(indexVal - 1)); // value of i-1
-        } catch (NumberFormatException e) { x = 0.0; }
+        } catch (NumberFormatException ignored) {}
 
         try {
             y = Double.parseDouble(formattedUserInput.get(indexVal + 1)); // value of i+1
-        } catch (NumberFormatException e) { y = 0.0; }
+        } catch (NumberFormatException ignored) {}
 
         double output; // final output
         switch (operator) {
@@ -96,12 +96,10 @@ public class Calculator {
          * a number, constant, etc. This avoids returning a 0 if the user enters, e.g.
          * sqrt(2)
          */
-        double condense;
+        double condense = 0;
         try {
             condense = Double.parseDouble(formattedUserInput.get(0));
-        } catch (NumberFormatException e) {
-            condense = 0.0;
-        }
+        } catch (NumberFormatException ignored) {}
 
         // Perform parentheses before everything
         EvaluateParentheses evalParenths;

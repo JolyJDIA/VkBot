@@ -85,7 +85,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         return map.containsKey(peerId) && map.get(peerId).containsKey(userId);
     }
     @Nullable
-    private User getUser(@NotNull User user) {
+    public User getUser(@NotNull User user) {
         if (hasUser(user)) {
             return map.get(user.getPeerId()).get(user.getUserId());
         }
@@ -93,7 +93,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     }
 
     @Nullable
-    private User getUser(int peerId, int userId) {
+    public User getUser(int peerId, int userId) {
         if (hasUser(peerId, userId)) {
             return map.get(peerId).get(userId);
         }
@@ -149,7 +149,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         if(user == null) {
             return;
         }
-        addIfAbsentAndConsumer(user, userId -> userId.setPrefix(suffix));
+        addIfAbsentAndConsumer(user, userId -> userId.setSuffix(suffix));
     }
 
     public void remove(@NotNull User user) {
