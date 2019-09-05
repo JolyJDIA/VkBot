@@ -8,7 +8,7 @@ import jolyjdia.bot.Bot;
 
 public class SetSuffixCommand extends Command {
     public SetSuffixCommand() {
-        super("setsuffix", "[пользователь] <суффикс>", "изменить суффикс пользователя");
+        super("setsuffix", "<пользователь> [суффикс]", "изменить суффикс пользователя");
     }
 
     @Override

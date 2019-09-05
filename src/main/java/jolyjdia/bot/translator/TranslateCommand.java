@@ -17,7 +17,7 @@ public class TranslateCommand extends Command {
     TranslateCommand() {
         super("translate",
                 "<текст>",
-                "перевод текста(Автоопределение языка)"
+                "перевод текста"
         );
         setAlias("перевод");
     }

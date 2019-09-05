@@ -55,7 +55,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             fireEvent(event);
             return;
         }
-        System.out.println("Сообщение: ("+ msg.getText() + ") Чат: " +msg.getPeerId());
+        System.out.println("СООБЩЕНИЕ: ("+ msg.getText() + ") ЧАТ: " +msg.getPeerId());
         NewMessageEvent event = new NewMessageEvent(msg);
         fireEvent(event);
     }

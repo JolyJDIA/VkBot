@@ -8,7 +8,7 @@ import jolyjdia.bot.Bot;
 
 public class SetPrefixCommand extends Command {
     public SetPrefixCommand() {
-        super("setprefix", "[пользователь] <префикс>", "изменить префикс пользователя");
+        super("setprefix", "<пользователь> [префикс]", "изменить префикс пользователя");
     }
     @Override
     public final void execute(User sender, String[] args) {
