@@ -10,9 +10,12 @@ import java.util.List;
 
 public class CalculatorKeyboard {
     public static final List<List<KeyboardButton>> BOARD = new ArrayList<>();
+    public static final List<List<KeyboardButton>> EMPTY = new ArrayList<>();
 
     static {
         renderNumber();
+        List<KeyboardButton> list = new ArrayList<>();
+        EMPTY.add(list);
     }
     private static void renderNumber() {
         List<KeyboardButton> list = null;
