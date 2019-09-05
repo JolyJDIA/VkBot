@@ -1,4 +1,4 @@
-package jolyjdia.bot.calculate;
+package jolyjdia.bot.calculate.calculator;
 
 import org.jetbrains.annotations.NonNls;
 
@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 
 public class Calculator {
     private static final Pattern COMPILE = Pattern.compile(" ");
-    private static final String[] OPERATORS = {"+", "-", "*", "/", "^", "(", ")", "<"};
+    //private static final String[] OPERATORS1 = {"+", "-", "*", "/", "^", "(", ")", "<"};
+    private static final String OPERATORS = "+-*/^()<";
 
     @NonNls
     private String userInput;
@@ -27,7 +28,8 @@ public class Calculator {
          * Gets user input Adds spaces in between the operation and the operatorList
          * Splits each item by spaces, into formattedUserInput
          */
-        for (String j : OPERATORS) {
+        for (int i = 0; i < OPERATORS.length(); ++i) {
+            String j = String.valueOf(OPERATORS.charAt(i));
             switch (j) {
                 case "(" -> userInput = userInput.replace(j, j + ' ');
                 case ")" -> userInput = userInput.replace(j, ' ' + j);

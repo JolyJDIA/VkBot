@@ -1,4 +1,4 @@
-package jolyjdia.bot.calculate;
+package jolyjdia.bot.calculate.calculator;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

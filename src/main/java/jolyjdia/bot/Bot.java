@@ -9,7 +9,7 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.groups.LongPollSettings;
-import jolyjdia.bot.calculate.Respondent;
+import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.shoutbox.ShoutboxMain;
@@ -59,7 +59,7 @@ public class Bot {
         handler.run();
     }
     private static void registerAll() {
-        new Respondent().onLoad();
+        new CalculatorRegister().onLoad();
         new YandexTraslate().onLoad();
         new GeoLoad().onLoad();
         new Puzzle().onLoad();

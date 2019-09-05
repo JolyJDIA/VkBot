@@ -1,4 +1,4 @@
-package jolyjdia.bot.calculate;
+package jolyjdia.bot.calculate.calculator;
 
 import com.google.common.collect.Maps;
 import org.jetbrains.annotations.Contract;
