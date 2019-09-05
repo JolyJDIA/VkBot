@@ -42,7 +42,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
 
             long start = System.currentTimeMillis();
-            RegisterCommandList.getRegisteredCommands().stream()//Хотел параллель(Не надо)
+            RegisterCommandList.getRegisteredCommands().stream()
                     .filter(c -> c.getName().equalsIgnoreCase(args[0])
                             || c.getAlias() != null && !c.getAlias().isEmpty()
                             && c.getAlias().stream().anyMatch(e -> e.equalsIgnoreCase(args[0])))
