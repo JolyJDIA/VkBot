@@ -22,6 +22,7 @@ public class RegisterCommandList {
         registerCommand(new BroadcastMessageCommand());
         registerCommand(new CalendarCommand());
         registerCommand(new InfoUserCommand());
+        registerCommand(new VersionCommand());
     }
 
     public static void registerCommand(Command command) {
