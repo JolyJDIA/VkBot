@@ -54,14 +54,12 @@ final class CalculatorManager {
     static void closeCalculatorBoard(String text, int peerId) {
         removeHistory(peerId);
         ObedientBot.sendKeyboard(text, peerId, new Keyboard()
-                .setButtons(Collections.emptyList())
-                .setOneTime(false));
+                .setButtons(Collections.emptyList()));
     }
     static void openCalculatorBoard(int peerId) {
         addHistory(peerId);
         ObedientBot.sendKeyboard("Калькулятор", peerId, new Keyboard()
-                .setButtons(CalculatorKeyboard.BOARD)
-                .setOneTime(false));
+                .setButtons(CalculatorKeyboard.BOARD));
     }
     @Contract(pure = true)
     static boolean isPersonalConversation(int peerId, int fromId) {
