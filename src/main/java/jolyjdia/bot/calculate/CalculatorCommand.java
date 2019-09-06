@@ -2,11 +2,7 @@ package jolyjdia.bot.calculate;
 
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
-import com.vk.api.sdk.objects.messages.Keyboard;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
 
 public class CalculatorCommand extends Command {
     CalculatorCommand() {
@@ -19,16 +15,10 @@ public class CalculatorCommand extends Command {
         if (peerId != sender.getUserId()) {
             return;
         }
-        if(CalculatorListener.containsKey(peerId)) {
-            CalculatorListener.removeHistory(peerId);
-            ObedientBot.sendKeyboard("Калькулятор", peerId, new Keyboard()
-                            .setButtons(Collections.emptyList())
-                            .setOneTime(false));
+        if(CalculatorManager.containsKey(peerId)) {
+            CalculatorManager.closeCalculatorBoard("_", peerId);
             return;
         }
-        CalculatorListener.addHistory(peerId);
-        ObedientBot.sendKeyboard("Калькулятор", peerId, new Keyboard()
-                        .setButtons(CalculatorKeyboard.BOARD)
-                        .setOneTime(false));
+        CalculatorManager.openCalculatorBoard("Калькулятор", peerId);
     }
 }

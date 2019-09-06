@@ -1,5 +1,6 @@
 package jolyjdia.bot.puzzle;
 
+import api.utils.ObedientBot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -8,9 +9,9 @@ public class MathPuzzle implements Answer {
     private final int answer;
     @NonNls private final String format;
     MathPuzzle() {
-        int token = Puzzle.RANDOM.nextInt(2);
-        int first = Puzzle.RANDOM.nextInt(1000);
-        int second = Puzzle.RANDOM.nextInt(1000);
+        int token = ObedientBot.RANDOM.nextInt(2);
+        int first = ObedientBot.RANDOM.nextInt(1000);
+        int second = ObedientBot.RANDOM.nextInt(1000);
         this.answer = token == 0 ? first + second : first - second;
         this.format = first + (token == 0 ? " + " : " - ") + second;
     }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NonNls;
 import java.util.ArrayList;
 
 public class MathFunctions {
-    private static final String[] advOperatorList = {
+    public static final String[] ADV_OPERATOR_LIST = {
             "sqrt",
             "sin",
             "cos",
@@ -32,8 +32,8 @@ public class MathFunctions {
     public static double factorialOf(double x) {
         double factorial = 1;
         
-        for (int i = (int)x; i > 1; i--) {
-            factorial *= i;
+        for (; x > 1; x--) {
+            factorial *= x;
         }
         return factorial;
     }
@@ -44,7 +44,7 @@ public class MathFunctions {
          * "sin(" with "sin" or "ln(" with "ln" etc.. Then adds a ( after sin. eg. ["2",
          * "+", "sin", "(", "x", ")"]
          */
-        for (@NonNls String operator : advOperatorList) {
+        for (@NonNls String operator : ADV_OPERATOR_LIST) {
             for (int i = 0; i < formattedUserInput.size(); i++) {
                 if (formattedUserInput.get(i).equals(operator + '(')) {
                     formattedUserInput.set(i, operator);
@@ -68,11 +68,9 @@ public class MathFunctions {
 
         EvaluateParentheses evalPrenths;
 
-        for (String operator : advOperatorList) {
+        for (String operator : ADV_OPERATOR_LIST) {
             for (int i = 0; i < formattedUserInput.size(); i++) {
-
                 if (formattedUserInput.get(i).equals(operator)) {
-                    // Evaluates [(, x, )] from [sin, (, x, )], leaving us with [sin, x]
                     evalPrenths = new EvaluateParentheses(formattedUserInput);
                     evalPrenths.condense(i + 1); 
                     x = Double.parseDouble(evalPrenths.getSolvedInnerExpression());

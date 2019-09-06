@@ -12,10 +12,7 @@ import api.utils.ObedientBot;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
-
 public class Puzzle extends JavaModule implements Listener {
-    static final Random RANDOM = new Random();
     private Answer answer;
     private boolean math;
     private boolean next = true;

@@ -11,13 +11,14 @@ import java.util.Random;
 
 @NonNls
 public final class ObedientBot {
+    public static final Random RANDOM = new Random();
 
     @Contract(pure = true)
     private ObedientBot() {}
     public static void sendMessage(String msg, int peerId) {
         try { Bot.getVkApiClient().messages()
                 .send(Bot.getGroupActor())
-                .randomId(new Random().nextInt(10000))
+                .randomId(RANDOM.nextInt(10000))
                 .message(msg)
                 .groupId(Bot.GROUP_ID)
                 .peerId(peerId)
@@ -27,7 +28,7 @@ public final class ObedientBot {
     public static void sendKeyboard(String msg, int peerId, Keyboard keyboard) {
         try { Bot.getVkApiClient().messages()
                 .send(Bot.getGroupActor())
-                .randomId(new Random().nextInt(10000))
+                .randomId(RANDOM.nextInt(10000))
                 .message(msg)
                 .groupId(Bot.GROUP_ID)
                 .peerId(peerId)

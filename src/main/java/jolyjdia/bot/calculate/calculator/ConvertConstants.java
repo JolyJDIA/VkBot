@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ConvertConstants {
-    private static final String[] constants = { "pi", "e", "tau" };
     private static final Map<String, Double> DOUBLE_MAP = Maps.newHashMap();
     @NonNls private final List<? super String> userInpList;
     static {
@@ -23,13 +22,13 @@ public class ConvertConstants {
     }
 
     public final void convert() {
-        for (String constant : constants) {
+        for (Map.Entry<String, Double> entry : DOUBLE_MAP.entrySet()) {
+            String constant = entry.getKey();
             for (int i = 0; i < userInpList.size(); i++) {
                 if (userInpList.get(i).equals(constant)) {
-                    userInpList.set(i, String.valueOf(DOUBLE_MAP.get(constant)));
+                    userInpList.set(i, String.valueOf(entry.getValue()));
                 } else if (userInpList.get(i).equals('-' + constant)) {
-                    // Deals with negative constants
-                    userInpList.set(i, "-" + DOUBLE_MAP.get(constant));
+                    userInpList.set(i, "-" + entry.getValue());
                 }
             }
         }
