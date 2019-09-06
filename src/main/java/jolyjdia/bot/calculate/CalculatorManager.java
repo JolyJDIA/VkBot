@@ -10,8 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 final class CalculatorManager {
+    public static final Pattern NUMBER = Pattern.compile("\\D+|\\d*\\.?\\d+");
+    public static final Pattern MATH = Pattern.compile("(.*[0-9]+.*)");
+    public static final Pattern MATHPERSONAL = Pattern.compile("[a-zA-Z.\\d+\\-*/()^< ]*");
     private static final Map<Integer, String> history = new HashMap<>();
     @Contract(pure = true)
     private CalculatorManager() {}
@@ -31,6 +35,9 @@ final class CalculatorManager {
                 history.computeIfPresent(peerId, (k, v) -> v.substring(0, v.length()-1));
                 String expression = history.get(peerId);
                 if(expression.isEmpty()) {
+                    return;
+                }
+                if(!NUMBER.matcher(expression).matches()) {
                     return;
                 }
                 ObedientBot.sendMessage(expression, peerId);

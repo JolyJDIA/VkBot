@@ -15,11 +15,7 @@ public class MathFunctions {
             "ln",
             "abs",
             "exp",
-            "fact",
-            "!",
-            "arcsin",
-            "arccos",
-            "arctan"};
+            "fact"};
     private final ArrayList<String> formattedUserInput;
 
     @Contract(pure = true)
@@ -63,34 +59,26 @@ public class MathFunctions {
 
     public final ArrayList<String> evaluateFunctions() {
         formatFunctions();
-        double x;
-
-        EvaluateParentheses evalPrenths;
-
         for (String operator : ADV_OPERATOR_LIST) {
             for (int i = 0; i < formattedUserInput.size(); i++) {
-                if (formattedUserInput.get(i).equals(operator)) {
-                    evalPrenths = new EvaluateParentheses(formattedUserInput);
-                    evalPrenths.condense(i + 1); 
-                    x = Double.parseDouble(evalPrenths.getSolvedInnerExpression());
-
-                    switch (operator) {
-                        case "sqrt" -> formattedUserInput.set(i, String.valueOf(Math.sqrt(x)));
-                        case "sin" -> formattedUserInput.set(i, String.valueOf(Math.sin(x)));
-                        case "cos" -> formattedUserInput.set(i, String.valueOf(Math.cos(x)));
-                        case "tan" -> formattedUserInput.set(i, String.valueOf(Math.tan(x)));
-                        case "ln" -> formattedUserInput.set(i, String.valueOf(Math.log(x)));
-                        case "abs" -> formattedUserInput.set(i, String.valueOf(Math.abs(x)));
-                        case "exp" -> formattedUserInput.set(i, String.valueOf(Math.exp(x)));
-                        case "fact" -> formattedUserInput.set(i, String.valueOf(factorialOf(x)));
-                        case "arcsin" -> formattedUserInput.set(i, String.valueOf(Math.asin(x)));
-                        case "arccos" -> formattedUserInput.set(i, String.valueOf(Math.acos(x)));
-                        case "arctan" -> formattedUserInput.set(i, String.valueOf(Math.atan(x)));
-                    }
-                    
-                    formattedUserInput.remove(i + 1); // Remove x from formattedUserInput
+                if (!formattedUserInput.get(i).equals(operator)) {
+                    continue;
                 }
+                EvaluateParentheses evalPrenths = new EvaluateParentheses(formattedUserInput);
+                evalPrenths.condense(i + 1);
+                double x = Double.parseDouble(evalPrenths.getSolvedInnerExpression());
 
+                switch (operator) {
+                    case "sqrt" -> formattedUserInput.set(i, String.valueOf(Math.sqrt(x)));
+                    case "sin" -> formattedUserInput.set(i, String.valueOf(Math.sin(x)));
+                    case "cos" -> formattedUserInput.set(i, String.valueOf(Math.cos(x)));
+                    case "tan" -> formattedUserInput.set(i, String.valueOf(Math.tan(x)));
+                    case "ln" -> formattedUserInput.set(i, String.valueOf(Math.log(x)));
+                    case "abs" -> formattedUserInput.set(i, String.valueOf(Math.abs(x)));
+                    case "exp" -> formattedUserInput.set(i, String.valueOf(Math.exp(x)));
+                    case "fact" -> formattedUserInput.set(i, String.valueOf(factorialOf(x)));
+                }
+                formattedUserInput.remove(i + 1);
             }
         }
 
