@@ -29,20 +29,17 @@ final class CalculatorManager {
             case "C" -> history.compute(peerId, (k, v) -> "");
             case "<=" -> {
                 history.computeIfPresent(peerId, (k, v) -> v.substring(0, v.length()-1));
-                sendExpression(peerId);
+                String expression = history.get(peerId);
+                if(expression.isEmpty()) {
+                    return;
+                }
+                ObedientBot.sendMessage(expression, peerId);
             }
             default -> {
                 history.compute(peerId, (k, v) -> v + element);
-                sendExpression(peerId);
+                ObedientBot.sendMessage(history.get(peerId), peerId);
             }
         }
-    }
-    public static void sendExpression(int peerId) {
-        String expression = history.get(peerId);
-        if(expression.isEmpty()) {
-            return;
-        }
-        ObedientBot.sendMessage(history.get(peerId), peerId);
     }
     private static void addHistory(int peerId) {
         history.put(peerId, "");
