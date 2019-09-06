@@ -88,10 +88,12 @@ public class Calculator {
         new ConvertConstants(formattedUserInput).convert();
         formattedUserInput = new MathFunctions(formattedUserInput).evaluateFunctions();
 
-        double condense = 0;
+        double condense;
         try {
             condense = Double.parseDouble(formattedUserInput.get(0));
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException e) {
+            return "";
+        }
         for (int i = 0; i < formattedUserInput.size()-1; ++i) {
             if (formattedUserInput.get(i).equals("-(")) {
                 formattedUserInput.add(i, "-1");
