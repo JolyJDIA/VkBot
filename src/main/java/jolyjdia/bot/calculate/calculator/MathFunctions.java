@@ -15,7 +15,8 @@ public class MathFunctions {
             "ln",
             "abs",
             "exp",
-            "fact"};
+            "fact"
+    };
     private final ArrayList<String> formattedUserInput;
 
     @Contract(pure = true)

@@ -16,16 +16,7 @@ public class Calculator {
         this.userInput = COMPILE.matcher(userInput).replaceAll("");
         this.formatUserInput();
     }
-
-    public String getUserInput() {
-        return userInput;
-    }
-
-    public final void formatUserInput() {
-        /**
-         * Gets user input Adds spaces in between the operation and the operatorList
-         * Splits each item by spaces, into formattedUserInput
-         */
+    private final void formatUserInput() {
         for (int i = 0; i < OPERATORS.length(); ++i) {
             String j = String.valueOf(OPERATORS.charAt(i));
             switch (j) {
@@ -35,13 +26,14 @@ public class Calculator {
             }
         }
 
-        formattedUserInput = new ArrayList<>(Arrays.asList(userInput.split(" ")));
+        this.formattedUserInput = new ArrayList<>(Arrays.asList(userInput.split(" ")));
 
         for (int i = 0; i < formattedUserInput.size(); i++) {
-            if (formattedUserInput.get(i).equals("-")) {
-                formattedUserInput.set(i, "+");
-                formattedUserInput.set(i+1, '-' + formattedUserInput.get(i+1));
+            if (!formattedUserInput.get(i).equals("-")) {
+                continue;
             }
+            formattedUserInput.set(i, "+");
+            formattedUserInput.set(i+1, '-' + formattedUserInput.get(i+1));
         }
 
     }

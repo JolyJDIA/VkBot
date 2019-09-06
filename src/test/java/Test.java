@@ -1,15 +1,13 @@
+import java.util.regex.Pattern;
+
 public class Test {
+    static final Pattern NUMBER = Pattern.compile("^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$");
     public static void main(String[] args) {
-        long start = System.nanoTime();
         for(int i = 0; i < 5; ++i) {
-            if(i != 2) {
-                System.out.println(i);
-            }
+            long start = System.nanoTime();
+            System.out.println(NUMBER.matcher("-1.5").matches());
+            long end = System.nanoTime() - start;
+            System.out.println(end);//36400//36100
         }
-        long end = System.nanoTime() - start;
-        System.out.println(end+" наносек");
-        //249900 //335500
-        //326000 //266400
-        //297200 //253200
     }
 }
