@@ -29,36 +29,35 @@ public final class CalculatorManager {
             case "C" -> history.compute(peerId, (k, v) -> "");
             case "<=" -> history.computeIfPresent(peerId, (k, v) -> v.substring(0, v.length()-1));
             default -> {
-                String append = history.get(peerId) + element;
-                history.compute(peerId, (k, v) -> append);
-                ObedientBot.sendMessage(append, peerId);
+                history.compute(peerId, (k, v) -> v + element);
+                ObedientBot.sendMessage(history.get(peerId), peerId);
             }
         }
     }
-    static void addHistory(int peerId) {
+    private static void addHistory(int peerId) {
         history.put(peerId, "");
     }
-    static void removeHistory(int peerId) {
+    private static void removeHistory(int peerId) {
         history.remove(peerId);
     }
     @Contract(pure = true)
     static boolean containsKey(int peerId) {
         return history.containsKey(peerId);
     }
-    public static void closeCalculatorBoard(String text, int peerId) {
+    static void closeCalculatorBoard(String text, int peerId) {
         removeHistory(peerId);
         ObedientBot.sendKeyboard(text, peerId, new Keyboard()
                 .setButtons(Collections.emptyList())
                 .setOneTime(false));
     }
-    public static void openCalculatorBoard(String text, int peerId) {
+    static void openCalculatorBoard(int peerId) {
         addHistory(peerId);
         ObedientBot.sendKeyboard("Калькулятор", peerId, new Keyboard()
                 .setButtons(CalculatorKeyboard.BOARD)
                 .setOneTime(false));
     }
     @Contract(pure = true)
-    public static boolean isPersonalConversation(int peerId, int fromId) {
+    static boolean isPersonalConversation(int peerId, int fromId) {
         return peerId == fromId && containsKey(peerId);
     }
 }

@@ -20,6 +20,6 @@ public class CalculatorCommand extends Command {
             CalculatorManager.closeCalculatorBoard("close", peerId);
             return;
         }
-        CalculatorManager.openCalculatorBoard("Калькулятор", peerId);
+        CalculatorManager.openCalculatorBoard(peerId);
     }
 }
