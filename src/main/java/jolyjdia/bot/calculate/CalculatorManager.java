@@ -11,12 +11,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class CalculatorManager {
+final class CalculatorManager {
     private static final Map<Integer, String> history = new HashMap<>();
     @Contract(pure = true)
     private CalculatorManager() {}
 
-    public static void actionsCalculator(int peerId, @NotNull @NonNls String element) {
+    static void actionsCalculator(int peerId, @NotNull @NonNls String element) {
         switch (element) {
             case "=" -> {
                 Calculator calculator = new Calculator(history.get(peerId));
