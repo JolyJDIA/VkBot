@@ -21,11 +21,8 @@ public class CalculatorListener implements Listener {
         if (!CalculatorManager.MATH.matcher(text).matches()) {
             return;
         }
-        long start = System.nanoTime();
         Calculator calculator = new Calculator(text);
         String answer = calculator.solveExpression();
-        long end = System.nanoTime() - start;
-        System.out.println(end);
         if(!CalculatorManager.OUTPUT.matcher(answer).matches()) {
             return;
         }
