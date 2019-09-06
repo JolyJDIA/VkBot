@@ -16,7 +16,7 @@ public class CalculatorListener implements Listener {
         boolean personal = CalculatorManager.isPersonalConversation(peerId, msg.getFromId());
         if (personal) {
             if(!CalculatorManager.MATHPERSONAL.matcher(msg.getText()).matches()) {
-                CalculatorManager.closeCalculatorBoard("Я вижу, дружок, тебе не нужен калькулятор-board", peerId);
+                CalculatorManager.closeCalculatorBoard("Я вижу, дружок, тебе не нужен калькулятор", peerId);
                 return;
             }
             CalculatorManager.actionsCalculator(peerId, msg.getText());
