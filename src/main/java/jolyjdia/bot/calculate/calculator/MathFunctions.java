@@ -17,7 +17,6 @@ public class MathFunctions {
             "exp",
             "fact",
             "!",
-            "pow",
             "arcsin",
             "arccos",
             "arctan"};
@@ -84,7 +83,6 @@ public class MathFunctions {
                         case "abs" -> formattedUserInput.set(i, String.valueOf(Math.abs(x)));
                         case "exp" -> formattedUserInput.set(i, String.valueOf(Math.exp(x)));
                         case "fact" -> formattedUserInput.set(i, String.valueOf(factorialOf(x)));
-                        case "pow" -> formattedUserInput.set(i, String.valueOf(Math.pow(x, 2)));
                         case "arcsin" -> formattedUserInput.set(i, String.valueOf(Math.asin(x)));
                         case "arccos" -> formattedUserInput.set(i, String.valueOf(Math.acos(x)));
                         case "arctan" -> formattedUserInput.set(i, String.valueOf(Math.atan(x)));
