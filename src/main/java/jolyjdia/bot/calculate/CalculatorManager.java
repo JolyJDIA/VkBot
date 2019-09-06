@@ -27,12 +27,22 @@ final class CalculatorManager {
                 closeCalculatorBoard(answer, peerId);
             }
             case "C" -> history.compute(peerId, (k, v) -> "");
-            case "<=" -> history.computeIfPresent(peerId, (k, v) -> v.substring(0, v.length()-1));
+            case "<=" -> {
+                history.computeIfPresent(peerId, (k, v) -> v.substring(0, v.length()-1));
+                sendExpression(peerId);
+            }
             default -> {
                 history.compute(peerId, (k, v) -> v + element);
-                ObedientBot.sendMessage(history.get(peerId), peerId);
+                sendExpression(peerId);
             }
         }
+    }
+    public static void sendExpression(int peerId) {
+        String expression = history.get(peerId);
+        if(expression.isEmpty()) {
+            return;
+        }
+        ObedientBot.sendMessage(history.get(peerId), peerId);
     }
     private static void addHistory(int peerId) {
         history.put(peerId, "");
