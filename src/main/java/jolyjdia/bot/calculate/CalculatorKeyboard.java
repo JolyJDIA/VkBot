@@ -31,8 +31,8 @@ class CalculatorKeyboard {
     private static void renderAction() {
         List<KeyboardButton> keyboardButtons = new ArrayList<>(3);
         keyboardButtons.add(create("C", KeyboardButtonColor.NEGATIVE));
-        keyboardButtons.add(create("<=", KeyboardButtonColor.POSITIVE));
-        keyboardButtons.add(create("=", KeyboardButtonColor.POSITIVE));
+        keyboardButtons.add(create("<=", KeyboardButtonColor.NEGATIVE));
+        keyboardButtons.add(create("=", KeyboardButtonColor.NEGATIVE));
         BOARD.add(keyboardButtons);
     }
     private static void renderOperation() {
