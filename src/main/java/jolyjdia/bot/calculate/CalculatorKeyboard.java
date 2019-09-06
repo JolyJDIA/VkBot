@@ -10,51 +10,48 @@ import jolyjdia.bot.calculate.calculator.MathFunctions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalculatorKeyboard {
-    static final List<List<KeyboardButton>> BOARD = new ArrayList<>();
-    private static final List<List<KeyboardButton>> EMPTY = new ArrayList<>();
+class CalculatorKeyboard {
+    static final List<List<KeyboardButton>> BOARD = new ArrayList<>(7);
 
     static {
         renderNumber();
-        List<KeyboardButton> list = new ArrayList<>();
-        EMPTY.add(list);
+        renderOperation();
+        renderAction();
     }
     private static void renderNumber() {
         List<KeyboardButton> list = null;
         for(int i = 0; i < 10; ++i) {
             if(i % 4 == 0) {
-                list = new ArrayList<>();
+                list = new ArrayList<>(4);
                 BOARD.add(list);
             }
             list.add(create(String.valueOf(i), KeyboardButtonColor.PRIMARY));
         }
-        List<KeyboardButton> operatortButtons = null;
-        for(int i = 0; i < Calculator.OPERATORS.length(); ++i) {
-            String c = String.valueOf(Calculator.OPERATORS.charAt(i));
-            if(i % 4 == 0) {
-                operatortButtons = new ArrayList<>();
-                BOARD.add(operatortButtons);
-            }
-            operatortButtons.add(create(c, KeyboardButtonColor.PRIMARY));
-        }
-
-        List<KeyboardButton> advOperatorList = null;
-        for(int i = 0; i < 8; ++i) {
-            if(i % 4 == 0) {
-                advOperatorList = new ArrayList<>();
-                BOARD.add(advOperatorList);
-            }
-            advOperatorList.add(create(MathFunctions.ADV_OPERATOR_LIST[i], KeyboardButtonColor.PRIMARY));
-        }
-        List<KeyboardButton> keyboardButtons = new ArrayList<>();
+    }
+    private static void renderAction() {
+        List<KeyboardButton> keyboardButtons = new ArrayList<>(3);
         keyboardButtons.add(create("C", KeyboardButtonColor.NEGATIVE));
         keyboardButtons.add(create("<=", KeyboardButtonColor.POSITIVE));
         keyboardButtons.add(create("=", KeyboardButtonColor.POSITIVE));
         BOARD.add(keyboardButtons);
-
-
     }
-    public static KeyboardButton create(String label, KeyboardButtonColor color) {
+    private static void renderOperation() {
+        List<KeyboardButton> operatortButtons = null;
+        for(int i = 0; i < Calculator.OPERATORS.length(); ++i) {
+            String c = String.valueOf(Calculator.OPERATORS.charAt(i));
+            if(i % 4 == 0) {
+                operatortButtons = new ArrayList<>(4);
+                BOARD.add(operatortButtons);
+            }
+            operatortButtons.add(create(c, KeyboardButtonColor.PRIMARY));
+        }
+        List<KeyboardButton> advOperatorList = new ArrayList<>(4);
+        for(int i = 0; i < 4; ++i) {
+            advOperatorList.add(create(MathFunctions.ADV_OPERATOR_LIST[i], KeyboardButtonColor.PRIMARY));
+        }
+        BOARD.add(advOperatorList);
+    }
+    private static KeyboardButton create(String label, KeyboardButtonColor color) {
         return new KeyboardButton().setColor(color).setAction(new KeyboardButtonAction()
                 .setType(KeyboardButtonActionType.TEXT)
                 .setLabel(label));

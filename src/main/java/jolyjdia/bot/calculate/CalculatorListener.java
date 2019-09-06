@@ -20,7 +20,7 @@ public class CalculatorListener implements Listener {
         boolean personal = CalculatorManager.isPersonalConversation(peerId, msg.getFromId());
         if (personal) {
             if(!MATHPERSONAL.matcher(msg.getText()).matches()) {
-                CalculatorManager.closeCalculatorBoard("close", peerId);
+                CalculatorManager.closeCalculatorBoard("Я вижу, дружок, тебе не нужен калькулятор-board", peerId);
                 return;
             }
             CalculatorManager.actionsCalculator(peerId, msg.getText());
@@ -28,11 +28,8 @@ public class CalculatorListener implements Listener {
             if (!MATH.matcher(msg.getText()).matches()) {
                 return;
             }
-            long start = System.nanoTime();
             Calculator calc = new Calculator(msg.getText());
             String answer = calc.solveExpression();
-            long end = System.nanoTime() - start;
-            System.out.println(end);
             if (answer.isEmpty()) {
                 return;
             }

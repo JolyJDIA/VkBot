@@ -6,7 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class CalculatorCommand extends Command {
     CalculatorCommand() {
-        super("calc");
+        super("calc", "клавиатура калькулятора(РАБОТАЕТ ТОЛЬКО В ЛИЧНЫХ СООБЩЕНИЯХ)");
+        setAlias("calculator");
     }
 
     @Override
@@ -16,7 +17,7 @@ public class CalculatorCommand extends Command {
             return;
         }
         if(CalculatorManager.containsKey(peerId)) {
-            CalculatorManager.closeCalculatorBoard("_", peerId);
+            CalculatorManager.closeCalculatorBoard("close", peerId);
             return;
         }
         CalculatorManager.openCalculatorBoard("Калькулятор", peerId);
