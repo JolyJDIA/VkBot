@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
-    private CommandExecutor executor = new CommandExecutor(Runtime.getRuntime().availableProcessors());
+    private final CommandExecutor executor = new CommandExecutor(Runtime.getRuntime().availableProcessors());
 
     public CallbackApiLongPollHandler(VkApiClient client, GroupActor actor) {
         super(client, actor);

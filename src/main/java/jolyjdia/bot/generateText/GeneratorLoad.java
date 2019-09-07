@@ -33,7 +33,7 @@ public class GeneratorLoad extends JavaModule {
                 data.getModelOutputUnitToUse(),
                 initParamsStdDev);
 
-        int reportEveryNthEpoch = 2;
+        int reportEveryNthEpoch = 10;
         int trainingEpochs = 250;
 
         new TrainerNeural.BuilderTrainer()
