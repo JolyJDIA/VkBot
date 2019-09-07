@@ -11,12 +11,10 @@ public class Worker extends Thread implements Comparable<Worker> {
 
     @Override
     public void run() {
-        while (!isInterrupted()) {
-            Runnable task = taskQueue.poll();
-
-            if (task != null)
-                task.run();
-        }
+        try {
+            while (true)
+                taskQueue.take().run();
+        } catch (InterruptedException ignored) {}
     }
 
     void addTask(Runnable task) {
