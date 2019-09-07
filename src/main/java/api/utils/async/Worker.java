@@ -5,25 +5,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Note: this class has a natural ordering that is inconsistent with equals.
+ */
 public class Worker extends Thread implements Comparable<Worker> {
 
-    private BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<>();
 
     @Override
-    public void run() {
+    public final void run() {
         try {
-            while (true)
+            while (!isInterrupted()) {
                 taskQueue.take().run();
+            }
         } catch (InterruptedException ignored) {}
     }
 
-    void addTask(Runnable task) {
+    final void addTask(Runnable task) {
         taskQueue.add(task);
     }
 
     @Override
-    public int compareTo(@NotNull Worker o) {
+    public final int compareTo(@NotNull Worker o) {
         return Integer.compare(taskQueue.size(), o.taskQueue.size());
     }
-
 }

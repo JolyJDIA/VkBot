@@ -5,10 +5,11 @@ import jolyjdia.bot.generateText.neuralnetwork.autodiff.Graph;
 import jolyjdia.bot.generateText.neuralnetwork.datastructs.DataSequence;
 import jolyjdia.bot.generateText.neuralnetwork.datastructs.DataSet;
 import jolyjdia.bot.generateText.neuralnetwork.datastructs.DataStep;
+import jolyjdia.bot.generateText.neuralnetwork.datastructs.Matrix;
 import jolyjdia.bot.generateText.neuralnetwork.loss.Loss;
-import jolyjdia.bot.generateText.neuralnetwork.matrix.Matrix;
 import jolyjdia.bot.generateText.neuralnetwork.model.Model;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class TrainerNeural {
     }
 
     public static class BuilderTrainer {
+        @NonNls
         private int trainingEpochs;
         private double learningRate;
         private Model model;
@@ -115,23 +117,22 @@ public class TrainerNeural {
                 return;
             }
             new Thread(() -> {
-                StringBuilder builder = new StringBuilder("epoch[");
                 for (int i = 0; i < trainingEpochs; ++i) {
-                    builder.append(i+1).append('/').append(trainingEpochs).append(']');
-
                     double reportedLossTrain = pass();
                     if (Double.isNaN(reportedLossTrain) || Double.isInfinite(reportedLossTrain)) {
                         return;
                     }
-                    builder.append("\tloss = ").append(String.format("%.5f", reportedLossTrain));
-                    System.out.println(builder);
+                    String info = "epoch["+(i+1)+'/'+trainingEpochs+']'+"\tloss = "+String.format("%.5f", reportedLossTrain);
+                    System.out.println(info);
 
                     if (i % reportEveryNthEpoch == reportEveryNthEpoch - 1) {
                         data.displayReport(model);
                     }
                 }
                 if (overwriteSaved) {
+                    System.out.println("Сохраняю данные...");
                     FileSerializer.serialize(savePath, model);
+                    System.out.println("Данные сохранены");
                 }
             }).start();
         }
