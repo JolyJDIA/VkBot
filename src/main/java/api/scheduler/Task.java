@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class Task implements TypeTask {
+public class Task implements TypeTask, Runnable {
     public static final int NO_REPEATING = -1;
     private int delay = NO_REPEATING;
     private int period = NO_REPEATING;
@@ -29,6 +29,14 @@ public class Task implements TypeTask {
         this.delay = delay;
         this.period = period;
     }
+    @Override
+    public final void run() {
+        if (this.runnable != null) {
+            this.runnable.run();
+        } else {
+            this.consumer.accept(this);
+        }
+    }
 
     @Contract(pure = true)
     public final int getDelay() {
@@ -43,12 +51,6 @@ public class Task implements TypeTask {
     public final void setCurrentTickZero() {
         this.currentTick = 0;
     }
-
-    @Contract(pure = true)
-    public final Runnable getRunnable() {
-        return runnable;
-    }
-
     @Contract(pure = true)
     public final Consumer<TypeTask> getConsumer() {
         return consumer;

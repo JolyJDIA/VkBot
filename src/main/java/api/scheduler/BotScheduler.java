@@ -19,9 +19,9 @@ public class BotScheduler {
         if(task.getCurrentTick() >= task.getDelay()) {
             if(task.getCurrentTick() % task.getPeriod() == 0) {
                 if (task.isSync()) {
-                    task.getRunnable().run();
+                    task.run();
                 } else {
-                    executor.execute(task.getRunnable());
+                    executor.execute(task);
                 }
                 task.setCurrentTickZero();
             }
