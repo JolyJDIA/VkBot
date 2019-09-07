@@ -2,12 +2,13 @@ package api.utils.async;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 public class CommandExecutor implements Executor {
 
-    private TreeSet<Worker> workers = new TreeSet<>();
+    private List<Worker> workers = new ArrayList<>();
 
     public CommandExecutor(int workersCount) {
         for (int i = 0; i < workersCount; i++) {
@@ -21,7 +22,9 @@ public class CommandExecutor implements Executor {
 
     @Override
     public void execute(@NotNull Runnable command) {
-        workers.first().addTask(command);
+        workers.sort(null);
+
+        workers.get(0).addTask(command);
     }
 
 }
