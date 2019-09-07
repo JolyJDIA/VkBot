@@ -16,7 +16,7 @@ public final class TickPerSeconds extends TimerTask {
     public static void doStart() {
         if (ourInstance == null) {
             ourInstance = new TickPerSeconds();
-            new Timer(true).scheduleAtFixedRate(ourInstance, 0, 50);
+            new Timer(true).scheduleAtFixedRate(ourInstance, 0, 50);//50
         }
     }
 
@@ -28,9 +28,11 @@ public final class TickPerSeconds extends TimerTask {
         }
         return avg / tpsRecent.size();
     }
+    private short tick;
 
     @Override
     public void run() {
+        ObedientBot.getScheduler().mainThreadHeartbeat();
         long startTime = System.nanoTime();
         long timeSpent = (startTime - lastPoll) / 1000;
         if (timeSpent == 0) {

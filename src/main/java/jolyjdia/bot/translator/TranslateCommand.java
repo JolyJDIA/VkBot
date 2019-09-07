@@ -25,15 +25,17 @@ public class TranslateCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length >= 2) {
-            Language lang = COMPILE.matcher(args[1]).matches() ? Language.RUSSIAN : Language.ENGLISH;
-            @NonNls String translate;
-            try {
-                translate = YandexTraslate.translate(lang, StringBind.toString(args));
-            } catch (IOException e) {
-                ObedientBot.sendMessage("Ошибка", sender.getPeerId());
-                return;
-            }
-            ObedientBot.sendMessage(translate, sender.getPeerId());
+            ObedientBot.getScheduler().runAsyncTask(() -> {
+                Language lang = COMPILE.matcher(args[1]).matches() ? Language.RUSSIAN : Language.ENGLISH;
+                @NonNls String translate;
+                try {
+                    translate = YandexTraslate.translate(lang, StringBind.toString(args));
+                } catch (IOException e) {
+                    ObedientBot.sendMessage("Ошибка", sender.getPeerId());
+                    return;
+                }
+                ObedientBot.sendMessage(translate, sender.getPeerId());
+            });
         } else {
             ObedientBot.sendMessage("Использование: " + getUseCommand(), sender.getPeerId());
         }

@@ -1,5 +1,6 @@
 package api.utils;
 
+import api.scheduler.BotScheduler;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Keyboard;
@@ -10,12 +11,12 @@ import org.jetbrains.annotations.NonNls;
 
 import java.util.Random;
 
-@NonNls
-public final class ObedientBot {
+@NonNls public final class ObedientBot {
     public static final Random RANDOM = new Random();
+    private static final BotScheduler SCHEDULER = new BotScheduler();
 
-    @Contract(pure = true)
-    private ObedientBot() {}
+    @Contract(pure = true) private ObedientBot() {}
+
     public static void sendMessage(String msg, int peerId) {
         try {
             send().peerId(peerId).message(msg).execute();
@@ -36,5 +37,10 @@ public final class ObedientBot {
         try {
             Bot.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId-2000000000, title).execute();
         } catch (ApiException | ClientException ignored) {}
+    }
+
+    @Contract(pure = true)
+    public static BotScheduler getScheduler() {
+        return SCHEDULER;
     }
 }
