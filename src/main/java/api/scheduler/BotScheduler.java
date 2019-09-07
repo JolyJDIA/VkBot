@@ -16,14 +16,15 @@ public class BotScheduler {
         if(task == null) {
             return;
         }
-        if(task.getCurrentTick() >= task.getDelay()
-                && task.getCurrentTick() >= task.getPeriod()) {
-            if (task.isSync()) {
-                task.getRunnable().run();
-            } else {
-                executor.execute(task.getRunnable());
+        if(task.getCurrentTick() >= task.getDelay()) {
+            if(task.getCurrentTick() % task.getPeriod() == 0) {
+                if (task.isSync()) {
+                    task.getRunnable().run();
+                } else {
+                    executor.execute(task.getRunnable());
+                }
+                task.setCurrentTickZero();
             }
-            task.setCurrentTickZero();
         }
         if(task.getPeriod() > 0) {
             task.addCurrentTick();
@@ -31,9 +32,7 @@ public class BotScheduler {
             taskQueue.remove(task);
         }
     }
-    public final void runSyncTask(Runnable runnable) {
-        taskQueue.add(new Task(runnable));
-    }
+
     public final void runSyncTaskTimer(Runnable runnable, int period) {
         taskQueue.add(new Task(runnable, 0, period));
     }
