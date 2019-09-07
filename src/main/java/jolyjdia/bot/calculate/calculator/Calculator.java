@@ -2,6 +2,8 @@ package jolyjdia.bot.calculate.calculator;
 
 import org.jetbrains.annotations.NonNls;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -38,40 +40,37 @@ public class Calculator {
 
     }
 
-    private final double condenseExpression(String operator, int indexVal) {
-        double x = 0;
-        double y = 0;
+    private final BigDecimal condenseExpression(String operator, int indexVal) {
+        BigDecimal x = BigDecimal.ZERO;
+        BigDecimal y = BigDecimal.ZERO;
         try {
-            x = Double.parseDouble(formattedUserInput.get(indexVal - 1)); // value of i-1
+            x = new BigDecimal(formattedUserInput.get(indexVal - 1));
+            y = new BigDecimal(formattedUserInput.get(indexVal + 1));
         } catch (NumberFormatException ignored) {}
 
-        try {
-            y = Double.parseDouble(formattedUserInput.get(indexVal + 1)); // value of i+1
-        } catch (NumberFormatException ignored) {}
-
-        double output; // final output
+        BigDecimal output; // final output
         switch (operator) {
             case "^":
-                output = Math.pow(x, y);
+                output = x.pow(y.intValue());
                 break;
             case "/":
-                if (y == 0) {
-                    return 0;
+                if (y.equals(BigDecimal.ZERO)) {
+                    return BigDecimal.ZERO;
                 } else {
-                    output = x / y;
+                    output = x.divide(y, MathContext.DECIMAL128);
                 }
                 break;
             case "*":
-                output = x * y;
+                output = x.multiply(y);
                 break;
             case "-":
-                output = x - y;
+                output = x.subtract(y);
                 break;
             case "+":
-                output = x + y;
+                output = x.add(y);
                 break;
             default:
-                return 0;
+                return BigDecimal.ZERO;
         }
         return output;
     }
@@ -80,9 +79,9 @@ public class Calculator {
         new ConvertConstants(formattedUserInput).convert();
         formattedUserInput = new MathFunctions(formattedUserInput).evaluateFunctions();
 
-        double condense = 0;
+        BigDecimal condense = BigDecimal.ZERO;
         try {
-            condense = Double.parseDouble(formattedUserInput.get(0));
+            condense = new BigDecimal(formattedUserInput.get(0));
         } catch (NumberFormatException ignored) {}
         for (int i = 0; i < formattedUserInput.size()-1; ++i) {
             if (formattedUserInput.get(i).equals("-(")) {

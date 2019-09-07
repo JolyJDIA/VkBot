@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 
 final class CalculatorManager {
     static final Pattern OUTPUT = Pattern.compile("^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$");
-    //static final Pattern MATH = Pattern.compile("(.*[0-9]+.*)");
     static final Pattern MATH = Pattern.compile("[a-zA-Z.\\d+\\-*/()^ ]*");
     private static final Map<Integer, String> history = new HashMap<>();
     @Contract(pure = true)

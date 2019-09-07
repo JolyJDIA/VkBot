@@ -20,14 +20,16 @@ public class MathFunctions {
     private final ArrayList<String> formattedUserInput;
 
     @Contract(pure = true)
-    public MathFunctions(ArrayList<String> formattedUserInput) {
+    MathFunctions(ArrayList<String> formattedUserInput) {
         this.formattedUserInput = formattedUserInput;
     }
 
     @Contract(pure = true)
-    public static double factorialOf(double x) {
+    private static double factorialOf(double x) {
+        if(x > 100) {
+            return -1;
+        }
         double factorial = 1;
-        
         for (; x > 1; x--) {
             factorial *= x;
         }
@@ -58,7 +60,7 @@ public class MathFunctions {
         }
     }
 
-    public final ArrayList<String> evaluateFunctions() {
+    final ArrayList<String> evaluateFunctions() {
         formatFunctions();
         for (String operator : ADV_OPERATOR_LIST) {
             for (int i = 0; i < formattedUserInput.size(); i++) {
@@ -68,7 +70,6 @@ public class MathFunctions {
                 EvaluateParentheses evalPrenths = new EvaluateParentheses(formattedUserInput);
                 evalPrenths.condense(i + 1);
                 double x = Double.parseDouble(evalPrenths.getSolvedInnerExpression());
-
                 switch (operator) {
                     case "sqrt" -> formattedUserInput.set(i, String.valueOf(Math.sqrt(x)));
                     case "sin" -> formattedUserInput.set(i, String.valueOf(Math.sin(x)));

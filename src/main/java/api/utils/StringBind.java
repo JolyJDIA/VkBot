@@ -39,6 +39,7 @@ public final class StringBind {
             int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
             GetConversationMembersResponse g = Bot.getVkApiClient().
                     messages().getConversationMembers(Bot.getGroupActor(), sender.getPeerId()).execute();
+            System.out.println(g);
             if (g == null) {
                 ObedientBot.sendMessage("Упс, что-то пошло не так;( Обратитесь к администратору", sender.getPeerId());
                 return null;

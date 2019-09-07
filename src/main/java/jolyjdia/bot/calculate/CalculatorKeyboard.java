@@ -1,8 +1,7 @@
 package jolyjdia.bot.calculate;
 
+import api.utils.KeyboardUtils;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
-import com.vk.api.sdk.objects.messages.KeyboardButtonAction;
-import com.vk.api.sdk.objects.messages.KeyboardButtonActionType;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import jolyjdia.bot.calculate.calculator.Calculator;
 import jolyjdia.bot.calculate.calculator.MathFunctions;
@@ -25,14 +24,14 @@ class CalculatorKeyboard {
                 list = new ArrayList<>(4);
                 BOARD.add(list);
             }
-            list.add(create(String.valueOf(i), KeyboardButtonColor.PRIMARY));
+            list.add(KeyboardUtils.create(String.valueOf(i), KeyboardButtonColor.PRIMARY));
         }
     }
     private static void renderAction() {
         List<KeyboardButton> keyboardButtons = new ArrayList<>(3);
-        keyboardButtons.add(create("C", KeyboardButtonColor.NEGATIVE));
-        keyboardButtons.add(create("<=", KeyboardButtonColor.NEGATIVE));
-        keyboardButtons.add(create("=", KeyboardButtonColor.NEGATIVE));
+        keyboardButtons.add(KeyboardUtils.create("C", KeyboardButtonColor.NEGATIVE));
+        keyboardButtons.add(KeyboardUtils.create("<=", KeyboardButtonColor.NEGATIVE));
+        keyboardButtons.add(KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE));
         BOARD.add(keyboardButtons);
     }
     private static void renderOperation() {
@@ -43,17 +42,12 @@ class CalculatorKeyboard {
                 operatortButtons = new ArrayList<>(4);
                 BOARD.add(operatortButtons);
             }
-            operatortButtons.add(create(c, KeyboardButtonColor.PRIMARY));
+            operatortButtons.add(KeyboardUtils.create(c, KeyboardButtonColor.PRIMARY));
         }
         List<KeyboardButton> advOperatorList = new ArrayList<>(4);
         for(int i = 0; i < 4; ++i) {
-            advOperatorList.add(create(MathFunctions.ADV_OPERATOR_LIST[i], KeyboardButtonColor.PRIMARY));
+            advOperatorList.add(KeyboardUtils.create(MathFunctions.ADV_OPERATOR_LIST[i], KeyboardButtonColor.PRIMARY));
         }
         BOARD.add(advOperatorList);
-    }
-    private static KeyboardButton create(String label, KeyboardButtonColor color) {
-        return new KeyboardButton().setColor(color).setAction(new KeyboardButtonAction()
-                .setType(KeyboardButtonActionType.TEXT)
-                .setLabel(label));
     }
 }

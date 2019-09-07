@@ -1,6 +1,6 @@
 package jolyjdia.bot.shoutbox;
 
-import jolyjdia.bot.neuralnetwork.similarity.Cosine;
+import jolyjdia.bot.shoutbox.similarity.Cosine;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
