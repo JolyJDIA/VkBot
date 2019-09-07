@@ -14,6 +14,7 @@ import api.event.messages.ReplyMessageEvent;
 import api.event.messages.SendCommandEvent;
 import api.event.post.NewPostWallEvent;
 import api.event.post.RepostWallEvent;
+import api.utils.async.CommandExecutor;
 import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -29,6 +30,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
+
+    private CommandExecutor executor = new CommandExecutor(Runtime.getRuntime().availableProcessors());
 
     public CallbackApiLongPollHandler(VkApiClient client, GroupActor actor) {
         super(client, actor);
@@ -47,7 +50,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                             || c.getAlias() != null && !c.getAlias().isEmpty()
                             && c.getAlias().stream().anyMatch(e -> e.equalsIgnoreCase(args[0])))
                     .findFirst()
-                    .ifPresent(c -> c.execute(user, args));
+                    .ifPresent(c -> executor.execute(() -> c.execute(user, args)));
             @NonNls long end = System.currentTimeMillis() - start;
             System.out.println("КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
 
