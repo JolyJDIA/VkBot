@@ -27,9 +27,6 @@ public class ShoutboxMain extends JavaModule implements Listener {
     public final void onLoad() {
         RegisterListEvent.registerEvent(this);
     }
-    /**
-     * ГОВНО
-     */
     @EventHandler
     public final void onShout(@NotNull NewMessageEvent e) {
         Message msg = e.getMessage();

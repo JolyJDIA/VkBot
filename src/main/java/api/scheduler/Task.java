@@ -26,7 +26,7 @@ public class Task implements TypeTask, Runnable {
     public Task(Object o, int delay, int period) {
         this(o);
         this.period = period;
-        this.currentTick = (period-delay)+1;
+        this.currentTick = (period-delay);
     }
     @Override
     public final void run() {
@@ -42,7 +42,7 @@ public class Task implements TypeTask, Runnable {
     }
 
     public final void setCurrentTickZero() {
-        this.currentTick = 0;
+        this.currentTick = NO_REPEATING;
     }
     @Contract(pure = true)
     public final Consumer<TypeTask> getConsumer() {

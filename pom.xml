@@ -13,10 +13,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>LATEST</version>
                 <configuration>
-                    <source>12</source>
-                    <target>12</target>
+                    <source>12.0.2</source>
+                    <target>12.0.2</target>
                 </configuration>
             </plugin>
         </plugins>

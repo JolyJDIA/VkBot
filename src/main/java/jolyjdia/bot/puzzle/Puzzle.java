@@ -19,16 +19,29 @@ public class Puzzle extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-        /**ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(() -> {
+        ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(() -> {
             if (next) {
                 math = !math;
                 answer = math ? new MathPuzzle() : new TextPuzzle();
                 next = false;
             }
-            for(int chat : Bot.getProfileList().getChats()) {
-                ObedientBot.sendMessage("Чат-игра!\n"+answer.getStringFormatAnswer(), chat);
+            System.out.println("EXECUTE");
+            //for(int chat : Bot.getProfileList().getChats()) {
+              //  ObedientBot.sendMessage("Чат-игра!\n"+answer.getStringFormatAnswer(), chat);
+            //}
+        }, 2, 5);
+        ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(() -> {
+            if (next) {
+                math = !math;
+                answer = math ? new MathPuzzle() : new TextPuzzle();
+                next = false;
             }
-        }, 7000, 7000);*/
+            System.out.println("EXECUTE2");
+            System.out.println("ЗАДАЧ2");
+            //for(int chat : Bot.getProfileList().getChats()) {
+            //  ObedientBot.sendMessage("Чат-игра!\n"+answer.getStringFormatAnswer(), chat);
+            //}
+        }, 2, 5);
         RegisterCommandList.registerCommand(new Puzzle.GeneratePuzzleCommand(this));
         RegisterListEvent.registerEvent(this);
     }
@@ -50,7 +63,6 @@ public class Puzzle extends JavaModule implements Listener {
             super("ask", "сгенерировать загадку");
             this.puzzle = puzzle;
         }
-
 
         @Override
         public final void execute(User sender, String[] args) {

@@ -13,6 +13,7 @@ import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.game.GameLoad;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.puzzle.Puzzle;
+import jolyjdia.bot.shoutbox.ShoutboxMain;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 
@@ -64,9 +65,9 @@ public class Bot {
         new YandexTraslate().onLoad();
         new GeoLoad().onLoad();
         new Puzzle().onLoad();
-       // new ShoutboxMain().onLoad();
+        new ShoutboxMain().onLoad();
         new GameLoad().onLoad();
-        //new GeneratorLoad().onLoad();
+       // new GeneratorLoad().onLoad();
     }
 
     @Contract(pure = true)
