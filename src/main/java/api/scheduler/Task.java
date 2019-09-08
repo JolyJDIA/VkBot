@@ -26,7 +26,7 @@ public class Task implements TypeTask, Runnable {
     public Task(Object o, int delay, int period) {
         this(o);
         this.period = period;
-        this.currentTick = period-delay;
+        this.currentTick = (period-delay)+1;
     }
     @Override
     public final void run() {
