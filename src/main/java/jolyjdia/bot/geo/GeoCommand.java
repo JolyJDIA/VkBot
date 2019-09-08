@@ -36,14 +36,14 @@ public class GeoCommand extends Command {
             return;
         }
         if(args.length == 2) {
-           // ObedientBot.getScheduler().runTaskAsynchronously(() -> {
+            ObedientBot.getScheduler().runAsyncTask(() -> {
                 Matcher matcher = IPV4.matcher(args[1]);
                 if (!matcher.matches()) {
                     ObedientBot.sendMessage("Это не айпи 0_o", sender.getPeerId());
                     return;
                 }
                 ObedientBot.sendMessage(getInfo(args[1]), sender.getPeerId());
-           // });
+            });
         } else {
             ObedientBot.sendMessage(getArguments(), sender.getPeerId());
         }

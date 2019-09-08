@@ -81,9 +81,14 @@ public class BotScheduler {
     public final Task runAsyncTaskLater(Consumer<Task> consumer, int delay) {
         return async(consumer, delay, Task.NO_REPEATING);
     }
-    final void cancel(Task task) {
+    public final void cancel(Task task) {
         taskQueue.remove(task);
     }
+    public final void cancelTasks() {
+        taskQueue.clear();
+    }
+
+    @NotNull
     private Task sync(Object o, int delay, int period) {
         if (delay < 0L) {
             delay = 0;
