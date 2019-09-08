@@ -68,6 +68,6 @@ public class Task implements TypeTask, Runnable {
 
     @Override
     public final void cancel() {
-        ObedientBot.getScheduler().cancel(this);
+        ObedientBot.SCHEDULER.cancel(this);
     }
 }

@@ -13,7 +13,7 @@ import java.util.Random;
 
 @NonNls public final class ObedientBot {
     public static final Random RANDOM = new Random();
-    private static final BotScheduler SCHEDULER = new BotScheduler();
+    public static final BotScheduler SCHEDULER = new BotScheduler();
 
     @Contract(pure = true) private ObedientBot() {}
 
@@ -37,10 +37,5 @@ import java.util.Random;
         try {
             Bot.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId-2000000000, title).execute();
         } catch (ApiException | ClientException ignored) {}
-    }
-
-    @Contract(pure = true)
-    public static BotScheduler getScheduler() {
-        return SCHEDULER;
     }
 }

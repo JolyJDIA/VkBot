@@ -32,7 +32,7 @@ public final class TickPerSeconds extends TimerTask {
 
     @Override
     public void run() {
-        ObedientBot.getScheduler().mainThreadHeartbeat();
+        ObedientBot.SCHEDULER.mainThreadHeartbeat();
         long startTime = System.nanoTime();
         long timeSpent = (startTime - lastPoll) / 1000;
         if (timeSpent == 0) {

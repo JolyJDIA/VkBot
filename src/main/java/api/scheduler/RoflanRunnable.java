@@ -8,31 +8,31 @@ public class RoflanRunnable implements Runnable {
     private Task task;
 
     public void cancel() {
-        ObedientBot.getScheduler().cancel(task);
+        ObedientBot.SCHEDULER.cancel(task);
     }
     @NotNull
     public Task runTask() {
-        return setupTask(ObedientBot.getScheduler().runTask(this));
+        return setupTask(ObedientBot.SCHEDULER.runTask(this));
     }
     @NotNull
     public Task runTaskAsynchronously() {
-        return setupTask(ObedientBot.getScheduler().runAsyncTask(this));
+        return setupTask(ObedientBot.SCHEDULER.runAsyncTask(this));
     }
     @NotNull
     public Task runTaskLater(int delay) {
-        return setupTask(ObedientBot.getScheduler().runTaskLater(this, delay));
+        return setupTask(ObedientBot.SCHEDULER.runTaskLater(this, delay));
     }
     @NotNull
     public Task runTaskLaterAsynchronously(int delay) {
-        return setupTask(ObedientBot.getScheduler().runAsyncTaskLater(this, delay));
+        return setupTask(ObedientBot.SCHEDULER.runAsyncTaskLater(this, delay));
     }
     @NotNull
     public Task runTaskTimer(int delay, int period) {
-        return setupTask(ObedientBot.getScheduler().runTaskTimer(this, delay, period));
+        return setupTask(ObedientBot.SCHEDULER.runTaskTimer(this, delay, period));
     }
     @NotNull
     public Task runTaskTimerAsynchronously(int delay, int period) {
-        return setupTask(ObedientBot.getScheduler().runAsyncTaskTimer(this, delay, period));
+        return setupTask(ObedientBot.SCHEDULER.runAsyncTaskTimer(this, delay, period));
     }
     @Contract("_ -> param1")
     @NotNull

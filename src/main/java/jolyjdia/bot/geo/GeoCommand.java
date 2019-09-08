@@ -36,7 +36,7 @@ public class GeoCommand extends Command {
             return;
         }
         if(args.length == 2) {
-            ObedientBot.getScheduler().runAsyncTask(() -> {
+            ObedientBot.SCHEDULER.runAsyncTask(() -> {
                 Matcher matcher = IPV4.matcher(args[1]);
                 if (!matcher.matches()) {
                     ObedientBot.sendMessage("Это не айпи 0_o", sender.getPeerId());
