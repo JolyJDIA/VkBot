@@ -18,19 +18,23 @@ public class BotScheduler {
         if(task == null) {
             return;
         }
-        if(task.getCurrentTick() >= task.getDelay() && task.getCurrentTick() % task.getPeriod() == 0) {
+        if(task.getCurrentTick() >= task.getPeriod()) {
+            if(task.getCurrentTick() == task.getPeriod()) {
+                task.resetPeriod();
+            }
             if (task.isSync()) {
                 task.run();
             } else {
                 executor.execute(task);
             }
+            if (task.getPeriod() <= Task.NO_REPEATING) {
+                System.out.println("УДАЛЯЮ ЗАДАЧУ");
+                taskQueue.remove(task);
+                return;
+            }
             task.setCurrentTickZero();
         }
-        if(task.getPeriod() > 0) {
-            task.addCurrentTick();
-        } else {
-            taskQueue.remove(task);
-        }
+        task.addCurrentTick();
     }
     @NotNull
     public final Task runTask(Runnable runnable) {

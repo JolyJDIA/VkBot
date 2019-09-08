@@ -4,8 +4,10 @@ import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonAction;
 import com.vk.api.sdk.objects.messages.KeyboardButtonActionType;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
+import org.jetbrains.annotations.Contract;
 
 public final class KeyboardUtils {
+    @Contract(pure = true)
     private KeyboardUtils() {}
 
     public static KeyboardButton create(String label, KeyboardButtonColor color) {

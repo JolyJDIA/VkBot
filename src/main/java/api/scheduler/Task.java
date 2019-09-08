@@ -12,7 +12,6 @@ public class Task implements TypeTask, Runnable {
     private int delay = NO_REPEATING;
     private int period = NO_REPEATING;
     private int currentTick;
-
     private Runnable runnable;
     private Consumer<TypeTask> consumer;
 
@@ -28,16 +27,13 @@ public class Task implements TypeTask, Runnable {
 
     public Task(Object o, int delay, int period) {
         this(o);
-        if (delay < 0L) {
-            delay = 0;
-        }
         if (period == ERROR) {
             period = 1;
         } else if (period < NO_REPEATING) {
             period = NO_REPEATING;
         }
         this.delay = delay;
-        this.period = period;
+        this.period = period + delay;
     }
     @Override
     public final void run() {
@@ -49,11 +45,6 @@ public class Task implements TypeTask, Runnable {
     }
 
     @Contract(pure = true)
-    public final int getDelay() {
-        return delay;
-    }
-
-    @Contract(pure = true)
     public final int getPeriod() {
         return period;
     }
@@ -61,6 +52,7 @@ public class Task implements TypeTask, Runnable {
     public final void setCurrentTickZero() {
         this.currentTick = 0;
     }
+
     @Contract(pure = true)
     public final Consumer<TypeTask> getConsumer() {
         return consumer;
@@ -73,7 +65,9 @@ public class Task implements TypeTask, Runnable {
     public final void addCurrentTick() {
         this.currentTick += 1;
     }
-
+    public final void resetPeriod() {
+        this.period -= delay;
+    }
     @Override
     public final void cancel() {
         ObedientBot.SCHEDULER.cancel(this);
