@@ -19,19 +19,16 @@ public class Puzzle extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-/*        new Timer(true).scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (next) {
-                    math = !math;
-                    answer = math ? new MathPuzzle() : new TextPuzzle();
-                    next = false;
-                }
-                System.out.println("d");
-                //\n" + answer.getStringFormatAnswer() + '\n'
-                ObedientBot.sendMessage("Чат-игра!", 2000000020);
+        /**ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(() -> {
+            if (next) {
+                math = !math;
+                answer = math ? new MathPuzzle() : new TextPuzzle();
+                next = false;
             }
-        }, 1000, 1000);//60*1000*/
+            for(int chat : Bot.getProfileList().getChats()) {
+                ObedientBot.sendMessage("Чат-игра!\n"+answer.getStringFormatAnswer(), chat);
+            }
+        }, 7000, 7000);*/
         RegisterCommandList.registerCommand(new Puzzle.GeneratePuzzleCommand(this));
         RegisterListEvent.registerEvent(this);
     }
@@ -62,7 +59,7 @@ public class Puzzle extends JavaModule implements Listener {
                 puzzle.answer = puzzle.math ? new MathPuzzle() : new TextPuzzle();
                 puzzle.next = false;
             }
-            ObedientBot.sendMessage(puzzle.answer.getStringFormatAnswer(), 2000000020);
+            ObedientBot.sendMessage(puzzle.answer.getStringFormatAnswer(), sender.getPeerId());
         }
     }
 }
