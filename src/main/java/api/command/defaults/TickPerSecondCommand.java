@@ -18,7 +18,7 @@ public class TickPerSecondCommand extends Command {
             long totalMemory = Runtime.getRuntime().totalMemory();
             long freeMemory = Runtime.getRuntime().freeMemory();
             @NonNls String sb =
-                    "TPS: " + TickPerSeconds.getAverageTPS() +
+                    "TPS: " + TickPerSeconds.getInstance().getAverageTPS() +
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
                     "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory);
