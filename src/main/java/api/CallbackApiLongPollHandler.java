@@ -39,12 +39,12 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
-        ObedientBot.SCHEDULER.scheduleSyncDelayTask(new Runnable() {
+        ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(new Runnable() {
             @Override
             public void run() {
                 System.out.println("ДА ВСЕ");
             }
-        }, 20);
+        }, 5, 20);
         @NonNls String text = msg.getText();//УБрать аннотацию
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {//Проверяю первый символ(startsWith abort)
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы

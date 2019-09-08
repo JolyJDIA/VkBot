@@ -33,7 +33,8 @@ public class Task implements TypeTask, Runnable {
             period = NO_REPEATING;
         }
         this.delay = delay;
-        this.period = period + delay;
+        this.period = period;
+        this.currentTick = -delay+period;
     }
     @Override
     public final void run() {
@@ -42,6 +43,10 @@ public class Task implements TypeTask, Runnable {
         } else {
             this.consumer.accept(this);
         }
+    }
+
+    public int getDelay() {
+        return delay;
     }
 
     @Contract(pure = true)

@@ -18,10 +18,9 @@ public class BotScheduler {
         if(task == null) {
             return;
         }
+
+        System.out.println(task.getCurrentTick() + "  " + task.getPeriod());
         if(task.getCurrentTick() >= task.getPeriod()) {
-            if(task.getCurrentTick() == task.getPeriod()) {
-                task.resetPeriod();
-            }
             if (task.isSync()) {
                 task.run();
             } else {
@@ -35,6 +34,7 @@ public class BotScheduler {
             task.setCurrentTickZero();
         }
         task.addCurrentTick();
+
     }
     @NotNull
     public final Task runTask(Runnable runnable) {
