@@ -8,8 +8,6 @@ import java.util.function.Consumer;
 
 public class Task implements TypeTask, Runnable {
     public static final int NO_REPEATING = -1;
-    public static final int ERROR = 0;
-    private int delay = NO_REPEATING;
     private int period = NO_REPEATING;
     private int currentTick;
     private Runnable runnable;
@@ -27,12 +25,6 @@ public class Task implements TypeTask, Runnable {
 
     public Task(Object o, int delay, int period) {
         this(o);
-        if (period == ERROR) {
-            period = 1;
-        } else if (period < NO_REPEATING) {
-            period = NO_REPEATING;
-        }
-        this.delay = delay;
         this.period = period;
         this.currentTick = period-delay;
     }
@@ -44,11 +36,6 @@ public class Task implements TypeTask, Runnable {
             this.consumer.accept(this);
         }
     }
-
-    public int getDelay() {
-        return delay;
-    }
-
     @Contract(pure = true)
     public final int getPeriod() {
         return period;

@@ -18,8 +18,6 @@ public class BotScheduler {
         if(task == null) {
             return;
         }
-
-        System.out.println(task.getCurrentTick() + "  " + task.getPeriod());
         if(task.getCurrentTick() >= task.getPeriod()) {
             if (task.isSync()) {
                 task.run();
