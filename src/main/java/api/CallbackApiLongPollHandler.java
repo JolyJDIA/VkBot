@@ -14,7 +14,6 @@ import api.event.messages.ReplyMessageEvent;
 import api.event.messages.SendCommandEvent;
 import api.event.post.NewPostWallEvent;
 import api.event.post.RepostWallEvent;
-import api.utils.ObedientBot;
 import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -39,12 +38,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
-        ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("dasdasdasdas");
-            }
-        },5,  2);
         @NonNls String text = msg.getText();//УБрать аннотацию
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {//Проверяю первый символ(startsWith abort)
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
