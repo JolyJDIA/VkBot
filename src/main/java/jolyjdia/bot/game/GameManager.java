@@ -46,22 +46,6 @@ public final class GameManager {
             ObedientBot.sendKeyboard("Конец игры!\n"+builder, peerId, new Keyboard().setButtons(Collections.emptyList()));
         }
     }
-    @Nullable
-    static Player getStatePlayer(int peerId, int userId) {
-        if(!map.containsKey(peerId)) {
-            return null;
-        }
-        if(!map.get(peerId).containsKey(userId)) {
-            return null;
-        }
-        return map.get(peerId).get(userId);
-    }
-    static void stop(String win, int peerId, int userId) {
-        ObedientBot.sendKeyboard(win, peerId, new Keyboard().setButtons(Collections.emptyList()));
-        if(map.containsKey(peerId)) {
-            map.get(peerId).remove(userId);
-        }
-    }
     @NotNull
     static Collection<Player> getScore(int peerId) {
         return map.get(peerId).values();
@@ -84,5 +68,11 @@ public final class GameManager {
         Map<Integer, Player> players = map.getOrDefault(peerId, null);
         return players != null ? players.getOrDefault(userId, null) : null;
     }
-
+    public static void stopGame(int peerId) {
+        ObedientBot.sendKeyboard("Конец игры!", peerId, new Keyboard().setButtons(Collections.emptyList()));
+        if(!map.containsKey(peerId)) {
+            return;
+        }
+        map.get(peerId).clear();
+    }
 }

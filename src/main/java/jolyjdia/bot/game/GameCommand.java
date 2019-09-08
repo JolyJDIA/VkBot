@@ -6,8 +6,6 @@ import api.utils.ObedientBot;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-
 public class GameCommand extends Command {
     GameCommand() {
         super("game");
@@ -23,8 +21,7 @@ public class GameCommand extends Command {
                         new Keyboard().setButtons(GameKeyboard.GAME));
 
             } else if(args[1].equalsIgnoreCase("stop")) {
-                ObedientBot.sendKeyboard("Конец игры!", peerId, new Keyboard().setButtons(Collections.emptyList()));
-                GameManager.map.get(peerId).clear();
+                GameManager.stopGame(peerId);
 
             } else if(args[1].equalsIgnoreCase("info")) {
                 StringBuilder builder = new StringBuilder();
