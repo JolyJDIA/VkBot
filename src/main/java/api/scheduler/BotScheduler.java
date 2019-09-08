@@ -1,11 +1,13 @@
 package api.scheduler;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Consumer;
 
 public class BotScheduler {
     private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
@@ -16,15 +18,13 @@ public class BotScheduler {
         if(task == null) {
             return;
         }
-        if(task.getCurrentTick() >= task.getDelay()) {
-            if(task.getCurrentTick() % task.getPeriod() == 0) {
-                if (task.isSync()) {
-                    task.run();
-                } else {
-                    executor.execute(task);
-                }
-                task.setCurrentTickZero();
+        if(task.getCurrentTick() >= task.getDelay() && task.getCurrentTick() % task.getPeriod() == 0) {
+            if (task.isSync()) {
+                task.run();
+            } else {
+                executor.execute(task);
             }
+            task.setCurrentTickZero();
         }
         if(task.getPeriod() > 0) {
             task.addCurrentTick();
@@ -32,20 +32,84 @@ public class BotScheduler {
             taskQueue.remove(task);
         }
     }
+    @NotNull
+    public final Task runTask(Runnable runnable) {
+        return sync(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
+    }
+    @NotNull
+    public final Task runTask(Consumer<Task> consumer) {
+        return sync(consumer, Task.NO_REPEATING, Task.NO_REPEATING);
+    }
+    @NotNull
+    public final Task runTaskTimer(Runnable runnable, int delay, int period) {
+        return sync(runnable, delay, period);
+    }
+    @NotNull
+    public final Task runTaskTimer(Consumer<Task> consumer, int delay, int period) {
+        return sync(consumer, delay, period);
+    }
+    @NotNull
+    public final Task runTaskLater(Runnable runnable, int delay) {
+        return sync(runnable, delay, Task.NO_REPEATING);
+    }
+    @NotNull
+    public final Task runTaskLater(Consumer<Task> consumer, int delay) {
+        return sync(consumer, delay, Task.NO_REPEATING);
+    }
 
-    public final void runSyncTaskTimer(Runnable runnable, int period) {
-        taskQueue.add(new Task(runnable, 0, period));
+    @NotNull
+    public final Task runAsyncTask(Runnable runnable) {
+        return async(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
     }
-    public final void runSyncTaskLater(Runnable runnable, int delay) {
-        taskQueue.add(new Task(runnable, delay, 0));
+    @NotNull
+    public final Task runAsyncTask(Consumer<Task> consumer) {
+        return async(consumer, Task.NO_REPEATING, Task.NO_REPEATING);
     }
-    public final void runAsyncTask(Runnable runnable) {
-        taskQueue.add(new TaskAsync(runnable));
+    @NotNull
+    public final Task runAsyncTaskTimer(Runnable runnable, int delay, int period) {
+        return async(runnable, delay, period);
     }
-    public final void runAsyncTaskTimer(Runnable runnable, int period) {
-        taskQueue.add(new TaskAsync(runnable, 0, period));
+    @NotNull
+    public final Task runAsyncTaskTimer(Consumer<Task> consumer, int delay, int period) {
+        return async(consumer, delay, period);
     }
-    public final void runAsyncTaskLater(Runnable runnable, int delay) {
-        taskQueue.add(new TaskAsync(runnable, delay, 0));
+    @NotNull
+    public final Task runAsyncTaskLater(Runnable runnable, int delay) {
+        return async(runnable, delay, Task.NO_REPEATING);
     }
+    @NotNull
+    public final Task runAsyncTaskLater(Consumer<Task> consumer, int delay) {
+        return async(consumer, delay, Task.NO_REPEATING);
+    }
+    final void cancel(Task task) {
+        taskQueue.remove(task);
+    }
+    private Task sync(Object o, int delay, int period) {
+        if (delay < 0L) {
+            delay = 0;
+        }
+        if (period == Task.ERROR) {
+            period = 1;
+        } else if (period < Task.NO_REPEATING) {
+            period = Task.NO_REPEATING;
+        }
+        Task task = new Task(o, delay, period);
+        taskQueue.add(task);
+        return task;
+    }
+    @NotNull
+    private Task async(Object o, int delay, int period) {
+        if (delay < 0L) {
+            delay = 0;
+        }
+        if (period == Task.ERROR) {
+            period = 1;
+        } else if (period < Task.NO_REPEATING) {
+            period = Task.NO_REPEATING;
+        }
+        TaskAsync task = new TaskAsync(o, delay, period);
+        taskQueue.add(task);
+        return task;
+    }
+
 }

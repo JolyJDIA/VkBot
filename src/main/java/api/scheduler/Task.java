@@ -1,5 +1,6 @@
 package api.scheduler;
 
+import api.utils.ObedientBot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,6 +8,7 @@ import java.util.function.Consumer;
 
 public class Task implements TypeTask, Runnable {
     public static final int NO_REPEATING = -1;
+    public static final int ERROR = 0;
     private int delay = NO_REPEATING;
     private int period = NO_REPEATING;
     private int currentTick;
@@ -62,5 +64,10 @@ public class Task implements TypeTask, Runnable {
     }
     public final void addCurrentTick() {
         this.currentTick += 1;
+    }
+
+    @Override
+    public final void cancel() {
+        ObedientBot.getScheduler().cancel(this);
     }
 }
