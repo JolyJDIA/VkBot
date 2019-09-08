@@ -40,45 +40,46 @@ public class BotScheduler {
     public final Task runTask(Consumer<Task> consumer) {
         return sync(consumer, Task.NO_REPEATING, Task.NO_REPEATING);
     }
+
     @NotNull
-    public final Task runTaskTimer(Runnable runnable, int delay, int period) {
+    public final Task scheduleSyncRepeatingTask(Runnable runnable, int delay, int period) {
         return sync(runnable, delay, period);
     }
     @NotNull
-    public final Task runTaskTimer(Consumer<Task> consumer, int delay, int period) {
+    public final Task scheduleSyncRepeatingTask(Consumer<Task> consumer, int delay, int period) {
         return sync(consumer, delay, period);
     }
     @NotNull
-    public final Task runTaskLater(Runnable runnable, int delay) {
+    public final Task scheduleSyncDelayTask(Runnable runnable, int delay) {
         return sync(runnable, delay, Task.NO_REPEATING);
     }
     @NotNull
-    public final Task runTaskLater(Consumer<Task> consumer, int delay) {
+    public final Task scheduleSyncDelayTask(Consumer<Task> consumer, int delay) {
         return sync(consumer, delay, Task.NO_REPEATING);
     }
 
     @NotNull
-    public final Task runAsyncTask(Runnable runnable) {
+    public final Task runTaskAsynchronously(Runnable runnable) {
         return async(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
     }
     @NotNull
-    public final Task runAsyncTask(Consumer<Task> consumer) {
+    public final Task runTaskAsynchronously(Consumer<Task> consumer) {
         return async(consumer, Task.NO_REPEATING, Task.NO_REPEATING);
     }
     @NotNull
-    public final Task runAsyncTaskTimer(Runnable runnable, int delay, int period) {
+    public final Task scheduleAsyncRepeatingTask(Runnable runnable, int delay, int period) {
         return async(runnable, delay, period);
     }
     @NotNull
-    public final Task runAsyncTaskTimer(Consumer<Task> consumer, int delay, int period) {
+    public final Task scheduleAsyncRepeatingTask(Consumer<Task> consumer, int delay, int period) {
         return async(consumer, delay, period);
     }
     @NotNull
-    public final Task runAsyncTaskLater(Runnable runnable, int delay) {
+    public final Task scheduleAsyncDelayTask(Runnable runnable, int delay) {
         return async(runnable, delay, Task.NO_REPEATING);
     }
     @NotNull
-    public final Task runAsyncTaskLater(Consumer<Task> consumer, int delay) {
+    public final Task scheduleAsyncDelayTask(Consumer<Task> consumer, int delay) {
         return async(consumer, delay, Task.NO_REPEATING);
     }
     public final void cancel(Task task) {

@@ -1,6 +1,7 @@
 package jolyjdia.bot.generateText.neuralnetwork;
 
 import api.utils.FileSerializer;
+import api.utils.ObedientBot;
 import jolyjdia.bot.generateText.neuralnetwork.autodiff.Graph;
 import jolyjdia.bot.generateText.neuralnetwork.datastructs.DataSequence;
 import jolyjdia.bot.generateText.neuralnetwork.datastructs.DataSet;
@@ -51,7 +52,6 @@ public class TrainerNeural {
         private DataSet data;
         private int reportEveryNthEpoch;
         private boolean initFromSaved;
-        private boolean overwriteSaved;
         private String savePath;
         private double minloss;
 
@@ -86,14 +86,8 @@ public class TrainerNeural {
         }
 
         @Contract("_ -> this")
-        public final TrainerNeural.BuilderTrainer setInitFromSaved(boolean b) {
+        public final TrainerNeural.BuilderTrainer setInitFromSavedAndSave(boolean b) {
             this.initFromSaved = b;
-            return this;
-        }
-
-        @Contract("_ -> this")
-        public final TrainerNeural.BuilderTrainer setOverwriteSaved(boolean b) {
-            this.overwriteSaved = b;
             return this;
         }
 
@@ -116,7 +110,7 @@ public class TrainerNeural {
                 glModel = (Model) FileSerializer.deserialize(savePath);
                 return;
             }
-            new Thread(() -> {
+            ObedientBot.SCHEDULER.runTaskAsynchronously(() -> {
                 for (int i = 0; i < trainingEpochs; ++i) {
                     double reportedLossTrain = pass();
                     if (Double.isNaN(reportedLossTrain) || Double.isInfinite(reportedLossTrain)) {
@@ -129,12 +123,12 @@ public class TrainerNeural {
                         data.displayReport(model);
                     }
                 }
-                if (overwriteSaved) {
+                if (!initFromSaved) {
                     System.out.println("Сохраняю данные...");
                     FileSerializer.serialize(savePath, model);
                     System.out.println("Данные сохранены");
                 }
-            }).start();
+            });
         }
         final double pass() {
             List<DataSequence> sequences = data.getTraining();

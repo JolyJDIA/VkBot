@@ -16,23 +16,23 @@ public class RoflanRunnable implements Runnable {
     }
     @NotNull
     public Task runTaskAsynchronously() {
-        return setupTask(ObedientBot.SCHEDULER.runAsyncTask(this));
+        return setupTask(ObedientBot.SCHEDULER.runTaskAsynchronously(this));
     }
     @NotNull
     public Task runTaskLater(int delay) {
-        return setupTask(ObedientBot.SCHEDULER.runTaskLater(this, delay));
+        return setupTask(ObedientBot.SCHEDULER.scheduleSyncDelayTask(this, delay));
     }
     @NotNull
     public Task runTaskLaterAsynchronously(int delay) {
-        return setupTask(ObedientBot.SCHEDULER.runAsyncTaskLater(this, delay));
+        return setupTask(ObedientBot.SCHEDULER.scheduleAsyncDelayTask(this, delay));
     }
     @NotNull
     public Task runTaskTimer(int delay, int period) {
-        return setupTask(ObedientBot.SCHEDULER.runTaskTimer(this, delay, period));
+        return setupTask(ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(this, delay, period));
     }
     @NotNull
     public Task runTaskTimerAsynchronously(int delay, int period) {
-        return setupTask(ObedientBot.SCHEDULER.runAsyncTaskTimer(this, delay, period));
+        return setupTask(ObedientBot.SCHEDULER.scheduleAsyncRepeatingTask(this, delay, period));
     }
     @Contract("_ -> param1")
     @NotNull

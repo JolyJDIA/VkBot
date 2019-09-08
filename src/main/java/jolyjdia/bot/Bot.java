@@ -10,6 +10,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.groups.LongPollSettings;
 import jolyjdia.bot.calculate.CalculatorRegister;
+import jolyjdia.bot.generateText.GeneratorLoad;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.translator.YandexTraslate;
@@ -65,7 +66,7 @@ public class Bot {
         new Puzzle().onLoad();
        // new ShoutboxMain().onLoad();
        // new GameLoad().onLoad();
-        //new GeneratorLoad().onLoad();
+        new GeneratorLoad().onLoad();
     }
 
     @Contract(pure = true)
