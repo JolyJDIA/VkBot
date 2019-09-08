@@ -6,8 +6,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * @author ItzFreshyyy
  * Note: this class has a natural ordering that is inconsistent with equals.
+ * @author ItzFreshyyy
  */
 public class Worker extends Thread implements Comparable<Worker> {
 
