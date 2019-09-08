@@ -17,16 +17,17 @@ public final class GameManager {
     @Contract(pure = true)
     private GameManager() {}
 
-    public static int getRandom() {
-        return (int)(Math.random() * 6) + 1;
-    }
     static void addPlayer(int peerId, int userId) {
-        map.putIfAbsent(peerId, new HashMap<>());
-        map.get(peerId).put(userId, new Player());
+        Map<Integer, Player> maps = map.computeIfAbsent(peerId, k -> new HashMap<>());
+        maps.put(userId, new Player());
     }
     static void newIntegerPlayer(int peerId, int userId) {
-        int random = getRandom();
-        int sum = map.get(peerId).get(userId).addScore(random);
+        int random = (int)(Math.random() * 6) + 1;
+        Player player = getPlayer(peerId, userId);
+        if(player == null) {
+            return;
+        }
+        int sum = player.addScore(random);
         ObedientBot.sendMessage(
                 "[id"+userId+"|ДОДИК]"+
                 "\nВаше число: "+random+
@@ -36,7 +37,7 @@ public final class GameManager {
             map.get(peerId).remove(userId);
         } else if(sum == 21) {
             ObedientBot.sendMessage("Ты выиграл", peerId);
-            map.get(peerId).get(userId).setWin(true);
+            player.setWin(true);
         }
         if(map.get(peerId).size() == 1) {
             StringBuilder builder = new StringBuilder();
@@ -69,10 +70,19 @@ public final class GameManager {
         return map.containsKey(peerId) && map.get(peerId).containsKey(userId);
     }
     @NotNull
-    static Collection<Integer> getChat(int peerId) {
+    private static Collection<Integer> getChat(int peerId) {
         return map.get(peerId).keySet();
     }
     static void removePlayer(int peerId, int userId) {
         map.get(peerId).remove(userId);
     }
+    public static int getCount(int peerId) {
+        return getChat(peerId).size();
+    }
+    @Nullable
+    public static Player getPlayer(int peerId, int userId) {
+        Map<Integer, Player> players = map.getOrDefault(peerId, null);
+        return players != null ? players.getOrDefault(userId, null) : null;
+    }
+
 }
