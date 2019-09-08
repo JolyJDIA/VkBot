@@ -28,6 +28,14 @@ public class Task implements TypeTask, Runnable {
 
     public Task(Object o, int delay, int period) {
         this(o);
+        if (delay < 0L) {
+            delay = 0;
+        }
+        if (period == ERROR) {
+            period = 1;
+        } else if (period < NO_REPEATING) {
+            period = NO_REPEATING;
+        }
         this.delay = delay;
         this.period = period;
     }

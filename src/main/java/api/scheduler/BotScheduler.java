@@ -91,28 +91,12 @@ public class BotScheduler {
 
     @NotNull
     private Task sync(Object o, int delay, int period) {
-        if (delay < 0L) {
-            delay = 0;
-        }
-        if (period == Task.ERROR) {
-            period = 1;
-        } else if (period < Task.NO_REPEATING) {
-            period = Task.NO_REPEATING;
-        }
         Task task = new Task(o, delay, period);
         taskQueue.add(task);
         return task;
     }
     @NotNull
     private Task async(Object o, int delay, int period) {
-        if (delay < 0L) {
-            delay = 0;
-        }
-        if (period == Task.ERROR) {
-            period = 1;
-        } else if (period < Task.NO_REPEATING) {
-            period = Task.NO_REPEATING;
-        }
         TaskAsync task = new TaskAsync(o, delay, period);
         taskQueue.add(task);
         return task;
