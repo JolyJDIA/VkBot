@@ -15,16 +15,16 @@ public final class RegisterListEvent {
     private RegisterListEvent() {}
 
     public static void registerEvent(@NotNull Listener listener) {
-        for(Method method : listener.getClass().getMethods()) {
-            if(!method.isAnnotationPresent(EventHandler.class)) {
+        for (Method method : listener.getClass().getMethods()) {
+            if (!method.isAnnotationPresent(EventHandler.class)) {
                 continue;
             }
             Class<?> parameter = method.getParameterTypes()[0];
-            if(!Event.class.isAssignableFrom(parameter)) {
+            if (!Event.class.isAssignableFrom(parameter)) {
                 continue;
             }
             handlers.add(new Handler(event -> {
-                if(!event.getClass().isAssignableFrom(parameter)) {
+                if (!event.getClass().isAssignableFrom(parameter)) {
                     return;
                 }
                 try {
