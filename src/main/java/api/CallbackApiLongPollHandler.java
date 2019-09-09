@@ -101,6 +101,9 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         fireEvent(event);
     }
     private static void fireEvent(Event event) {
+        long start = System.nanoTime();
         RegisterListEvent.getHandlers().forEach(m -> m.accept(event));
+        long end = System.nanoTime() - start;
+        System.out.println(end);
     }
 }

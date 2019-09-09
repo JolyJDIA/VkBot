@@ -5,12 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Consumer;
+import java.util.AbstractQueue;
+import java.util.PriorityQueue;
 
 public final class RegisterListEvent {
-    private static final Set<Consumer<Event>> handlers = new HashSet<>();
+    private static final AbstractQueue<Handler> handlers = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1.priority));
 
     @Contract(pure = true)
     private RegisterListEvent() {}
@@ -23,7 +22,7 @@ public final class RegisterListEvent {
             if(!Event.class.isAssignableFrom(method.getParameterTypes()[0])) {
                 continue;
             }
-            Consumer<Event> eventConsumer = event -> {
+            handlers.add(new Handler(event -> {
                 if(!event.getClass().isAssignableFrom(method.getParameterTypes()[0])) {
                     return;
                 }
@@ -32,13 +31,12 @@ public final class RegisterListEvent {
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-            };
-            handlers.add(eventConsumer);
+            }, method.getAnnotation(EventHandler.class).priority()));
         }
     }
 
     @Contract(pure = true)
-    public static Set<Consumer<Event>> getHandlers() {
+    public static Iterable<Handler> getHandlers() {
         return handlers;
     }
 }

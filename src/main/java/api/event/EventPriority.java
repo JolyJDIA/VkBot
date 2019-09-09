@@ -3,21 +3,21 @@ package api.event;
 import org.jetbrains.annotations.Contract;
 
 public enum EventPriority {
-    LOWEST(-2),
-    LOW(-1),
-    NORMAL(0),
-    HIGH(1),
-    HIGHEST(2);
+    LOWEST((byte)-2),
+    LOW((byte)-1),
+    NORMAL((byte)0),
+    HIGH((byte)1),
+    HIGHEST((byte)2);
 
-    private final int slot;
+    private final byte slot;
 
     @Contract(pure = true)
-    EventPriority(int slot) {
+    EventPriority(byte slot) {
         this.slot = slot;
     }
 
     @Contract(pure = true)
-    public int getSlot() {
+    public byte getSlot() {
         return slot;
     }
 }

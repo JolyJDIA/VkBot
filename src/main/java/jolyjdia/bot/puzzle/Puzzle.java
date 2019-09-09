@@ -34,6 +34,7 @@ public class Puzzle extends JavaModule implements Listener {
     }
     @EventHandler
     public final void onSend(@NotNull NewMessageEvent e) {
+        System.out.println("Я ДОЛЖЕН ПЕРВЫЙ");
         if(next) {
             return;
         }
