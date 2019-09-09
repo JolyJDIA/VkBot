@@ -3,19 +3,19 @@ package api.scheduler;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.BlockingQueue;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 public class BotScheduler {
     private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
-    private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
+    private final Set<Task> taskQueue = new HashSet<>();
 
 
     public final void mainThreadHeartbeat() {
-        //BlockingQueue синхронизация не нужна)
+        //Потом синхронизирую
         taskQueue.forEach(task -> {
             if (task == null) {
                 return;

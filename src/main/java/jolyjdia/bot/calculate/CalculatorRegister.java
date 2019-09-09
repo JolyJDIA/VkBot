@@ -30,6 +30,7 @@ public class CalculatorRegister extends JavaModule implements Listener {
 		if (!CalculatorManager.MATH.matcher(text).matches()) {
 			return;
 		}
+
 		Calculator calculator = new Calculator(text);
 		String answer = calculator.solveExpression();
 		if(!CalculatorManager.OUTPUT.matcher(answer).matches()) {
