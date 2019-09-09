@@ -5,6 +5,7 @@ import api.command.Command;
 import api.command.RegisterCommandList;
 import api.entity.User;
 import api.event.EventHandler;
+import api.event.EventPriority;
 import api.event.Listener;
 import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
@@ -34,7 +35,7 @@ public class Puzzle extends JavaModule implements Listener {
         RegisterCommandList.registerCommand(new Puzzle.GeneratePuzzleCommand(this));
         RegisterListEvent.registerEvent(this);
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public final void onSend(@NotNull NewMessageEvent e) {
         if(next) {
             return;
