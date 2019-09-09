@@ -19,11 +19,12 @@ public final class RegisterListEvent {
             if(!method.isAnnotationPresent(EventHandler.class)) {
                 continue;
             }
-            if(!Event.class.isAssignableFrom(method.getParameterTypes()[0])) {
+            Class<?> parameter = method.getParameterTypes()[0];
+            if(!Event.class.isAssignableFrom(parameter)) {
                 continue;
             }
             handlers.add(new Handler(event -> {
-                if(!event.getClass().isAssignableFrom(method.getParameterTypes()[0])) {
+                if(!event.getClass().isAssignableFrom(parameter)) {
                     return;
                 }
                 try {
