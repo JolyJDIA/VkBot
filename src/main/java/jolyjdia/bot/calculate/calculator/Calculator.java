@@ -21,6 +21,9 @@ public class Calculator {
     private final void formatUserInput() {
         for (int i = 0; i < OPERATORS.length(); ++i) {
             String j = String.valueOf(OPERATORS.charAt(i));
+            /**
+             * ПОТОМ ПОФИКСЮ
+             */
             switch (j) {
                 case "(" -> userInput = userInput.replace(j, j + ' ');
                 case ")" -> userInput = userInput.replace(j, ' ' + j);

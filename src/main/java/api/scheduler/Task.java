@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 public class Task implements TypeTask, Runnable {
-    public static final int NO_REPEATING = -1;
+    static final int NO_REPEATING = -1;
     private int period = NO_REPEATING;
-    private int currentTick;
+    private volatile int currentTick;
     private Runnable runnable;
     private Consumer<TypeTask> consumer;
 
@@ -44,10 +44,7 @@ public class Task implements TypeTask, Runnable {
     public final void setCurrentTickZero() {
         this.currentTick = NO_REPEATING;
     }
-    @Contract(pure = true)
-    public final Consumer<TypeTask> getConsumer() {
-        return consumer;
-    }
+
     @Contract(pure = true)
     public final int getCurrentTick() {
         return currentTick;

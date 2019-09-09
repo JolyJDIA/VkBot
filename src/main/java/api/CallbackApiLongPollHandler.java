@@ -3,7 +3,6 @@ package api;
 import api.command.RegisterCommandList;
 import api.entity.User;
 import api.event.Event;
-import api.event.EventHandler;
 import api.event.RegisterListEvent;
 import api.event.board.BoardPostEditEvent;
 import api.event.board.BoardPostNewEvent;
@@ -24,8 +23,6 @@ import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
@@ -104,20 +101,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         fireEvent(event);
     }
     private static void fireEvent(Event event) {
-        RegisterListEvent.getRegisteredListeners().forEach(listener -> {//Получаю все зарегистрированные классы событий
-            for (Method m : listener.getClass().getDeclaredMethods()) {
-                if (!m.isAnnotationPresent(EventHandler.class)) {
-                    continue;
-                }
-                if (!event.getClass().isAssignableFrom(m.getParameterTypes()[0])) {
-                    continue;
-                }
-                try {
-                    m.invoke(listener, event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        RegisterListEvent.getHandlers().forEach(m -> m.accept(event));
     }
 }

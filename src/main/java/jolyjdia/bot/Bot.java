@@ -40,7 +40,6 @@ public class Bot {
         }
     }
     public static void main(String[] args) throws ClientException, ApiException {
-        TickPerSeconds.doStart();
         groupActor = new GroupActor(GROUP_ID, properties.getProperty("accessToken"));
         vkApiClient = new VkApiClient(new HttpTransportClient());
         LongPollSettings settings = vkApiClient.groups().getLongPollSettings(groupActor, GROUP_ID).execute();
@@ -55,6 +54,7 @@ public class Bot {
                     .messageNew(true)
                     .execute();
         }
+        TickPerSeconds.doStart();
         profileList = new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(vkApiClient, groupActor);
         registerAll();
