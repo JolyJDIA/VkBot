@@ -29,12 +29,13 @@ public class Puzzle extends JavaModule implements Listener {
                 ObedientBot.sendMessage("Чат-игра!\n"+answer.getStringFormatAnswer(), chat);
             }
         }, 2, 5);*/
+
+
         RegisterCommandList.registerCommand(new Puzzle.GeneratePuzzleCommand(this));
         RegisterListEvent.registerEvent(this);
     }
     @EventHandler
     public final void onSend(@NotNull NewMessageEvent e) {
-        System.out.println("Я ДОЛЖЕН ПЕРВЫЙ");
         if(next) {
             return;
         }

@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.AbstractQueue;
-import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class RegisterListEvent {
-    private static final AbstractQueue<Handler> handlers = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1.priority));
+    private static final List<Handler> handlers = new ArrayList<>();
 
     @Contract(pure = true)
     private RegisterListEvent() {}
@@ -34,6 +34,7 @@ public final class RegisterListEvent {
                 }
             }, method.getAnnotation(EventHandler.class).priority()));
         }
+        handlers.sort((o1, o2) -> o2.compareTo(o1.priority));
     }
 
     @Contract(pure = true)

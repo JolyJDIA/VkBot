@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 public class CalculatorListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public static void onSend(@NotNull NewMessageEvent e) {
-        System.out.println("Я ДОЛЖЕН ПОСЛЕДНИЙ");
         Message msg = e.getMessage();
         int peerId = msg.getPeerId();
         String text = msg.getText();
