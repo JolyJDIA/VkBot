@@ -26,25 +26,21 @@ public class Handler implements Comparable<EventPriority>, Consumer<Event> {
         return priority.getSlot() - handler.getSlot();
     }
 
-    @Contract(value = "null -> false", pure = true)
-    @Override
-    public final boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof Handler)) {
-            return false;
-        }
-        Handler other = (Handler) obj;
-        return Objects.equals(c, other.c) && priority == other.priority;
-    }
-
     @Contract(pure = true)
     @Override
     public final int hashCode() {
         return priority.getSlot();
+    }
+    @Contract(value = "null -> false", pure = true)
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Handler handler = (Handler) o;
+        return Objects.equals(c, handler.c) && priority == handler.priority;
     }
 }
