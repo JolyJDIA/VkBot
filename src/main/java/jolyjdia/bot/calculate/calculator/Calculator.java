@@ -18,7 +18,6 @@ public class Calculator {
     }
     private final void formatUserInput() {
         formattedUserInput = new Parser().parse(userInput);
-        System.out.println("До: "+formattedUserInput);
     }
 
     private final BigDecimal condenseExpression(String operator, int indexVal) {
