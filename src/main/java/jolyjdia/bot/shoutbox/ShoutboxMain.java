@@ -1,7 +1,7 @@
 package jolyjdia.bot.shoutbox;
 
 import api.JavaModule;
-import api.event.EventHandler;
+import api.event.EventLabel;
 import api.event.Listener;
 import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
@@ -27,7 +27,7 @@ public class ShoutboxMain extends JavaModule implements Listener {
     public final void onLoad() {
         RegisterListEvent.registerEvent(this);
     }
-    @EventHandler
+    @EventLabel
     public final void onShout(@NotNull NewMessageEvent e) {
         Message msg = e.getMessage();
         String text = E.matcher(msg.getText().toLowerCase(Locale.ENGLISH)).replaceAll("е");

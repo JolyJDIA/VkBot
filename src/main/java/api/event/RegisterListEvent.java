@@ -15,8 +15,9 @@ public final class RegisterListEvent {
     private RegisterListEvent() {}
 
     public static void registerEvent(@NotNull Listener listener) {
+
         for (Method method : listener.getClass().getMethods()) {
-            if (!method.isAnnotationPresent(EventHandler.class)) {
+            if (!method.isAnnotationPresent(EventLabel.class)) {
                 continue;
             }
             Class<?> parameter = method.getParameterTypes()[0];
@@ -32,7 +33,7 @@ public final class RegisterListEvent {
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-            }, method.getAnnotation(EventHandler.class).priority()));
+            }, method.getAnnotation(EventLabel.class).priority()));
         }
         handlers.sort((o1, o2) -> o2.compareTo(o1.priority));
     }

@@ -2,7 +2,7 @@ package jolyjdia.bot.calculate;
 
 import api.JavaModule;
 import api.command.RegisterCommandList;
-import api.event.EventHandler;
+import api.event.EventLabel;
 import api.event.Listener;
 import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
@@ -18,7 +18,7 @@ public class CalculatorRegister extends JavaModule implements Listener {
         RegisterListEvent.registerEvent(this);
 		RegisterCommandList.registerCommand(new CalculatorCommand());
     }
-	@EventHandler
+	@EventLabel
 	public static void onSend(@NotNull NewMessageEvent e) {
 		Message msg = e.getMessage();
 		int peerId = msg.getPeerId();

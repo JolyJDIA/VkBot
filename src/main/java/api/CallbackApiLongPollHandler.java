@@ -52,12 +52,12 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             System.out.println("КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
 
             SendCommandEvent event = new SendCommandEvent(msg);
-            fireEvent(event);
+            submitEvent(event);
             return;
         }
         System.out.println("СООБЩЕНИЕ: ("+ msg.getText() + ") ЧАТ: " +msg.getPeerId());
         NewMessageEvent event = new NewMessageEvent(msg);
-        fireEvent(event);
+        submitEvent(event);
     }
 
     /**
@@ -67,40 +67,40 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     @Override
     public final void messageReply(Integer groupId, Message msg) {
         ReplyMessageEvent event = new ReplyMessageEvent(msg);
-        fireEvent(event);
+        submitEvent(event);
     }
 
     @Override
     public final void messageEdit(Integer groupId, Message msg) {
         EditMessageEvent event = new EditMessageEvent(msg);
-        fireEvent(event);
+        submitEvent(event);
     }
     @Override
     public final void wallPostNew(Integer groupId, Wallpost wallpost) {
         NewPostWallEvent event = new NewPostWallEvent(wallpost);
-        fireEvent(event);
+        submitEvent(event);
     }
     @Override
     public final void wallRepost(Integer groupId, Wallpost wallpost) {
         RepostWallEvent event = new RepostWallEvent(wallpost);
-        fireEvent(event);
+        submitEvent(event);
     }
     @Override
     public final void boardPostNew(Integer groupId, TopicComment comment) {
         BoardPostNewEvent event = new BoardPostNewEvent(comment);
-        fireEvent(event);
+        submitEvent(event);
     }
     @Override
     public final void boardPostEdit(Integer groupId, TopicComment comment) {
         BoardPostEditEvent event = new BoardPostEditEvent(comment);
-        fireEvent(event);
+        submitEvent(event);
     }
     @Override
     public final void boardPostRestore(Integer groupId, TopicComment comment) {
         BoardPostRestoreEvent event = new BoardPostRestoreEvent(comment);
-        fireEvent(event);
+        submitEvent(event);
     }
-    private static void fireEvent(Event event) {
+    private static void submitEvent(Event event) {
         RegisterListEvent.getHandlers().forEach(m -> m.accept(event));
     }
 }

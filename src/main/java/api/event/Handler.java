@@ -31,6 +31,7 @@ public class Handler implements Comparable<EventPriority>, Consumer<Event> {
     public final int hashCode() {
         return priority.getSlot();
     }
+
     @Contract(value = "null -> false", pure = true)
     @Override
     public final boolean equals(Object o) {
