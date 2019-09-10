@@ -3,8 +3,8 @@ package jolyjdia.bot.calculate;
 import api.utils.KeyboardUtils;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
-import jolyjdia.bot.calculate.calculator.Calculator;
 import jolyjdia.bot.calculate.calculator.MathFunctions;
+import jolyjdia.bot.calculate.calculator.Parser;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -40,8 +40,8 @@ final class CalculatorKeyboard {
     }
     private static void renderOperation() {
         List<KeyboardButton> operatortButtons = null;
-        for(int i = 0; i < Calculator.OPERATORS.length(); ++i) {
-            String c = String.valueOf(Calculator.OPERATORS.charAt(i));
+        for(int i = 0; i < Parser.OPERATORS.length(); ++i) {
+            String c = String.valueOf(Parser.OPERATORS.charAt(i));
             if(i % 4 == 0) {
                 operatortButtons = new ArrayList<>(4);
                 BOARD.add(operatortButtons);

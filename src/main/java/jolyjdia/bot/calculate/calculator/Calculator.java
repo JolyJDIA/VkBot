@@ -5,42 +5,20 @@ import org.jetbrains.annotations.NonNls;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class Calculator {
     private static final Pattern COMPILE = Pattern.compile(" ");
-    public static final String OPERATORS = "+-*/^()";
-    @NonNls private String userInput;
-    private ArrayList<String> formattedUserInput = new ArrayList<>();
+    @NonNls private final String userInput;
+    private ArrayList<String> formattedUserInput;
 
     public Calculator(String userInput) {
         this.userInput = COMPILE.matcher(userInput).replaceAll("");
         this.formatUserInput();
     }
     private final void formatUserInput() {
-        for (int i = 0; i < OPERATORS.length(); ++i) {
-            String j = String.valueOf(OPERATORS.charAt(i));
-            /**
-             * ПОТОМ ПОФИКСЮ
-             */
-            switch (j) {
-                case "(" -> userInput = userInput.replace(j, j + ' ');
-                case ")" -> userInput = userInput.replace(j, ' ' + j);
-                default -> userInput = userInput.replace(j, ' ' + j + ' ');
-            }
-        }
-
-        this.formattedUserInput = new ArrayList<>(Arrays.asList(userInput.split(" ")));
-
-        for (int i = 0; i < formattedUserInput.size(); i++) {
-            if (!formattedUserInput.get(i).equals("-")) {
-                continue;
-            }
-            formattedUserInput.set(i, "+");
-            formattedUserInput.set(i+1, '-' + formattedUserInput.get(i+1));
-        }
-
+        formattedUserInput = new Parser().parse(userInput);
+        System.out.println("До: "+formattedUserInput);
     }
 
     private final BigDecimal condenseExpression(String operator, int indexVal) {
