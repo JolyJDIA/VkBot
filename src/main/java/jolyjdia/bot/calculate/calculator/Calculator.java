@@ -10,7 +10,6 @@ public class Calculator {
     public Calculator(String userInput) {
         this.formattedUserInput = new Parser().parse(userInput);
     }
-
     private final BigDecimal condenseExpression(String operator, int indexVal) {
         BigDecimal x = BigDecimal.ZERO;
         BigDecimal y = BigDecimal.ZERO;
