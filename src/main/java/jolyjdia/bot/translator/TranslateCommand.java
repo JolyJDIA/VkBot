@@ -4,7 +4,6 @@ import api.command.Command;
 import api.entity.User;
 import api.utils.ObedientBot;
 import api.utils.StringBind;
-import jolyjdia.bot.translator.language.Language;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

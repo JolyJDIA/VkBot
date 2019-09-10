@@ -1,4 +1,4 @@
-package jolyjdia.bot.game;
+package jolyjdia.bot.kubanoid;
 
 import api.JavaModule;
 import api.command.RegisterCommandList;
@@ -13,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
-public class GameLoad extends JavaModule implements Listener {
+public class KubanoidLoad extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-        RegisterCommandList.registerCommand(new GameCommand());
+        RegisterCommandList.registerCommand(new KubanoidCommand());
         RegisterListEvent.registerEvent(this);
         RegisterCommandList.registerCommand(new RollCommand());
     }
@@ -26,17 +26,17 @@ public class GameLoad extends JavaModule implements Listener {
         Message msg = e.getMessage();
         int peerId = msg.getPeerId();
         int userId = msg.getFromId();
-        if(GameManager.containsPlayer(peerId, userId)) {
+        if(KubanoidManager.containsPlayer(peerId, userId)) {
             if(msg.getText().contains("КИНУТЬ")) {//колумбайн//колумbruh//колумbruhйн
-                GameManager.newIntegerPlayer(peerId, userId);
+                KubanoidManager.newIntegerPlayer(peerId, userId);
 
             } else if(msg.getText().contains("СТОП")) {
                 ObedientBot.sendKeyboard("Конец игры!", peerId, new Keyboard().setButtons(Collections.emptyList()));
             }
         } else {
             if (msg.getText().contains("УЧАСТВОВАТЬ")) {
-                GameManager.addPlayer(peerId, userId);
-                ObedientBot.sendMessage("Твой номер: " + GameManager.getCount(peerId), peerId);
+                KubanoidManager.addPlayer(peerId, userId);
+                ObedientBot.sendMessage("Твой номер: " + KubanoidManager.getCount(peerId), peerId);
             }
         }
     }

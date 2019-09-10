@@ -1,4 +1,4 @@
-package jolyjdia.bot.game;
+package jolyjdia.bot.kubanoid;
 
 import api.command.Command;
 import api.entity.User;

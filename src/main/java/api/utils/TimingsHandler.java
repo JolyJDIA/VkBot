@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Contract;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimingsHandler {
+class TimingsHandler {
     private long lastPoll = System.nanoTime();
     private final List<Long> tpsRecent = new ArrayList<>();
 

@@ -5,12 +5,16 @@ import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import jolyjdia.bot.calculate.calculator.Calculator;
 import jolyjdia.bot.calculate.calculator.MathFunctions;
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class CalculatorKeyboard {
+final class CalculatorKeyboard {
     static final List<List<KeyboardButton>> BOARD = new ArrayList<>(7);
+
+    @Contract(pure = true)
+    private CalculatorKeyboard() {}
 
     static {
         renderNumber();
@@ -28,7 +32,7 @@ class CalculatorKeyboard {
         }
     }
     private static void renderAction() {
-        List<KeyboardButton> keyboardButtons = new ArrayList<>(3);
+        final List<KeyboardButton> keyboardButtons = new ArrayList<>(3);
         keyboardButtons.add(KeyboardUtils.create("C", KeyboardButtonColor.NEGATIVE));
         keyboardButtons.add(KeyboardUtils.create("<=", KeyboardButtonColor.NEGATIVE));
         keyboardButtons.add(KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE));
@@ -44,7 +48,7 @@ class CalculatorKeyboard {
             }
             operatortButtons.add(KeyboardUtils.create(c, KeyboardButtonColor.PRIMARY));
         }
-        List<KeyboardButton> advOperatorList = new ArrayList<>(4);
+        final List<KeyboardButton> advOperatorList = new ArrayList<>(4);
         for(int i = 0; i < 4; ++i) {
             advOperatorList.add(KeyboardUtils.create(MathFunctions.ADV_OPERATOR_LIST[i], KeyboardButtonColor.PRIMARY));
         }

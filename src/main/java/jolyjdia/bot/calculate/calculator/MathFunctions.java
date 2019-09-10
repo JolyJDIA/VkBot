@@ -36,12 +36,7 @@ public class MathFunctions {
         return factorial;
     }
 
-    public final void formatFunctions() {
-        /**
-         * "2+sin(x)" is represented as ["2", "+", "sin(", "x", ")"] The loop replaces
-         * "sin(" with "sin" or "ln(" with "ln" etc.. Then adds a ( after sin. eg. ["2",
-         * "+", "sin", "(", "x", ")"]
-         */
+    private final void formatFunctions() {
         for (@NonNls String operator : ADV_OPERATOR_LIST) {
             for (int i = 0; i < formattedUserInput.size(); i++) {
                 if (formattedUserInput.get(i).equals(operator + '(')) {
@@ -49,7 +44,6 @@ public class MathFunctions {
                     formattedUserInput.add(i + 1, "(");
                 }
 
-                // Negative functions
                 if (formattedUserInput.get(i).equals('-' + operator + '(')) {
                     formattedUserInput.set(i, operator);
                     formattedUserInput.add(i, "-1");

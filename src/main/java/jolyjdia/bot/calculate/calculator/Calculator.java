@@ -51,7 +51,7 @@ public class Calculator {
             y = new BigDecimal(formattedUserInput.get(indexVal + 1));
         } catch (NumberFormatException ignored) {}
 
-        BigDecimal output; // final output
+        BigDecimal output;
         switch (operator) {
             case "^":
                 output = x.pow(y.intValue());

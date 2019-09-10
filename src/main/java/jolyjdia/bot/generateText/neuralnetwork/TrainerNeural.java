@@ -161,12 +161,12 @@ public class TrainerNeural {
             model.getParameters().forEach(m -> {
                 for (int i = 0; i < m.w.length; i++) {
                     double mdwi = m.dw[i];
-                    m.stepCache[i] = m.stepCache[i] * DECAYRATE + (1 - DECAYRATE) * mdwi * mdwi;
+                    m.stepCache[i] = m.stepCache[i] * DECAYRATE + (0.0010000000000000009) * mdwi * mdwi;
                     if (mdwi > GRADIENE_CLIP_VALUE) {
                         mdwi = GRADIENE_CLIP_VALUE;
                     }
-                    if (mdwi < -GRADIENE_CLIP_VALUE) {
-                        mdwi = -GRADIENE_CLIP_VALUE;
+                    if (mdwi < -5.0) {
+                        mdwi = -5.0;
                     }
                     m.w[i] += - stepSize * mdwi / Math.sqrt(m.stepCache[i] + SMOOTH_EPSILON) - REGULARIZATION * m.w[i];
                     m.dw[i] = 0;

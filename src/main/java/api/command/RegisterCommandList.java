@@ -23,7 +23,6 @@ public class RegisterCommandList {
         registerCommand(new CalendarCommand());
         registerCommand(new InfoUserCommand());
         registerCommand(new VersionCommand());
-        registerCommand(new TimerCommand());
     }
 
     public static void registerCommand(Command command) {

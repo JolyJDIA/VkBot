@@ -1,4 +1,4 @@
-package jolyjdia.bot.game;
+package jolyjdia.bot.kubanoid;
 
 import api.utils.ObedientBot;
 import com.vk.api.sdk.objects.messages.Keyboard;
@@ -11,19 +11,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class GameManager {
-    public static final Map<Integer, Map<Integer, Player>> map = new HashMap<>();
+public final class KubanoidManager {
+    public static Map<Integer, Map<Integer, KubanoidPlayer>> map = new HashMap<>();
 
     @Contract(pure = true)
-    private GameManager() {}
+    private KubanoidManager() {}
 
     static void addPlayer(int peerId, int userId) {
-        Map<Integer, Player> maps = map.computeIfAbsent(peerId, k -> new HashMap<>());
-        maps.put(userId, new Player());
+        Map<Integer, KubanoidPlayer> maps = map.computeIfAbsent(peerId, k -> new HashMap<>());
+        maps.put(userId, new KubanoidPlayer());
     }
     static void newIntegerPlayer(int peerId, int userId) {
         int random = (int)(Math.random() * 6) + 1;
-        Player player = getPlayer(peerId, userId);
+        KubanoidPlayer player = getPlayer(peerId, userId);
         if(player == null) {
             return;
         }
@@ -47,7 +47,7 @@ public final class GameManager {
         }
     }
     @NotNull
-    static Collection<Player> getScore(int peerId) {
+    static Collection<KubanoidPlayer> getScore(int peerId) {
         return map.get(peerId).values();
     }
     static boolean containsPlayer(int peerId, int userId) {
@@ -64,8 +64,8 @@ public final class GameManager {
         return getChat(peerId).size();
     }
     @Nullable
-    public static Player getPlayer(int peerId, int userId) {
-        Map<Integer, Player> players = map.getOrDefault(peerId, null);
+    public static KubanoidPlayer getPlayer(int peerId, int userId) {
+        Map<Integer, KubanoidPlayer> players = map.getOrDefault(peerId, null);
         return players != null ? players.getOrDefault(userId, null) : null;
     }
     public static void stopGame(int peerId) {

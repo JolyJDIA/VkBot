@@ -23,7 +23,7 @@ public class PermissionManager {
     }
 
     public static final void addGroup(String name, String prefix, String... permissions) {
-        PermissionGroup group = new PermissionGroup(Sets.newHashSet(permissions));
+        final PermissionGroup group = new PermissionGroup(Sets.newHashSet(permissions));
         group.setSuffix(prefix);
         lookup.put(name, group);
     }

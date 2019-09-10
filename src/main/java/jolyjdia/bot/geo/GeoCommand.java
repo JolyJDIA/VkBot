@@ -9,7 +9,6 @@ import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.Country;
 import com.maxmind.geoip2.record.Location;
 import jolyjdia.bot.translator.YandexTraslate;
-import jolyjdia.bot.translator.language.Language;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

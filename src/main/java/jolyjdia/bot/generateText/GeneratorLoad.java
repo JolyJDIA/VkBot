@@ -46,7 +46,7 @@ public class GeneratorLoad extends JavaModule {
                 initParamsStdDev);
     }
 
-    public TextGenerationUnbroken getData() {
+    public final TextGenerationUnbroken getData() {
         return data;
     }
 }

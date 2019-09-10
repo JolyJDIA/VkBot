@@ -15,7 +15,6 @@ public final class RegisterListEvent {
     private RegisterListEvent() {}
 
     public static void registerEvent(@NotNull Listener listener) {
-
         for (Method method : listener.getClass().getMethods()) {
             if (!method.isAnnotationPresent(EventLabel.class)) {
                 continue;

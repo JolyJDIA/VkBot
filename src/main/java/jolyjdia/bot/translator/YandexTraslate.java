@@ -2,9 +2,9 @@ package jolyjdia.bot.translator;
 
 import api.JavaModule;
 import api.command.RegisterCommandList;
-import jolyjdia.bot.translator.language.Language;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -24,16 +24,19 @@ public class YandexTraslate extends JavaModule {
     public final void onLoad() {
         RegisterCommandList.registerCommand(new TranslateCommand());
     }
-    private static URL url;
+    @Nullable private static URL url;
     static {
         try {
             url = new URL(KEY);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            url = null;
         }
     }
     @NotNull public static String translate(@NotNull @NonNls Language lang, String input) throws IOException {
         @NonNls StringBuilder builder = new StringBuilder();
+        if(url == null) {
+            return "URL Error";
+        }
         URLConnection connection = url.openConnection();
         connection.setDoOutput(true);
         try (DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream())) {

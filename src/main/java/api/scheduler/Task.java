@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public class Task implements TypeTask, Runnable {
     static final int NO_REPEATING = -1;
     private int period = NO_REPEATING;
-    private volatile int currentTick;
+    private int currentTick;
     private Runnable runnable;
     private Consumer<TypeTask> consumer;
 

@@ -23,12 +23,11 @@ import java.util.*;
 public class TextGenerationUnbroken extends DataSet {
     private static final long serialVersionUID = 3974448212113540917L;
     private static final int REPORT_SEQUENCE_LENGTH = 100;
-    private final Map<String, Integer> charToIndex = new HashMap<>();
     private final Map<Integer, String> indexToChar = new HashMap<>();
     private int dimension;
 
     @NotNull
-    public String generateText(@NotNull Model model, int steps, double temperature) {
+    public final String generateText(@NotNull Model model, int steps, double temperature) {
         model.resetState();
         Graph g = new Graph(false);
         Matrix input = new Matrix(dimension);
@@ -61,6 +60,7 @@ public class TextGenerationUnbroken extends DataSet {
 
         Set<String> chars = new HashSet<>();
         int id = 0;
+        Map<String, Integer> charToIndex = new HashMap<>();
         for (int i = 0; i < text.length(); i++) {
             String ch = String.valueOf(text.charAt(i));
             if (!chars.contains(ch)) {
@@ -102,7 +102,7 @@ public class TextGenerationUnbroken extends DataSet {
     }
     @NotNull
     public String getOutput(Model model) {
-        double[] temperatures = {0.85, 0.8, 0.75, 0.5, 0.45};
+        double[] temperatures = {0.85, 0.8, 0.75, 0.5, 0.45};//НАДА ПОФИКСИТЬ
         StringBuilder builder = new StringBuilder();
         for (double temperature : temperatures) {
             String guess = generateText(model, REPORT_SEQUENCE_LENGTH, temperature);

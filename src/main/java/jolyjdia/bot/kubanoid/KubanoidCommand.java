@@ -1,4 +1,4 @@
-package jolyjdia.bot.game;
+package jolyjdia.bot.kubanoid;
 
 import api.command.Command;
 import api.entity.User;
@@ -6,8 +6,8 @@ import api.utils.ObedientBot;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import org.jetbrains.annotations.NotNull;
 
-public class GameCommand extends Command {
-    GameCommand() {
+public class KubanoidCommand extends Command {
+    KubanoidCommand() {
         super("game");
         setPermission("roflanbot.game", "NO");
     }
@@ -18,15 +18,15 @@ public class GameCommand extends Command {
             int peerId = sender.getPeerId();
             if(args[1].equalsIgnoreCase("start")) {
                 ObedientBot.sendKeyboard("ЙОБАНЫЙ РОТ ЭТОГО КАЗИНО, БЛЯТЬ", sender.getPeerId(),
-                        new Keyboard().setButtons(GameKeyboard.GAME));
+                        new Keyboard().setButtons(KubanoidKeyboard.GAME));
 
             } else if(args[1].equalsIgnoreCase("stop")) {
-                GameManager.stopGame(peerId);
+                KubanoidManager.stopGame(peerId);
 
             } else if(args[1].equalsIgnoreCase("info")) {
                 StringBuilder builder = new StringBuilder();
                 int i = 0;
-                for(Player value : GameManager.getScore(peerId)) {
+                for(KubanoidPlayer value : KubanoidManager.getScore(peerId)) {
                     ++i;
                     builder.append('#').append(i).append(' ').append("Очко: ").append(value.getScore()).append('\n');
                 }

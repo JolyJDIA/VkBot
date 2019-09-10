@@ -7,18 +7,18 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class Handler implements Comparable<EventPriority>, Consumer<Event> {
-    public final Consumer<Event> c;
+    public final Consumer<Event> consumer;
     final EventPriority priority;
 
     @Contract(pure = true)
     Handler(Consumer<Event> consumer, EventPriority priority) {
-        this.c = consumer;
+        this.consumer = consumer;
         this.priority = priority;
     }
 
     @Override
     public final void accept(Event t) {
-        c.accept(t);
+        consumer.accept(t);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class Handler implements Comparable<EventPriority>, Consumer<Event> {
             return false;
         }
         Handler handler = (Handler) o;
-        return Objects.equals(c, handler.c) && priority == handler.priority;
+        return Objects.equals(consumer, handler.consumer) && priority == handler.priority;
     }
 }

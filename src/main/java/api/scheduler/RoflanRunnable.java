@@ -7,25 +7,25 @@ import org.jetbrains.annotations.NotNull;
 public class RoflanRunnable implements Runnable {
     private Task task;
 
-    public void cancel() {
+    public final void cancel() {
         ObedientBot.SCHEDULER.cancel(task);
     }
-    public Task runTask() {
+    public final Task runTask() {
         return setupTask(ObedientBot.SCHEDULER.runTask(this));
     }
-    public Task runTaskAsynchronously() {
+    public final Task runTaskAsynchronously() {
         return setupTask(ObedientBot.SCHEDULER.runTaskAsynchronously(this));
     }
-    public Task runTaskLater(int delay) {
+    public final Task runTaskLater(int delay) {
         return setupTask(ObedientBot.SCHEDULER.scheduleSyncDelayTask(this, delay));
     }
-    public Task runTaskLaterAsynchronously(int delay) {
+    public final Task runTaskLaterAsynchronously(int delay) {
         return setupTask(ObedientBot.SCHEDULER.scheduleAsyncDelayTask(this, delay));
     }
-    public Task runTaskTimer(int delay, int period) {
+    public final Task runTaskTimer(int delay, int period) {
         return setupTask(ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(this, delay, period));
     }
-    public Task runTaskTimerAsynchronously(int delay, int period) {
+    public final Task runTaskTimerAsynchronously(int delay, int period) {
         return setupTask(ObedientBot.SCHEDULER.scheduleAsyncRepeatingTask(this, delay, period));
     }
     @Contract("_ -> param1")
