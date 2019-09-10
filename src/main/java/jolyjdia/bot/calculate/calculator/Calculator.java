@@ -1,23 +1,14 @@
 package jolyjdia.bot.calculate.calculator;
 
-import org.jetbrains.annotations.NonNls;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 public class Calculator {
-    private static final Pattern COMPILE = Pattern.compile(" ");
-    @NonNls private final String userInput;
     private ArrayList<String> formattedUserInput;
 
     public Calculator(String userInput) {
-        this.userInput = COMPILE.matcher(userInput).replaceAll("");
-        this.formatUserInput();
-    }
-    private final void formatUserInput() {
-        formattedUserInput = new Parser().parse(userInput);
+        this.formattedUserInput = new Parser().parse(userInput);
     }
 
     private final BigDecimal condenseExpression(String operator, int indexVal) {
