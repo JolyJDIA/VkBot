@@ -13,7 +13,6 @@ import api.event.messages.ReplyMessageEvent;
 import api.event.messages.SendCommandEvent;
 import api.event.post.NewPostWallEvent;
 import api.event.post.RepostWallEvent;
-import api.utils.Watchdog;
 import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -32,7 +31,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     public CallbackApiLongPollHandler(VkApiClient client, GroupActor actor) {
         super(client, actor);
-        Watchdog.doStart();
     }
 
     @Override
