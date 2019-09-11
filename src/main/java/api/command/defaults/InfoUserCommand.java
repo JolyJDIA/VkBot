@@ -5,6 +5,7 @@ import api.entity.User;
 import api.utils.ObedientBot;
 import api.utils.StringBind;
 import jolyjdia.bot.Bot;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,11 +17,9 @@ public class InfoUserCommand extends Command {
 
     @Override
     public final void execute(User sender, @NotNull String[] args) {
-        @NonNls String info = "Ранг: ";
+        String info;
         if(args.length == 1) {
-            info += sender.getGroup() + '\n' +
-                    "Префикс: "+sender.getPrefix() + '\n' +
-                    "Суффикс: "+ sender.getSuffix();
+            info = getInfo(sender.getGroup(), sender.getPrefix(), sender.getSuffix());
         } else if(args.length == 2) {
             Integer id = StringBind.getUserId(args[1], sender);
             if (id == null) {
@@ -31,12 +30,18 @@ public class InfoUserCommand extends Command {
                 ObedientBot.sendMessage("Не удалось найти этого пользователя в базе", sender.getPeerId());
                 return;
             }
-            info += target.getGroup() + '\n' +
-                    "Префикс: "+target.getPrefix() + '\n' +
-                    "Суффикс: "+ target.getSuffix();
+
+            info = getInfo(target.getGroup(), target.getPrefix(), target.getSuffix());
         } else {
             return;
         }
         ObedientBot.sendMessage(info, sender.getPeerId());
+    }
+    @NotNull
+    @Contract(pure = true)
+    @NonNls private static String getInfo(String group, String prefix, String suffix) {
+        return "Ранг: "+group + '\n' +
+                "Префикс: "+prefix + '\n' +
+                "Суффикс: "+ suffix;
     }
 }
