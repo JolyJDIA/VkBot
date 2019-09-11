@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class PermissionManager {
@@ -24,6 +25,11 @@ public class PermissionManager {
 
     public static final void addGroup(String name, String prefix, String... permissions) {
         final PermissionGroup group = new PermissionGroup(Sets.newHashSet(permissions));
+        group.setSuffix(prefix);
+        lookup.put(name, group);
+    }
+    public static final void addGroup(String name, String prefix, HashSet<String> permission) {
+        final PermissionGroup group = new PermissionGroup(permission);
         group.setSuffix(prefix);
         lookup.put(name, group);
     }

@@ -40,12 +40,13 @@ public final class RegisterListEvent {
     }
 
     @Contract(pure = true)
-    public static Iterable<Handler> getHandlers() {
+    public static List<Handler> getHandlers() {
         return handlers;
     }
     public static void unregisterAll() {
         handlers.clear();
     }
+
     public static void registerAll(@NotNull Iterable<? extends Listener> listeners) {
         listeners.forEach(RegisterListEvent::registerEvent);
     }

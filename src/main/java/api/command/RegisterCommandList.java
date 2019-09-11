@@ -4,7 +4,6 @@ import api.command.defaults.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,12 +29,13 @@ public class RegisterCommandList {
     }
 
     @Contract(pure = true)
-    public static Collection<Command> getRegisteredCommands() {
+    public static Set<Command> getRegisteredCommands() {
         return commands;
     }
     public static void unregisterAll() {
         commands.clear();
     }
+
     public static void registerAll(@NotNull Iterable<? extends Command> commands) {
         commands.forEach(RegisterCommandList::registerCommand);
     }
