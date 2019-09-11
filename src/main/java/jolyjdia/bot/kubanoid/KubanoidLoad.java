@@ -20,6 +20,7 @@ public class KubanoidLoad extends JavaModule implements Listener {
         RegisterCommandList.registerCommand(new KubanoidCommand());
         RegisterListEvent.registerEvent(this);
         RegisterCommandList.registerCommand(new RollCommand());
+        RegisterCommandList.registerCommand(new FlipCommand());
     }
     @EventLabel
     public static void onSend(@NotNull NewMessageEvent e) {

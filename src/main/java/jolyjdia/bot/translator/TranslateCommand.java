@@ -14,17 +14,14 @@ public class TranslateCommand extends Command {
     private static final Pattern COMPILE = Pattern.compile("^[A-Za-z]+$");
 
     TranslateCommand() {
-        super("translate",
-                "<текст>",
-                "перевод текста"
-        );
+        super("translate", "<текст>", "перевод текста");
         setAlias("перевод");
     }
 
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length >= 2) {
-            ObedientBot.SCHEDULER.runTaskAsynchronously(() -> {
+            ObedientBot.SCHEDULER.runTask(() -> {//Async
                 Language lang = COMPILE.matcher(args[1]).matches() ? Language.RUSSIAN : Language.ENGLISH;
                 @NonNls String translate;
                 try {

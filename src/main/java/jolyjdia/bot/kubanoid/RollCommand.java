@@ -2,6 +2,7 @@ package jolyjdia.bot.kubanoid;
 
 import api.command.Command;
 import api.entity.User;
+import api.utils.MathUtils;
 import api.utils.ObedientBot;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,20 +18,9 @@ public class RollCommand extends Command {
         if(args.length == 1) {
             ObedientBot.sendMessage(String.valueOf(new Random().nextInt(100) + 1), sender.getPeerId());
         } else if(args.length == 2) {
-            ObedientBot.sendMessage(String.valueOf(rnd(null, args[1])), sender.getPeerId());
+            ObedientBot.sendMessage(String.valueOf(MathUtils.random(null, args[1])), sender.getPeerId());
         } else if(args.length == 3) {
-            ObedientBot.sendMessage(String.valueOf(rnd(args[2], args[1])), sender.getPeerId());
+            ObedientBot.sendMessage(String.valueOf(MathUtils.random(args[2], args[1])), sender.getPeerId());
         }
-    }
-    private static int rnd(String min, String max) {
-        int maxI = 100;
-        int minI = 1;
-        try {
-            maxI = Integer.parseInt(max);
-            minI = Integer.parseInt(min);
-        } catch (NumberFormatException ignored) {}
-        maxI -= minI;
-        ++maxI;
-        return (int) (Math.random() * maxI) + minI;
     }
 }

@@ -23,6 +23,18 @@ public final class MathUtils {
 		}
 		return 0;
 	}
+	public static int random(String min, String max) {
+		int maxI = 100;
+		int minI = 1;
+		try {
+			maxI = Integer.parseInt(max);
+			minI = Integer.parseInt(min);
+		} catch (NumberFormatException ignored) {}
+		return (int) (Math.random() * (maxI - minI) + 1) + minI;
+	}
+	public static int random(int min, int max) {
+		return (int) (Math.random() * (max - min) + 1) + min;
+	}
 	
 	public static double median(List<Double> vals) {
 		Collections.sort(vals);

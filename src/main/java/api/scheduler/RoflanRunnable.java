@@ -13,18 +13,22 @@ public class RoflanRunnable implements Runnable {
     public final Task runTask() {
         return setupTask(ObedientBot.SCHEDULER.runTask(this));
     }
+
+    @Deprecated
     public final Task runTaskAsynchronously() {
         return setupTask(ObedientBot.SCHEDULER.runTaskAsynchronously(this));
     }
     public final Task runTaskLater(int delay) {
         return setupTask(ObedientBot.SCHEDULER.scheduleSyncDelayTask(this, delay));
     }
+    @Deprecated
     public final Task runTaskLaterAsynchronously(int delay) {
         return setupTask(ObedientBot.SCHEDULER.scheduleAsyncDelayTask(this, delay));
     }
     public final Task runTaskTimer(int delay, int period) {
         return setupTask(ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(this, delay, period));
     }
+    @Deprecated
     public final Task runTaskTimerAsynchronously(int delay, int period) {
         return setupTask(ObedientBot.SCHEDULER.scheduleAsyncRepeatingTask(this, delay, period));
     }

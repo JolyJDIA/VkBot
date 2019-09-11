@@ -12,20 +12,20 @@ public class GeneratorLoad extends JavaModule {
     @Override
     public final void onLoad() {
         int totalSequences = 2000;
-        int sequenceMinLength = 10;
-        int sequenceMaxLength = 100;
+        int sequenceMinLength = 15;
+        int sequenceMaxLength = 150;
         data = new TextGenerationUnbroken(
-                "D:\\IdeaProjects\\VkBot\\src\\main\\resources\\PaulGraham.txt",
+                "D:\\IdeaProjects\\VkBot\\src\\main\\resources\\Generator.txt",
                 totalSequences, sequenceMinLength, sequenceMaxLength);
         new TrainerNeural.BuilderTrainer()
-                .setInitFromSavedAndSave(true)
-                .setFromPath("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\PaulGraham.ser")
-/*                .setTrainingEpoch(500)
+                .setInitFromSavedAndSave(false)
+                .setFromPath("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\Generator.dat")
+                .setTrainingEpoch(500)
                 .setLearningRate(0.001)
                 .setModel(getModel())
                 .setDataSet(data)
                 .setReportEveryNthEpoch(10)
-                .setMinLoss(0.1)*/
+                .setMinLoss(0.1)
                 .build();
 
         RegisterCommandList.registerCommand(new GeneratorCommand(this));

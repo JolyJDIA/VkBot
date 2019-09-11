@@ -107,6 +107,7 @@ public class TrainerNeural {
             System.out.println("--------------------------------------------------------------");
             if (initFromSaved) {
                 System.out.println("инициализация из сохраненного состояния...");
+                //НОРМ ДЕСЕРИАЛИЗАЦИЮ ПОТОМ СДЕЛАЮ
                 glModel = (Model) FileSerializer.deserialize(savePath);
                 return;
             }
@@ -123,6 +124,7 @@ public class TrainerNeural {
                         data.displayReport(model);
                     }
                 }
+                //НОРМ СОХРАНЕНИЕ СДЕЛАТЬ
                 if (!initFromSaved) {
                     System.out.println("Сохраняю данные...");
                     FileSerializer.serialize(savePath, model);

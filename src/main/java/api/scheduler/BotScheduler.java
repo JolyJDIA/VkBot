@@ -1,16 +1,13 @@
 package api.scheduler;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class BotScheduler {
-    private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
+    //private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
     private final Set<Task> taskQueue = new HashSet<>();
 
 
@@ -23,8 +20,8 @@ public class BotScheduler {
             if (task.getCurrentTick() >= task.getPeriod()) {
                 if (task.isSync()) {
                     task.run();
-                } else {
-                    executor.execute(task);
+              //  } else {
+                  //  executor.execute(task);
                 }
                 if (task.getPeriod() <= Task.NO_REPEATING) {
                     System.out.println("УДАЛЯЮ ЗАДАЧУ");
@@ -67,31 +64,32 @@ public class BotScheduler {
         return sync(consumer, delay, Task.NO_REPEATING);
     }
 
+    @Deprecated
     @NotNull
     public final Task runTaskAsynchronously(Runnable runnable) {
         return async(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
     }
-
+    @Deprecated
     @NotNull
     public final Task runTaskAsynchronously(Consumer<Task> consumer) {
         return async(consumer, Task.NO_REPEATING, Task.NO_REPEATING);
     }
-
+    @Deprecated
     @NotNull
     public final Task scheduleAsyncRepeatingTask(Runnable runnable, int delay, int period) {
         return async(runnable, delay, period);
     }
-
+    @Deprecated
     @NotNull
     public final Task scheduleAsyncRepeatingTask(Consumer<Task> consumer, int delay, int period) {
         return async(consumer, delay, period);
     }
-
+    @Deprecated
     @NotNull
     public final Task scheduleAsyncDelayTask(Runnable runnable, int delay) {
         return async(runnable, delay, Task.NO_REPEATING);
     }
-
+    @Deprecated
     @NotNull
     public final Task scheduleAsyncDelayTask(Consumer<Task> consumer, int delay) {
         return async(consumer, delay, Task.NO_REPEATING);

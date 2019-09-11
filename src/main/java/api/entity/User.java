@@ -72,6 +72,12 @@ public class User implements Serializable {
         this.prefix = prefix;
     }
 
+    /**
+     * ПУСТЬ БУДЕТ)
+     * @param stream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
         this.peerId = stream.readInt();
         this.userId = stream.readInt();

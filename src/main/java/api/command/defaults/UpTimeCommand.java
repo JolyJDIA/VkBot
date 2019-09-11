@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class UpTimeCommand extends Command {
     public UpTimeCommand() {
-        super("uptime", "[NEW] время с момента включения бота");
+        super("uptime", "время с момента включения бота");
     }
 
     @Override

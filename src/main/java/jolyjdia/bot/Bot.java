@@ -2,7 +2,6 @@ package jolyjdia.bot;
 
 import api.CallbackApiLongPollHandler;
 import api.ProfileList;
-import api.utils.TickPerSeconds;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -10,6 +9,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.groups.LongPollSettings;
 import jolyjdia.bot.calculate.CalculatorRegister;
+import jolyjdia.bot.generateText.GeneratorLoad;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.kubanoid.KubanoidLoad;
 import jolyjdia.bot.puzzle.Puzzle;
@@ -53,7 +53,6 @@ public class Bot {
                     .messageNew(true)
                     .execute();
         }
-        TickPerSeconds.doStart();
         profileList = new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(vkApiClient, groupActor);
         registerAll();
@@ -66,7 +65,7 @@ public class Bot {
         new Puzzle().onLoad();
        // new ShoutboxMain().onLoad();
         new KubanoidLoad().onLoad();
-       // new GeneratorLoad().onLoad();
+        new GeneratorLoad().onLoad();
     }
 
     @Contract(pure = true)
