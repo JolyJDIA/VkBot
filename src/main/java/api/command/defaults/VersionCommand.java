@@ -17,7 +17,7 @@ public class VersionCommand extends Command {
         if(args.length == 1) {
             ObedientBot.sendMessage(
                     "VK API: " +Bot.getVkApiClient().getVersion() +
-                    "\nВерсия бота: v1.0.5", sender.getPeerId());
+                    "\nВерсия бота: v1.0.7", sender.getPeerId());
         }
     }
 }

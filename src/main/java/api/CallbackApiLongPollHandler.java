@@ -60,10 +60,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         submitEvent(event);
     }
 
-    /**
-     * @param groupId
-     * @param msg
-     */
     @Override
     public final void messageReply(Integer groupId, Message msg) {
         ReplyMessageEvent event = new ReplyMessageEvent(msg);
