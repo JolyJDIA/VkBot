@@ -25,6 +25,9 @@ public class KubanoidLoad extends JavaModule implements Listener {
     @EventLabel
     public static void onSend(@NotNull NewMessageEvent e) {
         Message msg = e.getMessage();
+        if(msg.getText().isEmpty()) {
+            return;
+        }
         int peerId = msg.getPeerId();
         int userId = msg.getFromId();
         if(KubanoidManager.containsPlayer(peerId, userId)) {

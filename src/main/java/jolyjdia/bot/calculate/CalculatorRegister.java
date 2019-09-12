@@ -22,8 +22,11 @@ public class CalculatorRegister extends JavaModule implements Listener {
 	@EventLabel(priority = EventPriority.HIGH)
 	public static void onSend(@NotNull NewMessageEvent e) {
 		Message msg = e.getMessage();
-		int peerId = msg.getPeerId();
 		String text = msg.getText();
+		if(text.isEmpty()) {
+			return;
+		}
+		int peerId = msg.getPeerId();
 		if (CalculatorManager.isPersonalConversation(peerId, msg.getFromId())) {
 			CalculatorManager.actionsCalculator(peerId, text);
 			return;

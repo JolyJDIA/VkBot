@@ -19,6 +19,7 @@ public class Puzzle extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
+        RegisterListEvent.registerEvent(this);
         ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(() -> {
             if (next) {
                 math = !math;
@@ -26,11 +27,8 @@ public class Puzzle extends JavaModule implements Listener {
                 next = false;
             }
             ObedientBot.sendMessage("Развитие лодки!\n"+answer.getStringFormatAnswer(), 2000000001);
-        }, 5000, 5000);
-
-
+        }, 3000, 3000);
         RegisterCommandList.registerCommand(new Puzzle.GeneratePuzzleCommand(this));
-        RegisterListEvent.registerEvent(this);
     }
     @EventLabel
     public final void onSend(@NotNull NewMessageEvent e) {
