@@ -2,39 +2,34 @@ package api.scheduler;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 public class BotScheduler {
     //private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
-    private final Set<Task> taskQueue = new HashSet<>();
+    private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
 
 
     public final void mainThreadHeartbeat() {
-        synchronized (taskQueue) {
-            Iterator<Task> iterator = taskQueue.iterator();
-            while (iterator.hasNext()) {
-                Task task = iterator.next();
-                if (task == null) {
+        Iterator<Task> iterator = taskQueue.iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            if (task.getCurrentTick() >= task.getPeriod()) {
+                if (task.isSync()) {
+                    task.run();
+                    //} else {
+                    //executor.execute(task);
+                }
+                if (task.getPeriod() <= Task.NO_REPEATING) {
+                    System.out.println("удалил задачу: "+taskQueue);
+                    iterator.remove();
                     return;
                 }
-                if (task.getCurrentTick() >= task.getPeriod()) {
-                    if (task.isSync()) {
-                        task.run();
-                    //} else {
-                        //executor.execute(task);
-                    }
-                    if (task.getPeriod() <= Task.NO_REPEATING) {
-                        iterator.remove();
-                        System.out.println("удалил задачу: "+taskQueue);
-                        return;
-                    }
-                    task.setCurrentTickZero();
-                }
-                task.addCurrentTick();
+                task.setCurrentTickZero();
             }
+            task.addCurrentTick();
         }
     }
 
