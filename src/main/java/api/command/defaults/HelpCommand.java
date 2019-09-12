@@ -4,12 +4,13 @@ import api.command.Command;
 import api.command.RegisterCommandList;
 import api.entity.User;
 import api.utils.ObedientBot;
+import jolyjdia.bot.calculate.calculator.MathFunctions;
 import org.jetbrains.annotations.NotNull;
 
 public class HelpCommand extends Command {
     public HelpCommand() {
-        super("help", "просмотреть информацию");
-        setAlias("info", "?", "cmds");
+        super("help", "<math>", "просмотреть информацию");
+        setAlias("info", "?");
     }
 
     @Override
@@ -26,8 +27,14 @@ public class HelpCommand extends Command {
                                 builder.append(" - ").append(cmd.getDescription()).append('\n');
                             });
             ObedientBot.sendMessage(builder.toString(), sender.getPeerId());
-        } else if (args.length == 2 && args[1].equalsIgnoreCase("math")) {
-            ObedientBot.sendMessage("Потом", sender.getPeerId());
+        } else if (args.length == 2) {
+            if(args[1].equalsIgnoreCase("math")) {
+                StringBuilder builder = new StringBuilder();
+                for (String s : MathFunctions.ADV_OPERATOR_LIST) {
+                    builder.append(s).append("(число)\n");
+                }
+                ObedientBot.sendMessage(builder.toString(), sender.getPeerId());
+            }
         } else {
             ObedientBot.sendMessage("Использование: " + getUseCommand(), sender.getPeerId());
         }

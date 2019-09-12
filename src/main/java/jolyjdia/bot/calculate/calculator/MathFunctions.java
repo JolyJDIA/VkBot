@@ -15,7 +15,10 @@ public class MathFunctions {
             "ln",
             "abs",
             "exp",
-            "fact"
+            "fact",
+            "arcsin",
+            "arccos",
+            "arctan"
     };
     private final ArrayList<String> formattedUserInput;
 
@@ -73,6 +76,9 @@ public class MathFunctions {
                     case "abs" -> formattedUserInput.set(i, String.valueOf(Math.abs(x)));
                     case "exp" -> formattedUserInput.set(i, String.valueOf(Math.exp(x)));
                     case "fact" -> formattedUserInput.set(i, String.valueOf(factorialOf(x)));
+                    case "arcsin" -> formattedUserInput.set(i, String.valueOf(Math.asin(x)));
+                    case "arccos" -> formattedUserInput.set(i, String.valueOf(Math.acos(x)));
+                    case "arctan" -> formattedUserInput.set(i, String.valueOf(Math.atan(x)));
                 }
                 formattedUserInput.remove(i + 1);
             }

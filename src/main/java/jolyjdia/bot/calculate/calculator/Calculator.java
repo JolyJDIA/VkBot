@@ -50,11 +50,11 @@ public class Calculator {
     public final String solveExpression() {
         new ConvertConstants(formattedUserInput).convert();
         formattedUserInput = new MathFunctions(formattedUserInput).evaluateFunctions();
-
         BigDecimal condense = BigDecimal.ZERO;
         try {
             condense = new BigDecimal(formattedUserInput.get(0));
         } catch (NumberFormatException ignored) {}
+
         for (int i = 0; i < formattedUserInput.size()-1; ++i) {
             if (formattedUserInput.get(i).equals("-(")) {
                 formattedUserInput.add(i, "-1");
