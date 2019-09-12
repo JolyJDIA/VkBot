@@ -13,13 +13,14 @@ public class BotScheduler {
 
 
     public final void mainThreadHeartbeat() {
+        //старый добрый итератор, не хочу try catch
         Iterator<Task> iterator = taskQueue.iterator();
         while (iterator.hasNext()) {
             Task task = iterator.next();
             if (task.getCurrentTick() >= task.getPeriod()) {
                 if (task.isSync()) {
                     task.run();
-                    //} else {
+                //} else {
                     //executor.execute(task);
                 }
                 if (task.getPeriod() <= Task.NO_REPEATING) {
