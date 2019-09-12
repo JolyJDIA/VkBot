@@ -3,6 +3,7 @@ package api.scheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -12,27 +13,28 @@ public class BotScheduler {
 
 
     public final void mainThreadHeartbeat() {
-
         synchronized (taskQueue) {
-            taskQueue.forEach(task -> {
+            Iterator<Task> iterator = taskQueue.iterator();
+            while (iterator.hasNext()) {
+                Task task = iterator.next();
                 if (task == null) {
                     return;
                 }
                 if (task.getCurrentTick() >= task.getPeriod()) {
                     if (task.isSync()) {
                         task.run();
-                        //  } else {
-                        //  executor.execute(task);
+                    //} else {
+                        //executor.execute(task);
                     }
                     if (task.getPeriod() <= Task.NO_REPEATING) {
-                        System.out.println("УДАЛЯЮ ЗАДАЧУ");
-                        taskQueue.remove(task);
+                        iterator.remove();
+                        System.out.println("удалил задачу: "+taskQueue);
                         return;
                     }
                     task.setCurrentTickZero();
                 }
                 task.addCurrentTick();
-            });
+            }
         }
     }
 
