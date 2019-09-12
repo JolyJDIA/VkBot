@@ -19,16 +19,14 @@ public class Puzzle extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-        /*ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(() -> {
+        ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(() -> {
             if (next) {
                 math = !math;
                 answer = math ? new MathPuzzle() : new TextPuzzle();
                 next = false;
             }
-            for(int chat : Bot.getProfileList().getChats()) {
-                ObedientBot.sendMessage("Чат-игра!\n"+answer.getStringFormatAnswer(), chat);
-            }
-        }, 2, 5);*/
+            ObedientBot.sendMessage("Развитие лодки!\n"+answer.getStringFormatAnswer(), 2000000001);
+        }, 5000, 5000);
 
 
         RegisterCommandList.registerCommand(new Puzzle.GeneratePuzzleCommand(this));

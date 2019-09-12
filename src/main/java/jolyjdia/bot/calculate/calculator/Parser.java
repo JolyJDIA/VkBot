@@ -20,7 +20,7 @@ public class Parser {
         for (int i = 0; i < expression.length(); i++) {
             int codePoint = expression.codePointAt(i);
 
-            Parser.SymbolType type = getSymbolType(codePoint);
+            Parser.SymbolType type = getSymbolType(codePoint) ;
             if(type == Parser.SymbolType.SYMBOL) {
                 tokenBuilder.appendCodePoint(codePoint);
             } else {

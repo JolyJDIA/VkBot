@@ -6,10 +6,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public final class KubanoidManager {
     public static Map<Integer, Map<Integer, KubanoidPlayer>> map = new HashMap<>();
@@ -54,7 +51,7 @@ public final class KubanoidManager {
         return map.containsKey(peerId) && map.get(peerId).containsKey(userId);
     }
     @NotNull
-    private static Collection<Integer> getChat(int peerId) {
+    private static Set<Integer> getChat(int peerId) {
         return map.get(peerId).keySet();
     }
     static void removePlayer(int peerId, int userId) {
