@@ -18,14 +18,19 @@ import java.util.Random;
     @Contract(pure = true) private ObedientBot() {}
 
     public static void sendMessage(String msg, int peerId) {
-        try {
-            send().peerId(peerId).message(msg).execute();
-        } catch (ApiException | ClientException ignored) {}
+        SCHEDULER.runTask(() -> {
+            try {
+                send().peerId(peerId).message(msg).execute();
+            } catch (ApiException | ClientException ignored) {}
+        });
     }
     public static void sendKeyboard(String msg, int peerId, Keyboard keyboard) {
-        try {
-            send().peerId(peerId).keyboard(keyboard).message(msg).execute();
-        } catch (ApiException | ClientException ignored) {}
+        SCHEDULER.runTask(() -> {
+            try {
+                send().peerId(peerId).keyboard(keyboard).message(msg).execute();
+            } catch (ApiException | ClientException ignored) {
+            }
+        });
     }
     private static MessagesSendQuery send() {
         return Bot.getVkApiClient().messages()
@@ -34,8 +39,10 @@ import java.util.Random;
                 .groupId(Bot.GROUP_ID);
     }
     public static void editChat(String title, int peerId) {
-        try {
-            Bot.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId-2000000000, title).execute();
-        } catch (ApiException | ClientException ignored) {}
+        SCHEDULER.runTask(() -> {
+            try {
+                Bot.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId-2000000000, title).execute();
+            } catch (ApiException | ClientException ignored) {}
+        });
     }
 }

@@ -12,26 +12,28 @@ public class BotScheduler {
 
 
     public final void mainThreadHeartbeat() {
-        //Потом синхронизирую
-        taskQueue.forEach(task -> {
-            if (task == null) {
-                return;
-            }
-            if (task.getCurrentTick() >= task.getPeriod()) {
-                if (task.isSync()) {
-                    task.run();
-              //  } else {
-                  //  executor.execute(task);
-                }
-                if (task.getPeriod() <= Task.NO_REPEATING) {
-                    System.out.println("УДАЛЯЮ ЗАДАЧУ");
-                    taskQueue.remove(task);
+
+        synchronized (taskQueue) {
+            taskQueue.forEach(task -> {
+                if (task == null) {
                     return;
                 }
-                task.setCurrentTickZero();
-            }
-            task.addCurrentTick();
-        });
+                if (task.getCurrentTick() >= task.getPeriod()) {
+                    if (task.isSync()) {
+                        task.run();
+                        //  } else {
+                        //  executor.execute(task);
+                    }
+                    if (task.getPeriod() <= Task.NO_REPEATING) {
+                        System.out.println("УДАЛЯЮ ЗАДАЧУ");
+                        taskQueue.remove(task);
+                        return;
+                    }
+                    task.setCurrentTickZero();
+                }
+                task.addCurrentTick();
+            });
+        }
     }
 
     @NotNull
