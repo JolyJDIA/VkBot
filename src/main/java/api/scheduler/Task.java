@@ -13,7 +13,7 @@ public class Task implements TypeTask, Runnable {
     private Runnable runnable;
     private Consumer<TypeTask> consumer;
 
-    public Task(@NotNull Object o) {
+    private Task(@NotNull Object o) {
         if (Runnable.class.isAssignableFrom(o.getClass())) {
             this.runnable = (Runnable) o;
         } else if (Consumer.class.isAssignableFrom(o.getClass())) {
@@ -23,7 +23,7 @@ public class Task implements TypeTask, Runnable {
         }
     }
 
-    public Task(Object o, int delay, int period) {
+    Task(Object o, int delay, int period) {
         this(o);
         this.period = period;
         this.currentTick = (period-delay);

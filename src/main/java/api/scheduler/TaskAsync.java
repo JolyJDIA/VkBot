@@ -3,9 +3,7 @@ package api.scheduler;
 import org.jetbrains.annotations.Contract;
 
 public class TaskAsync extends Task {
-    public TaskAsync(Object o) {
-        super(o);
-    }
+
     public TaskAsync(Object o, int period, int delay) {
         super(o, period, delay);
     }
