@@ -24,8 +24,8 @@ public class BotScheduler {
                     //executor.execute(task);
                 }
                 if (task.getPeriod() <= Task.NO_REPEATING) {
-                    System.out.println("удалил задачу: "+taskQueue);
                     iterator.remove();
+                    System.out.println("удалил задачу: "+taskQueue);
                     return;
                 }
                 task.setCurrentTickZero();

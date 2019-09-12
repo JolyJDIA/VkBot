@@ -11,7 +11,6 @@ public class Calculator {
 
     public Calculator(String userInput) {
         this.formattedUserInput = new Parser().parse(COMPILE.matcher(userInput).replaceAll(""));
-        System.out.println(formattedUserInput);
     }
     private final BigDecimal condenseExpression(String operator, int indexVal) {
         BigDecimal x = BigDecimal.ZERO;
