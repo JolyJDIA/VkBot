@@ -15,6 +15,9 @@ public class KubanoidCommand extends Command {
     @Override
     public final void execute(@NotNull User sender, @NotNull String[] args) {
         if(args.length == 2) {
+            if(noPermission(sender)) {
+                return;
+            }
             int peerId = sender.getPeerId();
             if(args[1].equalsIgnoreCase("start")) {
                 ObedientBot.sendKeyboard("ЙОБАНЫЙ РОТ ЭТОГО КАЗИНО, БЛЯТЬ", sender.getPeerId(),

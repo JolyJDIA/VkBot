@@ -29,14 +29,18 @@ final class CalculatorManager {
                 }
                 closeCalculatorBoard(answer, peerId);
             }
-            case "C" -> history.compute(peerId, (k, v) -> "");
+            case "C" -> history.put(peerId, "");
             case "<=" -> {
-                history.computeIfPresent(peerId, (k, v) -> v.substring(0, v.length()-1));
-                String expression = history.get(peerId);
-                if(!OUTPUT.matcher(expression).matches()) {
+                String get = history.get(peerId);
+                String set = get.substring(0, get.length()-1);
+                history.put(peerId, set);
+                if(!OUTPUT.matcher(get).matches()) {
                     return;
                 }
-                ObedientBot.sendMessage(expression, peerId);
+                if(set.isEmpty()) {
+                    return;
+                }
+                ObedientBot.sendMessage(set, peerId);
             }
             default -> {
                 if (MATH.matcher(element).matches()) {
