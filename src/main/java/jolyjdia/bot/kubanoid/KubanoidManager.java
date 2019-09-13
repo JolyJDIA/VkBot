@@ -27,7 +27,7 @@ public final class KubanoidManager {
         Map<Integer, KubanoidPlayer> maps = map.computeIfAbsent(peerId, k -> new HashMap<>());
         maps.put(userId, new KubanoidPlayer());
     }
-    static void newIntegerPlayer(int peerId, int userId) {
+    static void newRandomAndCreatePlayer(int peerId, int userId) {
         int random = (int)(Math.random() * 6) + 1;
         KubanoidPlayer player = getPlayer(peerId, userId);
         if(player == null) {
@@ -44,14 +44,11 @@ public final class KubanoidManager {
             player.setWin(true);
         }
         if(map.get(peerId).size() == 1) {
-            @NonNls StringBuilder builder = new StringBuilder();
-            map.get(peerId).forEach((id, p) ->
-                    builder.append(" - ").append(nick).append(" Очнов: ").append(p.getScore()).append('\n'));
-            stopGame("Конец игры!\n"+builder, peerId);
+            stopGame("Конец игры!\n"+ getInfo(peerId), peerId);
         }
     }
     @NotNull
-    static Collection<KubanoidPlayer> getScore(int peerId) {
+    private static Collection<KubanoidPlayer> getScore(int peerId) {
         return map.get(peerId).values();
     }
     static boolean containsPlayer(int peerId, int userId) {
@@ -90,5 +87,15 @@ public final class KubanoidManager {
             return;
         }
         map.get(peerId).clear();
+    }
+    @NotNull
+    public static String getInfo(int peerId) {
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        for(KubanoidPlayer value : getScore(peerId)) {
+            ++i;
+            builder.append('#').append(i).append(' ').append("Очко: ").append(value.getScore()).append('\n');
+        }
+        return builder.toString();
     }
 }

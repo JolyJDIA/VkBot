@@ -27,13 +27,7 @@ public class KubanoidCommand extends Command {
                 KubanoidManager.stopGame("Конец игры!", peerId);
 
             } else if(args[1].equalsIgnoreCase("info")) {
-                StringBuilder builder = new StringBuilder();
-                int i = 0;
-                for(KubanoidPlayer value : KubanoidManager.getScore(peerId)) {
-                    ++i;
-                    builder.append('#').append(i).append(' ').append("Очко: ").append(value.getScore()).append('\n');
-                }
-                ObedientBot.sendMessage(builder.toString(), peerId);
+                ObedientBot.sendMessage(KubanoidManager.getInfo(peerId), peerId);
             }
         }
     }

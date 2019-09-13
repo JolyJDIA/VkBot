@@ -28,13 +28,13 @@ public class KubanoidLoad extends JavaModule implements Listener {
         int peerId = msg.getPeerId();
         int userId = msg.getFromId();
         if(KubanoidManager.containsPlayer(peerId, userId)) {
-            if(msg.getText().contains("КИНУТЬ")) {//колумбайн//колумbruh//колумbruhйн
-                KubanoidManager.newIntegerPlayer(peerId, userId);
+            if(msg.getText().equalsIgnoreCase("КИНУТЬ")) {//колумбайн//колумbruh//колумbruhйн
+                KubanoidManager.newRandomAndCreatePlayer(peerId, userId);
             }
         } else {
-            if (msg.getText().contains("УЧАСТВОВАТЬ")) {
+            if (msg.getText().equalsIgnoreCase("УЧАСТВОВАТЬ")) {
                 KubanoidManager.addPlayer(peerId, userId);
-                ObedientBot.sendMessage("Твой номер: " + KubanoidManager.getCount(peerId), peerId);
+                ObedientBot.sendMessage("Твой номер: " + KubanoidManager.getCount(peerId), userId);
             }
         }
     }
