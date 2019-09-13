@@ -1,5 +1,6 @@
 package jolyjdia.bot.calculate;
 
+import api.utils.KeyboardUtils;
 import api.utils.ObedientBot;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import jolyjdia.bot.calculate.calculator.Calculator;
@@ -7,7 +8,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -60,8 +60,7 @@ final class CalculatorManager {
     }
     static void closeCalculatorBoard(String text, int peerId) {
         removeHistory(peerId);
-        ObedientBot.sendKeyboard(text, peerId, new Keyboard()
-                .setButtons(Collections.emptyList()));
+        ObedientBot.sendKeyboard(text, peerId, KeyboardUtils.EMPTY_KEYBOARD);
     }
     static void openCalculatorBoard(int peerId) {
         addHistory(peerId);

@@ -13,7 +13,7 @@ import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.kubanoid.KubanoidLoad;
 import jolyjdia.bot.puzzle.Puzzle;
-import jolyjdia.bot.shoutbox.ShoutboxMain;
+import jolyjdia.bot.shkila.Timetable;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 
@@ -39,8 +39,9 @@ public class Bot {
             e.printStackTrace();
         }
     }
+    public static final String ACCESS_TOKEN = properties.getProperty("accessToken");
     public static void main(String[] args) throws ClientException, ApiException {
-        groupActor = new GroupActor(GROUP_ID, properties.getProperty("accessToken"));
+        groupActor = new GroupActor(GROUP_ID, ACCESS_TOKEN);
         vkApiClient = new VkApiClient(new HttpTransportClient());
         LongPollSettings settings = vkApiClient.groups().getLongPollSettings(groupActor, GROUP_ID).execute();
         if (settings == null) {
@@ -65,8 +66,9 @@ public class Bot {
         new YandexTraslate().onLoad();
         new GeoLoad().onLoad();
         new Puzzle().onLoad();
-        new ShoutboxMain().onLoad();
+        //new ShoutboxMain().onLoad();
         new KubanoidLoad().onLoad();
+        new Timetable().onLoad();
        // new GeneratorLoad().onLoad();
     }
 

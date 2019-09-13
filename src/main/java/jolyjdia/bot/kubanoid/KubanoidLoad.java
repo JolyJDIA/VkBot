@@ -7,11 +7,8 @@ import api.event.Listener;
 import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
 import api.utils.ObedientBot;
-import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
 
 public class KubanoidLoad extends JavaModule implements Listener {
 
@@ -35,7 +32,7 @@ public class KubanoidLoad extends JavaModule implements Listener {
                 KubanoidManager.newIntegerPlayer(peerId, userId);
 
             } else if(msg.getText().contains("СТОП")) {
-                ObedientBot.sendKeyboard("Конец игры!", peerId, new Keyboard().setButtons(Collections.emptyList()));
+                KubanoidManager.stopGame(peerId);
             }
         } else {
             if (msg.getText().contains("УЧАСТВОВАТЬ")) {

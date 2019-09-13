@@ -1,12 +1,12 @@
 package api.utils;
 
-import com.vk.api.sdk.objects.messages.KeyboardButton;
-import com.vk.api.sdk.objects.messages.KeyboardButtonAction;
-import com.vk.api.sdk.objects.messages.KeyboardButtonActionType;
-import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
+import com.vk.api.sdk.objects.messages.*;
 import org.jetbrains.annotations.Contract;
 
+import java.util.Collections;
+
 public final class KeyboardUtils {
+    public static final Keyboard EMPTY_KEYBOARD = new Keyboard().setButtons(Collections.emptyList());
     @Contract(pure = true)
     private KeyboardUtils() {}
 

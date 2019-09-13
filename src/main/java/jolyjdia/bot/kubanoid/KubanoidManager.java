@@ -1,8 +1,15 @@
 package jolyjdia.bot.kubanoid;
 
+import api.utils.KeyboardUtils;
 import api.utils.ObedientBot;
+import com.vk.api.sdk.client.actors.UserActor;
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Keyboard;
+import com.vk.api.sdk.objects.users.UserXtrCounters;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,21 +32,19 @@ public final class KubanoidManager {
             return;
         }
         int sum = player.addScore(random);
-        ObedientBot.sendMessage(
-                "[id"+userId+"|ДОДИК]"+
-                "\nВаше число: "+random+
-                "\nСумма: "+sum, peerId);
+        String nick = getPlayerName(userId);
+        ObedientBot.sendMessage("Ваше число: "+random+ "\nСумма: "+sum, userId);
         if(sum > 21) {
-            ObedientBot.sendMessage("ТЫ ПРОИХРАЛ BRUH", peerId);
+            ObedientBot.sendMessage(nick +" ПРОИГРАЛ", peerId);
             map.get(peerId).remove(userId);
         } else if(sum == 21) {
-            ObedientBot.sendMessage("Ты выиграл", peerId);
+            ObedientBot.sendMessage(nick+" ВЫИГРАЛ", peerId);
             player.setWin(true);
         }
         if(map.get(peerId).size() == 1) {
             StringBuilder builder = new StringBuilder();
             map.get(peerId).forEach((id, p) ->
-                    builder.append("# [id").append(id).append("|ДОДИК]").append('(').append(p.getScore()).append(')').append('\n'));
+                    builder.append(nick).append(" Очнов: ").append(p.getScore()).append('\n'));
             ObedientBot.sendKeyboard("Конец игры!\n"+builder, peerId, new Keyboard().setButtons(Collections.emptyList()));
         }
     }
@@ -65,8 +70,20 @@ public final class KubanoidManager {
         Map<Integer, KubanoidPlayer> players = map.getOrDefault(peerId, null);
         return players != null ? players.getOrDefault(userId, null) : null;
     }
-    public static void stopGame(int peerId) {
-        ObedientBot.sendKeyboard("Конец игры!", peerId, new Keyboard().setButtons(Collections.emptyList()));
+    @NotNull
+    @NonNls
+    public static String getPlayerName(int userId) {
+        try {
+            UserXtrCounters user = Bot.getVkApiClient().users().get(new UserActor(userId, Bot.ACCESS_TOKEN))
+                    .userIds(String.valueOf(userId)).execute().get(0);
+            return user.getFirstName() + ' ' +user.getLastName();
+        } catch (ClientException | ApiException ex) {
+            ex.printStackTrace();
+        }
+        return "";
+    }
+    static void stopGame(int peerId) {
+        ObedientBot.sendKeyboard("Конец игры!", peerId, KeyboardUtils.EMPTY_KEYBOARD);
         if(!map.containsKey(peerId)) {
             return;
         }
