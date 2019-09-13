@@ -30,9 +30,6 @@ public class KubanoidLoad extends JavaModule implements Listener {
         if(KubanoidManager.containsPlayer(peerId, userId)) {
             if(msg.getText().contains("КИНУТЬ")) {//колумбайн//колумbruh//колумbruhйн
                 KubanoidManager.newIntegerPlayer(peerId, userId);
-
-            } else if(msg.getText().contains("СТОП")) {
-                KubanoidManager.stopGame(peerId);
             }
         } else {
             if (msg.getText().contains("УЧАСТВОВАТЬ")) {

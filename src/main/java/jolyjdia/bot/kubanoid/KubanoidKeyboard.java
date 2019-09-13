@@ -15,10 +15,9 @@ final class KubanoidKeyboard {
     private KubanoidKeyboard() {}
 
     static {
-        final List<KeyboardButton> keyboardButtons = new ArrayList<>(3);
+        final List<KeyboardButton> keyboardButtons = new ArrayList<>(2);
         keyboardButtons.add(KeyboardUtils.create("КИНУТЬ", KeyboardButtonColor.POSITIVE));
         keyboardButtons.add(KeyboardUtils.create("УЧАСТВОВАТЬ", KeyboardButtonColor.PRIMARY));
-        keyboardButtons.add(KeyboardUtils.create("СТОП", KeyboardButtonColor.NEGATIVE));
         GAME.add(keyboardButtons);
     }
 }

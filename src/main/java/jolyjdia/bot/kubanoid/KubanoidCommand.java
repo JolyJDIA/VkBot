@@ -24,7 +24,7 @@ public class KubanoidCommand extends Command {
                         new Keyboard().setButtons(KubanoidKeyboard.GAME));
 
             } else if(args[1].equalsIgnoreCase("stop")) {
-                KubanoidManager.stopGame(peerId);
+                KubanoidManager.stopGame("Конец игры!", peerId);
 
             } else if(args[1].equalsIgnoreCase("info")) {
                 StringBuilder builder = new StringBuilder();

@@ -68,8 +68,8 @@ final class CalculatorManager {
     }
     static void openCalculatorBoard(int peerId) {
         addHistory(peerId);
-        ObedientBot.sendKeyboard("Калькулятор", peerId, new Keyboard()
-                .setButtons(CalculatorKeyboard.BOARD));
+        ObedientBot.sendKeyboard("Калькулятор", peerId,
+                new Keyboard().setButtons(CalculatorKeyboard.BOARD));
     }
     @Contract(pure = true)
     static boolean isPersonalConversation(int peerId, int fromId) {

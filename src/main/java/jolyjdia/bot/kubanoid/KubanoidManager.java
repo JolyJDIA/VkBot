@@ -5,7 +5,6 @@ import api.utils.ObedientBot;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
@@ -13,7 +12,10 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public final class KubanoidManager {
     public static Map<Integer, Map<Integer, KubanoidPlayer>> map = new HashMap<>();
@@ -42,10 +44,10 @@ public final class KubanoidManager {
             player.setWin(true);
         }
         if(map.get(peerId).size() == 1) {
-            StringBuilder builder = new StringBuilder();
+            @NonNls StringBuilder builder = new StringBuilder();
             map.get(peerId).forEach((id, p) ->
-                    builder.append(nick).append(" Очнов: ").append(p.getScore()).append('\n'));
-            ObedientBot.sendKeyboard("Конец игры!\n"+builder, peerId, new Keyboard().setButtons(Collections.emptyList()));
+                    builder.append(" - ").append(nick).append(" Очнов: ").append(p.getScore()).append('\n'));
+            stopGame("Конец игры!\n"+builder, peerId);
         }
     }
     @NotNull
@@ -82,8 +84,8 @@ public final class KubanoidManager {
         }
         return "";
     }
-    static void stopGame(int peerId) {
-        ObedientBot.sendKeyboard("Конец игры!", peerId, KeyboardUtils.EMPTY_KEYBOARD);
+    static void stopGame(String message, int peerId) {
+        ObedientBot.sendKeyboard(message, peerId, KeyboardUtils.EMPTY_KEYBOARD);
         if(!map.containsKey(peerId)) {
             return;
         }
