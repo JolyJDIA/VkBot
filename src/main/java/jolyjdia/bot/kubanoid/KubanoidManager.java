@@ -44,7 +44,7 @@ public final class KubanoidManager {
             player.setWin(true);
         }
         if(map.get(peerId).size() == 1) {
-            stopGame("Конец игры!\n"+ getInfo(peerId), peerId);
+            stopGame("Конец игры!\n"+ getInfo(peerId), userId);
         }
     }
     @NotNull
@@ -94,7 +94,10 @@ public final class KubanoidManager {
         int i = 0;
         for(KubanoidPlayer value : getScore(peerId)) {
             ++i;
-            builder.append('#').append(i).append(' ').append("Очко: ").append(value.getScore()).append('\n');
+            builder.append('#').append(i).append(' ')
+                    .append("Очко: ").append(value.getScore()).append(' ')
+                    .append(value.isWin() ? "ВЫИГРАЛ" : "ПРОИГРАЛ")
+                    .append('\n');
         }
         return builder.toString();
     }

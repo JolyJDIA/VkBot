@@ -13,7 +13,6 @@ import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.kubanoid.KubanoidLoad;
 import jolyjdia.bot.puzzle.Puzzle;
-import jolyjdia.bot.shkila.Timetable;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 
@@ -68,7 +67,6 @@ public class Bot {
         new Puzzle().onLoad();
         //new ShoutboxMain().onLoad();
         new KubanoidLoad().onLoad();
-        new Timetable().onLoad();
        // new GeneratorLoad().onLoad();
     }
 

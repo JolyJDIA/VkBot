@@ -9,8 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class GeoLoad extends JavaModule {
-    @NonNls
-    private static final String PATH =
+    @NonNls private static final String PATH =
             "D:\\IdeaProjects\\VkBot\\src\\main\\resources\\GeoLite2-City.mmdb";
 
     @Override

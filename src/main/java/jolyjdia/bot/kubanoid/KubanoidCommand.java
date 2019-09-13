@@ -20,11 +20,11 @@ public class KubanoidCommand extends Command {
             }
             int peerId = sender.getPeerId();
             if(args[1].equalsIgnoreCase("start")) {
-                ObedientBot.sendKeyboard("ЙОБАНЫЙ РОТ ЭТОГО КАЗИНО, БЛЯТЬ", sender.getPeerId(),
+                ObedientBot.sendKeyboard("ЙОБАНЫЙ РОТ ЭТОГО КАЗИНО, БЛЯТЬ", sender.getUserId(),
                         new Keyboard().setButtons(KubanoidKeyboard.GAME));
 
             } else if(args[1].equalsIgnoreCase("stop")) {
-                KubanoidManager.stopGame("Конец игры!", peerId);
+                KubanoidManager.stopGame("Конец игры!", sender.getUserId());
 
             } else if(args[1].equalsIgnoreCase("info")) {
                 ObedientBot.sendMessage(KubanoidManager.getInfo(peerId), peerId);

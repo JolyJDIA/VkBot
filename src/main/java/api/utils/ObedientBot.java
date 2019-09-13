@@ -28,8 +28,7 @@ import java.util.Random;
         SCHEDULER.runTask(() -> {
             try {
                 send().peerId(peerId).keyboard(keyboard).message(msg).execute();
-            } catch (ApiException | ClientException ignored) {
-            }
+            } catch (ApiException | ClientException ignored) {}
         });
     }
     private static MessagesSendQuery send() {
