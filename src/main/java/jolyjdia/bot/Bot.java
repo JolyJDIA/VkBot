@@ -52,6 +52,7 @@ public class Bot {
                     .enabled(true)
                     .wallPostNew(true)
                     .messageNew(true)
+                    .audioNew(true)
                     .execute();
         }
         Watchdog.doStart();

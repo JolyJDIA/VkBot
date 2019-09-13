@@ -1,16 +1,12 @@
 package api.entity;
 
 import api.permission.PermissionGroup;
+import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-public class User implements Serializable {
-    private static final long serialVersionUID = 3641738823927881630L;
-    private transient int peerId;
-    private transient int userId;
+public class User  {
+    @Expose(serialize = false, deserialize = false) private final int peerId;
+    @Expose(serialize = false, deserialize = false) private final int userId;
     private String group = PermissionGroup.DEFAULT;
     private String prefix = "";
     private String suffix = "";
@@ -70,24 +66,5 @@ public class User implements Serializable {
     }
     public final void setPrefix(String prefix) {
         this.prefix = prefix;
-    }
-
-    /**
-     * ПУСТЬ БУДЕТ)
-     * @param stream
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        this.peerId = stream.readInt();
-        this.userId = stream.readInt();
-        this.group = (String)stream.readObject();
-        this.prefix = (String)stream.readObject();
-        this.suffix = (String)stream.readObject();
-        stream.close();
-    }
-    private void writeObject(@NotNull java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.close();
     }
 }

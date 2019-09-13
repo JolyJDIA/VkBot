@@ -3,6 +3,7 @@ package api;
 import api.entity.User;
 import api.file.FileCustom;
 import com.google.gson.*;
+import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +32,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(Map.class, this)
                 .setPrettyPrinting()
+                .setExclusionStrategies(new MyExclusionStrategy())
                 .create();
         this.load();
     }
@@ -59,7 +61,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     public void load() {
         try (FileInputStream fileInputStream = new FileInputStream(getFile());
              InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
-            this.gson.fromJson(inputStreamReader, new ProfileList.MapTypeToken().getType());
+            this.gson.fromJson(inputStreamReader, new MapTypeToken().getType());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -197,5 +199,18 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     }
 
     private static class MapTypeToken extends TypeToken<Map<Integer, Map<Integer, User>>> {
+    }
+
+    private static class MyExclusionStrategy implements ExclusionStrategy {
+        @Override
+        public final boolean shouldSkipField(@NotNull FieldAttributes f) {
+            return f.getAnnotation(Expose.class) != null;
+        }
+
+        @Contract(pure = true)
+        @Override
+        public final boolean shouldSkipClass(Class<?> c) {
+            return false;
+        }
     }
 }
