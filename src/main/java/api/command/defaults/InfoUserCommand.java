@@ -2,9 +2,8 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
 import api.utils.StringBind;
-import jolyjdia.bot.Bot;
+import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +24,9 @@ public class InfoUserCommand extends Command {
             if (id == null) {
                 return;
             }
-            User target = Bot.getProfileList().getUser(sender.getPeerId(), id);
+            User target = Loader.getProfileList().getUser(sender.getPeerId(), id);
             if(target == null) {
-                ObedientBot.sendMessage("Не удалось найти этого пользователя в базе", sender.getPeerId());
+                sender.sendMessageFromHisChat("Не удалось найти этого пользователя в базе");
                 return;
             }
 
@@ -35,7 +34,7 @@ public class InfoUserCommand extends Command {
         } else {
             return;
         }
-        ObedientBot.sendMessage(info, sender.getPeerId());
+        sender.sendMessageFromHisChat(info);
     }
     @NotNull
     @Contract(pure = true)

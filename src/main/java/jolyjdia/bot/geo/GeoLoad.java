@@ -1,7 +1,7 @@
 package jolyjdia.bot.geo;
 
-import api.JavaModule;
 import api.command.RegisterCommandList;
+import api.utils.JavaModule;
 import com.maxmind.geoip2.DatabaseReader;
 import org.jetbrains.annotations.NonNls;
 

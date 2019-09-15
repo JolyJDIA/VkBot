@@ -1,11 +1,11 @@
 package jolyjdia.bot.shoutbox;
 
-import api.JavaModule;
+import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
-import api.utils.ObedientBot;
+import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class ShoutboxMain extends JavaModule implements Listener {
             } else if (Shoutbox.COSINE.similarity(text, "Давай поболтаем") > 0.7) {
                 speakChat.add(msg.getPeerId());
             }
-            ObedientBot.sendMessage(Shoutbox.generateResponse(text), msg.getPeerId());
+            Bot.sendMessage(Shoutbox.generateResponse(text), msg.getPeerId());
         }
     }
 }

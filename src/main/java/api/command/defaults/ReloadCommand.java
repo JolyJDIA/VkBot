@@ -1,9 +1,8 @@
 package api.command.defaults;
 
-import api.JavaModule;
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
+import api.utils.JavaModule;
 import org.jetbrains.annotations.NotNull;
 
 public class ReloadCommand extends Command {
@@ -17,7 +16,7 @@ public class ReloadCommand extends Command {
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length == 1) {
             JavaModule.reloadModule();
-            ObedientBot.sendMessage("Перезагрузка завершена\nМой планировщик: Привет из Async", sender.getPeerId());
+            sender.sendMessageFromHisChat("Перезагрузка завершена\nМой планировщик: Привет из Async");
         }
     }
 }

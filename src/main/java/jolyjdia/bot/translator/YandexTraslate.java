@@ -1,7 +1,8 @@
 package jolyjdia.bot.translator;
 
-import api.JavaModule;
 import api.command.RegisterCommandList;
+import api.utils.JavaModule;
+import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,10 +17,9 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-@NonNls
-public class YandexTraslate extends JavaModule {
+@NonNls public class YandexTraslate extends JavaModule {
     @NonNls private static final String KEY =
-            "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190604T115104Z.df1684c5248f0d39.b57d76995665926fb0fb0e8e6c3a3de2e36aa00e";
+            "https://translate.yandex.net/api/v1.5/tr.json/translate?key="+ Loader.getConfig().getProperty("translateKey");
     @Override
     public final void onLoad() {
         RegisterCommandList.registerCommand(new TranslateCommand());

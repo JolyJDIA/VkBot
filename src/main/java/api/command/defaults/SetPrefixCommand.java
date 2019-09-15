@@ -2,9 +2,8 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
 import api.utils.StringBind;
-import jolyjdia.bot.Bot;
+import jolyjdia.bot.Loader;
 
 public class SetPrefixCommand extends Command {
     public SetPrefixCommand() {
@@ -27,14 +26,14 @@ public class SetPrefixCommand extends Command {
             return;
         }
         if(prefix.length() > 16) {
-            ObedientBot.sendMessage("Слышь, дружок-пирожок, - большой префикс", sender.getPeerId());
+            sender.sendMessageFromHisChat("Слышь, дружок-пирожок, - большой префикс");
             return;
         }
         if(id != null) {
-            Bot.getProfileList().setPrefix(sender.getPeerId(), id, prefix);
+            Loader.getProfileList().setPrefix(sender.getPeerId(), id, prefix);
         } else {
-            Bot.getProfileList().setPrefix(sender, prefix);
+            Loader.getProfileList().setPrefix(sender, prefix);
         }
-        ObedientBot.sendMessage("Вы успешно изменили префикс", sender.getPeerId());
+        sender.sendMessageFromHisChat("Вы успешно изменили префикс");
     }
 }

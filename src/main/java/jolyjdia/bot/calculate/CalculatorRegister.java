@@ -1,13 +1,12 @@
 package jolyjdia.bot.calculate;
 
-import api.JavaModule;
 import api.command.RegisterCommandList;
 import api.event.EventLabel;
 import api.event.EventPriority;
 import api.event.Listener;
 import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
-import api.utils.ObedientBot;
+import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
 import jolyjdia.bot.calculate.calculator.Calculator;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +39,6 @@ public class CalculatorRegister extends JavaModule implements Listener {
 		if(!CalculatorManager.OUTPUT.matcher(answer).matches()) {
 			return;
 		}
-		ObedientBot.sendMessage(answer, peerId);
+		e.getUser().sendMessageFromHisChat(answer);
 	}
 }

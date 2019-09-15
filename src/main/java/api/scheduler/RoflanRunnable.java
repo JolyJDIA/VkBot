@@ -1,6 +1,6 @@
 package api.scheduler;
 
-import api.utils.ObedientBot;
+import api.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,29 +8,29 @@ public class RoflanRunnable implements Runnable {
     private Task task;
 
     public final void cancel() {
-        ObedientBot.SCHEDULER.cancel(task);
+        Bot.getScheduler().cancel(task);
     }
     public final Task runTask() {
-        return setupTask(ObedientBot.SCHEDULER.runTask(this));
+        return setupTask(Bot.getScheduler().runTask(this));
     }
 
     @Deprecated
     public final Task runTaskAsynchronously() {
-        return setupTask(ObedientBot.SCHEDULER.runTaskAsynchronously(this));
+        return setupTask(Bot.getScheduler().runTaskAsynchronously(this));
     }
     public final Task runTaskLater(int delay) {
-        return setupTask(ObedientBot.SCHEDULER.scheduleSyncDelayTask(this, delay));
+        return setupTask(Bot.getScheduler().scheduleSyncDelayTask(this, delay));
     }
     @Deprecated
     public final Task runTaskLaterAsynchronously(int delay) {
-        return setupTask(ObedientBot.SCHEDULER.scheduleAsyncDelayTask(this, delay));
+        return setupTask(Bot.getScheduler().scheduleAsyncDelayTask(this, delay));
     }
     public final Task runTaskTimer(int delay, int period) {
-        return setupTask(ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(this, delay, period));
+        return setupTask(Bot.getScheduler().scheduleSyncRepeatingTask(this, delay, period));
     }
     @Deprecated
     public final Task runTaskTimerAsynchronously(int delay, int period) {
-        return setupTask(ObedientBot.SCHEDULER.scheduleAsyncRepeatingTask(this, delay, period));
+        return setupTask(Bot.getScheduler().scheduleAsyncRepeatingTask(this, delay, period));
     }
     @Contract("_ -> param1")
     private Task setupTask(@NotNull Task task) {

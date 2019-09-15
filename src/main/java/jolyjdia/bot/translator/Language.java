@@ -42,8 +42,8 @@ public enum Language {
     private final String language;
 
     @Contract(pure = true)
-    Language(String pLanguage) {
-        language = pLanguage;
+    Language(String language) {
+        this.language = language;
     }
 
     @Contract(pure = true)

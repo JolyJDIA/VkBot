@@ -1,5 +1,6 @@
 package api.entity;
 
+import api.Bot;
 import api.permission.PermissionGroup;
 import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.Contract;
@@ -66,5 +67,9 @@ public class User  {
     }
     public final void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public final void sendMessageFromHisChat(String message) {
+        Bot.sendMessage(message, peerId);
     }
 }

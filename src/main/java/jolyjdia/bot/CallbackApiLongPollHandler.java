@@ -1,4 +1,4 @@
-package api;
+package jolyjdia.bot;
 
 import api.command.RegisterCommandList;
 import api.entity.User;
@@ -19,7 +19,6 @@ import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.objects.board.TopicComment;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.wall.Wallpost;
-import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,9 +35,9 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
         @NonNls String text = msg.getText();//УБрать аннотацию
+        User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {//Проверяю первый символ(startsWith abort)
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
-            User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
 
             long start = System.currentTimeMillis();
             RegisterCommandList.getRegisteredCommands().stream()
@@ -51,24 +50,26 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             @NonNls long end = System.currentTimeMillis() - start;
             System.out.println("КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
 
-            SendCommandEvent event = new SendCommandEvent(msg);
+            SendCommandEvent event = new SendCommandEvent(user, msg);
             submitEvent(event);
             return;
         }
         System.out.println("СООБЩЕНИЕ: ("+ msg.getText() + ") ЧАТ: " +msg.getPeerId());
-        NewMessageEvent event = new NewMessageEvent(msg);
+        NewMessageEvent event = new NewMessageEvent(user, msg);
         submitEvent(event);
     }
 
     @Override
-    public final void messageReply(Integer groupId, Message msg) {
-        ReplyMessageEvent event = new ReplyMessageEvent(msg);
+    public final void messageReply(Integer groupId, @NotNull Message msg) {
+        User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        ReplyMessageEvent event = new ReplyMessageEvent(user, msg);
         submitEvent(event);
     }
 
     @Override
-    public final void messageEdit(Integer groupId, Message msg) {
-        EditMessageEvent event = new EditMessageEvent(msg);
+    public final void messageEdit(Integer groupId, @NotNull Message msg) {
+        User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        EditMessageEvent event = new EditMessageEvent(user, msg);
         submitEvent(event);
     }
     @Override

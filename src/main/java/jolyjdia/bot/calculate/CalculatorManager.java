@@ -1,7 +1,7 @@
 package jolyjdia.bot.calculate;
 
+import api.Bot;
 import api.utils.KeyboardUtils;
-import api.utils.ObedientBot;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import jolyjdia.bot.calculate.calculator.Calculator;
 import org.jetbrains.annotations.Contract;
@@ -40,12 +40,12 @@ final class CalculatorManager {
                 if(set.isEmpty()) {
                     return;
                 }
-                ObedientBot.sendMessage(set, peerId);
+                Bot.sendMessage(set, peerId);
             }
             default -> {
                 if (MATH.matcher(element).matches()) {
                     history.compute(peerId, (k, v) -> v + element);
-                    ObedientBot.sendMessage(history.get(peerId), peerId);
+                    Bot.sendMessage(history.get(peerId), peerId);
                 } else {
                     closeCalculatorBoard("Я вижу, дружок, тебе не нужен калькулятор", peerId);
                 }
@@ -64,11 +64,11 @@ final class CalculatorManager {
     }
     static void closeCalculatorBoard(String text, int peerId) {
         removeHistory(peerId);
-        ObedientBot.sendKeyboard(text, peerId, KeyboardUtils.EMPTY_KEYBOARD);
+        Bot.sendKeyboard(text, peerId, KeyboardUtils.EMPTY_KEYBOARD);
     }
     static void openCalculatorBoard(int peerId) {
         addHistory(peerId);
-        ObedientBot.sendKeyboard("Калькулятор", peerId,
+        Bot.sendKeyboard("Калькулятор", peerId,
                 new Keyboard().setButtons(CalculatorKeyboard.BOARD));
     }
     @Contract(pure = true)

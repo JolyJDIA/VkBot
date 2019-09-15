@@ -2,9 +2,8 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
 import api.utils.StringBind;
-import jolyjdia.bot.Bot;
+import jolyjdia.bot.Loader;
 
 public class SetSuffixCommand extends Command {
     public SetSuffixCommand() {
@@ -28,14 +27,14 @@ public class SetSuffixCommand extends Command {
             return;
         }
         if(suffix.length() > 16) {
-            ObedientBot.sendMessage("Слышь, дружок-пирожок, - большой суффикс", sender.getPeerId());
+            sender.sendMessageFromHisChat("Слышь, дружок-пирожок, - большой суффикс");
             return;
         }
         if(id != null) {
-            Bot.getProfileList().setSuffix(sender.getPeerId(), id, suffix);
+            Loader.getProfileList().setSuffix(sender.getPeerId(), id, suffix);
         } else {
-            Bot.getProfileList().setSuffix(sender, suffix);
+            Loader.getProfileList().setSuffix(sender, suffix);
         }
-        ObedientBot.sendMessage("Вы успешно изменили суффикс", sender.getPeerId());
+        sender.sendMessageFromHisChat("Вы успешно изменили суффикс");
     }
 }

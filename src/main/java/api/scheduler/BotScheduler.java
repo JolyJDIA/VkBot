@@ -11,7 +11,6 @@ public class BotScheduler {
     //private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
     private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
 
-
     public final void mainThreadHeartbeat() {
         //старый добрый итератор, не хочу try catch
         Iterator<Task> iterator = taskQueue.iterator();

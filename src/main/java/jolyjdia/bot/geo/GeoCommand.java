@@ -1,8 +1,8 @@
 package jolyjdia.bot.geo;
 
+import api.Bot;
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
@@ -32,21 +32,21 @@ public class GeoCommand extends Command {
     }
     @Override
     public final void execute(User sender, String[] args) {
-        if (noPermission(sender)) {
-            return;
-        }
-        if(args.length == 2) {
-            ObedientBot.SCHEDULER.runTask(() -> {
+        Bot.getScheduler().runTask(() -> {
+            if (noPermission(sender)) {
+                return;
+            }
+            if(args.length == 2) {
                 Matcher matcher = IPV4.matcher(args[1]);
                 if (!matcher.matches()) {
-                    ObedientBot.sendMessage("Это не айпи 0_o", sender.getPeerId());
+                    sender.sendMessageFromHisChat("Это не айпи 0_o");
                     return;
                 }
-                ObedientBot.sendMessage(getInfo(args[1]), sender.getPeerId());
-            });
-        } else {
-            ObedientBot.sendMessage(getArguments(), sender.getPeerId());
-        }
+                sender.sendMessageFromHisChat(getInfo(args[1]));
+            } else {
+                sender.sendMessageFromHisChat(getArguments());
+            }
+        });
     }
     @NotNull
     private final String getInfo(String host) {

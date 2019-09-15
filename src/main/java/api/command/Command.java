@@ -3,7 +3,6 @@ package api.command;
 import api.entity.User;
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
-import api.utils.ObedientBot;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
@@ -109,7 +108,7 @@ public abstract class Command {
         PermissionGroup group = PermissionManager.getPermGroup(user.getGroup());
         boolean access = group.hasPermission(permission);
         if(!access) {
-            ObedientBot.sendMessage(noPermissionMessage, user.getPeerId());
+            user.sendMessageFromHisChat(noPermissionMessage);
         }
         return access;
     }
@@ -126,7 +125,7 @@ public abstract class Command {
         PermissionGroup group = PermissionManager.getPermGroup(user.getGroup());
         boolean noAccess = group.notPermission(permission);
         if(noAccess) {
-            ObedientBot.sendMessage(noPermissionMessage, user.getPeerId());
+            user.sendMessageFromHisChat(noPermissionMessage);
         }
         return noAccess;
     }

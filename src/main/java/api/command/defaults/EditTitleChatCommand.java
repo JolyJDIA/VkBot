@@ -1,10 +1,10 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
 import api.utils.StringBind;
-import jolyjdia.bot.Bot;
+import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.NotNull;
 
 public class EditTitleChatCommand extends Command {
@@ -22,10 +22,10 @@ public class EditTitleChatCommand extends Command {
                 return;
             }
             if (args.length == 1) {
-                ObedientBot.editChat(Bot.getConfig().getProperty("defaultTitleChat"), sender.getPeerId());
+                Bot.editChat(Loader.getConfig().getProperty("defaultTitleChat"), sender.getPeerId());
                 return;
             }
-            ObedientBot.editChat(StringBind.toString(args), sender.getPeerId());
+            Bot.editChat(StringBind.toString(args), sender.getPeerId());
         }
     }
 }

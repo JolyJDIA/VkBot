@@ -1,10 +1,10 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
 import api.utils.StringBind;
-import jolyjdia.bot.Bot;
+import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.NotNull;
 
 public class BroadcastMessageCommand extends Command {
@@ -19,11 +19,11 @@ public class BroadcastMessageCommand extends Command {
         if(args.length > 1) {
             if(sender.getUserId() == ADMIN) {
                 String text = StringBind.toString(args);
-                for(int id : Bot.getProfileList().getChats()) {
-                    ObedientBot.sendMessage(text, id);
+                for(int id : Loader.getProfileList().getChats()) {
+                    Bot.sendMessage(text, id);
                 }
             } else {
-                ObedientBot.sendMessage("У вас нет прав", sender.getPeerId());
+                sender.sendMessageFromHisChat("У вас нет прав");
             }
         }
     }

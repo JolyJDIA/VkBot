@@ -1,7 +1,6 @@
-package api;
+package api.file;
 
 import api.entity.User;
-import api.file.FileCustom;
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;

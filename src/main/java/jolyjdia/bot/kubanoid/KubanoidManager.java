@@ -1,12 +1,12 @@
 package jolyjdia.bot.kubanoid;
 
+import api.Bot;
 import api.utils.KeyboardUtils;
-import api.utils.ObedientBot;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
-import jolyjdia.bot.Bot;
+import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -35,12 +35,12 @@ public final class KubanoidManager {
         }
         int sum = player.addScore(random);
         String nick = getPlayerName(userId);
-        ObedientBot.sendMessage("Ваше число: "+random+ "\nСумма: "+sum, userId);
+        Bot.sendMessage("Ваше число: "+random+ "\nСумма: "+sum, userId);
         if(sum > 21) {
-            ObedientBot.sendMessage(nick +" ПРОИГРАЛ", peerId);
+            Bot.sendMessage(nick +" ПРОИГРАЛ", peerId);
             map.get(peerId).remove(userId);
         } else if(sum == 21) {
-            ObedientBot.sendMessage(nick+" ВЫИГРАЛ", peerId);
+            Bot.sendMessage(nick+" ВЫИГРАЛ", peerId);
             player.setWin(true);
         }
         if(map.get(peerId).size() == 1) {
@@ -73,7 +73,7 @@ public final class KubanoidManager {
     @NonNls
     public static String getPlayerName(int userId) {
         try {
-            UserXtrCounters user = Bot.getVkApiClient().users().get(new UserActor(userId, Bot.ACCESS_TOKEN))
+            UserXtrCounters user = Loader.getVkApiClient().users().get(new UserActor(userId, Loader.ACCESS_TOKEN))
                     .userIds(String.valueOf(userId)).execute().get(0);
             return user.getFirstName() + ' ' +user.getLastName();
         } catch (ClientException | ApiException ex) {
@@ -82,7 +82,7 @@ public final class KubanoidManager {
         return "";
     }
     static void stopGame(String message, int peerId) {
-        ObedientBot.sendKeyboard(message, peerId, KeyboardUtils.EMPTY_KEYBOARD);
+        Bot.sendKeyboard(message, peerId, KeyboardUtils.EMPTY_KEYBOARD);
         if(!map.containsKey(peerId)) {
             return;
         }

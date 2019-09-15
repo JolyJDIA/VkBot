@@ -1,8 +1,7 @@
 package jolyjdia.bot;
 
-import api.CallbackApiLongPollHandler;
-import api.ProfileList;
-import api.utils.Watchdog;
+import api.Bot;
+import api.file.ProfileList;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -13,6 +12,7 @@ import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.kubanoid.KubanoidLoad;
 import jolyjdia.bot.puzzle.Puzzle;
+import jolyjdia.bot.shoutbox.ShoutboxMain;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 
@@ -21,27 +21,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class Bot {
+public class Loader {
+    private static final Properties properties = new Properties();
     public static final int GROUP_ID = 178836630;
-    private static GroupActor groupActor;
-    private static VkApiClient vkApiClient;
-    private static ProfileList profileList;
-    private static Properties properties;
+    private static final ProfileList profileList;
 
     static {
-        try (InputStream inputStream = Bot.class.getClassLoader().getResourceAsStream("config.properties")) {
-            properties = new Properties();
+        try (InputStream inputStream = Loader.class.getClassLoader().getResourceAsStream("config.properties")) {
             if(inputStream != null) {
                 properties.load(inputStream);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        profileList = new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
     }
+    private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
     public static final String ACCESS_TOKEN = properties.getProperty("accessToken");
+    private static final GroupActor groupActor = new GroupActor(GROUP_ID, ACCESS_TOKEN);
+
     public static void main(String[] args) throws ClientException, ApiException {
-        groupActor = new GroupActor(GROUP_ID, ACCESS_TOKEN);
-        vkApiClient = new VkApiClient(new HttpTransportClient());
         LongPollSettings settings = vkApiClient.groups().getLongPollSettings(groupActor, GROUP_ID).execute();
         if (settings == null) {
             return;
@@ -55,8 +54,7 @@ public class Bot {
                     .audioNew(true)
                     .execute();
         }
-        Watchdog.doStart();
-        profileList = new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
+        Bot.setBot(new ObedientBot());
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(vkApiClient, groupActor);
         registerAll();
         handler.run();
@@ -66,9 +64,9 @@ public class Bot {
         new YandexTraslate().onLoad();
         new GeoLoad().onLoad();
         new Puzzle().onLoad();
-        //new ShoutboxMain().onLoad();
+        new ShoutboxMain().onLoad();
         new KubanoidLoad().onLoad();
-       // new GeneratorLoad().onLoad();
+        //new Raid().onLoad();
     }
 
     @Contract(pure = true)

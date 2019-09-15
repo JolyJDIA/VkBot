@@ -3,9 +3,9 @@ package api.command.defaults;
 import api.command.Command;
 import api.entity.User;
 import api.permission.PermissionManager;
-import api.utils.ObedientBot;
 import api.utils.StringBind;
-import jolyjdia.bot.Bot;
+import jolyjdia.bot.Loader;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public class RankCommand extends Command {
@@ -15,14 +15,14 @@ public class RankCommand extends Command {
     }
 
     @Override
-    public final void execute(User sender, @NotNull String[] args) {
+    public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length == 3) {
             if (noPermission(sender)) {
                 return;
             }
             Integer id = StringBind.getUserId(args[1], sender);
             if(id == null) {
-                ObedientBot.sendMessage("Пользователя нет в беседе", sender.getPeerId());
+                sender.sendMessageFromHisChat("Пользователя нет в беседе");
                 return;
             }
             if (PermissionManager.getPermGroup(args[2]) == null) {
@@ -30,13 +30,13 @@ public class RankCommand extends Command {
                 for (String s : PermissionManager.getLookup().keySet()) {
                     builder.append(s).append('\n');
                 }
-                ObedientBot.sendMessage(builder.toString(), sender.getPeerId());
+                sender.sendMessageFromHisChat(builder.toString());
                 return;
             }
-            Bot.getProfileList().setRank(sender.getPeerId(), id, args[2]);
-            ObedientBot.sendMessage("Вы успешно выдали права", sender.getPeerId());
+            Loader.getProfileList().setRank(sender.getPeerId(), id, args[2]);
+            sender.sendMessageFromHisChat("Вы успешно выдали права");
         } else {
-            ObedientBot.sendMessage("Использование: " + getUseCommand(), sender.getPeerId());
+            sender.sendMessageFromHisChat("Использование: " + getUseCommand());
         }
     }
 }

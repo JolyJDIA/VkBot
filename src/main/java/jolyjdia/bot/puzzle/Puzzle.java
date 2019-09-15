@@ -1,6 +1,5 @@
 package jolyjdia.bot.puzzle;
 
-import api.JavaModule;
 import api.command.Command;
 import api.command.RegisterCommandList;
 import api.entity.User;
@@ -8,7 +7,7 @@ import api.event.EventLabel;
 import api.event.Listener;
 import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
-import api.utils.ObedientBot;
+import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +37,7 @@ public class Puzzle extends JavaModule implements Listener {
         Message msg = e.getMessage();
         if(msg.getText().equalsIgnoreCase(answer.getAnswer())) {
             this.next = true;
-            ObedientBot.sendMessage("Ура! Вы угадали ответ!", msg.getPeerId());
+            e.getUser().sendMessageFromHisChat("Ура! Вы угадали ответ!");
         }
     }
     public static class GeneratePuzzleCommand extends Command {
@@ -56,7 +55,7 @@ public class Puzzle extends JavaModule implements Listener {
                 puzzle.answer = puzzle.math ? new MathPuzzle() : new TextPuzzle();
                 puzzle.next = false;
             }
-            ObedientBot.sendMessage(puzzle.answer.getStringFormatAnswer(), sender.getPeerId());
+            sender.sendMessageFromHisChat(puzzle.answer.getStringFormatAnswer());
         }
     }
 }

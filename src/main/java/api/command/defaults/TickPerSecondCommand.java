@@ -1,9 +1,8 @@
 package api.command.defaults;
 
+import api.Watchdog;
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
-import api.utils.Watchdog;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +21,7 @@ public class TickPerSecondCommand extends Command {
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
                     "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory);
-            ObedientBot.sendMessage(sb, sender.getPeerId());
+            sender.sendMessageFromHisChat(sb);
 
         }
     }

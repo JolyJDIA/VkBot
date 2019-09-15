@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Contract;
 import java.util.ArrayList;
 import java.util.List;
 
-class TimingsHandler {
+public class TimingsHandler {
     private long lastPoll = System.nanoTime();
     private final List<Long> tpsRecent = new ArrayList<>();
 
@@ -23,7 +23,7 @@ class TimingsHandler {
         lastPoll = startTime;
     }
     @Contract(pure = true)
-    final double getAverageTPS() {
+    public final double getAverageTPS() {
         int avg = 0;
         for (long f : tpsRecent) {
             avg += f;

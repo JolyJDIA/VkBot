@@ -2,7 +2,6 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +23,7 @@ public class UpTimeCommand extends Command {
             @NonNls String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(uptime),
                     TimeUnit.MILLISECONDS.toMinutes(uptime) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(uptime)),
                     TimeUnit.MILLISECONDS.toSeconds(uptime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(uptime)));
-            ObedientBot.sendMessage("Время работы " + hms, sender.getPeerId());
+            sender.sendMessageFromHisChat("Время работы " + hms);
         }
     }
 }

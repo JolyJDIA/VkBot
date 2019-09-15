@@ -5,7 +5,7 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.ConversationMember;
 import com.vk.api.sdk.objects.messages.responses.GetConversationMembersResponse;
-import jolyjdia.bot.Bot;
+import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,18 +37,16 @@ public final class StringBind {
     public static Integer getUserId(@NotNull String s, @NotNull User sender) {
         try {
             int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
-            GetConversationMembersResponse g = Bot.getVkApiClient().
-                    messages().getConversationMembers(Bot.getGroupActor(), sender.getPeerId()).execute();
+            GetConversationMembersResponse g = Loader.getVkApiClient()
+                    .messages()
+                    .getConversationMembers(Loader.getGroupActor(), sender.getPeerId())
+                    .execute();
             System.out.println(g);
-            if (g == null) {
-                ObedientBot.sendMessage("Упс, что-то пошло не так;( Обратитесь к администратору", sender.getPeerId());
-                return null;
-            }
-            Optional<ConversationMember> member = g.getItems().stream().filter(m ->
-                    m.getMemberId() == id).findFirst();
+            Optional<ConversationMember> member = g.getItems().stream()
+                    .filter(m -> m.getMemberId() == id).findFirst();
             return member.map(ConversationMember::getMemberId).orElse(null);
         } catch (ApiException | ClientException e) {
-            ObedientBot.sendMessage("Пользователя нет в беседе", sender.getPeerId());
+            sender.sendMessageFromHisChat("Пользователя нет в беседе");
         }
         return null;
     }

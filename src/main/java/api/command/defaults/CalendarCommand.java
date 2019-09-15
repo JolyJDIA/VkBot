@@ -2,7 +2,6 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.entity.User;
-import api.utils.ObedientBot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +29,7 @@ public class CalendarCommand extends Command {
                     (day < 10 ? "0" : "")+day+ '.' +
                     (month < 10 ? "0" : "")+ month+ '.' +
                     localDateTime.getYear();
-            ObedientBot.sendMessage(time+'\n'+date, sender.getPeerId());
+            sender.sendMessageFromHisChat(time+'\n'+date);
         }
     }
 }
