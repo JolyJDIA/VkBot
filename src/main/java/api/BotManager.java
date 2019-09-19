@@ -33,7 +33,7 @@ public final class BotManager {
         registerCommand(new VersionCommand());
     }
 
-    public final void registerEvent(@NotNull Listener listener) {
+    public void registerEvent(@NotNull Listener listener) {
         for (Method method : listener.getClass().getMethods()) {
             if (!method.isAnnotationPresent(EventLabel.class)) {
                 continue;
@@ -57,14 +57,14 @@ public final class BotManager {
     }
 
     @Contract(pure = true)
-    public final List<Handler> getHandlerEvent() {
+    public List<Handler> getHandlerEvent() {
         return handlerEvent;
     }
-    public final void unregisterAllEvents() {
+    public void unregisterAllEvents() {
         handlerEvent.clear();
     }
 
-    public final void registerAllEvents(@NotNull Iterable<? extends Listener> iterable) {
+    public void registerAllEvents(@NotNull Iterable<? extends Listener> iterable) {
         iterable.forEach(this::registerEvent);
     }
     public void registerCommand(Command command) {
