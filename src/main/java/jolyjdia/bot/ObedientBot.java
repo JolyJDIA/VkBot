@@ -25,8 +25,8 @@ public final class ObedientBot implements RoflanBot {
     private final RegisterCommandList registerCommandList = new RegisterCommandList();
     private final RegisterListEvent registerListEvent = new RegisterListEvent();
     private final Properties properties = new Properties();
-    public final String accessToken;
-    public final int groupId = 178836630;
+    private final String accessToken;
+    private final int groupId;
 
     public ObedientBot() {
         try (InputStream inputStream = Loader.class.getClassLoader().getResourceAsStream("config.properties")) {
@@ -36,7 +36,7 @@ public final class ObedientBot implements RoflanBot {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //this.groupId = groupId;
+        this.groupId = Integer.parseInt(properties.getProperty("groupId"));
         this.accessToken = properties.getProperty("accessToken");
         Watchdog.doStart();
     }
