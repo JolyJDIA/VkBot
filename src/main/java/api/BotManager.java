@@ -30,7 +30,6 @@ public final class BotManager {
         registerCommand(new BroadcastMessageCommand());
         registerCommand(new CalendarCommand());
         registerCommand(new InfoUserCommand());
-        registerCommand(new VersionCommand());
     }
 
     public void registerEvent(@NotNull Listener listener) {
