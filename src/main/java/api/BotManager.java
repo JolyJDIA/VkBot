@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 public final class BotManager {
     private final List<Handler> listeners = new ArrayList<>();
-    private final Set<Command> commands = new HashSet<>();//Классы уникальные
+    private final Set<Command> commands = new HashSet<>();
 
     public BotManager() {
         registerCommand(new HelpCommand());
