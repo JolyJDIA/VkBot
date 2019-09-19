@@ -51,7 +51,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                 return;
             }
             long start = System.currentTimeMillis();
-            Bot.getRegisterCommandList().getRegisteredCommands().stream()
+            Bot.getBotManager().getRegisteredCommands().stream()
                     .filter(c -> {
                         Set<String> alias = c.getAlias();
                         return c.getName().equalsIgnoreCase(args[0])
@@ -109,6 +109,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         submitEvent(event);
     }
     private static void submitEvent(Event event) {
-        Bot.getRegisterListEvent().getHandlers().forEach(m -> m.accept(event));
+        Bot.getBotManager().getHandlerEvent().forEach(m -> m.accept(event));
     }
 }

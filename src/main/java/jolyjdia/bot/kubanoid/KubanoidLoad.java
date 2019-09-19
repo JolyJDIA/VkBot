@@ -12,10 +12,10 @@ public class KubanoidLoad extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-        Bot.getRegisterCommandList().registerCommand(new KubanoidCommand());
-        Bot.getRegisterListEvent().registerEvent(this);
-        Bot.getRegisterCommandList().registerCommand(new RollCommand());
-        Bot.getRegisterCommandList().registerCommand(new FlipCommand());
+        Bot.getBotManager().registerCommand(new KubanoidCommand());
+        Bot.getBotManager().registerEvent(this);
+        Bot.getBotManager().registerCommand(new RollCommand());
+        Bot.getBotManager().registerCommand(new FlipCommand());
     }
     @EventLabel
     public static void onSend(@NotNull NewMessageEvent e) {

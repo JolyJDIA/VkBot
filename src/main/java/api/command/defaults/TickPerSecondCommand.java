@@ -1,8 +1,8 @@
 package api.command.defaults;
 
-import api.Watchdog;
 import api.command.Command;
 import api.entity.User;
+import api.utils.Watchdog;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

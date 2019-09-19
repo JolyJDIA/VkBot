@@ -1,6 +1,6 @@
-package api;
+package api.utils;
 
-import api.utils.TimingsHandler;
+import api.Bot;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Timer;

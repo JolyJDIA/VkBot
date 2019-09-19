@@ -1,7 +1,5 @@
 package api;
 
-import api.command.RegisterCommandList;
-import api.event.RegisterListEvent;
 import api.file.ProfileList;
 import api.scheduler.BotScheduler;
 import com.vk.api.sdk.objects.messages.Keyboard;
@@ -26,12 +24,9 @@ public final class Bot {
     public static String getAccessToken() {
         return roflanBot.getAccessToken();
     }
-    public static RegisterCommandList getRegisterCommandList() {
-        return roflanBot.getRegisterCommandList();
-    }
 
-    public static RegisterListEvent getRegisterListEvent() {
-        return roflanBot.getRegisterListEvent();
+    public static BotManager getBotManager() {
+        return roflanBot.getBotManager();
     }
 
     public static BotScheduler getScheduler() {

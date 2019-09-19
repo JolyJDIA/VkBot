@@ -1,12 +1,11 @@
 package jolyjdia.bot;
 
+import api.BotManager;
 import api.RoflanBot;
-import api.Watchdog;
-import api.command.RegisterCommandList;
-import api.event.RegisterListEvent;
 import api.file.ProfileList;
 import api.scheduler.BotScheduler;
 import api.utils.MathUtils;
+import api.utils.Watchdog;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Keyboard;
@@ -22,8 +21,7 @@ public final class ObedientBot implements RoflanBot {
     private final BotScheduler scheduler = new BotScheduler();
     private final ProfileList profileList = new ProfileList(new File(
             "D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
-    private final RegisterCommandList registerCommandList = new RegisterCommandList();
-    private final RegisterListEvent registerListEvent = new RegisterListEvent();
+    private final BotManager registerListEvent = new BotManager();
     private final Properties properties = new Properties();
     private final String accessToken;
     private final int groupId;
@@ -67,13 +65,7 @@ public final class ObedientBot implements RoflanBot {
 
     @Contract(pure = true)
     @Override
-    public RegisterCommandList getRegisterCommandList() {
-        return registerCommandList;
-    }
-
-    @Contract(pure = true)
-    @Override
-    public RegisterListEvent getRegisterListEvent() {
+    public BotManager getBotManager() {
         return registerListEvent;
     }
 

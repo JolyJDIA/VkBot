@@ -16,7 +16,7 @@ public class GeoLoad extends JavaModule {
     public final void onLoad() {
         try {
             DatabaseReader reader = new DatabaseReader.Builder(new File(PATH)).build();
-            Bot.getRegisterCommandList().registerCommand(new GeoCommand(reader));
+            Bot.getBotManager().registerCommand(new GeoCommand(reader));
         } catch (IOException e) {
             e.printStackTrace();
         }

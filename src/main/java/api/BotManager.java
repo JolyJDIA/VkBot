@@ -1,17 +1,37 @@
-package api.event;
+package api;
 
+import api.command.Command;
+import api.command.defaults.*;
+import api.event.Event;
+import api.event.EventLabel;
+import api.event.EventPriority;
+import api.event.Listener;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
-public class RegisterListEvent {
-    private final List<Handler> handlers = new ArrayList<>();
+public final class BotManager {
+    private final List<Handler> handlerEvent = new ArrayList<>();
+    private final Set<Command> commands = new HashSet<>();//Классы уникальные
+
+    public BotManager() {
+        registerCommand(new HelpCommand());
+        registerCommand(new ReloadCommand());
+        registerCommand(new RankCommand());
+        registerCommand(new SetPrefixCommand());
+        registerCommand(new SetSuffixCommand());
+        registerCommand(new EditTitleChatCommand());
+        registerCommand(new UpTimeCommand());
+        registerCommand(new TickPerSecondCommand());
+        registerCommand(new BroadcastMessageCommand());
+        registerCommand(new CalendarCommand());
+        registerCommand(new InfoUserCommand());
+        registerCommand(new VersionCommand());
+    }
 
     public final void registerEvent(@NotNull Listener listener) {
         for (Method method : listener.getClass().getMethods()) {
@@ -22,7 +42,7 @@ public class RegisterListEvent {
             if (!Event.class.isAssignableFrom(parameter)) {
                 continue;
             }
-            handlers.add(new Handler(event -> {
+            handlerEvent.add(new Handler(event -> {
                 if (!event.getClass().isAssignableFrom(parameter)) {
                     return;
                 }
@@ -33,20 +53,36 @@ public class RegisterListEvent {
                 }
             }, method.getAnnotation(EventLabel.class).priority()));
         }
-        handlers.sort((o1, o2) -> o2.compareTo(o1.priority));
+        handlerEvent.sort((o1, o2) -> o2.compareTo(o1.priority));
     }
 
     @Contract(pure = true)
-    public final List<Handler> getHandlers() {
-        return handlers;
+    public final List<Handler> getHandlerEvent() {
+        return handlerEvent;
     }
-    public final void unregisterAll() {
-        handlers.clear();
+    public final void unregisterAllEvents() {
+        handlerEvent.clear();
     }
 
-    public final void registerAll(@NotNull Iterable<? extends Listener> iterable) {
+    public final void registerAllEvents(@NotNull Iterable<? extends Listener> iterable) {
         iterable.forEach(this::registerEvent);
     }
+    public void registerCommand(Command command) {
+        commands.add(command);
+    }
+
+    @Contract(pure = true)
+    public Set<Command> getRegisteredCommands() {
+        return commands;
+    }
+    public void unregisterAllCommands() {
+        commands.clear();
+    }
+
+    public void registerAllCommands(@NotNull Iterable<? extends Command> iterable) {
+        iterable.forEach(commands::add);
+    }
+
     public static class Handler implements Comparable<EventPriority>, Consumer<Event> {
         final Consumer<? super Event> consumer;
         final EventPriority priority;

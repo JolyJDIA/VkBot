@@ -15,8 +15,8 @@ public class CalculatorRegister extends JavaModule implements Listener {
 
 	@Override
 	public final void onLoad() {
-		Bot.getRegisterListEvent().registerEvent(this);
-		Bot.getRegisterCommandList().registerCommand(new CalculatorCommand());
+		Bot.getBotManager().registerEvent(this);
+		Bot.getBotManager().registerCommand(new CalculatorCommand());
     }
 	@EventLabel(priority = EventPriority.HIGH)
 	public static void onSend(@NotNull NewMessageEvent e) {

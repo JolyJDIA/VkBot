@@ -24,7 +24,7 @@ public class ShoutboxMain extends JavaModule implements Listener {
     private final List<Integer> speakChat = new ArrayList<>();
     @Override
     public final void onLoad() {
-        Bot.getRegisterListEvent().registerEvent(this);
+        Bot.getBotManager().registerEvent(this);
     }
     @EventLabel
     public final void onShout(@NotNull NewMessageEvent e) {

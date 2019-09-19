@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
             "https://translate.yandex.net/api/v1.5/tr.json/translate?key="+ Bot.getConfig().getProperty("translateKey");
     @Override
     public final void onLoad() {
-        Bot.getRegisterCommandList().registerCommand(new TranslateCommand());
+        Bot.getBotManager().registerCommand(new TranslateCommand());
     }
     @Nullable private static URL url;
     static {

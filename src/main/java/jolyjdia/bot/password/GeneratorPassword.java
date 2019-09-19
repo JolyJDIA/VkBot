@@ -15,8 +15,8 @@ public class GeneratorPassword extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-        Bot.getRegisterCommandList().registerCommand(new PasswordCommand());
-        Bot.getRegisterListEvent().registerEvent(this);
+        Bot.getBotManager().registerCommand(new PasswordCommand());
+        Bot.getBotManager().registerEvent(this);
     }
     @EventLabel
     public final void onCommand(@NotNull SendCommandEvent e) {
