@@ -109,6 +109,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         submitEvent(event);
     }
     private static void submitEvent(Event event) {
-        Bot.getBotManager().getHandlerEvent().forEach(m -> m.accept(event));
+        Bot.getBotManager().getListeners().forEach(m -> m.accept(event));
     }
 }

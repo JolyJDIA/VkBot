@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public final class BotManager {
-    private final List<Handler> handlerEvent = new ArrayList<>();
+    private final List<Handler> listeners = new ArrayList<>();
     private final Set<Command> commands = new HashSet<>();//Классы уникальные
 
     public BotManager() {
@@ -42,7 +42,7 @@ public final class BotManager {
             if (!Event.class.isAssignableFrom(parameter)) {
                 continue;
             }
-            handlerEvent.add(new Handler(event -> {
+            listeners.add(new Handler(event -> {
                 if (!event.getClass().isAssignableFrom(parameter)) {
                     return;
                 }
@@ -53,15 +53,16 @@ public final class BotManager {
                 }
             }, method.getAnnotation(EventLabel.class).priority()));
         }
-        handlerEvent.sort((o1, o2) -> o2.compareTo(o1.priority));
+        listeners.sort((o1, o2) -> o2.compareTo(o1.priority));
     }
 
     @Contract(pure = true)
-    public List<Handler> getHandlerEvent() {
-        return handlerEvent;
+    public List<Handler> getListeners() {
+        return listeners;
     }
+
     public void unregisterAllEvents() {
-        handlerEvent.clear();
+        listeners.clear();
     }
 
     public void registerAllEvents(@NotNull Iterable<? extends Listener> iterable) {
@@ -75,6 +76,7 @@ public final class BotManager {
     public Set<Command> getRegisteredCommands() {
         return commands;
     }
+
     public void unregisterAllCommands() {
         commands.clear();
     }
