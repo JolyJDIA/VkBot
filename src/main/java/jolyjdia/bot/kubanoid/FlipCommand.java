@@ -12,7 +12,7 @@ public class FlipCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            sender.sendMessageFromHisChat(MathUtils.RANDOM.nextInt(2) == 1 ? "Орел" : "Решка");
+            sender.sendMessageFromHisChat(MathUtils.RANDOM.nextBoolean() ? "Орел" : "Решка");
         }
     }
 }

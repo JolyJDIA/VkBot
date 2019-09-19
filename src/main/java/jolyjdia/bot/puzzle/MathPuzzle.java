@@ -9,11 +9,11 @@ public class MathPuzzle implements Answer {
     private final int answer;
     @NonNls private final String format;
     MathPuzzle() {
-        int token = MathUtils.RANDOM.nextInt(2);
+        boolean token = MathUtils.RANDOM.nextBoolean();
         int first = MathUtils.RANDOM.nextInt(1000);
         int second = MathUtils.RANDOM.nextInt(1000);
-        this.answer = token == 0 ? first + second : first - second;
-        this.format = first + (token == 0 ? " + " : " - ") + second;
+        this.answer = token ? first + second : first - second;
+        this.format = first + (token ? " + " : " - ") + second;
     }
 
     @NotNull

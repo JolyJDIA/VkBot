@@ -1,7 +1,6 @@
 package jolyjdia.bot;
 
 import api.RoflanBot;
-import api.Watchdog;
 import api.scheduler.BotScheduler;
 import api.utils.MathUtils;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -12,9 +11,6 @@ import org.jetbrains.annotations.Contract;
 
 public final class ObedientBot implements RoflanBot {
     private final BotScheduler scheduler = new BotScheduler();
-    public ObedientBot() {
-        Watchdog.doStart();
-    }
 
     @Contract(pure = true)
     @Override
@@ -27,8 +23,7 @@ public final class ObedientBot implements RoflanBot {
         scheduler.runTask(() -> {
             try {
                 send().peerId(peerId).message(msg).execute();
-            } catch (ApiException | ClientException ignored) {
-            }
+            } catch (ApiException | ClientException ignored) {}
         });
     }
 
@@ -37,8 +32,7 @@ public final class ObedientBot implements RoflanBot {
         scheduler.runTask(() -> {
             try {
                 send().peerId(peerId).keyboard(keyboard).message(msg).execute();
-            } catch (ApiException | ClientException ignored) {
-            }
+            } catch (ApiException | ClientException ignored) {}
         });
     }
 
@@ -47,8 +41,7 @@ public final class ObedientBot implements RoflanBot {
         scheduler.runTask(() -> {
             try {
                 Loader.getVkApiClient().messages().editChat(Loader.getGroupActor(), peerId - 2000000000, title).execute();
-            } catch (ApiException | ClientException ignored) {
-            }
+            } catch (ApiException | ClientException ignored) { }
         });
     }
 

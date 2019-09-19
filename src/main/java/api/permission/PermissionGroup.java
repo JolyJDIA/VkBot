@@ -1,16 +1,15 @@
 package api.permission;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Locale;
 
 public class PermissionGroup {
-    @NonNls public static final String ADMIN = "admin";
-    @NonNls public static final String MODER = "moder";
-    @NonNls public static final String DEFAULT = "default";
+    public static final String ADMIN = "admin";
+    public static final String MODER = "moder";
+    public static final String DEFAULT = "default";
 
     private final HashSet<String> permission;
     private String prefix;

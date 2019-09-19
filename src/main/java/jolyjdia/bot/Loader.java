@@ -1,6 +1,7 @@
 package jolyjdia.bot;
 
 import api.Bot;
+import api.Watchdog;
 import api.file.ProfileList;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -11,6 +12,7 @@ import com.vk.api.sdk.objects.groups.LongPollSettings;
 import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.kubanoid.KubanoidLoad;
+import jolyjdia.bot.password.GeneratorPassword;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.shoutbox.ShoutboxMain;
 import jolyjdia.bot.translator.YandexTraslate;
@@ -57,6 +59,7 @@ public class Loader {
         Bot.setBot(new ObedientBot());
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(vkApiClient, groupActor);
         registerAll();
+        Watchdog.doStart();
         handler.run();
     }
     private static void registerAll() {
@@ -66,6 +69,7 @@ public class Loader {
         new Puzzle().onLoad();
         new ShoutboxMain().onLoad();
         new KubanoidLoad().onLoad();
+        new GeneratorPassword().onLoad();
         //new Raid().onLoad();
     }
 
