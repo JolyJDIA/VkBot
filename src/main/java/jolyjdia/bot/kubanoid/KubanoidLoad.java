@@ -1,9 +1,8 @@
 package jolyjdia.bot.kubanoid;
 
-import api.command.RegisterCommandList;
+import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
-import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
 import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
@@ -13,10 +12,10 @@ public class KubanoidLoad extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-        RegisterCommandList.registerCommand(new KubanoidCommand());
-        RegisterListEvent.registerEvent(this);
-        RegisterCommandList.registerCommand(new RollCommand());
-        RegisterCommandList.registerCommand(new FlipCommand());
+        Bot.getRegisterCommandList().registerCommand(new KubanoidCommand());
+        Bot.getRegisterListEvent().registerEvent(this);
+        Bot.getRegisterCommandList().registerCommand(new RollCommand());
+        Bot.getRegisterCommandList().registerCommand(new FlipCommand());
     }
     @EventLabel
     public static void onSend(@NotNull NewMessageEvent e) {

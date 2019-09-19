@@ -1,6 +1,10 @@
 package jolyjdia.bot;
 
 import api.RoflanBot;
+import api.Watchdog;
+import api.command.RegisterCommandList;
+import api.event.RegisterListEvent;
+import api.file.ProfileList;
 import api.scheduler.BotScheduler;
 import api.utils.MathUtils;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -9,8 +13,69 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import org.jetbrains.annotations.Contract;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public final class ObedientBot implements RoflanBot {
     private final BotScheduler scheduler = new BotScheduler();
+    private final ProfileList profileList = new ProfileList(new File(
+            "D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
+    private final RegisterCommandList registerCommandList = new RegisterCommandList();
+    private final RegisterListEvent registerListEvent = new RegisterListEvent();
+    private final Properties properties = new Properties();
+    public final String accessToken;
+    public final int groupId = 178836630;
+
+    public ObedientBot() {
+        try (InputStream inputStream = Loader.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if(inputStream != null) {
+                properties.load(inputStream);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //this.groupId = groupId;
+        this.accessToken = properties.getProperty("accessToken");
+        Watchdog.doStart();
+    }
+
+    @Contract(pure = true)
+    @Override
+    public int getGroupId() {
+        return groupId;
+    }
+
+    @Contract(pure = true)
+    @Override
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    @Contract(pure = true)
+    @Override
+    public Properties getConfig() {
+        return properties;
+    }
+
+    @Contract(pure = true)
+    @Override
+    public ProfileList getProfileList() {
+        return profileList;
+    }
+
+    @Contract(pure = true)
+    @Override
+    public RegisterCommandList getRegisterCommandList() {
+        return registerCommandList;
+    }
+
+    @Contract(pure = true)
+    @Override
+    public RegisterListEvent getRegisterListEvent() {
+        return registerListEvent;
+    }
 
     @Contract(pure = true)
     @Override
@@ -44,11 +109,10 @@ public final class ObedientBot implements RoflanBot {
             } catch (ApiException | ClientException ignored) { }
         });
     }
-
-    private static MessagesSendQuery send() {
+    private MessagesSendQuery send() {
         return Loader.getVkApiClient().messages()
                 .send(Loader.getGroupActor())
                 .randomId(MathUtils.RANDOM.nextInt(10000))
-                .groupId(Loader.GROUP_ID);
+                .groupId(groupId);
     }
 }

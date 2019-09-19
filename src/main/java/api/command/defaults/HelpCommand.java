@@ -1,7 +1,7 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
-import api.command.RegisterCommandList;
 import api.entity.User;
 import jolyjdia.bot.calculate.calculator.MathFunctions;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public class HelpCommand extends Command {
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length == 1) {
             StringBuilder builder = new StringBuilder();
-            RegisterCommandList.getRegisteredCommands().stream()
+            Bot.getRegisterCommandList().getRegisteredCommands().stream()
                     .filter(cmd -> cmd.getDescription() != null && !cmd.getDescription().isEmpty())
                     .forEach(cmd -> {
                                 builder.append('/').append(cmd.getName());// /cmd - дададая | /cmd <да-да я> - описание

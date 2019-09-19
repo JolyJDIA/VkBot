@@ -73,7 +73,7 @@ public final class KubanoidManager {
     @NonNls
     public static String getPlayerName(int userId) {
         try {
-            UserXtrCounters user = Loader.getVkApiClient().users().get(new UserActor(userId, Loader.ACCESS_TOKEN))
+            UserXtrCounters user = Loader.getVkApiClient().users().get(new UserActor(userId, Bot.getAccessToken()))
                     .userIds(String.valueOf(userId)).execute().get(0);
             return user.getFirstName() + ' ' +user.getLastName();
         } catch (ClientException | ApiException ex) {

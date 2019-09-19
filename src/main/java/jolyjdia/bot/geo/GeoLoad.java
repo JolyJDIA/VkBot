@@ -1,6 +1,6 @@
 package jolyjdia.bot.geo;
 
-import api.command.RegisterCommandList;
+import api.Bot;
 import api.utils.JavaModule;
 import com.maxmind.geoip2.DatabaseReader;
 import org.jetbrains.annotations.NonNls;
@@ -16,7 +16,7 @@ public class GeoLoad extends JavaModule {
     public final void onLoad() {
         try {
             DatabaseReader reader = new DatabaseReader.Builder(new File(PATH)).build();
-            RegisterCommandList.registerCommand(new GeoCommand(reader));
+            Bot.getRegisterCommandList().registerCommand(new GeoCommand(reader));
         } catch (IOException e) {
             e.printStackTrace();
         }

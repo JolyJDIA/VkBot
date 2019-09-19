@@ -1,9 +1,9 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
 import api.entity.User;
 import api.utils.StringBind;
-import jolyjdia.bot.Loader;
 
 public class SetPrefixCommand extends Command {
     public SetPrefixCommand() {
@@ -30,9 +30,9 @@ public class SetPrefixCommand extends Command {
             return;
         }
         if(id != null) {
-            Loader.getProfileList().setPrefix(sender.getPeerId(), id, prefix);
+            Bot.getProfileList().setPrefix(sender.getPeerId(), id, prefix);
         } else {
-            Loader.getProfileList().setPrefix(sender, prefix);
+            Bot.getProfileList().setPrefix(sender, prefix);
         }
         sender.sendMessageFromHisChat("Вы успешно изменили префикс");
     }

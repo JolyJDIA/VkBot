@@ -4,7 +4,6 @@ import api.Bot;
 import api.command.Command;
 import api.entity.User;
 import api.utils.StringBind;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.NotNull;
 
 public class BroadcastMessageCommand extends Command {
@@ -19,7 +18,7 @@ public class BroadcastMessageCommand extends Command {
         if(args.length > 1) {
             if(sender.getUserId() == ADMIN) {
                 String text = StringBind.toString(args);
-                for(int id : Loader.getProfileList().getChats()) {
+                for(int id : Bot.getProfileList().getChats()) {
                     Bot.sendMessage(text, id);
                 }
             } else {

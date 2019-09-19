@@ -1,9 +1,9 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
 import api.entity.User;
 import api.utils.StringBind;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class InfoUserCommand extends Command {
             if (id == null) {
                 return;
             }
-            User target = Loader.getProfileList().getUser(sender.getPeerId(), id);
+            User target = Bot.getProfileList().getUser(sender.getPeerId(), id);
             if(target == null) {
                 sender.sendMessageFromHisChat("Не удалось найти этого пользователя в базе");
                 return;

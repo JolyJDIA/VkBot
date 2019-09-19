@@ -1,10 +1,9 @@
 package jolyjdia.bot.calculate;
 
-import api.command.RegisterCommandList;
+import api.Bot;
 import api.event.EventLabel;
 import api.event.EventPriority;
 import api.event.Listener;
-import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
 import api.event.messages.SendCommandEvent;
 import api.utils.JavaModule;
@@ -16,8 +15,8 @@ public class CalculatorRegister extends JavaModule implements Listener {
 
 	@Override
 	public final void onLoad() {
-        RegisterListEvent.registerEvent(this);
-		RegisterCommandList.registerCommand(new CalculatorCommand());
+		Bot.getRegisterListEvent().registerEvent(this);
+		Bot.getRegisterCommandList().registerCommand(new CalculatorCommand());
     }
 	@EventLabel(priority = EventPriority.HIGH)
 	public static void onSend(@NotNull NewMessageEvent e) {

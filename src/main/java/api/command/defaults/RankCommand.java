@@ -1,10 +1,10 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
 import api.entity.User;
 import api.permission.PermissionManager;
 import api.utils.StringBind;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +33,7 @@ public class RankCommand extends Command {
                 sender.sendMessageFromHisChat(builder.toString());
                 return;
             }
-            Loader.getProfileList().setRank(sender.getPeerId(), id, args[2]);
+            Bot.getProfileList().setRank(sender.getPeerId(), id, args[2]);
             sender.sendMessageFromHisChat("Вы успешно выдали права");
         } else {
             sender.sendMessageFromHisChat("Использование: " + getUseCommand());

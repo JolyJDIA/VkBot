@@ -1,9 +1,9 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
 import api.entity.User;
 import api.utils.StringBind;
-import jolyjdia.bot.Loader;
 
 public class SetSuffixCommand extends Command {
     public SetSuffixCommand() {
@@ -31,9 +31,9 @@ public class SetSuffixCommand extends Command {
             return;
         }
         if(id != null) {
-            Loader.getProfileList().setSuffix(sender.getPeerId(), id, suffix);
+            Bot.getProfileList().setSuffix(sender.getPeerId(), id, suffix);
         } else {
-            Loader.getProfileList().setSuffix(sender, suffix);
+            Bot.getProfileList().setSuffix(sender, suffix);
         }
         sender.sendMessageFromHisChat("Вы успешно изменили суффикс");
     }

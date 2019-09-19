@@ -7,9 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RegisterCommandList {
-    private static final Set<Command> commands = new HashSet<>();//Классы уникальные
-    static {
+public final class RegisterCommandList {
+    private final Set<Command> commands = new HashSet<>();//Классы уникальные
+
+    public RegisterCommandList() {
         registerCommand(new HelpCommand());
         registerCommand(new ReloadCommand());
         registerCommand(new RankCommand());
@@ -24,19 +25,19 @@ public class RegisterCommandList {
         registerCommand(new VersionCommand());
     }
 
-    public static void registerCommand(Command command) {
+    public void registerCommand(Command command) {
         commands.add(command);
     }
 
     @Contract(pure = true)
-    public static Set<Command> getRegisteredCommands() {
+    public Set<Command> getRegisteredCommands() {
         return commands;
     }
-    public static void unregisterAll() {
+    public void unregisterAll() {
         commands.clear();
     }
 
-    public static void registerAll(@NotNull Iterable<? extends Command> commands) {
-        commands.forEach(RegisterCommandList::registerCommand);
+    public void registerAll(@NotNull Iterable<? extends Command> iterable) {
+        iterable.forEach(commands::add);
     }
 }

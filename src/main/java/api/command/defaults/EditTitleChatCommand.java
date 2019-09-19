@@ -4,7 +4,6 @@ import api.Bot;
 import api.command.Command;
 import api.entity.User;
 import api.utils.StringBind;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.NotNull;
 
 public class EditTitleChatCommand extends Command {
@@ -22,7 +21,7 @@ public class EditTitleChatCommand extends Command {
                 return;
             }
             if (args.length == 1) {
-                Bot.editChat(Loader.getConfig().getProperty("defaultTitleChat"), sender.getPeerId());
+                Bot.editChat(Bot.getConfig().getProperty("defaultTitleChat"), sender.getPeerId());
                 return;
             }
             Bot.editChat(StringBind.toString(args), sender.getPeerId());

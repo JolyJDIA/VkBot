@@ -1,9 +1,8 @@
 package jolyjdia.bot.password;
 
-import api.command.RegisterCommandList;
+import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
-import api.event.RegisterListEvent;
 import api.event.messages.SendCommandEvent;
 import api.utils.JavaModule;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +15,8 @@ public class GeneratorPassword extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-        RegisterCommandList.registerCommand(new PasswordCommand());
-        RegisterListEvent.registerEvent(this);
+        Bot.getRegisterCommandList().registerCommand(new PasswordCommand());
+        Bot.getRegisterListEvent().registerEvent(this);
     }
     @EventLabel
     public final void onCommand(@NotNull SendCommandEvent e) {

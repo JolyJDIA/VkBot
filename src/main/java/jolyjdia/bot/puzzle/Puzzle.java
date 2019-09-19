@@ -1,11 +1,10 @@
 package jolyjdia.bot.puzzle;
 
+import api.Bot;
 import api.command.Command;
-import api.command.RegisterCommandList;
 import api.entity.User;
 import api.event.EventLabel;
 import api.event.Listener;
-import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
 import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
@@ -18,7 +17,7 @@ public class Puzzle extends JavaModule implements Listener {
 
     @Override
     public final void onLoad() {
-        RegisterListEvent.registerEvent(this);
+        Bot.getRegisterListEvent().registerEvent(this);
 /*        ObedientBot.SCHEDULER.scheduleSyncRepeatingTask(() -> {
             if (next) {
                 math = !math;
@@ -27,7 +26,7 @@ public class Puzzle extends JavaModule implements Listener {
             }
             ObedientBot.sendMessage("Развитие лодки!\n"+answer.getStringFormatAnswer(), 2000000001);
         }, 3000, 3000);*/
-        RegisterCommandList.registerCommand(new Puzzle.GeneratePuzzleCommand(this));
+        Bot.getRegisterCommandList().registerCommand(new Puzzle.GeneratePuzzleCommand(this));
     }
     @EventLabel
     public final void onSend(@NotNull NewMessageEvent e) {

@@ -3,7 +3,6 @@ package jolyjdia.bot.shoutbox;
 import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
-import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
 import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
@@ -25,7 +24,7 @@ public class ShoutboxMain extends JavaModule implements Listener {
     private final List<Integer> speakChat = new ArrayList<>();
     @Override
     public final void onLoad() {
-        RegisterListEvent.registerEvent(this);
+        Bot.getRegisterListEvent().registerEvent(this);
     }
     @EventLabel
     public final void onShout(@NotNull NewMessageEvent e) {

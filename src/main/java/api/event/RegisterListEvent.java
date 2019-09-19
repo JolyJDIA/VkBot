@@ -10,13 +10,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public final class RegisterListEvent {
-    private static final List<Handler> handlers = new ArrayList<>();
+public class RegisterListEvent {
+    private final List<Handler> handlers = new ArrayList<>();
 
-    @Contract(pure = true)
-    private RegisterListEvent() {}
-
-    public static void registerEvent(@NotNull Listener listener) {
+    public final void registerEvent(@NotNull Listener listener) {
         for (Method method : listener.getClass().getMethods()) {
             if (!method.isAnnotationPresent(EventLabel.class)) {
                 continue;
@@ -40,15 +37,15 @@ public final class RegisterListEvent {
     }
 
     @Contract(pure = true)
-    public static List<Handler> getHandlers() {
+    public final List<Handler> getHandlers() {
         return handlers;
     }
-    public static void unregisterAll() {
+    public final void unregisterAll() {
         handlers.clear();
     }
 
-    public static void registerAll(@NotNull Iterable<? extends Listener> listeners) {
-        listeners.forEach(RegisterListEvent::registerEvent);
+    public final void registerAll(@NotNull Iterable<? extends Listener> iterable) {
+        iterable.forEach(this::registerEvent);
     }
     public static class Handler implements Comparable<EventPriority>, Consumer<Event> {
         final Consumer<? super Event> consumer;

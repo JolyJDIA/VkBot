@@ -1,7 +1,13 @@
 package api;
 
+import api.command.RegisterCommandList;
+import api.event.RegisterListEvent;
+import api.file.ProfileList;
 import api.scheduler.BotScheduler;
 import com.vk.api.sdk.objects.messages.Keyboard;
+import org.jetbrains.annotations.Contract;
+
+import java.util.Properties;
 
 public final class Bot {
     private static RoflanBot roflanBot;
@@ -12,7 +18,31 @@ public final class Bot {
         }
         roflanBot = bot;
     }
+    public static int getGroupId() {
+        return roflanBot.getGroupId();
+    }
 
+    @Contract(pure = true)
+    public static String getAccessToken() {
+        return roflanBot.getAccessToken();
+    }
+    public static RegisterCommandList getRegisterCommandList() {
+        return roflanBot.getRegisterCommandList();
+    }
+
+    public static RegisterListEvent getRegisterListEvent() {
+        return roflanBot.getRegisterListEvent();
+    }
+
+    public static BotScheduler getScheduler() {
+        return roflanBot.getScheduler();
+    }
+    public static ProfileList getProfileList() {
+        return roflanBot.getProfileList();
+    }
+    public static Properties getConfig() {
+        return roflanBot.getConfig();
+    }
     public static void sendMessage(String message, int peerId) {
         roflanBot.sendMessage(message, peerId);
     }
@@ -24,7 +54,5 @@ public final class Bot {
     public static void editChat(String title, int peerId) {
         roflanBot.editChat(title, peerId);
     }
-    public static BotScheduler getScheduler() {
-        return roflanBot.getScheduler();
-    }
+
 }

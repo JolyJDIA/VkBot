@@ -1,9 +1,8 @@
 package jolyjdia.bot;
 
-import api.command.RegisterCommandList;
+import api.Bot;
 import api.entity.User;
 import api.event.Event;
-import api.event.RegisterListEvent;
 import api.event.board.BoardPostEditEvent;
 import api.event.board.BoardPostNewEvent;
 import api.event.board.BoardPostRestoreEvent;
@@ -25,6 +24,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Set;
 
 public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
@@ -38,11 +38,11 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     public final void messageNew(Integer groupId, @NotNull Message msg) {
         MessageAction action = msg.getAction();
         if(action != null && action.getType() == MessageActionStatus.CHAT_KICK_USER) {
-            Loader.getProfileList().remove(msg.getPeerId(), msg.getFromId());
+            Bot.getProfileList().remove(msg.getPeerId(), msg.getFromId());
             return;
         }
         @NonNls String text = msg.getText();
-        User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
             SendCommandEvent event = new SendCommandEvent(user, args);
@@ -51,10 +51,13 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                 return;
             }
             long start = System.currentTimeMillis();
-            RegisterCommandList.getRegisteredCommands().stream()
-                    .filter(c -> c.getName().equalsIgnoreCase(args[0])
-                            || c.getAlias() != null && !c.getAlias().isEmpty()
-                            && c.getAlias().stream().anyMatch(e -> e.equalsIgnoreCase(args[0])))
+            Bot.getRegisterCommandList().getRegisteredCommands().stream()
+                    .filter(c -> {
+                        Set<String> alias = c.getAlias();
+                        return c.getName().equalsIgnoreCase(args[0])
+                                || (alias != null && !alias.isEmpty()
+                                && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0])));
+                    })
                     .findFirst()
                     .ifPresent(c -> c.execute(user, args));
 
@@ -69,14 +72,14 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageReply(Integer groupId, @NotNull Message msg) {
-        User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         ReplyMessageEvent event = new ReplyMessageEvent(user, msg);
         submitEvent(event);
     }
 
     @Override
     public final void messageEdit(Integer groupId, @NotNull Message msg) {
-        User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         EditMessageEvent event = new EditMessageEvent(user, msg);
         submitEvent(event);
     }
@@ -106,6 +109,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         submitEvent(event);
     }
     private static void submitEvent(Event event) {
-        RegisterListEvent.getHandlers().forEach(m -> m.accept(event));
+        Bot.getRegisterListEvent().getHandlers().forEach(m -> m.accept(event));
     }
 }
