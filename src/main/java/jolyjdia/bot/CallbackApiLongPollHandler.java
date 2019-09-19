@@ -18,6 +18,8 @@ import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.objects.board.TopicComment;
 import com.vk.api.sdk.objects.messages.Message;
+import com.vk.api.sdk.objects.messages.MessageAction;
+import com.vk.api.sdk.objects.messages.MessageActionStatus;
 import com.vk.api.sdk.objects.wall.Wallpost;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +37,11 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
         @NonNls String text = msg.getText();
+        MessageAction action = msg.getAction();
+        if(action != null && action.getType() == MessageActionStatus.CHAT_KICK_USER) {
+            Loader.getProfileList().remove(msg.getPeerId(), msg.getFromId());
+            return;
+        }
         User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы

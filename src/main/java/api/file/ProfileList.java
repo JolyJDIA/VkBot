@@ -157,7 +157,11 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         if (!map.containsKey(user.getPeerId())) {
             return;
         }
-        map.get(user.getPeerId()).remove(user.getUserId());
+        Map<Integer, User> users = map.get(user.getPeerId());
+        if(!users.containsKey(user.getUserId())) {
+            return;
+        }
+        users.remove(user.getUserId());
         this.save();
     }
 
@@ -165,7 +169,11 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         if (!map.containsKey(peerId)) {
             return;
         }
-        map.get(peerId).remove(userId);
+        Map<Integer, User> users = map.get(peerId);
+        if(!users.containsKey(userId)) {
+            return;
+        }
+        users.remove(userId);
         this.save();
     }
 
