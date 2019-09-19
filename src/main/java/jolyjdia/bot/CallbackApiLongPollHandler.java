@@ -34,11 +34,15 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
-        @NonNls String text = msg.getText();//УБрать аннотацию
+        @NonNls String text = msg.getText();
         User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
-        if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {//Проверяю первый символ(startsWith abort)
+        if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
-
+            SendCommandEvent event = new SendCommandEvent(user, args);
+            submitEvent(event);
+            if(event.isCancelled()) {
+                return;
+            }
             long start = System.currentTimeMillis();
             RegisterCommandList.getRegisteredCommands().stream()
                     .filter(c -> c.getName().equalsIgnoreCase(args[0])
@@ -49,9 +53,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
             @NonNls long end = System.currentTimeMillis() - start;
             System.out.println("КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
-
-            SendCommandEvent event = new SendCommandEvent(user, msg);
-            submitEvent(event);
             return;
         }
         System.out.println("СООБЩЕНИЕ: ("+ msg.getText() + ") ЧАТ: " +msg.getPeerId());

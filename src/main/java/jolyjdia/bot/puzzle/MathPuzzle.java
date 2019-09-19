@@ -12,6 +12,7 @@ public class MathPuzzle implements Answer {
         boolean token = MathUtils.RANDOM.nextBoolean();
         int first = MathUtils.RANDOM.nextInt(1000);
         int second = MathUtils.RANDOM.nextInt(1000);
+
         this.answer = token ? first + second : first - second;
         this.format = first + (token ? " + " : " - ") + second;
     }

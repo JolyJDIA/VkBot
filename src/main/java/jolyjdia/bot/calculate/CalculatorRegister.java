@@ -6,6 +6,7 @@ import api.event.EventPriority;
 import api.event.Listener;
 import api.event.RegisterListEvent;
 import api.event.messages.NewMessageEvent;
+import api.event.messages.SendCommandEvent;
 import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
 import jolyjdia.bot.calculate.calculator.Calculator;
@@ -40,5 +41,11 @@ public class CalculatorRegister extends JavaModule implements Listener {
 			return;
 		}
 		e.getUser().sendMessageFromHisChat(answer);
+	}
+	@EventLabel
+	public static void onCommand(@NotNull SendCommandEvent e) {
+		if(e.getArguments()[0].equalsIgnoreCase("/help1")) {
+			e.setCancelled(true);
+		}
 	}
 }
