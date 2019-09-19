@@ -36,12 +36,12 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
-        @NonNls String text = msg.getText();
         MessageAction action = msg.getAction();
         if(action != null && action.getType() == MessageActionStatus.CHAT_KICK_USER) {
             Loader.getProfileList().remove(msg.getPeerId(), msg.getFromId());
             return;
         }
+        @NonNls String text = msg.getText();
         User user = Loader.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
