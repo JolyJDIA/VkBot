@@ -23,12 +23,12 @@ public class GeneratorPassword extends JavaModule implements Listener {
     public final void onCommand(@NotNull SendCommandEvent e) {
         int userId = e.getUser().getUserId();
         if(cooldown.containsKey(userId) && cooldown.get(userId) > System.currentTimeMillis()) {
-            e.getUser().sendMessageFromHisChat("Подождите 3 секунд, перед тем, как использовать команду снова");
+            e.getUser().sendMessageFromHisChat("Подождите 1 секунд, перед тем, как использовать команду снова");
             e.setCancelled(true);
             return;
         } else {
             cooldown.remove(userId);
         }
-        cooldown.put(userId, System.currentTimeMillis() + 3000);
+        cooldown.put(userId, System.currentTimeMillis() + 1000);
     }
 }
