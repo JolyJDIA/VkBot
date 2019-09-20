@@ -96,7 +96,7 @@ public final class ObedientBot implements RoflanBot {
         scheduler.runTask(() -> {
             try {
                 Loader.getVkApiClient().messages().editChat(Loader.getGroupActor(), peerId - 2000000000, title).execute();
-            } catch (ApiException | ClientException ignored) { }
+            } catch (ApiException | ClientException ignored) {}
         });
     }
     private MessagesSendQuery send() {
