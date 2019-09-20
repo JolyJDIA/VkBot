@@ -19,7 +19,7 @@ import java.util.Properties;
 public final class ObedientBot implements RoflanBot {
     private final BotScheduler scheduler = new BotScheduler();
     private final ProfileList profileList = new ProfileList(new File(
-            "D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
+            Loader.class.getClassLoader().getResource("users.json").getFile()));
     private final BotManager registerListEvent = new BotManager();
     private final Properties properties = new Properties();
     private final String accessToken;
