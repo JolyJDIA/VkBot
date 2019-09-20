@@ -5,7 +5,6 @@ import api.RoflanBot;
 import api.file.ProfileList;
 import api.scheduler.BotScheduler;
 import api.utils.MathUtils;
-import api.utils.Watchdog;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Keyboard;
@@ -36,7 +35,6 @@ public final class ObedientBot implements RoflanBot {
         }
         this.groupId = Integer.parseInt(properties.getProperty("groupId"));
         this.accessToken = properties.getProperty("accessToken");
-        Watchdog.doStart();
     }
 
     @Contract(pure = true)

@@ -1,6 +1,7 @@
 package jolyjdia.bot;
 
 import api.Bot;
+import api.utils.Watchdog;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -38,6 +39,7 @@ public class Loader {
         }
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(vkApiClient, groupActor);
         registerAll();
+        Watchdog.doStart();
         handler.run();
     }
     private static void registerAll() {
