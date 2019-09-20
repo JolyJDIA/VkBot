@@ -26,7 +26,7 @@ public final class ObedientBot implements RoflanBot {
     private final int groupId;
 
     public ObedientBot() {
-        System.out.println(Loader.class.getClassLoader().getResource("users.json").getPath());
+        System.out.println(Loader.class.getClassLoader().getResource("/resources/users.json").getFile());
         try (InputStream inputStream = Loader.class.getClassLoader().getResourceAsStream("config.properties")) {
             if(inputStream != null) {
                 properties.load(inputStream);
