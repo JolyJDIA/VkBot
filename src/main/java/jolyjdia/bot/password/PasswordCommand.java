@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
+import java.util.Random;
 
 public class PasswordCommand extends Command {
     @NonNls public static final String STRING = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -17,7 +18,11 @@ public class PasswordCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            sender.sendMessageFromHisChat(generate(40));
+            String password = new Random()
+                    .ints(40, 33, 122)
+                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                    .toString();
+            sender.sendMessageFromHisChat(password);
         } else if(args.length == 2) {
             try {
                 sender.sendMessageFromHisChat(generate(Integer.parseInt(args[1])));

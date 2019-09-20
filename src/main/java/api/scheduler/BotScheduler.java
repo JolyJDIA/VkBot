@@ -12,7 +12,7 @@ public class BotScheduler {
     private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
 
     public final void mainThreadHeartbeat() {
-        //старый добрый итератор, не хочу try catch
+        //старый добрый итератор
         Iterator<Task> iterator = taskQueue.iterator();
         while (iterator.hasNext()) {
             Task task = iterator.next();
