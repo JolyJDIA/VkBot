@@ -45,13 +45,11 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
 
     @Override
     public void create() {
-        try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
+        try (PrintWriter pw = new PrintWriter(getFile(), "UTF-8")) {//StandardCharsets.UTF_8
             pw.print("{");
             pw.print("}");
             pw.flush();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -70,12 +68,10 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
 
     @Override
     public void save() {
-        try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
+        try (PrintWriter pw = new PrintWriter(getFile(), "UTF-8")) {//StandardCharsets.UTF_8
             pw.print(gson.toJson(map));
             pw.flush();
         } catch (UnsupportedEncodingException | FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
