@@ -21,35 +21,34 @@ final class CalculatorManager {
 
     static void actionsCalculator(int peerId, @NotNull @NonNls String element) {
         switch (element) {
-            case "=":
+            case "=" -> {
                 Calculator calculator = new Calculator(history.get(peerId));
                 String answer = calculator.solveExpression();
                 if (answer.isEmpty()) {
                     return;
                 }
                 closeCalculatorBoard(answer, peerId);
-                break;
-            case "C":
-                history.put(peerId, "");
-                break;
-            case "<=":
+            }
+            case "C" -> history.put(peerId, "");
+            case "<=" -> {
                 String get = history.get(peerId);
-                String set = get.substring(0, get.length()-1);
+                String set = get.substring(0, get.length() - 1);
                 history.put(peerId, set);
-                if(!OUTPUT.matcher(get).matches()) {
+                if (!OUTPUT.matcher(get).matches()) {
                     return;
                 }
-                if(set.isEmpty()) {
+                if (set.isEmpty()) {
                     return;
                 }
                 Bot.sendMessage(set, peerId);
-                break;
-            default:
+            }
+            default -> {
                 if (MATH.matcher(element).matches()) {
                     history.compute(peerId, (k, v) -> v + element);
                     Bot.sendMessage(history.get(peerId), peerId);
                 } else {
                     closeCalculatorBoard("Я вижу, дружок, тебе не нужен калькулятор", peerId);
+                }
             }
         }
     }
