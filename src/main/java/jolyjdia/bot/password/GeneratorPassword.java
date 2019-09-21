@@ -19,8 +19,8 @@ public class GeneratorPassword implements Module, Listener {
         Bot.getBotManager().registerCommand(new RaidCommand());
         Bot.getBotManager().registerEvent(this);
         Bot.getScheduler().scheduleSyncRepeatingTask(() ->
-                cooldown.entrySet().removeIf(e -> (e.getValue() / 1000L - System.currentTimeMillis() / 1000L) <= 1L),0, 50);
-
+                        cooldown.entrySet().removeIf(e -> (e.getValue() - System.currentTimeMillis()) <= 0L),
+                0, 50);
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> System.out.println(cooldown),0, 20);
     }
     @EventLabel
