@@ -77,6 +77,7 @@ public final class ObedientBot implements RoflanBot {
     }
 
     @Contract(pure = true)
+    @Override
     public ModuleLoader getModuleLoader() {
         return moduleLoader;
     }
