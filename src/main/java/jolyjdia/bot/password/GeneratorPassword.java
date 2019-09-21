@@ -21,7 +21,6 @@ public class GeneratorPassword implements Module, Listener {
         Bot.getScheduler().scheduleSyncRepeatingTask(() ->
                         cooldown.entrySet().removeIf(e -> (e.getValue() - System.currentTimeMillis()) <= 0L),
                 0, 50);
-        Bot.getScheduler().scheduleSyncRepeatingTask(() -> System.out.println(cooldown),0, 20);
     }
     @EventLabel
     public final void onCommand(@NotNull SendCommandEvent e) {
