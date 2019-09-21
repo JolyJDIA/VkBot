@@ -1,8 +1,8 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
-import api.entity.User;
-import api.utils.Watchdog;
+import api.storage.User;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ public class TickPerSecondCommand extends Command {
             long totalMemory = Runtime.getRuntime().totalMemory();
             long freeMemory = Runtime.getRuntime().freeMemory();
             @NonNls String sb =
-                    "TPS: " + Watchdog.getAverageTPS() +
+                    "TPS: " + Bot.getScheduler().getAverageTPS() +
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
                     "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory);

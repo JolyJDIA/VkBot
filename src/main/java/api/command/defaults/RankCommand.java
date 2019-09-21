@@ -2,8 +2,8 @@ package api.command.defaults;
 
 import api.Bot;
 import api.command.Command;
-import api.entity.User;
 import api.permission.PermissionManager;
+import api.storage.User;
 import api.utils.StringBind;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

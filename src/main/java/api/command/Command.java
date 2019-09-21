@@ -1,8 +1,8 @@
 package api.command;
 
-import api.entity.User;
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
+import api.storage.User;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;

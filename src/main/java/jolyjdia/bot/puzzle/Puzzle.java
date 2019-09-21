@@ -2,10 +2,10 @@ package jolyjdia.bot.puzzle;
 
 import api.Bot;
 import api.command.Command;
-import api.entity.User;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
+import api.storage.User;
 import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.NotNull;
@@ -48,13 +48,15 @@ public class Puzzle extends JavaModule implements Listener {
         }
 
         @Override
-        public final void execute(User sender, String[] args) {
-            if (puzzle.next) {
-                puzzle.math = !puzzle.math;
-                puzzle.answer = puzzle.math ? new MathPuzzle() : new TextPuzzle();
-                puzzle.next = false;
+        public final void execute(User sender, @NotNull String[] args) {
+            if(args.length == 1) {
+                if (puzzle.next) {
+                    puzzle.math = !puzzle.math;
+                    puzzle.answer = puzzle.math ? new MathPuzzle() : new TextPuzzle();
+                    puzzle.next = false;
+                }
+                sender.sendMessageFromHisChat(puzzle.answer.getStringFormatAnswer());
             }
-            sender.sendMessageFromHisChat(puzzle.answer.getStringFormatAnswer());
         }
     }
 }

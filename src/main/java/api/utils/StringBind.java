@@ -1,6 +1,7 @@
 package api.utils;
 
-import api.entity.User;
+import api.Bot;
+import api.storage.User;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.ConversationMember;
@@ -39,7 +40,7 @@ public final class StringBind {
             int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
             GetConversationMembersResponse g = Loader.getVkApiClient()
                     .messages()
-                    .getConversationMembers(Loader.getGroupActor(), sender.getPeerId())
+                    .getConversationMembers(Bot.getGroupActor(), sender.getPeerId())
                     .execute();
             System.out.println(g);
             Optional<ConversationMember> member = g.getItems().stream()

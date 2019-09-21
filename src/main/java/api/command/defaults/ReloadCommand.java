@@ -1,7 +1,7 @@
 package api.command.defaults;
 
 import api.command.Command;
-import api.entity.User;
+import api.storage.User;
 import api.utils.JavaModule;
 import org.jetbrains.annotations.NotNull;
 

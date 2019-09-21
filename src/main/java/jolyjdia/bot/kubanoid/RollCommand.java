@@ -1,7 +1,7 @@
 package jolyjdia.bot.kubanoid;
 
 import api.command.Command;
-import api.entity.User;
+import api.storage.User;
 import api.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 

@@ -2,7 +2,7 @@ package jolyjdia.bot.kubanoid;
 
 import api.Bot;
 import api.command.Command;
-import api.entity.User;
+import api.storage.User;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,7 +1,6 @@
 package jolyjdia.bot;
 
 import api.Bot;
-import api.entity.User;
 import api.event.Event;
 import api.event.board.BoardPostEditEvent;
 import api.event.board.BoardPostNewEvent;
@@ -12,6 +11,7 @@ import api.event.messages.ReplyMessageEvent;
 import api.event.messages.SendCommandEvent;
 import api.event.post.NewPostWallEvent;
 import api.event.post.RepostWallEvent;
+import api.storage.User;
 import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;

@@ -2,7 +2,7 @@ package jolyjdia.bot.translator;
 
 import api.Bot;
 import api.command.Command;
-import api.entity.User;
+import api.storage.User;
 import api.utils.StringBind;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

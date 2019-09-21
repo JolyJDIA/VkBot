@@ -2,7 +2,7 @@ package api.command.defaults;
 
 import api.Bot;
 import api.command.Command;
-import api.entity.User;
+import api.storage.User;
 import api.utils.StringBind;
 
 public class SetPrefixCommand extends Command {

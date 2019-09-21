@@ -1,5 +1,7 @@
 package api.scheduler;
 
+import api.utils.TimingsHandler;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -8,29 +10,35 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 public class BotScheduler {
+    //Второй поток
     //private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
     private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
+    private final TimingsHandler timingsHandler = new TimingsHandler();
 
-    public final void mainThreadHeartbeat() {
-        //старый добрый итератор
+   public final void mainThreadHeartbeat() {
+        timingsHandler.tick();
         Iterator<Task> iterator = taskQueue.iterator();
         while (iterator.hasNext()) {
             Task task = iterator.next();
             if (task.getCurrentTick() >= task.getPeriod()) {
                 if (task.isSync()) {
                     task.run();
-                //} else {
-                    //executor.execute(task);
+                /*} else {
+                    executor.execute(task);*/
                 }
                 if (task.getPeriod() <= Task.NO_REPEATING) {
                     iterator.remove();
-                    System.out.println("удалил задачу: "+taskQueue);
+                    System.out.println("удалил задачу: " + taskQueue);
                     return;
                 }
                 task.setCurrentTickZero();
             }
             task.addCurrentTick();
         }
+    }
+    @Contract(pure = true)
+    public final double getAverageTPS() {
+        return timingsHandler.getAverageTPS();
     }
 
     @NotNull

@@ -2,7 +2,7 @@ package api.command.defaults;
 
 import api.Bot;
 import api.command.Command;
-import api.entity.User;
+import api.storage.User;
 import jolyjdia.bot.calculate.calculator.MathFunctions;
 import org.jetbrains.annotations.NotNull;
 

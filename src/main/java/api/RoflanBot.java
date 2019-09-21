@@ -1,7 +1,8 @@
 package api;
 
-import api.file.ProfileList;
 import api.scheduler.BotScheduler;
+import api.storage.ProfileList;
+import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.objects.messages.Keyboard;
 
 import java.util.Properties;
@@ -16,4 +17,5 @@ public interface RoflanBot {
     int getGroupId();
     String getAccessToken();
     Properties getConfig();
+    GroupActor getGroupActor();
 }

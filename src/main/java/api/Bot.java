@@ -1,7 +1,8 @@
 package api;
 
-import api.file.ProfileList;
 import api.scheduler.BotScheduler;
+import api.storage.ProfileList;
+import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import org.jetbrains.annotations.Contract;
 
@@ -32,18 +33,24 @@ public final class Bot {
     public static BotScheduler getScheduler() {
         return roflanBot.getScheduler();
     }
+
     public static ProfileList getProfileList() {
         return roflanBot.getProfileList();
     }
+
     public static Properties getConfig() {
         return roflanBot.getConfig();
     }
+
     public static void sendMessage(String message, int peerId) {
         roflanBot.sendMessage(message, peerId);
     }
 
     public static void sendKeyboard(String message, int peerId, Keyboard keyboard) {
         roflanBot.sendKeyboard(message, peerId, keyboard);
+    }
+    public static GroupActor getGroupActor() {
+        return roflanBot.getGroupActor();
     }
 
     public static void editChat(String title, int peerId) {

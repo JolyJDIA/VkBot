@@ -1,7 +1,7 @@
 package jolyjdia.bot.calculate;
 
 import api.command.Command;
-import api.entity.User;
+import api.storage.User;
 import org.jetbrains.annotations.NotNull;
 
 public class CalculatorCommand extends Command {
@@ -18,8 +18,8 @@ public class CalculatorCommand extends Command {
         }
         if(CalculatorManager.containsKey(peerId)) {
             CalculatorManager.closeCalculatorBoard("close", peerId);
-            return;
+        } else {
+            CalculatorManager.openCalculatorBoard(peerId);
         }
-        CalculatorManager.openCalculatorBoard(peerId);
     }
 }
