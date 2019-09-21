@@ -16,7 +16,6 @@ public class GeneratorPassword implements Module, Listener {
     @Override
     public final void onLoad() {
         Bot.getBotManager().registerCommand(new PasswordCommand());
-        Bot.getBotManager().registerCommand(new RaidCommand());
         Bot.getBotManager().registerEvent(this);
     }
     @EventLabel
