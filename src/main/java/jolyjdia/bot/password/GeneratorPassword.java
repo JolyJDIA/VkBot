@@ -16,18 +16,21 @@ public class GeneratorPassword implements Module, Listener {
     @Override
     public final void onLoad() {
         Bot.getBotManager().registerCommand(new PasswordCommand());
+        Bot.getBotManager().registerCommand(new RaidCommand());
         Bot.getBotManager().registerEvent(this);
+        Bot.getScheduler().scheduleSyncRepeatingTask(() ->
+                cooldown.entrySet().removeIf(e -> (e.getValue() / 1000L - System.currentTimeMillis() / 1000L) <= 1L),0, 50);
+
+        Bot.getScheduler().scheduleSyncRepeatingTask(() -> System.out.println(cooldown),0, 20);
     }
     @EventLabel
     public final void onCommand(@NotNull SendCommandEvent e) {
         int userId = e.getUser().getUserId();
-        if(cooldown.containsKey(userId) && cooldown.get(userId) > System.currentTimeMillis()) {
+        if(cooldown.containsKey(userId)) {
             e.getUser().sendMessageFromHisChat("Подождите 1 секунду, перед тем, как использовать команду снова");
             e.setCancelled(true);
-            return;
         } else {
-            cooldown.remove(userId);
+            cooldown.put(userId, System.currentTimeMillis());
         }
-        cooldown.put(userId, System.currentTimeMillis() + 1000);
     }
 }
