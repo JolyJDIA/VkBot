@@ -1,5 +1,6 @@
 package api;
 
+import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
 import api.storage.ProfileList;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -18,4 +19,5 @@ public interface RoflanBot {
     String getAccessToken();
     Properties getConfig();
     GroupActor getGroupActor();
+    ModuleLoader getModuleLoader();
 }

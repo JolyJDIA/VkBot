@@ -4,11 +4,11 @@ import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
-import api.utils.JavaModule;
+import api.module.Module;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.NotNull;
 
-public class KubanoidLoad extends JavaModule implements Listener {
+public class KubanoidLoad implements Module, Listener {
 
     @Override
     public final void onLoad() {

@@ -2,6 +2,7 @@ package jolyjdia.bot;
 
 import api.BotManager;
 import api.RoflanBot;
+import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
 import api.storage.ProfileList;
 import api.utils.MathUtils;
@@ -11,6 +12,13 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.groups.LongPollSettings;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
+import jolyjdia.bot.calculate.CalculatorRegister;
+import jolyjdia.bot.geo.GeoLoad;
+import jolyjdia.bot.kubanoid.KubanoidLoad;
+import jolyjdia.bot.password.GeneratorPassword;
+import jolyjdia.bot.puzzle.Puzzle;
+import jolyjdia.bot.shoutbox.ShoutboxMain;
+import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
@@ -24,8 +32,9 @@ public final class ObedientBot implements RoflanBot {
     private final ProfileList profileList = new ProfileList(new File(
             Objects.requireNonNull(Loader.class.getClassLoader().getResource("users.json")).getFile()
     ));
-    private final BotManager registerListEvent = new BotManager();
+    private final BotManager manager = new BotManager();
     private final Properties properties = new Properties();
+    private final ModuleLoader moduleLoader = new ModuleLoader();
     private final String accessToken;
     private final int groupId;
     private final GroupActor groupActor;
@@ -55,6 +64,21 @@ public final class ObedientBot implements RoflanBot {
                 .messageNew(true)
                 .audioNew(true)
                 .execute();
+        registerModules();
+    }
+    private  void registerModules() {
+        moduleLoader.registerModule(new CalculatorRegister());
+        moduleLoader.registerModule(new YandexTraslate());
+        moduleLoader.registerModule(new GeoLoad());
+        moduleLoader.registerModule(new Puzzle());
+        moduleLoader.registerModule(new ShoutboxMain());
+        moduleLoader.registerModule(new KubanoidLoad());
+        moduleLoader.registerModule(new GeneratorPassword());
+    }
+
+    @Contract(pure = true)
+    public ModuleLoader getModuleLoader() {
+        return moduleLoader;
     }
 
     @Contract(pure = true)
@@ -90,7 +114,7 @@ public final class ObedientBot implements RoflanBot {
     @Contract(pure = true)
     @Override
     public BotManager getBotManager() {
-        return registerListEvent;
+        return manager;
     }
 
     @Contract(pure = true)

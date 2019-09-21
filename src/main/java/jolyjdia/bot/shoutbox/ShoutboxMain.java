@@ -4,7 +4,7 @@ import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
-import api.utils.JavaModule;
+import api.module.Module;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * ГОВНО
  */
 
-public class ShoutboxMain extends JavaModule implements Listener {
+public class ShoutboxMain implements Module, Listener {
     private static final Pattern E = Pattern.compile("ё");
     @NonNls private static final String PREFIX = "бот, ";
     private final List<Integer> speakChat = new ArrayList<>();

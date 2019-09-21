@@ -4,13 +4,13 @@ import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.SendCommandEvent;
-import api.utils.JavaModule;
+import api.module.Module;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public class GeneratorPassword extends JavaModule implements Listener {
+public class GeneratorPassword implements Module, Listener {
     private final Map<Integer, Long> cooldown = new WeakHashMap<>();
 
     @Override

@@ -1,5 +1,6 @@
 package api;
 
+import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
 import api.storage.ProfileList;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -57,4 +58,7 @@ public final class Bot {
         roflanBot.editChat(title, peerId);
     }
 
+    public static ModuleLoader getModuleLoader() {
+        return roflanBot.getModuleLoader();
+    }
 }

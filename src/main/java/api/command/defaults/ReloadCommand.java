@@ -1,8 +1,8 @@
 package api.command.defaults;
 
+import api.Bot;
 import api.command.Command;
 import api.storage.User;
-import api.utils.JavaModule;
 import org.jetbrains.annotations.NotNull;
 
 public class ReloadCommand extends Command {
@@ -15,8 +15,8 @@ public class ReloadCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length == 1) {
-            JavaModule.reloadModule();
-            sender.sendMessageFromHisChat("Перезагрузка завершена\nМой планировщик: Привет из Async");
+            Bot.getModuleLoader().reloadModule();
+            sender.sendMessageFromHisChat("Перезагрузка завершена\nМой планировщик: Привет из Thread-2");
         }
     }
 }

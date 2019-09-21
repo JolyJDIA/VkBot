@@ -1,7 +1,7 @@
 package jolyjdia.bot.translator;
 
 import api.Bot;
-import api.utils.JavaModule;
+import api.module.Module;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +16,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-@NonNls public class YandexTraslate extends JavaModule {
+@NonNls public class YandexTraslate implements Module {
     @NonNls private static final String KEY =
             "https://translate.yandex.net/api/v1.5/tr.json/translate?key="+ Bot.getConfig().getProperty("translateKey");
     @Override

@@ -6,12 +6,12 @@ import api.event.EventPriority;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.event.messages.SendCommandEvent;
-import api.utils.JavaModule;
+import api.module.Module;
 import com.vk.api.sdk.objects.messages.Message;
 import jolyjdia.bot.calculate.calculator.Calculator;
 import org.jetbrains.annotations.NotNull;
 
-public class CalculatorRegister extends JavaModule implements Listener {
+public class CalculatorRegister implements Module, Listener {
 
 	@Override
 	public final void onLoad() {

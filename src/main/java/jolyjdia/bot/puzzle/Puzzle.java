@@ -5,12 +5,12 @@ import api.command.Command;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
+import api.module.Module;
 import api.storage.User;
-import api.utils.JavaModule;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.NotNull;
 
-public class Puzzle extends JavaModule implements Listener {
+public class Puzzle implements Module, Listener {
     private Answer answer;
     private boolean math;
     private boolean next = true;
