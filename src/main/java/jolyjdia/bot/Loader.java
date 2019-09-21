@@ -30,6 +30,7 @@ public class Loader {
                 Bot.getScheduler().mainThreadHeartbeat();
             }
         }, 0, 50);
+
         handler.run();
     }
     private static void registerModules() {
