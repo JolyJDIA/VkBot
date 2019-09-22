@@ -19,12 +19,12 @@ public class HelpCommand extends Command {
             Bot.getBotManager().getRegisteredCommands().stream()
                     .filter(cmd -> cmd.getDescription() != null && !cmd.getDescription().isEmpty())
                     .forEach(cmd -> {
-                                builder.append('/').append(cmd.getName());// /cmd - дададая | /cmd <да-да я> - описание
-                                if (cmd.getArguments() != null && !cmd.getArguments().isEmpty()) {
-                                    builder.append(' ').append(cmd.getArguments());
-                                }
-                                builder.append(" - ").append(cmd.getDescription()).append('\n');
-                            });
+                        builder.append('/').append(cmd.getName());// /cmd - дададая | /cmd <да-да я> - описание
+                        if (cmd.getArguments() != null && !cmd.getArguments().isEmpty()) {
+                            builder.append(' ').append(cmd.getArguments());
+                        }
+                        builder.append(" - ").append(cmd.getDescription()).append('\n');
+                    });
             sender.sendMessageFromHisChat(builder.toString());
         } else if (args.length == 2) {
             if(args[1].equalsIgnoreCase("math")) {
