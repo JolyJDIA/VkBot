@@ -16,14 +16,22 @@ public class TickPerSecondCommand extends Command {
         if (args.length == 1) {
             long totalMemory = Runtime.getRuntime().totalMemory();
             long freeMemory = Runtime.getRuntime().freeMemory();
-            @NonNls String sb =
-                    "TPS: " + Bot.getScheduler().getAverageTPS() +
+            StringBuilder builder = new StringBuilder("tps за последние:\n1м | 5м | 15м:\n");
+            for (double tps : Bot.getScheduler().getAverageTPS()) {
+                builder.append(format(tps)).append(", ");
+            }
+            @NonNls String sb = builder.substring(0, builder.length()-2) +
+                    "\n-------------------------------------"+
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
                     "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory);
             sender.sendMessageFromHisChat(sb);
-
         }
+    }
+    @NotNull
+    @NonNls
+    private static String format(double tps) {
+        return ((tps > 20.0) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
     }
     private static String humanReadableByteCount(long bytes) {
         if (bytes < 1000) {

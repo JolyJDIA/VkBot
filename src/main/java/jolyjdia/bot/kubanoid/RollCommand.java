@@ -5,8 +5,6 @@ import api.storage.User;
 import api.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
-
 public class RollCommand extends Command {
     RollCommand() {
         super("roll");
@@ -15,7 +13,7 @@ public class RollCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            sender.sendMessageFromHisChat(String.valueOf(new Random().nextInt(100) + 1));
+            sender.sendMessageFromHisChat(String.valueOf(MathUtils.RANDOM.nextInt(100) + 1));
         } else if(args.length == 2) {
             sender.sendMessageFromHisChat(String.valueOf(MathUtils.random(null, args[1])));
         } else if(args.length == 3) {

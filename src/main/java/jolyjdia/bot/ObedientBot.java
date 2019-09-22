@@ -129,6 +129,7 @@ public final class ObedientBot implements RoflanBot {
 
     @Override
     public void sendMessage(String msg, int peerId) {
+        System.out.println(Thread.currentThread().getId());
         try {
             send().peerId(peerId).message(msg).execute();
         } catch (ApiException | ClientException ignored) {}

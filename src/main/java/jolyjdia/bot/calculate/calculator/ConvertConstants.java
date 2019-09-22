@@ -1,19 +1,15 @@
 package jolyjdia.bot.calculate.calculator;
 
+import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ConvertConstants {
-    private static final Map<String, Double> DOUBLE_MAP = new HashMap<>(2);
+    private static final Map<String, Double> DOUBLE_MAP = ImmutableMap.of("pi", Math.PI, "e", Math.E);
     @NonNls private final List<? super String> userInpList;
-    static {
-        DOUBLE_MAP.put("pi", Math.PI);
-        DOUBLE_MAP.put("e", Math.E);
-    }
 
     @Contract(pure = true)
     public ConvertConstants(List<? super String> userInpList) {

@@ -3,6 +3,6 @@ package api.scheduler;
 @FunctionalInterface
 public interface TypeTask {
     //invert
-    default boolean isSync() { return true; }
+    default boolean isAsync() { return false; }
     void cancel();
 }

@@ -10,7 +10,7 @@ public class TaskAsync extends Task {
 
     @Contract(pure = true)
     @Override
-    public final boolean isSync() {
-        return false;
+    public final boolean isAsync() {
+        return true;
     }
 }

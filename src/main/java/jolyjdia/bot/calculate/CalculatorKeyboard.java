@@ -1,6 +1,7 @@
 package jolyjdia.bot.calculate;
 
 import api.utils.KeyboardUtils;
+import com.google.common.collect.ImmutableList;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import jolyjdia.bot.calculate.calculator.MathFunctions;
@@ -12,7 +13,6 @@ import java.util.List;
 
 final class CalculatorKeyboard {
     static final List<List<KeyboardButton>> BOARD = new ArrayList<>(7);
-
     @Contract(pure = true)
     private CalculatorKeyboard() {}
 
@@ -32,10 +32,11 @@ final class CalculatorKeyboard {
         }
     }
     private static void renderAction() {
-        final List<KeyboardButton> keyboardButtons = new ArrayList<>(3);
-        keyboardButtons.add(KeyboardUtils.create("C", KeyboardButtonColor.NEGATIVE));
-        keyboardButtons.add(KeyboardUtils.create("<=", KeyboardButtonColor.NEGATIVE));
-        keyboardButtons.add(KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE));
+        final List<KeyboardButton> keyboardButtons = ImmutableList.of(
+                KeyboardUtils.create("C", KeyboardButtonColor.NEGATIVE),
+                KeyboardUtils.create("<=", KeyboardButtonColor.NEGATIVE),
+                KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE)
+        );
         BOARD.add(keyboardButtons);
     }
     private static void renderOperation() {

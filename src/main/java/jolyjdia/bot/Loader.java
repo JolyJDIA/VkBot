@@ -15,12 +15,14 @@ public class Loader {
 
     public static void main(String[] args) throws ClientException, ApiException, InterruptedException {
         ObedientBot bot = new ObedientBot();
-        new Thread(new EventUpdater(new CallbackApiLongPollHandler(vkApiClient, bot.getGroupActor()))).start();
-
+        new Thread(
+                new EventUpdater(new CallbackApiLongPollHandler(vkApiClient, bot.getGroupActor()))
+        ).start();
         while (!Thread.currentThread().isInterrupted()) {
             bot.getScheduler().mainThreadHeartbeat();
             Thread.sleep(50);
         }
+
     }
     private static final class EventUpdater implements Runnable {
         private final CallbackApiLongPollHandler handler;

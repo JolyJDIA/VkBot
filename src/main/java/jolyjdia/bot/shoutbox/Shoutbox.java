@@ -1,5 +1,6 @@
 package jolyjdia.bot.shoutbox;
 
+import jolyjdia.bot.Loader;
 import jolyjdia.bot.shoutbox.similarity.Cosine;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -31,7 +33,7 @@ final class Shoutbox {
 
     static {
         try (Stream<String> stream = Files.lines(Paths.get(
-                "D:\\IdeaProjects\\VkBot\\src\\main\\resources\\base.txt"
+                Objects.requireNonNull(Loader.class.getClassLoader().getResource("base.txt")).getFile()
         ), StandardCharsets.UTF_8))  {
             stream.forEach(line -> {
                 String[] txt = SPLIT.split(line.trim());

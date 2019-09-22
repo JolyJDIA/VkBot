@@ -17,16 +17,16 @@ public class BotScheduler {
     private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
     private final TimingsHandler timingsHandler = new TimingsHandler();
 
-   public final void mainThreadHeartbeat() {
+    public final void mainThreadHeartbeat() {
         timingsHandler.tick();
         Iterator<Task> iterator = taskQueue.iterator();
         while (iterator.hasNext()) {
             Task task = iterator.next();
             if (task.getCurrentTick() >= task.getPeriod()) {
-                if (task.isSync()) {
-                    task.run();
-                } else {
+                if (task.isAsync()) {
                     executor.execute(task);
+                } else {
+                    task.run();
                 }
                 if (task.getPeriod() <= Task.NO_REPEATING) {
                     iterator.remove();
@@ -39,7 +39,7 @@ public class BotScheduler {
         }
     }
     @Contract(pure = true)
-    public final int getAverageTPS() {
+    public final double[] getAverageTPS() {
         return timingsHandler.getAverageTPS();
     }
 
@@ -81,7 +81,6 @@ public class BotScheduler {
     public final Task runTaskAsynchronously(Consumer<Task> consumer) {
         return async(consumer, Task.NO_REPEATING, Task.NO_REPEATING);
     }
-    @Deprecated
     @NotNull
     public final Task scheduleAsyncRepeatingTask(Runnable runnable, int delay, int period) {
         return async(runnable, delay, period);
