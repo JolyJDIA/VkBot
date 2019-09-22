@@ -69,8 +69,7 @@ public final class ObedientBot implements RoflanBot {
         }
         Bot.setBot(this);
         registerModules();
-        moduleLoader.getModules().forEach(Module::onLoad);
-        helpCommand.initializeCommands();
+        loadModule();
     }
     private void registerModules() {
         moduleLoader.registerModule(new CalculatorRegister());
@@ -80,6 +79,10 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.registerModule(new ShoutboxMain());
         moduleLoader.registerModule(new KubanoidLoad());
         moduleLoader.registerModule(new GeneratorPassword());
+    }
+    private void loadModule() {
+        moduleLoader.getModules().forEach(Module::onLoad);
+        helpCommand.initializeHelp();
     }
 
     @Contract(pure = true)

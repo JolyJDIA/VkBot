@@ -8,7 +8,7 @@ public class HelpAllCommands {
     private String helpCommand;
     private String helpMath;
 
-    public final void initializeCommands() {
+    public final void initializeHelp() {
         StringBuilder builder = new StringBuilder();
         Bot.getBotManager().getRegisteredCommands().stream()
                 .filter(cmd -> cmd.getDescription() != null && !cmd.getDescription().isEmpty())
