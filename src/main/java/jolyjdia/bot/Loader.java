@@ -22,7 +22,6 @@ public class Loader {
             bot.getScheduler().mainThreadHeartbeat();
             Thread.sleep(50);
         }
-
     }
     private static final class EventUpdater implements Runnable {
         private final CallbackApiLongPollHandler handler;

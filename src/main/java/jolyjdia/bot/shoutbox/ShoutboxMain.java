@@ -31,9 +31,9 @@ public class ShoutboxMain implements Module, Listener {
         Message msg = e.getMessage();
         String text = E.matcher(msg.getText().toLowerCase(Locale.ENGLISH)).replaceAll("е");
         if (speakChat.contains(msg.getPeerId()) || text.startsWith(PREFIX)) {
-            if (Shoutbox.COSINE.similarity(text, "Хватит болтать") > 0.6) {
+            if (Shoutbox.COSINE.similarity(text, "хватит болтать") > 0.6) {
                 speakChat.remove(msg.getPeerId());
-            } else if (Shoutbox.COSINE.similarity(text, "Давай поболтаем") > 0.7) {
+            } else if (Shoutbox.COSINE.similarity(text, "давай поболтаем") > 0.7) {
                 speakChat.add(msg.getPeerId());
             }
             Bot.sendMessage(Shoutbox.generateResponse(text), msg.getPeerId());

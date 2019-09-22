@@ -3,6 +3,7 @@ package jolyjdia.bot;
 import api.Bot;
 import api.BotManager;
 import api.RoflanBot;
+import api.command.HelpAllCommands;
 import api.module.Module;
 import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
@@ -37,6 +38,7 @@ public final class ObedientBot implements RoflanBot {
     private final BotManager manager = new BotManager();
     private final Properties properties = new Properties();
     private final ModuleLoader moduleLoader = new ModuleLoader();
+    private final HelpAllCommands helpCommand = new HelpAllCommands();
     private final String accessToken;
     private final int groupId;
     private final GroupActor groupActor;
@@ -68,6 +70,7 @@ public final class ObedientBot implements RoflanBot {
         Bot.setBot(this);
         registerModules();
         moduleLoader.getModules().forEach(Module::onLoad);
+        helpCommand.initializeCommands();
     }
     private void registerModules() {
         moduleLoader.registerModule(new CalculatorRegister());
@@ -77,6 +80,12 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.registerModule(new ShoutboxMain());
         moduleLoader.registerModule(new KubanoidLoad());
         moduleLoader.registerModule(new GeneratorPassword());
+    }
+
+    @Contract(pure = true)
+    @Override
+    public HelpAllCommands getHelpCommand() {
+        return helpCommand;
     }
 
     @Contract(pure = true)
@@ -129,9 +138,12 @@ public final class ObedientBot implements RoflanBot {
 
     @Override
     public void sendMessage(String msg, int peerId) {
-        try {
-            send().peerId(peerId).message(msg).execute();
-        } catch (ApiException | ClientException ignored) {}
+        Bot.getScheduler().runTask(() -> {
+            try {
+                send().peerId(peerId).message(msg).execute();
+            } catch (ApiException | ClientException ignored) {
+            }
+        });
     }
 
     @Override

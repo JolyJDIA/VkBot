@@ -1,5 +1,6 @@
 package api;
 
+import api.command.HelpAllCommands;
 import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
 import api.storage.ProfileList;
@@ -17,6 +18,9 @@ public final class Bot {
             throw new UnsupportedOperationException("Cannot redefine singleton Bot");
         }
         roflanBot = bot;
+    }
+    public static HelpAllCommands getHelpCommand() {
+        return roflanBot.getHelpCommand();
     }
     public static int getGroupId() {
         return roflanBot.getGroupId();

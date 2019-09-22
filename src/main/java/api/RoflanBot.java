@@ -1,5 +1,6 @@
 package api;
 
+import api.command.HelpAllCommands;
 import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
 import api.storage.ProfileList;
@@ -19,5 +20,6 @@ public interface RoflanBot {
     String getAccessToken();
     Properties getConfig();
     GroupActor getGroupActor();
+    HelpAllCommands getHelpCommand();
     ModuleLoader getModuleLoader();
 }
