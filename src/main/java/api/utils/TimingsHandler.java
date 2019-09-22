@@ -3,8 +3,8 @@ package api.utils;
 import org.jetbrains.annotations.Contract;
 
 public class TimingsHandler {
-    private final double[] recentTps = {20,20,20};
     private static final int SAMPLE_INTERVAL = 100;
+    private final double[] recentTps = {20,20,20};
     private long tickSection = System.currentTimeMillis();
     private long tickCount = 1;
 
