@@ -1,50 +1,61 @@
 package jolyjdia.bot;
 
 import api.Bot;
+import com.google.gson.JsonObject;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
-import jolyjdia.bot.calculate.CalculatorRegister;
-import jolyjdia.bot.geo.GeoLoad;
-import jolyjdia.bot.kubanoid.KubanoidLoad;
-import jolyjdia.bot.password.GeneratorPassword;
-import jolyjdia.bot.puzzle.Puzzle;
-import jolyjdia.bot.shoutbox.ShoutboxMain;
-import jolyjdia.bot.translator.YandexTraslate;
+import com.vk.api.sdk.objects.callback.longpoll.responses.GetLongPollEventsResponse;
+import com.vk.api.sdk.objects.groups.LongPollServer;
 import org.jetbrains.annotations.Contract;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Loader {
     private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
 
-    public static void main(String[] args) throws ClientException, ApiException {
-        Bot.setBot(new ObedientBot());
-        CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(vkApiClient, Bot.getGroupActor());
-        registerModules();
-        new Timer(true).scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Bot.getScheduler().mainThreadHeartbeat();
-            }
-        }, 0, 50);
-        handler.run();
-    }
-    private static void registerModules() {
-        new CalculatorRegister().onLoad();
-        new YandexTraslate().onLoad();
-        new GeoLoad().onLoad();
-        new Puzzle().onLoad();
-        new ShoutboxMain().onLoad();
-        new KubanoidLoad().onLoad();
-        new GeneratorPassword().onLoad();
-    }
+    public static void main(String[] args) throws ClientException, ApiException, InterruptedException {
+        ObedientBot bot = new ObedientBot();
+        new Thread(new EventUpdater(new CallbackApiLongPollHandler(vkApiClient, bot.getGroupActor()))).start();
 
+        while (!Thread.currentThread().isInterrupted()) {
+            bot.getScheduler().mainThreadHeartbeat();
+            Thread.sleep(50);
+        }
+    }
+    private static final class EventUpdater implements Runnable {
+        private final CallbackApiLongPollHandler handler;
+
+        @Contract(pure = true)
+        private EventUpdater(CallbackApiLongPollHandler hander) {
+            this.handler = hander;
+        }
+        @Override
+        public void run() {
+            try {
+                LongPollServer longPollServer = getLongPollServer();
+                int lastTimeStamp = Integer.parseInt(longPollServer.getTs());
+                while (!Thread.currentThread().isInterrupted()) {
+                    GetLongPollEventsResponse eventsResponse = vkApiClient
+                            .longPoll()
+                            .getEvents(longPollServer.getServer(), longPollServer.getKey(), lastTimeStamp)
+                            .waitTime(25)
+                            .execute();
+                    for (JsonObject jsonObject : eventsResponse.getUpdates()) {
+                        handler.parse(jsonObject);
+                    }
+                    lastTimeStamp = eventsResponse.getTs();
+                    Thread.sleep(50);
+                }
+            } catch (ClientException | ApiException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        private static LongPollServer getLongPollServer() throws ClientException, ApiException {
+            return vkApiClient.groupsLongPoll().getLongPollServer(Bot.getGroupActor(), Bot.getGroupId()).execute();
+        }
+    }
     @Contract(pure = true)
     public static VkApiClient getVkApiClient() {
         return vkApiClient;
     }
-
 }

@@ -1,17 +1,19 @@
 package api.scheduler;
 
 import api.utils.TimingsHandler;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 public class BotScheduler {
-    //Второй поток
-    //private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
+    private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
     private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
     private final TimingsHandler timingsHandler = new TimingsHandler();
 
@@ -23,8 +25,8 @@ public class BotScheduler {
             if (task.getCurrentTick() >= task.getPeriod()) {
                 if (task.isSync()) {
                     task.run();
-                /*} else {
-                    executor.execute(task);*/
+                } else {
+                    executor.execute(task);
                 }
                 if (task.getPeriod() <= Task.NO_REPEATING) {
                     iterator.remove();
@@ -37,7 +39,7 @@ public class BotScheduler {
         }
     }
     @Contract(pure = true)
-    public final double getAverageTPS() {
+    public final int getAverageTPS() {
         return timingsHandler.getAverageTPS();
     }
 
@@ -71,12 +73,10 @@ public class BotScheduler {
         return sync(consumer, delay, Task.NO_REPEATING);
     }
 
-    @Deprecated
     @NotNull
     public final Task runTaskAsynchronously(Runnable runnable) {
         return async(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
     }
-    @Deprecated
     @NotNull
     public final Task runTaskAsynchronously(Consumer<Task> consumer) {
         return async(consumer, Task.NO_REPEATING, Task.NO_REPEATING);
@@ -86,17 +86,14 @@ public class BotScheduler {
     public final Task scheduleAsyncRepeatingTask(Runnable runnable, int delay, int period) {
         return async(runnable, delay, period);
     }
-    @Deprecated
     @NotNull
     public final Task scheduleAsyncRepeatingTask(Consumer<Task> consumer, int delay, int period) {
         return async(consumer, delay, period);
     }
-    @Deprecated
     @NotNull
     public final Task scheduleAsyncDelayTask(Runnable runnable, int delay) {
         return async(runnable, delay, Task.NO_REPEATING);
     }
-    @Deprecated
     @NotNull
     public final Task scheduleAsyncDelayTask(Consumer<Task> consumer, int delay) {
         return async(consumer, delay, Task.NO_REPEATING);

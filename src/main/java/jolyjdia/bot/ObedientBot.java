@@ -1,7 +1,9 @@
 package jolyjdia.bot;
 
+import api.Bot;
 import api.BotManager;
 import api.RoflanBot;
+import api.module.Module;
 import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
 import api.storage.ProfileList;
@@ -54,19 +56,20 @@ public final class ObedientBot implements RoflanBot {
         if (settings == null) {
             return;
         }
-        if (settings.getIsEnabled()) {
-            return;
+        if (!settings.getIsEnabled()) {
+            Loader.getVkApiClient().groups()
+                    .setLongPollSettings(groupActor, groupId)
+                    .enabled(true)
+                    .wallPostNew(true)
+                    .messageNew(true)
+                    .audioNew(true)
+                    .execute();
         }
-        Loader.getVkApiClient().groups()
-                .setLongPollSettings(groupActor, groupId)
-                .enabled(true)
-                .wallPostNew(true)
-                .messageNew(true)
-                .audioNew(true)
-                .execute();
+        Bot.setBot(this);
         registerModules();
+        moduleLoader.getModules().forEach(Module::onLoad);
     }
-    private  void registerModules() {
+    private void registerModules() {
         moduleLoader.registerModule(new CalculatorRegister());
         moduleLoader.registerModule(new YandexTraslate());
         moduleLoader.registerModule(new GeoLoad());
@@ -126,29 +129,23 @@ public final class ObedientBot implements RoflanBot {
 
     @Override
     public void sendMessage(String msg, int peerId) {
-        scheduler.runTask(() -> {
-            try {
-                send().peerId(peerId).message(msg).execute();
-            } catch (ApiException | ClientException ignored) {}
-        });
+        try {
+            send().peerId(peerId).message(msg).execute();
+        } catch (ApiException | ClientException ignored) {}
     }
 
     @Override
     public void sendKeyboard(String msg, int peerId, Keyboard keyboard) {
-        scheduler.runTask(() -> {
-            try {
-                send().peerId(peerId).keyboard(keyboard).message(msg).execute();
-            } catch (ApiException | ClientException ignored) {}
-        });
+        try {
+            send().peerId(peerId).keyboard(keyboard).message(msg).execute();
+        } catch (ApiException | ClientException ignored) {}
     }
 
     @Override
     public void editChat(String title, int peerId) {
-        scheduler.runTask(() -> {
-            try {
-                Loader.getVkApiClient().messages().editChat(groupActor, peerId - 2000000000, title).execute();
-            } catch (ApiException | ClientException ignored) {}
-        });
+        try {
+            Loader.getVkApiClient().messages().editChat(groupActor, peerId - 2000000000, title).execute();
+        } catch (ApiException | ClientException ignored) {}
     }
     private MessagesSendQuery send() {
         return Loader.getVkApiClient().messages()

@@ -17,6 +17,5 @@ public class ModuleLoader {
     }
     public final void registerModule(Module module) {
         modules.add(module);
-        module.onLoad();
     }
 }
