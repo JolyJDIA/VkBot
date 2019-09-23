@@ -2,10 +2,7 @@ package api;
 
 import api.command.Command;
 import api.command.defaults.*;
-import api.event.Event;
-import api.event.EventLabel;
-import api.event.EventPriority;
-import api.event.Listener;
+import api.event.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +38,7 @@ public final class BotManager {
             if (!Event.class.isAssignableFrom(parameter)) {
                 continue;
             }
+            EventLabel label = method.getAnnotation(EventLabel.class);
             listeners.add(new Handler(event -> {
                 if (!event.getClass().isAssignableFrom(parameter)) {
                     return;
@@ -50,7 +48,7 @@ public final class BotManager {
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-            }, method.getAnnotation(EventLabel.class).priority()));
+            }, label.priority(), label.ignoreCancelled()));
         }
         listeners.sort((o1, o2) -> o2.compareTo(o1.priority));
     }
@@ -87,18 +85,24 @@ public final class BotManager {
     public static class Handler implements Comparable<EventPriority>, Consumer<Event> {
         final Consumer<? super Event> consumer;
         final EventPriority priority;
+        final boolean ignoreCancelled;
 
         @Contract(pure = true)
-        Handler(Consumer<? super Event> consumer, EventPriority priority) {
+        Handler(Consumer<? super Event> consumer, EventPriority priority, boolean ignoreCancelled) {
             this.consumer = consumer;
             this.priority = priority;
+            this.ignoreCancelled = ignoreCancelled;
         }
 
         @Override
-        public final void accept(Event event) {
+        public final void accept(@NotNull Event event) {
+            if (Cancellable.class.isAssignableFrom(event.getClass())) {
+                if (((Cancellable) event).isCancelled() && ignoreCancelled) {
+                    return;
+                }
+            }
             consumer.accept(event);
         }
-
         @Override
         public final int compareTo(@NotNull EventPriority handler) {
             return Integer.compare(priority.getSlot(), handler.getSlot());
@@ -120,7 +124,8 @@ public final class BotManager {
                 return false;
             }
             Handler handler = (Handler) o;
-            return Objects.equals(consumer, handler.consumer) &&
+            return ignoreCancelled == handler.ignoreCancelled &&
+                    Objects.equals(consumer, handler.consumer) &&
                     priority == handler.priority;
         }
     }
