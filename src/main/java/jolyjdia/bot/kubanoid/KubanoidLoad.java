@@ -12,8 +12,8 @@ public class KubanoidLoad implements Module, Listener {
 
     @Override
     public final void onLoad() {
-        Bot.getBotManager().registerCommand(new KubanoidCommand());
         Bot.getBotManager().registerEvent(this);
+        Bot.getBotManager().registerCommand(new KubanoidCommand());
         Bot.getBotManager().registerCommand(new RollCommand());
         Bot.getBotManager().registerCommand(new FlipCommand());
     }

@@ -22,11 +22,11 @@ public class GeneratorPassword implements Module, Listener {
                         cooldown.entrySet().removeIf(e -> (e.getValue() - System.currentTimeMillis()) < 1L),
                 0, 50);
     }
-    @EventLabel(ignoreCancelled = true)
+
+    @EventLabel
     public final void onCommand(@NotNull SendCommandEvent e) {
-        System.out.println("dsadas");
         int userId = e.getUser().getUserId();
-        if(cooldown.containsKey(userId)) {
+        if (cooldown.containsKey(userId)) {
             e.getUser().sendMessageFromHisChat("Подождите 1 секунду, перед тем, как использовать команду снова");
             e.setCancelled(true);
         } else {

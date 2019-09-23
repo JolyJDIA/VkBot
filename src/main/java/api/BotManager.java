@@ -41,7 +41,6 @@ public final class BotManager {
             if (!Event.class.isAssignableFrom(parameter)) {
                 continue;
             }
-            EventLabel label = method.getAnnotation(EventLabel.class);
             listeners.add(new Handler(event -> {
                 if (!event.getClass().isAssignableFrom(parameter)) {
                     return;
@@ -51,7 +50,7 @@ public final class BotManager {
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-            }, label.priority(), label.ignoreCancelled()));
+            }, method.getAnnotation(EventLabel.class).priority()));
         }
         listeners.sort((o1, o2) -> o2.compareTo(o1.priority));
     }
@@ -88,23 +87,16 @@ public final class BotManager {
     public static class Handler implements Comparable<EventPriority>, Consumer<Event> {
         final Consumer<? super Event> consumer;
         final EventPriority priority;
-        final boolean ignoreCancelled;
 
         @Contract(pure = true)
-        Handler(Consumer<? super Event> consumer, EventPriority priority, boolean ignoreCancelled) {
+        Handler(Consumer<? super Event> consumer, EventPriority priority) {
             this.consumer = consumer;
             this.priority = priority;
-            this.ignoreCancelled = ignoreCancelled;
-        }
-
-        @Contract(pure = true)
-        public final boolean isIgnoreCancelled() {
-            return ignoreCancelled;
         }
 
         @Override
-        public final void accept(Event t) {
-            consumer.accept(t);
+        public final void accept(Event event) {
+            consumer.accept(event);
         }
 
         @Override
@@ -128,8 +120,7 @@ public final class BotManager {
                 return false;
             }
             Handler handler = (Handler) o;
-            return ignoreCancelled == handler.ignoreCancelled &&
-                    Objects.equals(consumer, handler.consumer) &&
+            return Objects.equals(consumer, handler.consumer) &&
                     priority == handler.priority;
         }
     }

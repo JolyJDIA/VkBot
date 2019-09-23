@@ -1,7 +1,6 @@
 package jolyjdia.bot;
 
 import api.Bot;
-import api.event.Cancellable;
 import api.event.Event;
 import api.event.board.BoardPostEditEvent;
 import api.event.board.BoardPostNewEvent;
@@ -110,13 +109,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         submitEvent(event);
     }
     private static void submitEvent(@NotNull Event event) {
-        Bot.getBotManager().getListeners().forEach(m -> {
-            if (Cancellable.class.isAssignableFrom(event.getClass())) {
-                if (((Cancellable)event).isCancelled() && m.isIgnoreCancelled()) {
-                    return;
-                }
-            }
-            m.accept(event);
-        });
+        Bot.getBotManager().getListeners().forEach(handler -> handler.accept(event));
     }
 }
