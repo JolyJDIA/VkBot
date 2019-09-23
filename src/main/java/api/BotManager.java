@@ -41,6 +41,7 @@ public final class BotManager {
             if (!Event.class.isAssignableFrom(parameter)) {
                 continue;
             }
+            EventLabel label = method.getAnnotation(EventLabel.class);
             listeners.add(new Handler(event -> {
                 if (!event.getClass().isAssignableFrom(parameter)) {
                     return;
@@ -50,7 +51,7 @@ public final class BotManager {
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-            }, method.getAnnotation(EventLabel.class).priority()));
+            }, label.priority(), label.ignoreCancelled()));
         }
         listeners.sort((o1, o2) -> o2.compareTo(o1.priority));
     }
@@ -87,11 +88,18 @@ public final class BotManager {
     public static class Handler implements Comparable<EventPriority>, Consumer<Event> {
         final Consumer<? super Event> consumer;
         final EventPriority priority;
+        final boolean ignoreCancelled;
 
         @Contract(pure = true)
-        Handler(Consumer<? super Event> consumer, EventPriority priority) {
+        Handler(Consumer<? super Event> consumer, EventPriority priority, boolean ignoreCancelled) {
             this.consumer = consumer;
             this.priority = priority;
+            this.ignoreCancelled = ignoreCancelled;
+        }
+
+        @Contract(pure = true)
+        public final boolean isIgnoreCancelled() {
+            return ignoreCancelled;
         }
 
         @Override
@@ -101,7 +109,7 @@ public final class BotManager {
 
         @Override
         public final int compareTo(@NotNull EventPriority handler) {
-            return priority.getSlot() - handler.getSlot();
+            return Integer.compare(priority.getSlot(), handler.getSlot());
         }
 
         @Contract(pure = true)
@@ -120,7 +128,9 @@ public final class BotManager {
                 return false;
             }
             Handler handler = (Handler) o;
-            return Objects.equals(consumer, handler.consumer) && priority == handler.priority;
+            return ignoreCancelled == handler.ignoreCancelled &&
+                    Objects.equals(consumer, handler.consumer) &&
+                    priority == handler.priority;
         }
     }
 }
