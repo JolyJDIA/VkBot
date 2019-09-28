@@ -7,10 +7,11 @@ import api.storage.ProfileList;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Properties;
 
-public final class Bot {
+@NonNls public final class Bot {
     private static RoflanBot roflanBot;
 
     public static void setBot(RoflanBot bot) {

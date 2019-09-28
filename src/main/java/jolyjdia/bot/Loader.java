@@ -9,9 +9,13 @@ import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.callback.longpoll.responses.GetLongPollEventsResponse;
 import com.vk.api.sdk.objects.groups.LongPollServer;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.logging.Logger;
 
 public class Loader {
     private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
+    @NonNls public static Logger LOGGER = Logger.getLogger(Loader.class.getName());
 
     public static void main(String[] args) throws ClientException, ApiException {
         ObedientBot bot = new ObedientBot();

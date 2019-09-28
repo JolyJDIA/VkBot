@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
     public final void onLoad() {
         Bot.getBotManager().registerCommand(new TranslateCommand());
     }
-    @Nullable private static URL url;
+    private static @Nullable URL url;
     static {
         try {
             url = new URL(KEY);
@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
             url = null;
         }
     }
-    @NotNull public static String translate(@NotNull @NonNls Language lang, String input) throws IOException {
+    public static @NotNull String translate(@NotNull @NonNls Language lang, String input) throws IOException {
         @NonNls StringBuilder builder = new StringBuilder();
         if(url == null) {
             return "URL Error";

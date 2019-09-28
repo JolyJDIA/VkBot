@@ -1,6 +1,5 @@
 package jolyjdia.bot.translator;
 
-
 import org.jetbrains.annotations.Contract;
 
 public enum Language {

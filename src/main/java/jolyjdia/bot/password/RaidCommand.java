@@ -7,9 +7,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class RaidCommand extends Command {
-    private static final String ADMIN =
-            "[id190345817|ЮДЖИН]\n[id323998691|БОГАРДО]\n[id310289867|ЗАВР]\n[id199686399|ЛЕХА]\n";
-    private static final String RAID = ADMIN.repeat(50);
+    private static final String RAID =
+            "[id190345817|ЮДЖИН]\n[id323998691|БОГАРДО]\n[id310289867|ЗАВР]\n[id199686399|ЛЕХА]\n".repeat(50);
 
     private RaidRunnable runnable;
     public RaidCommand() {

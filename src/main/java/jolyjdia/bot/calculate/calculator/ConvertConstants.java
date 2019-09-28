@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ConvertConstants {
-    private static final Map<String, Double> DOUBLE_MAP = ImmutableMap.of("pi", Math.PI, "e", Math.E);
+    private static final Map<String, Double> MATH_CONST = ImmutableMap.of(
+            "pi", Math.PI,
+            "e", Math.E
+    );
     @NonNls private final List<? super String> userInpList;
 
     @Contract(pure = true)
@@ -17,7 +20,7 @@ public class ConvertConstants {
     }
 
     public final void convert() {
-        for (Map.Entry<String, Double> entry : DOUBLE_MAP.entrySet()) {
+        for (Map.Entry<String, Double> entry : MATH_CONST.entrySet()) {
             String constant = entry.getKey();
             for (int i = 0; i < userInpList.size(); i++) {
                 if (userInpList.get(i).equals(constant)) {

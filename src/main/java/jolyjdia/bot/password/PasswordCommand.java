@@ -10,7 +10,8 @@ import java.util.Locale;
 import java.util.Random;
 
 public class PasswordCommand extends Command {
-    @NonNls public static final String STRING = "abcdefghijklmnopqrstuvwxyz0123456789";
+    @NonNls private static final String STRING = "abcdefghijklmnopqrstuvwxyz0123456789";
+
     PasswordCommand() {
         super("password", "[Длина пароля]", "[NEW] генерирует пароль");
     }
@@ -32,8 +33,7 @@ public class PasswordCommand extends Command {
         }
     }
 
-    @NotNull
-    private static String generate(int length) {
+    private static @NotNull String generate(int length) {
         if (length <= 0) {
             return "";
         }

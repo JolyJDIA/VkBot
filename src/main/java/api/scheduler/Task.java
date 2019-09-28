@@ -56,7 +56,7 @@ public class Task implements TypeTask, Runnable {
     public final void addCurrentTick() {
         this.currentTick += 1;
     }
-    @Override
+
     public final void cancel() {
         Bot.getScheduler().cancel(this);
     }

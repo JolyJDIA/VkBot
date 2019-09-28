@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class FileSerializer {
     @Contract(pure = true)
@@ -27,8 +29,7 @@ public final class FileSerializer {
         }
     }
 
-    @Nullable
-    public static Object deserialize(String path) {
+    public static @Nullable Object deserialize(String path) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path))) {
             return in.readObject();
         } catch (FileNotFoundException e) {
@@ -37,5 +38,10 @@ public final class FileSerializer {
             e.printStackTrace();
         }
         return null;
+    }
+    private static final Pattern COMPILE = Pattern.compile("\\\\", Pattern.LITERAL);
+
+    public static String checkSeparator(String url) {
+        return COMPILE.matcher(url).replaceAll(Matcher.quoteReplacement(File.separator));
     }
 }

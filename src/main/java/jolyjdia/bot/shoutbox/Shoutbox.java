@@ -19,15 +19,14 @@ import java.util.stream.Stream;
 /**
  * ГОВНО
  */
-
-final class Shoutbox {
+public final class Shoutbox {
     private static final Pattern TIME = Pattern.compile("%time%");
     private static final Pattern DATE = Pattern.compile("%date%");
     private static final Pattern RANDOM = Pattern.compile("%random%");
-    private static final Pattern OR = Pattern.compile(" ~ ");
-    private static final Map<String, String> DIAGLOG = new HashMap<>();
-    static final Cosine COSINE = new Cosine(2);
-    private static final Pattern SPLIT = Pattern.compile(" : ");
+    public static final Pattern OR = Pattern.compile(" ~ ");
+    public static final Map<String, String> DIAGLOG = new HashMap<>();
+    public static final Cosine COSINE = new Cosine(2);
+    public static final Pattern SPLIT = Pattern.compile(" : ");
 
     static {
         try (Stream<String> stream = Files.lines(Paths.get(
@@ -43,10 +42,8 @@ final class Shoutbox {
     }
     @Contract(pure = true)
     private Shoutbox() {}
-    /**
-     * ГОВНО
-     */
-    private static String replacementKey(@NotNull String text) {
+
+    public static String replacementKey(@NotNull String text) {
         if (text.contains("%time%")) {
             LocalTime time = LocalTime.now();
             text = TIME.matcher(text).replaceAll(time.getHour() + ":" + time.getMinute());
@@ -55,12 +52,8 @@ final class Shoutbox {
         text = RANDOM.matcher(text).replaceAll(String.valueOf(new Random().nextInt(100) + 1));
 
         return text;
-    }/**
-     * ГОВНО
-     *//**
-     * ГОВНО
-     */
-    static String generateResponse(String input) {
+    }
+    public static String generateResponse(String input) {
         double proximity = 0;
         String output = "Произошел сбой, небольшие технические шоколодки";
         for (Map.Entry<String, String> entry : DIAGLOG.entrySet()) {

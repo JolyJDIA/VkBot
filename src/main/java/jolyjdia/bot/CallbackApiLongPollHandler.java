@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
@@ -60,9 +61,8 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                     })
                     .findFirst()
                     .ifPresent(c -> c.execute(user, args));
-
             @NonNls long end = System.currentTimeMillis() - start;
-            System.out.println("КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
+            Loader.LOGGER.log(Level.INFO, "КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
             return;
         }
         System.out.println("СООБЩЕНИЕ: ("+ msg.getText() + ") ЧАТ: " +msg.getPeerId());

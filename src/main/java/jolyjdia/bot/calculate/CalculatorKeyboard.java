@@ -2,9 +2,9 @@ package jolyjdia.bot.calculate;
 
 import api.utils.KeyboardUtils;
 import com.google.common.collect.ImmutableList;
+import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
-import jolyjdia.bot.calculate.calculator.MathFunctions;
 import jolyjdia.bot.calculate.calculator.Parser;
 import org.jetbrains.annotations.Contract;
 
@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 final class CalculatorKeyboard {
-    static final List<List<KeyboardButton>> BOARD = new ArrayList<>(7);
+    private static final ImmutableList.Builder<List<KeyboardButton>> BOARD = ImmutableList.builder();
+    static final Keyboard KEYBOARD;
     @Contract(pure = true)
     private CalculatorKeyboard() {}
 
@@ -20,6 +21,7 @@ final class CalculatorKeyboard {
         renderNumber();
         renderOperation();
         renderAction();
+        KEYBOARD = new Keyboard().setButtons(BOARD.build());
     }
     private static void renderNumber() {
         List<KeyboardButton> list = null;
@@ -32,7 +34,7 @@ final class CalculatorKeyboard {
         }
     }
     private static void renderAction() {
-        final List<KeyboardButton> keyboardButtons = ImmutableList.of(
+        List<KeyboardButton> keyboardButtons = ImmutableList.of(
                 KeyboardUtils.create("C", KeyboardButtonColor.NEGATIVE),
                 KeyboardUtils.create("<=", KeyboardButtonColor.NEGATIVE),
                 KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE)
@@ -49,10 +51,5 @@ final class CalculatorKeyboard {
             }
             operatortButtons.add(KeyboardUtils.create(c, KeyboardButtonColor.PRIMARY));
         }
-        final List<KeyboardButton> advOperatorList = new ArrayList<>(4);
-        for(int i = 0; i < 4; ++i) {
-            advOperatorList.add(KeyboardUtils.create(MathFunctions.ADV_OPERATOR_LIST[i], KeyboardButtonColor.PRIMARY));
-        }
-        BOARD.add(advOperatorList);
     }
 }

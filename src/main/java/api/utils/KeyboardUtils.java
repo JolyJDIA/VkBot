@@ -15,4 +15,7 @@ public final class KeyboardUtils {
                 .setType(KeyboardButtonActionType.TEXT)
                 .setLabel(label));
     }
+    public static KeyboardButton create(KeyboardButtonColor color, KeyboardButtonAction action) {
+        return new KeyboardButton().setColor(color).setAction(action);
+    }
 }

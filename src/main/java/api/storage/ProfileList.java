@@ -37,9 +37,8 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     }
 
 
-    @NotNull
     @Contract(pure = true)
-    public Set<Integer> getChats() {
+    public @NotNull Set<Integer> getChats() {
         return map.keySet();
     }
 
@@ -85,16 +84,14 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     private boolean hasUser(int peerId, int userId) {
         return map.containsKey(peerId) && map.get(peerId).containsKey(userId);
     }
-    @Nullable
-    public User getUser(@NotNull User user) {
+    public @Nullable User getUser(@NotNull User user) {
         if (hasUser(user)) {
             return map.get(user.getPeerId()).get(user.getUserId());
         }
         return null;
     }
 
-    @Nullable
-    public User getUser(int peerId, int userId) {
+    public @Nullable User getUser(int peerId, int userId) {
         if (hasUser(peerId, userId)) {
             return map.get(peerId).get(userId);
         }

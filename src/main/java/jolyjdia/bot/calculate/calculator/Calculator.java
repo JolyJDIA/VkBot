@@ -1,5 +1,7 @@
 package jolyjdia.bot.calculate.calculator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -12,13 +14,9 @@ public class Calculator {
     public Calculator(String userInput) {
         this.formattedUserInput = new Parser().parse(COMPILE.matcher(userInput).replaceAll(""));
     }
-    private final BigDecimal condenseExpression(String operator, int indexVal) {
-        BigDecimal x = BigDecimal.ZERO;
-        BigDecimal y = BigDecimal.ZERO;
-        try {
-            x = new BigDecimal(formattedUserInput.get(indexVal - 1));
-            y = new BigDecimal(formattedUserInput.get(indexVal + 1));
-        } catch (NumberFormatException ignored) {}
+    private final BigDecimal condenseExpression(@NotNull String operator, int indexVal) {
+        BigDecimal x = new BigDecimal(formattedUserInput.get(indexVal - 1));
+        BigDecimal y = new BigDecimal(formattedUserInput.get(indexVal + 1));
 
         BigDecimal output;
         switch (operator) {
@@ -48,9 +46,11 @@ public class Calculator {
     }
 
     public final String solveExpression() {
-        new ConvertConstants(formattedUserInput).convert();
         formattedUserInput = new MathFunctions(formattedUserInput).evaluateFunctions();
+        new ConvertConstants(formattedUserInput).convert();
+
         BigDecimal condense = BigDecimal.ZERO;
+
         try {
             condense = new BigDecimal(formattedUserInput.get(0));
         } catch (NumberFormatException ignored) {}

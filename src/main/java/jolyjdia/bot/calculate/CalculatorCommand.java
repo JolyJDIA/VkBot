@@ -16,7 +16,7 @@ public class CalculatorCommand extends Command {
         if (peerId != sender.getUserId()) {
             return;
         }
-        if(CalculatorManager.containsKey(peerId)) {
+        if(CalculatorManager.isPersonalConversation(peerId, sender.getUserId())) {
             CalculatorManager.closeCalculatorBoard("close", peerId);
         } else {
             CalculatorManager.openCalculatorBoard(peerId);

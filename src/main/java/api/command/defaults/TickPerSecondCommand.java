@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TickPerSecondCommand extends Command {
     public TickPerSecondCommand() {
-        super("gc", "[NEW] производительность");
+        super("gc");
         setAlias("lag", "tps");
     }
     @Override
@@ -28,9 +28,8 @@ public class TickPerSecondCommand extends Command {
             sender.sendMessageFromHisChat(sb);
         }
     }
-    @NotNull
     @NonNls
-    private static String format(double tps) {
+    private static @NotNull String format(double tps) {
         return ((tps > 20.0) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
     }
     private static String humanReadableByteCount(long bytes) {

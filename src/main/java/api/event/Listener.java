@@ -1,4 +1,3 @@
 package api.event;
 
-public interface Listener {
-}
+public interface Listener {}

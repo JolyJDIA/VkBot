@@ -10,8 +10,10 @@ import com.vk.api.sdk.objects.messages.Message;
 import jolyjdia.bot.calculate.calculator.Calculator;
 import org.jetbrains.annotations.NotNull;
 
-public class CalculatorRegister implements Module, Listener {
+import java.util.regex.Pattern;
 
+public class CalculatorRegister implements Module, Listener {
+	private static final Pattern OUTPUT = Pattern.compile("^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$");
 	@Override
 	public final void onLoad() {
 		Bot.getBotManager().registerEvent(this);
@@ -32,10 +34,9 @@ public class CalculatorRegister implements Module, Listener {
 		if (!CalculatorManager.MATH.matcher(text).matches()) {
 			return;
 		}
-
 		Calculator calculator = new Calculator(text);
 		String answer = calculator.solveExpression();
-		if(!CalculatorManager.OUTPUT.matcher(answer).matches()) {
+		if(!OUTPUT.matcher(answer).matches()) {
 			return;
 		}
 		e.getUser().sendMessageFromHisChat(answer);

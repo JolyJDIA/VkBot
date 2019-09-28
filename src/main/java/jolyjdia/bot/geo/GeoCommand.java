@@ -23,6 +23,7 @@ public class GeoCommand extends Command {
     private final DatabaseReader reader;
     private static final Pattern IPV4 =
             Pattern.compile("^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]{1,2})(\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9]{1,2})){3}$");
+
     GeoCommand(DatabaseReader reader) {
         super("geo", "<IP-адрес>",
                 "узнать местоположение по айпи");
@@ -48,8 +49,7 @@ public class GeoCommand extends Command {
             }
         });
     }
-    @NotNull
-    private final String getInfo(String host) {
+    private final @NotNull String getInfo(String host) {
         try {
             InetAddress address = InetAddress.getByName(host);
             CityResponse response = reader.city(address);
@@ -68,7 +68,7 @@ public class GeoCommand extends Command {
                 info += "\nГород: "+cityName;
             }
             info += "\nШирота: " + location.getLatitude() +
-                    "\nдолгота: " + location.getLongitude();
+                    "\nДолгота: " + location.getLongitude();
             return info;
         } catch (UnknownHostException | GeoIp2Exception e) {
             return "Некоторый данные не удалось загрузить(";

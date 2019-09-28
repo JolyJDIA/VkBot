@@ -17,15 +17,13 @@ public final class StringBind {
 
     @Contract(pure = true)
     private StringBind() {}
-
-    @NotNull
-    public static String toString(@NotNull String[] a) {
+    public static @NotNull String toString(int start, @NotNull String[] a) {
         int iMax = a.length - 1;
         if (iMax == -1) {
             return "";
         }
         StringBuilder builder = new StringBuilder();
-        for (int i = 1; ; ++i) {
+        for (int i = start; ; ++i) {
             builder.append(a[i]);
             if (i == iMax) {
                 return builder.toString();
@@ -34,8 +32,11 @@ public final class StringBind {
         }
     }
 
-    @Nullable
-    public static Integer getUserId(@NotNull String s, @NotNull User sender) {
+    public static @NotNull String toString(@NotNull String[] a) {
+        return toString(1, a);
+    }
+
+    public static @Nullable Integer getUserId(@NotNull String s, @NotNull User sender) {
         try {
             int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
             GetConversationMembersResponse g = Loader.getVkApiClient()

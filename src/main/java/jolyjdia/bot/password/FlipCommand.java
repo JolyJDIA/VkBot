@@ -1,4 +1,4 @@
-package jolyjdia.bot.kubanoid;
+package jolyjdia.bot.password;
 
 import api.command.Command;
 import api.storage.User;
