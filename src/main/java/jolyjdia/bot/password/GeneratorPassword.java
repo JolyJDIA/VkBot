@@ -3,6 +3,7 @@ package jolyjdia.bot.password;
 import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
+import api.event.messages.NewMessageEvent;
 import api.event.messages.SendCommandEvent;
 import api.module.Module;
 import com.google.common.collect.Maps;
@@ -33,6 +34,23 @@ public class GeneratorPassword implements Module, Listener {
             e.setCancelled(true);
         } else {
             cooldown.put(userId, System.currentTimeMillis());
+        }
+    }
+    @EventLabel
+    public static void onSmile(@NotNull NewMessageEvent e) {
+        String text = e.getMessage().getText();
+        int peerId = e.getUser().getPeerId();
+        if(text.contains(":ban:")) {
+            Bot.sendMessage(null, peerId, "photo310289867_457244151");
+        }
+        if(text.contains(":god:")) {
+            Bot.sendMessage(null, peerId, "photo310289867_457244147");
+        }
+        if(text.contains(":dog:")) {
+            Bot.sendMessage(null, peerId, "photo310289867_457244146");
+        }
+        if(text.contains(":sit:")) {
+            Bot.sendMessage(null, peerId, "photo310289867_457244143");
         }
     }
 }

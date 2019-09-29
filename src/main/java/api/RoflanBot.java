@@ -10,7 +10,7 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import java.util.Properties;
 
 public interface RoflanBot {
-    void sendMessage(String message, int peerId);
+    void sendMessage(String message, int peerId, String... attachment);
     void sendKeyboard(String message, int peerId, Keyboard keyboard);
     void editChat(String title, int peerId);
     ProfileList getProfileList();

@@ -9,10 +9,10 @@ import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
 import api.storage.ProfileList;
 import api.utils.MathUtils;
+import com.vk.api.sdk.actions.Groups;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.groups.LongPollSettings;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.calculate.CalculatorRegister;
@@ -22,6 +22,7 @@ import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.shoutbox.ShoutboxMain;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,17 +55,22 @@ public final class ObedientBot implements RoflanBot {
         this.accessToken = properties.getProperty("accessToken");
         this.groupActor = new GroupActor(groupId, accessToken);
         Bot.setBot(this);
-        LongPollSettings settings = Loader.getVkApiClient().groups().getLongPollSettings(groupActor, groupId).execute();
-        if (settings == null) {
-            return;
-        }
-        if (!settings.getIsEnabled()) {
-            Loader.getVkApiClient().groups()
-                    .setLongPollSettings(groupActor, groupId)
+
+        Groups groups = Loader.getVkApiClient().groups();
+        if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
+            groups.setLongPollSettings(groupActor, groupActor.getGroupId())
                     .enabled(true)
+                    .apiVersion("5.101")
                     .wallPostNew(true)
                     .messageNew(true)
                     .audioNew(true)
+                    .groupJoin(true)
+                    .groupLeave(true)
+                    .messageReply(true)
+                    .messageEdit(true)
+                    .messageAllow(true)
+                    .messageDeny(true)
+                    .messageTypingState(true)
                     .execute();
         }
         registerModules();
@@ -136,25 +142,30 @@ public final class ObedientBot implements RoflanBot {
     public BotScheduler getScheduler() {
         return scheduler;
     }
-
     @Override
-    public void sendMessage(String msg, int peerId) {
+    public void sendMessage(String msg, int peerId, String... attachments) {
         try {
-            send().peerId(peerId).message(msg).execute();
+            MessagesSendQuery messagesSendQuery = send().peerId(peerId);
+            if(msg != null && !msg.isEmpty()) {
+                messagesSendQuery.message(msg);
+            }
+            String attachment = builderAttachment(attachments);
+            if(!attachment.isEmpty()) {
+                messagesSendQuery.attachment(attachment);
+            }
+            messagesSendQuery.execute();
         } catch (ApiException | ClientException ignored) {}
     }
-
     @Override
     public void sendKeyboard(String msg, int peerId, Keyboard keyboard) {
         try {
             send().peerId(peerId).keyboard(keyboard).message(msg).execute();
         } catch (ApiException | ClientException ignored) {}
     }
-
     @Override
     public void editChat(String title, int peerId) {
         try {
-            Loader.getVkApiClient().messages().editChat(groupActor, peerId - 2000000000, title).execute();
+            Loader.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId - 2000000000, title).execute();
         } catch (ApiException | ClientException ignored) {}
     }
     private MessagesSendQuery send() {
@@ -162,5 +173,15 @@ public final class ObedientBot implements RoflanBot {
                 .send(groupActor)
                 .randomId(MathUtils.RANDOM.nextInt(10000))
                 .groupId(groupId);
+    }
+    private static String builderAttachment(@NotNull String... attachments) {
+        StringBuilder builder = new StringBuilder();
+        for (String s : attachments) {
+            builder.append(s).append(", ");
+        }
+        if (attachments.length >= 1) {
+            return builder.substring(0, builder.length()-2);
+        }
+        return builder.toString();
     }
 }

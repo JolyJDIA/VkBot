@@ -42,9 +42,9 @@ public class GeoLoad implements Module {
                     }
                     String reply = String.format(HappyBirthdayBoatCommand.TO, days);
                     for (int id : Bot.getProfileList().getChats()) {
-                        Bot.sendMessage(reply, id);
+                      //  Bot.sendMessage(reply, id);
                     }
-                    Bot.editChat(reply, 2000000001);
+                   // Bot.editChat(reply, 2000000001);
                 } else if(LocalTime.now().getHour() > 20) {
                     next = true;
                 }

@@ -48,8 +48,8 @@ import java.util.Properties;
         return roflanBot.getConfig();
     }
 
-    public static void sendMessage(String message, int peerId) {
-        roflanBot.sendMessage(message, peerId);
+    public static void sendMessage(String message, int peerId, String... attachment) {
+        roflanBot.sendMessage(message, peerId, attachment);
     }
 
     public static void sendKeyboard(String message, int peerId, Keyboard keyboard) {
@@ -66,4 +66,5 @@ import java.util.Properties;
     public static ModuleLoader getModuleLoader() {
         return roflanBot.getModuleLoader();
     }
+
 }
