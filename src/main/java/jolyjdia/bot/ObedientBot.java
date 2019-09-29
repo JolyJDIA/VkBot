@@ -23,6 +23,7 @@ import jolyjdia.bot.shoutbox.ShoutboxMain;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -150,7 +151,7 @@ public final class ObedientBot implements RoflanBot {
                 messagesSendQuery.message(msg);
             }
             String attachment = builderAttachment(attachments);
-            if(!attachment.isEmpty()) {
+            if(attachment != null) {
                 messagesSendQuery.attachment(attachment);
             }
             messagesSendQuery.execute();
@@ -174,14 +175,16 @@ public final class ObedientBot implements RoflanBot {
                 .randomId(MathUtils.RANDOM.nextInt(10000))
                 .groupId(groupId);
     }
-    private static String builderAttachment(@NotNull String... attachments) {
-        StringBuilder builder = new StringBuilder();
-        for (String s : attachments) {
-            builder.append(s).append(", ");
+    private static @Nullable String builderAttachment(@NotNull String... attachments) {
+        if (attachments.length > 1) {
+            StringBuilder builder = new StringBuilder();
+            for (String s : attachments) {
+                builder.append(s).append(", ");
+            }
+            return builder.substring(0, builder.length() - 2);
+        } else if(attachments.length == 1) {
+            return attachments[0];
         }
-        if (attachments.length >= 1) {
-            return builder.substring(0, builder.length()-2);
-        }
-        return builder.toString();
+        return null;
     }
 }
