@@ -18,6 +18,10 @@ final class CalculatorKeyboard {
     private CalculatorKeyboard() {}
 
     static {
+        BOARD.add(ImmutableList.of(
+                KeyboardUtils.create("C", KeyboardButtonColor.NEGATIVE),
+                KeyboardUtils.create("<=", KeyboardButtonColor.NEGATIVE))
+        );
         List<KeyboardButton> list = null;
         int sumb = -1;
         int num = 10;
