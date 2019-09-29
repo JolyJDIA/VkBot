@@ -30,6 +30,7 @@ public class BotScheduler {
                 }
                 if (task.getPeriod() <= Task.NO_REPEATING) {
                     iterator.remove();
+                    System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted ("+taskQueue.size()+')');
                     return;
                 }
                 task.setCurrentTickZero();

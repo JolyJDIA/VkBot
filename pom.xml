@@ -15,8 +15,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>LATEST</version>
                 <configuration>
-                    <source>13</source>
-                    <target>13</target>
+                    <source>LATEST</source>
+                    <target>LATEST</target>
                 </configuration>
             </plugin>
         </plugins>

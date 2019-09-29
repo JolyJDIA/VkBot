@@ -36,9 +36,9 @@ public class InfoUserCommand extends Command {
         }
         sender.sendMessageFromHisChat(info);
     }
-    @NotNull
+    @NonNls
     @Contract(pure = true)
-    @NonNls private static String getInfo(String group, String prefix, String suffix) {
+    private static @NotNull String getInfo(String group, String prefix, String suffix) {
         return "Ранг: "+group + '\n' +
                 "Префикс: "+prefix + '\n' +
                 "Суффикс: "+ suffix;

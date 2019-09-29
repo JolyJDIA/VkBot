@@ -27,6 +27,13 @@ public class TickPerSecondCommand extends Command {
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory);
             sender.sendMessageFromHisChat(sb);
         }
+        if(args.length == 2) {
+            try {
+                sender.sendMessageFromHisChat(humanReadableByteCount(Long.parseLong(args[1])));
+            } catch (NumberFormatException e) {
+                sender.sendMessageFromHisChat("Это не число");
+            }
+        }
     }
     @NonNls
     private static @NotNull String format(double tps) {

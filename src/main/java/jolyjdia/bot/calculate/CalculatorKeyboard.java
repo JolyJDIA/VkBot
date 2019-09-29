@@ -13,43 +13,29 @@ import java.util.List;
 
 final class CalculatorKeyboard {
     private static final ImmutableList.Builder<List<KeyboardButton>> BOARD = ImmutableList.builder();
-    static final Keyboard KEYBOARD;
+    static Keyboard KEYBOARD;
     @Contract(pure = true)
     private CalculatorKeyboard() {}
 
     static {
-        renderNumber();
-        renderOperation();
-        renderAction();
-        KEYBOARD = new Keyboard().setButtons(BOARD.build());
-    }
-    private static void renderNumber() {
         List<KeyboardButton> list = null;
-        for(int i = 0; i < 10; ++i) {
+        int sumb = -1;
+        int num = 10;
+        for(int i = 0; i < 12; ++i) {
             if(i % 4 == 0) {
-                list = new ArrayList<>(4);
+                list = new ArrayList<>();
+                list.add(KeyboardUtils.create(String.valueOf(Parser.OPERATORS.charAt(++sumb)), KeyboardButtonColor.NEGATIVE));
                 BOARD.add(list);
+            } else {
+                list.add(KeyboardUtils.create(String.valueOf(--num), KeyboardButtonColor.POSITIVE));
             }
-            list.add(KeyboardUtils.create(String.valueOf(i), KeyboardButtonColor.PRIMARY));
         }
-    }
-    private static void renderAction() {
-        List<KeyboardButton> keyboardButtons = ImmutableList.of(
-                KeyboardUtils.create("C", KeyboardButtonColor.NEGATIVE),
-                KeyboardUtils.create("<=", KeyboardButtonColor.NEGATIVE),
-                KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE)
+        BOARD.add(ImmutableList.of(
+                KeyboardUtils.create("/", KeyboardButtonColor.NEGATIVE),
+                KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE),
+                KeyboardUtils.create("0", KeyboardButtonColor.POSITIVE),
+                KeyboardUtils.create(".", KeyboardButtonColor.NEGATIVE))
         );
-        BOARD.add(keyboardButtons);
-    }
-    private static void renderOperation() {
-        List<KeyboardButton> operatortButtons = null;
-        for(int i = 0; i < Parser.OPERATORS.length(); ++i) {
-            String c = String.valueOf(Parser.OPERATORS.charAt(i));
-            if(i % 4 == 0) {
-                operatortButtons = new ArrayList<>(4);
-                BOARD.add(operatortButtons);
-            }
-            operatortButtons.add(KeyboardUtils.create(c, KeyboardButtonColor.PRIMARY));
-        }
+        KEYBOARD = new Keyboard().setButtons(BOARD.build());
     }
 }

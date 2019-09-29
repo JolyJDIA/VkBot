@@ -53,6 +53,7 @@ public final class ObedientBot implements RoflanBot {
         this.groupId = Integer.parseInt(properties.getProperty("groupId"));
         this.accessToken = properties.getProperty("accessToken");
         this.groupActor = new GroupActor(groupId, accessToken);
+        Bot.setBot(this);
         LongPollSettings settings = Loader.getVkApiClient().groups().getLongPollSettings(groupActor, groupId).execute();
         if (settings == null) {
             return;
@@ -66,7 +67,6 @@ public final class ObedientBot implements RoflanBot {
                     .audioNew(true)
                     .execute();
         }
-        Bot.setBot(this);
         registerModules();
         loadModule();
     }

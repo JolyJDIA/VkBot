@@ -2,38 +2,41 @@ package jolyjdia.bot.calculate;
 
 import api.Bot;
 import api.utils.KeyboardUtils;
-import jolyjdia.bot.calculate.calculator.Calculator;
+import com.google.common.collect.Maps;
+import jolyjdia.bot.calculate.calculator.Calculate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 final class CalculatorManager {
     static final Pattern MATH = Pattern.compile("[a-zA-Z.\\d+\\-*/()^ ]*");
-    private static final Map<Integer, String> history = new HashMap<>();
+    private static final Map<Integer, String> history = Maps.newHashMap();
     @Contract(pure = true)
     private CalculatorManager() {}
 
     static void actionsCalculator(int peerId, @NotNull @NonNls String element) {
         switch (element) {
             case "=":
-                Calculator calculator = new Calculator(history.get(peerId));
+                Calculate calculator = new Calculate(history.get(peerId));
                 String answer = calculator.solveExpression();
                 if (answer.isEmpty()) {
                     return;
                 }
-                closeCalculatorBoard(answer, peerId);
+                Bot.sendMessage(answer, peerId);
+                history.put(peerId, "");
                 break;
             case "C":
                 history.put(peerId, "");
                 break;
             case "<=":
                 String get = history.get(peerId);
+                if (get.isEmpty()) {
+                    return;
+                }
                 String set = get.substring(0, get.length() - 1);
-
                 history.put(peerId, set);
                 if (set.isEmpty()) {
                     return;

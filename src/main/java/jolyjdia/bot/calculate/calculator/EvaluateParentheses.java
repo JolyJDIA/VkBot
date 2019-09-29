@@ -25,7 +25,7 @@ public class EvaluateParentheses {
             innerExpression.append(formattedUserInput.get(t));
         }
 
-        Calculator newExpression = new Calculator(innerExpression.toString());
+        Calculate newExpression = new Calculate(innerExpression.toString());
         this.solvedInnerExpression = newExpression.solveExpression();
 
         if (end >= start + 1) {

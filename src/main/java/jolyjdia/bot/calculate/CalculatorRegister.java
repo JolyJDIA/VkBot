@@ -7,7 +7,7 @@ import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.module.Module;
 import com.vk.api.sdk.objects.messages.Message;
-import jolyjdia.bot.calculate.calculator.Calculator;
+import jolyjdia.bot.calculate.calculator.Calculate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
@@ -34,7 +34,7 @@ public class CalculatorRegister implements Module, Listener {
 		if (!CalculatorManager.MATH.matcher(text).matches()) {
 			return;
 		}
-		Calculator calculator = new Calculator(text);
+		Calculate calculator = new Calculate(text);
 		String answer = calculator.solveExpression();
 		if(!OUTPUT.matcher(answer).matches()) {
 			return;

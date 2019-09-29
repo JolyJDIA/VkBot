@@ -7,16 +7,21 @@ import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-public class Calculator {
+public class Calculate {
     private static final Pattern COMPILE = Pattern.compile(" ");
     private ArrayList<String> formattedUserInput;
 
-    public Calculator(String userInput) {
+    public Calculate(String userInput) {
         this.formattedUserInput = new Parser().parse(COMPILE.matcher(userInput).replaceAll(""));
     }
     private final BigDecimal condenseExpression(@NotNull String operator, int indexVal) {
-        BigDecimal x = new BigDecimal(formattedUserInput.get(indexVal - 1));
-        BigDecimal y = new BigDecimal(formattedUserInput.get(indexVal + 1));
+        BigDecimal x = BigDecimal.ZERO;
+        BigDecimal y = BigDecimal.ZERO;
+
+        try {
+            x = new BigDecimal(formattedUserInput.get(indexVal - 1));
+            y = new BigDecimal(formattedUserInput.get(indexVal + 1));
+        } catch (NumberFormatException ignored) {}
 
         BigDecimal output;
         switch (operator) {
@@ -110,6 +115,8 @@ public class Calculator {
                 i = 0;
             }
         }
-        return formattedUserInput.size() == 1 ? formattedUserInput.get(0) : "";
+        String reply = formattedUserInput.size() == 1 ? formattedUserInput.get(0) : "";
+        this.formattedUserInput = null;
+        return reply;
     }
 }
