@@ -146,7 +146,7 @@ public final class ObedientBot implements RoflanBot {
     @Override
     public void sendMessage(String msg, int peerId, String... attachments) {
         try {
-            MessagesSendQuery messagesSendQuery = send().peerId(peerId);
+            MessagesSendQuery messagesSendQuery = send(peerId);
             if(msg != null && !msg.isEmpty()) {
                 messagesSendQuery.message(msg);
             }
@@ -160,7 +160,7 @@ public final class ObedientBot implements RoflanBot {
     @Override
     public void sendKeyboard(String msg, int peerId, Keyboard keyboard) {
         try {
-            send().peerId(peerId).keyboard(keyboard).message(msg).execute();
+            send(peerId).keyboard(keyboard).message(msg).execute();
         } catch (ApiException | ClientException ignored) {}
     }
     @Override
@@ -169,11 +169,12 @@ public final class ObedientBot implements RoflanBot {
             Loader.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId - 2000000000, title).execute();
         } catch (ApiException | ClientException ignored) {}
     }
-    private MessagesSendQuery send() {
+    private MessagesSendQuery send(int peerId) {
         return Loader.getVkApiClient().messages()
                 .send(groupActor)
                 .randomId(MathUtils.RANDOM.nextInt(10000))
-                .groupId(groupId);
+                .groupId(groupId)
+                .peerId(peerId);
     }
     private static @Nullable String builderAttachment(@NotNull String... attachments) {
         if (attachments.length > 1) {

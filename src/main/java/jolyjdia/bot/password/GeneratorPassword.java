@@ -39,18 +39,17 @@ public class GeneratorPassword implements Module, Listener {
     @EventLabel
     public static void onSmile(@NotNull NewMessageEvent e) {
         String text = e.getMessage().getText();
-        int peerId = e.getUser().getPeerId();
         if(text.contains(":ban:")) {
-            Bot.sendMessage(null, peerId, "photo310289867_457244151");
+            e.getUser().sendMessageFromHisChat(null, "photo310289867_457244151");
         }
         if(text.contains(":god:")) {
-            Bot.sendMessage(null, peerId, "photo310289867_457244147");
+            e.getUser().sendMessageFromHisChat(null, "photo310289867_457244147");
         }
         if(text.contains(":dog:")) {
-            Bot.sendMessage(null, peerId, "photo310289867_457244146");
+            e.getUser().sendMessageFromHisChat(null, "photo310289867_457244146");
         }
         if(text.contains(":sit:")) {
-            Bot.sendMessage(null, peerId, "photo310289867_457244143");
+            e.getUser().sendMessageFromHisChat(null, "photo310289867_457244143");
         }
     }
 }
