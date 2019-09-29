@@ -32,9 +32,9 @@ final class CalculatorKeyboard {
         }
         BOARD.add(ImmutableList.of(
                 KeyboardUtils.create("/", KeyboardButtonColor.NEGATIVE),
-                KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE),
+                KeyboardUtils.create(".", KeyboardButtonColor.NEGATIVE),
                 KeyboardUtils.create("0", KeyboardButtonColor.POSITIVE),
-                KeyboardUtils.create(".", KeyboardButtonColor.NEGATIVE))
+                KeyboardUtils.create("=", KeyboardButtonColor.NEGATIVE))
         );
         KEYBOARD = new Keyboard().setButtons(BOARD.build());
     }

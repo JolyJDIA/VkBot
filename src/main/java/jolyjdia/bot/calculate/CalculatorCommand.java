@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class CalculatorCommand extends Command {
     CalculatorCommand() {
         super("calc", "клавиатура калькулятора(РАБОТАЕТ ТОЛЬКО В ЛИЧНЫХ СООБЩЕНИЯХ)");
-        setAlias("calculator");
+        setAlias("посчитать");
     }
 
     @Override
