@@ -20,6 +20,7 @@ import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.password.GeneratorPassword;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.shoutbox.ShoutboxMain;
+import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -84,6 +85,7 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.registerModule(new Puzzle());
         moduleLoader.registerModule(new ShoutboxMain());
         moduleLoader.registerModule(new GeneratorPassword());
+        moduleLoader.registerModule(new SmileLoad());
     }
     private void loadModule() {
         moduleLoader.getModules().forEach(Module::onLoad);
@@ -137,7 +139,6 @@ public final class ObedientBot implements RoflanBot {
     public BotManager getBotManager() {
         return manager;
     }
-
     @Contract(pure = true)
     @Override
     public BotScheduler getScheduler() {

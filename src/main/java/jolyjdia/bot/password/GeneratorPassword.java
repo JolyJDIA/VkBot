@@ -2,8 +2,6 @@ package jolyjdia.bot.password;
 
 import api.Bot;
 import api.event.EventLabel;
-import api.event.Listener;
-import api.event.messages.NewMessageEvent;
 import api.event.messages.SendCommandEvent;
 import api.module.Module;
 import com.google.common.collect.Maps;
@@ -11,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class GeneratorPassword implements Module, Listener {
+public class GeneratorPassword implements Module {
     private final Map<Integer, Long> cooldown = Maps.newHashMap();
 
     @Override
@@ -20,7 +18,7 @@ public class GeneratorPassword implements Module, Listener {
         Bot.getBotManager().registerCommand(new RaidCommand());
         Bot.getBotManager().registerCommand(new RollCommand());
         Bot.getBotManager().registerCommand(new FlipCommand());
-        Bot.getBotManager().registerEvent(this);
+
         Bot.getScheduler().scheduleSyncRepeatingTask(() ->
                         cooldown.entrySet().removeIf(e -> (e.getValue() - System.currentTimeMillis()) < 1L),
                 0, 50);
@@ -34,22 +32,6 @@ public class GeneratorPassword implements Module, Listener {
             e.setCancelled(true);
         } else {
             cooldown.put(userId, System.currentTimeMillis());
-        }
-    }
-    @EventLabel
-    public static void onSmile(@NotNull NewMessageEvent e) {
-        String text = e.getMessage().getText();
-        if(text.contains(":ban:")) {
-            e.getUser().sendMessageFromHisChat(null, "photo310289867_457244151");
-        }
-        if(text.contains(":god:")) {
-            e.getUser().sendMessageFromHisChat(null, "photo310289867_457244147");
-        }
-        if(text.contains(":dog:")) {
-            e.getUser().sendMessageFromHisChat(null, "photo310289867_457244146");
-        }
-        if(text.contains(":sit:")) {
-            e.getUser().sendMessageFromHisChat(null, "photo310289867_457244143");
         }
     }
 }

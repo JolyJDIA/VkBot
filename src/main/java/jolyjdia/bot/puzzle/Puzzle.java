@@ -20,12 +20,12 @@ public class Puzzle implements Module, Listener {
 
     @Override
     public final void onLoad() {
-        Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
+        /**Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             if (next) {
                 this.generate();
             }
             Bot.sendMessage("Развитие лодки!\n"+getStringFormatAnswer(), 2000000001);
-        }, 15000, 15000);
+        }, 15000, 15000);*/
         Bot.getBotManager().registerCommand(new Puzzle.GeneratePuzzleCommand(this));
         Bot.getBotManager().registerEvent(this);
     }

@@ -15,10 +15,10 @@ public class InfoUserCommand extends Command {
     }
 
     @Override
-    public final void execute(User sender, @NotNull String[] args) {
-        String info;
+    public final void execute(@NotNull User sender, @NotNull String[] args) {
+        @NonNls String info = "Айди-беседа: "+sender.getPeerId()+ '\n';
         if(args.length == 1) {
-            info = getInfo(sender.getGroup(), sender.getPrefix(), sender.getSuffix());
+            info += getInfo(sender.getGroup(), sender.getPrefix(), sender.getSuffix());
         } else if(args.length == 2) {
             Integer id = StringBind.getUserId(args[1], sender);
             if (id == null) {
@@ -30,7 +30,7 @@ public class InfoUserCommand extends Command {
                 return;
             }
 
-            info = getInfo(target.getGroup(), target.getPrefix(), target.getSuffix());
+            info += getInfo(target.getGroup(), target.getPrefix(), target.getSuffix());
         } else {
             return;
         }
