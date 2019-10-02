@@ -32,12 +32,12 @@ public class GeoLoad implements Module {
                 }
                 Bot.editChat(HappyBirthdayBoatCommand.HAPPY, 2000000001);
             }
-            String reply = String.format(HappyBirthdayBoatCommand.TO, days);
-            //Bot.sendMessage(reply, 2000000001);
-            //Bot.sendMessage(reply, 2000000018);
-           // Bot.sendMessage(reply, 2000000013);
+            /**String reply = String.format(HappyBirthdayBoatCommand.TO, days);
+            Bot.sendMessage(reply, 2000000001);
+            Bot.sendMessage(reply, 2000000018);
+            Bot.sendMessage(reply, 2000000013);
 
-           // Bot.editChat(reply, 2000000001);
+            Bot.editChat(reply, 2000000001);*/
 
         } catch (IOException e) {
             e.printStackTrace();

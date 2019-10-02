@@ -33,8 +33,8 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
   //  private final CommandExecutor executor = new CommandExecutor(Runtime.getRuntime().availableProcessors());
 
-    public CallbackApiLongPollHandler(VkApiClient client, GroupActor actor) {
-        super(client, actor);
+    CallbackApiLongPollHandler(VkApiClient client, GroupActor actor) {
+        super(client, actor, 25);
     }
 
     @Override

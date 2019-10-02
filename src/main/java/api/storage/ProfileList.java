@@ -45,8 +45,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     @Override
     public void create() {
         try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
-            pw.print("{");
-            pw.print("}");
+            pw.print("{}");
             pw.flush();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();

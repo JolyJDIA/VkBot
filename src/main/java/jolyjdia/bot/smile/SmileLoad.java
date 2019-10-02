@@ -30,6 +30,8 @@ public class SmileLoad implements Module, Listener {
             .put("bottle", "310289867_457244149")
             .put("uk", "310289867_457244145")
             .put("plak", "310289867_457244150")
+            .put("bb", "310289867_457244175")
+            .put("roflanebalo", "310289867_457244176")
             .build();
     private static final ImmutableList.Builder<List<KeyboardButton>> BOARD = ImmutableList.builder();
 
@@ -62,11 +64,12 @@ public class SmileLoad implements Module, Listener {
         }
         text = text.substring(1);
         text = text.substring(0, text.length()-1);
-        for(Map.Entry<String, String> entry : SMILIES.entrySet()) {
-            if(!text.contains(entry.getKey())) {
-                continue;
+
+        String finalText = text;
+        SMILIES.forEach((key, value) -> {
+            if(finalText.contains(key)) {
+                e.getUser().sendMessageFromHisChat(null, "photo" + value);
             }
-            e.getUser().sendMessageFromHisChat(null, "photo" + entry.getValue());
-        }
+        });
     }
 }

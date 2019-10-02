@@ -1,6 +1,6 @@
 package jolyjdia.bot;
 
-import api.Bot;
+import api.RoflanBot;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -12,17 +12,30 @@ public class Loader {
 
     public static void main(String[] args) throws ClientException, ApiException {
         ObedientBot bot = new ObedientBot();
-        new Thread(new EventUpdater()).start();
+        new Thread(new EventUpdater(bot)).start();
 
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(vkApiClient, bot.getGroupActor());
-        handler.run();
+        try {
+            handler.run();
+        } catch (ApiException | ClientException | RuntimeException e) {
+            System.out.println("ПРОИЗОШЕЛ СБОЙ, ЗАПУСКАЮСЬ ЗАНОВО");
+            handler.run();
+        }
+    }
+    @Contract(pure = true)
+    public static VkApiClient getVkApiClient() {
+        return vkApiClient;
     }
     private static final class EventUpdater implements Runnable {
-
+        private final RoflanBot bot;
+        @Contract(pure = true)
+        private EventUpdater(RoflanBot bot) {
+            this.bot = bot;
+        }
         @Override
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
-                Bot.getScheduler().mainThreadHeartbeat();
+                bot.getScheduler().mainThreadHeartbeat();
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
@@ -30,9 +43,5 @@ public class Loader {
                 }
             }
         }
-    }
-    @Contract(pure = true)
-    public static VkApiClient getVkApiClient() {
-        return vkApiClient;
     }
 }
