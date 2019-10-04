@@ -12,7 +12,7 @@ public class TickPerSecondCommand extends Command {
         setAlias("lag", "tps");
     }
     @Override
-    public final void execute(User sender, @NotNull String[] args) {
+    public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length == 1) {
             long totalMemory = Runtime.getRuntime().totalMemory();
             long freeMemory = Runtime.getRuntime().freeMemory();
@@ -20,13 +20,14 @@ public class TickPerSecondCommand extends Command {
             for (double tps : Bot.getScheduler().getAverageTPS()) {
                 builder.append(format(tps)).append(", ");
             }
-            @NonNls String sb = builder.substring(0, builder.length()-2) +
+            sender.sendMessageFromHisChat(
+                    builder.substring(0, builder.length()-2) +
                     "\n-------------------------------------"+
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
                     "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
-                    "\nСвободно памяти: " + humanReadableByteCount(freeMemory);
-            sender.sendMessageFromHisChat(sb);
+                    "\nСвободно памяти: " + humanReadableByteCount(freeMemory));
         }
+        //удалить
         if(args.length == 2) {
             try {
                 sender.sendMessageFromHisChat(humanReadableByteCount(Long.parseLong(args[1])));

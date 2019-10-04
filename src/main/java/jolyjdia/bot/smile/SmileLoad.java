@@ -6,6 +6,7 @@ import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.module.Module;
 import api.utils.KeyboardUtils;
+import api.utils.MathUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vk.api.sdk.objects.messages.Keyboard;
@@ -58,6 +59,9 @@ public class SmileLoad implements Module, Listener {
         String text = e.getMessage().getText();
         if(text.isEmpty()) {
             return;
+        }
+        if(text.contains("Кодзима") || text.contains("Kojima")) {
+            e.getUser().sendMessageFromHisChat(MathUtils.RANDOM.nextBoolean() ? "ПИДОР" : "ГЕНИЙ");
         }
         if(text.charAt(0) != ':' && !text.endsWith(":")) {
             return;

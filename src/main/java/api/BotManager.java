@@ -19,14 +19,13 @@ public final class BotManager {
         registerCommand(new HelpCommand());
         registerCommand(new ReloadCommand());
         registerCommand(new RankCommand());
+        registerCommand(new InfoUserCommand());
         registerCommand(new SetPrefixCommand());
         registerCommand(new SetSuffixCommand());
-        registerCommand(new EditTitleChatCommand());
-        registerCommand(new UpTimeCommand());
         registerCommand(new TickPerSecondCommand());
+        registerCommand(new EditTitleChatCommand());
         registerCommand(new BroadcastMessageCommand());
-        registerCommand(new CalendarCommand());
-        registerCommand(new InfoUserCommand());
+        registerCommand(new UtilsCommand());
         registerCommand(new HappyBirthdayBoatCommand());
     }
 

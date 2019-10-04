@@ -42,6 +42,9 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         return map.keySet();
     }
 
+    /**
+     * FileChannel
+     */
     @Override
     public void create() {
         try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
@@ -53,6 +56,9 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             e.printStackTrace();
         }
     }
+    /**
+     * FileChannel
+     */
 
     @Override
     public void load() {
@@ -65,6 +71,9 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             e.printStackTrace();
         }
     }
+    /**
+     * FileChannel
+     */
 
     @Override
     public void save() {
