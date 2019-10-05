@@ -68,38 +68,17 @@ public class MathFunctions {
                 evalPrenths.condense(i + 1);
                 double x = Double.parseDouble(evalPrenths.getSolvedInnerExpression());
                 switch (operator) {
-                    case "sqrt":
-                        formattedUserInput.set(i, String.valueOf(Math.sqrt(x)));
-                        break;
-                    case "sin":
-                        formattedUserInput.set(i, String.valueOf(Math.sin(x)));
-                        break;
-                    case "cos":
-                        formattedUserInput.set(i, String.valueOf(Math.cos(x)));
-                        break;
-                    case "tan":
-                        formattedUserInput.set(i, String.valueOf(Math.tan(x)));
-                        break;
-                    case "ln":
-                        formattedUserInput.set(i, String.valueOf(Math.log(x)));
-                        break;
-                    case "abs":
-                        formattedUserInput.set(i, String.valueOf(Math.abs(x)));
-                        break;
-                    case "exp":
-                        formattedUserInput.set(i, String.valueOf(Math.exp(x)));
-                        break;
-                    case "fact":
-                        formattedUserInput.set(i, String.valueOf(factorialOf(x)));
-                        break;
-                    case "arcsin":
-                        formattedUserInput.set(i, String.valueOf(Math.asin(x)));
-                        break;
-                    case "arccos":
-                        formattedUserInput.set(i, String.valueOf(Math.acos(x)));
-                        break;
-                    case "arctan":
-                        formattedUserInput.set(i, String.valueOf(Math.atan(x)));
+                    case "sqrt" -> formattedUserInput.set(i, String.valueOf(Math.sqrt(x)));
+                    case "sin" -> formattedUserInput.set(i, String.valueOf(Math.sin(x)));
+                    case "cos" -> formattedUserInput.set(i, String.valueOf(Math.cos(x)));
+                    case "tan" -> formattedUserInput.set(i, String.valueOf(Math.tan(x)));
+                    case "ln" -> formattedUserInput.set(i, String.valueOf(Math.log(x)));
+                    case "abs" -> formattedUserInput.set(i, String.valueOf(Math.abs(x)));
+                    case "exp" -> formattedUserInput.set(i, String.valueOf(Math.exp(x)));
+                    case "fact" -> formattedUserInput.set(i, String.valueOf(factorialOf(x)));
+                    case "arcsin" -> formattedUserInput.set(i, String.valueOf(Math.asin(x)));
+                    case "arccos" -> formattedUserInput.set(i, String.valueOf(Math.acos(x)));
+                    case "arctan" -> formattedUserInput.set(i, String.valueOf(Math.atan(x)));
                 }
                 formattedUserInput.remove(i + 1);
             }

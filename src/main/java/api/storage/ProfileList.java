@@ -210,6 +210,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         return map;
     }
 
+
     private static class MapTypeToken extends TypeToken<Map<Integer, Map<Integer, User>>> {
     }
 

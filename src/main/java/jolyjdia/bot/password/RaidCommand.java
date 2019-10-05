@@ -20,7 +20,7 @@ public class RaidCommand extends Command {
     public final void execute(User user, @NotNull String[] args) {
         if(args.length == 1) {
             runnable = new RaidRunnable(user);
-            runnable.runTaskTimer(0, 10);
+            runnable.runTaskTimer(0, 2);
         } else if(args.length == 2) {
             if(args[1].equalsIgnoreCase("stop")) {
                 runnable.cancel();

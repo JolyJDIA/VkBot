@@ -1,14 +1,14 @@
 package api.storage;
 
 import api.Bot;
-import api.permission.PermissionGroup;
+import api.permission.PermissionManager;
 import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.Contract;
 
 public class User  {
     @Expose(serialize = false, deserialize = false) private final int peerId;
     @Expose(serialize = false, deserialize = false) private final int userId;
-    private String group = PermissionGroup.DEFAULT;
+    private String group = PermissionManager.DEFAULT;
     private String prefix = "";
     private String suffix = "";
 

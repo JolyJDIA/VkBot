@@ -66,5 +66,4 @@ import java.util.Properties;
     public static ModuleLoader getModuleLoader() {
         return roflanBot.getModuleLoader();
     }
-
 }

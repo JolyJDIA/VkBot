@@ -130,8 +130,7 @@ public abstract class Command {
         return noAccess;
     }
     @Contract(pure = true)
-    @NotNull
-    protected final String getUseCommand() {
+    protected final @NotNull String getUseCommand() {
         return '/' + name + (arguments != null && !arguments.isEmpty() ? ' ' + arguments : "");
     }
 }

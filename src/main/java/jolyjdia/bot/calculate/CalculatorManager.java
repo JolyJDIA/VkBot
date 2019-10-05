@@ -19,7 +19,7 @@ final class CalculatorManager {
 
     static void actionsCalculator(int peerId, @NotNull @NonNls String element) {
         switch (element) {
-            case "=":
+            case "=" -> {
                 Calculate calculator = new Calculate(history.get(peerId));
                 String answer = calculator.solveExpression();
                 if (answer.isEmpty()) {
@@ -27,11 +27,9 @@ final class CalculatorManager {
                 }
                 Bot.sendMessage(answer, peerId);
                 history.put(peerId, "");
-                break;
-            case "C":
-                history.put(peerId, "");
-                break;
-            case "<=":
+            }
+            case "C" -> history.put(peerId, "");
+            case "<=" -> {
                 String get = history.get(peerId);
                 if (get.isEmpty()) {
                     return;
@@ -42,13 +40,14 @@ final class CalculatorManager {
                     return;
                 }
                 Bot.sendMessage(set, peerId);
-                break;
-            default:
+            }
+            default -> {
                 if (MATH.matcher(element).matches()) {
                     history.compute(peerId, (k, v) -> v + element);
                     Bot.sendMessage(history.get(peerId), peerId);
                 } else {
                     closeCalculatorBoard("Я вижу, дружок, тебе не нужен калькулятор", peerId);
+                }
             }
         }
     }

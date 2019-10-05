@@ -8,7 +8,7 @@ public abstract class FileCustom implements FileBuilder {
     private final File file;
 
     @Contract(pure = true)
-    public FileCustom(File file) {
+    protected FileCustom(File file) {
         this.file = file;
     }
 

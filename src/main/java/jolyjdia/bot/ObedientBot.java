@@ -91,7 +91,6 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.getModules().forEach(Module::onLoad);
         helpCommand.initializeHelp();
     }
-
     @Contract(pure = true)
     @Override
     public HelpAllCommands getHelpCommand() {

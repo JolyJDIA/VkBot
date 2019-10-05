@@ -25,27 +25,20 @@ public class Calculate {
 
         BigDecimal output;
         switch (operator) {
-            case "^":
-                output = x.pow(y.intValue());
-                break;
-            case "/":
+            case "^" -> output = x.pow(y.intValue());
+            case "/" -> {
                 if (y.equals(BigDecimal.ZERO)) {
                     return BigDecimal.ZERO;
                 } else {
                     output = x.divide(y, MathContext.DECIMAL128);
                 }
-                break;
-            case "*":
-                output = x.multiply(y);
-                break;
-            case "-":
-                output = x.subtract(y);
-                break;
-            case "+":
-                output = x.add(y);
-                break;
-            default:
+            }
+            case "*" -> output = x.multiply(y);
+            case "-" -> output = x.subtract(y);
+            case "+" -> output = x.add(y);
+            default -> {
                 return BigDecimal.ZERO;
+            }
         }
         return output;
     }
