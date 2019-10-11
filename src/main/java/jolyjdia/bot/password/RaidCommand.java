@@ -21,7 +21,7 @@ public class RaidCommand extends Command {
             "Микрослав",
             "микрочел",
             "кулебяки",
-            "довн"
+            "бой нэкст дор"
     };
 
     private RaidRunnable runnable;
