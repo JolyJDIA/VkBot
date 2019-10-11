@@ -57,7 +57,7 @@ public class RaidCommand extends Command {
                 if(builder.length() <= 0) {
                     return;
                 }
-                runnable = new RaidRunnable(user, builder.toString().repeat(20));
+                runnable = new RaidRunnable(user, builder.toString().repeat(25));
                 runnable.runTaskTimer(0, 2);
             } catch (ApiException | ClientException e) {
                 e.printStackTrace();
