@@ -34,6 +34,7 @@ public class SmileLoad implements Module, Listener {
             .put(":plak:", "310289867_457244150")
             .put(":bb:", "310289867_457244175")
             .put(":roflanebalo:", "310289867_457244176")
+            .put(":др:", "310289867_457244257")
             .build();
     private static final ImmutableList.Builder<List<KeyboardButton>> BOARD = ImmutableList.builder();
 
