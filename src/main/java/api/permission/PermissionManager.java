@@ -6,6 +6,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -16,6 +17,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class PermissionManager extends JsonCustom implements JsonDeserializer<Map<String, PermissionGroup>> {
+    @NonNls public static final String ADMIN = "admin";
+    @NonNls public static final String DEFAULT = "default";
     private final Map<String, PermissionGroup> groups = new HashMap<>();
     private static PermissionManager manager;
 
@@ -32,8 +35,8 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
         manager = new PermissionManager(new File(
                 Objects.requireNonNull(Loader.class.getClassLoader().getResource("permissions.json")).getFile()
         ));
-        addGroup(new PermissionGroup("default", Sets.newHashSet(""), "ПОТРИБЛЯТЬ", null));
-        addGroup(new PermissionGroup("admin", Sets.newHashSet("*"), "АДМИН", null));
+        addGroup(new PermissionGroup(DEFAULT, Sets.newHashSet(""), "ПОТРИБЛЯТЬ", null));
+        addGroup(new PermissionGroup(ADMIN, Sets.newHashSet("*"), "АДМИН", null));
     }
     @Contract(pure = true)
     public static PermissionManager getInstance() {
@@ -61,7 +64,7 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
     }
     @Contract(pure = true)
     public static PermissionGroup getDefault() {
-        return getMapGroup().get("default");
+        return getMapGroup().get(DEFAULT);
     }
 
     /**

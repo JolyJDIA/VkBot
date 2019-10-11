@@ -86,7 +86,7 @@ public final class ProfileList extends JsonCustom implements
                             Boolean isAdmin = e.getIsAdmin();
                             return (e.getMemberId() == userId) && (isAdmin != null && isAdmin);
                         }).findFirst()
-                        .ifPresent(e -> user.setGroup(PermissionManager.getPermGroup("admin")));
+                        .ifPresent(e -> user.setGroup(PermissionManager.getPermGroup(PermissionManager.ADMIN)));
             } catch (ApiException | ClientException e) {
                 e.printStackTrace();
             }
