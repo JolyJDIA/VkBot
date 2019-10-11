@@ -1,4 +1,4 @@
-package jolyjdia.bot.calculate;
+/**package jolyjdia.bot.calculate;
 
 import api.command.Command;
 import api.storage.User;
@@ -22,4 +22,4 @@ public class CalculatorCommand extends Command {
             CalculatorManager.openCalculatorBoard(peerId);
         }
     }
-}
+}*/

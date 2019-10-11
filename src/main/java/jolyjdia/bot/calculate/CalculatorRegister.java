@@ -6,7 +6,6 @@ import api.event.EventPriority;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.module.Module;
-import com.vk.api.sdk.objects.messages.Message;
 import jolyjdia.bot.calculate.calculator.Calculate;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,20 +16,19 @@ public class CalculatorRegister implements Module, Listener {
 	@Override
 	public final void onLoad() {
 		Bot.getBotManager().registerEvent(this);
-		Bot.getBotManager().registerCommand(new CalculatorCommand());
+		//Bot.getBotManager().registerCommand(new CalculatorCommand());
     }
 	@EventLabel(priority = EventPriority.HIGH)
 	public static void onSend(@NotNull NewMessageEvent e) {
-		Message msg = e.getMessage();
-		String text = msg.getText();
+		String text = e.getMessage().getText();
 		if(text.isEmpty()) {
 			return;
 		}
-		int peerId = msg.getPeerId();
+	/*	int peerId = msg.getPeerId();
 		if (CalculatorManager.isPersonalConversation(peerId, msg.getFromId())) {
 			CalculatorManager.actionsCalculator(peerId, text);
 			return;
-		}
+		}*/
 		if (!CalculatorManager.MATH.matcher(text).matches()) {
 			return;
 		}

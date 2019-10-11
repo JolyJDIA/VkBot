@@ -1,7 +1,6 @@
 package api.command;
 
 import api.permission.PermissionGroup;
-import api.permission.PermissionManager;
 import api.storage.User;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
@@ -105,7 +104,7 @@ public abstract class Command {
         if (permission == null || permission.isEmpty()) {
             return true;
         }
-        PermissionGroup group = PermissionManager.getPermGroup(user.getGroup());
+        PermissionGroup group = user.getGroup();
         boolean access = group.hasPermission(permission);
         if(!access) {
             user.sendMessageFromHisChat(noPermissionMessage);
@@ -122,7 +121,7 @@ public abstract class Command {
         if (permission == null || permission.isEmpty()) {
             return false;
         }
-        PermissionGroup group = PermissionManager.getPermGroup(user.getGroup());
+        PermissionGroup group = user.getGroup();
         boolean noAccess = group.notPermission(permission);
         if(noAccess) {
             user.sendMessageFromHisChat(noPermissionMessage);

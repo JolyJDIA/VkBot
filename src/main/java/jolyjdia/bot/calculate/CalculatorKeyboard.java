@@ -1,4 +1,4 @@
-package jolyjdia.bot.calculate;
+/**package jolyjdia.bot.calculate;
 
 import api.utils.KeyboardUtils;
 import com.google.common.collect.ImmutableList;
@@ -44,4 +44,4 @@ final class CalculatorKeyboard {
         );
         KEYBOARD = new Keyboard().setButtons(BOARD.build());
     }
-}
+}*/

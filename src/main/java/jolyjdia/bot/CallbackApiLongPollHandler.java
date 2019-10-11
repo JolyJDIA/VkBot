@@ -39,6 +39,9 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
+        if(msg.getPeerId().equals(msg.getFromId())) {
+            return;
+        }
         MessageAction action = msg.getAction();
         if(action != null && action.getType() == MessageActionStatus.CHAT_KICK_USER) {
             Bot.getProfileList().remove(msg.getPeerId(), msg.getFromId());
@@ -74,6 +77,9 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageReply(Integer groupId, @NotNull Message msg) {
+        if(msg.getPeerId().equals(msg.getFromId())) {
+            return;
+        }
         User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         ReplyMessageEvent event = new ReplyMessageEvent(user, msg);
         submitEvent(event);
@@ -81,6 +87,9 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageEdit(Integer groupId, @NotNull Message msg) {
+        if(msg.getPeerId().equals(msg.getFromId())) {
+            return;
+        }
         User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         EditMessageEvent event = new EditMessageEvent(user, msg);
         submitEvent(event);

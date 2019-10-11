@@ -1,18 +1,11 @@
 package jolyjdia.bot.calculate;
 
-import api.Bot;
-import api.utils.KeyboardUtils;
-import com.google.common.collect.Maps;
-import jolyjdia.bot.calculate.calculator.Calculate;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 import java.util.regex.Pattern;
 
 final class CalculatorManager {
     static final Pattern MATH = Pattern.compile("[a-zA-Z.\\d+\\-*/()^ ]*");
+}
+    /**
     private static final Map<Integer, String> history = Maps.newHashMap();
     @Contract(pure = true)
     private CalculatorManager() {}
@@ -57,10 +50,10 @@ final class CalculatorManager {
     }
     static void openCalculatorBoard(int peerId) {
         history.put(peerId, "");
-        Bot.sendKeyboard("Калькулятор", peerId, CalculatorKeyboard.KEYBOARD);
+       // Bot.sendKeyboard("Калькулятор", peerId, CalculatorKeyboard.KEYBOARD);
     }
     @Contract(pure = true)
     static boolean isPersonalConversation(int peerId, int fromId) {
         return peerId == fromId && history.containsKey(peerId);
     }
-}
+}*/

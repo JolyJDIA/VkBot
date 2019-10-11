@@ -1,6 +1,7 @@
 package api.storage;
 
 import api.Bot;
+import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.Contract;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.Contract;
 public class User  {
     @Expose(serialize = false, deserialize = false) private final int peerId;
     @Expose(serialize = false, deserialize = false) private final int userId;
-    private String group = PermissionManager.DEFAULT;
+    private PermissionGroup group = PermissionManager.getDefault();
     private String prefix = "";
     private String suffix = "";
 
@@ -18,19 +19,19 @@ public class User  {
         this.userId = userId;
     }
     @Contract(pure = true)
-    public User(int peerId, int userId, String group) {
+    public User(int peerId, int userId, PermissionGroup group) {
         this(peerId, userId);
         this.group = group;
     }
 
     @Contract(pure = true)
-    public User(int peerId, int userId, String group, String prefix) {
+    public User(int peerId, int userId, PermissionGroup group, String prefix) {
         this(peerId, userId, group);
         this.prefix = prefix;
     }
 
     @Contract(pure = true)
-    public User(int peerId, int userId, String group, String prefix, String suffix) {
+    public User(int peerId, int userId, PermissionGroup group, String prefix, String suffix) {
         this(peerId, userId, group, prefix);
         this.suffix = suffix;
     }
@@ -45,7 +46,7 @@ public class User  {
     }
 
     @Contract(pure = true)
-    public final String getGroup() {
+    public final PermissionGroup getGroup() {
         return group;
     }
 
@@ -59,7 +60,7 @@ public class User  {
         return prefix;
     }
 
-    public final void setGroup(String group) {
+    public final void setGroup(PermissionGroup group) {
         this.group = group;
     }
     public final void setSuffix(String suffix) {

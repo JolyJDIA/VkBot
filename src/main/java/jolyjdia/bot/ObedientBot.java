@@ -6,6 +6,7 @@ import api.RoflanBot;
 import api.command.HelpAllCommands;
 import api.module.Module;
 import api.module.ModuleLoader;
+import api.permission.PermissionManager;
 import api.scheduler.BotScheduler;
 import api.storage.ProfileList;
 import api.utils.MathUtils;
@@ -29,20 +30,17 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 import java.util.Properties;
 
 public final class ObedientBot implements RoflanBot {
     private final BotScheduler scheduler = new BotScheduler();
-    private final ProfileList profileList = new ProfileList(new File(
-            Objects.requireNonNull(Loader.class.getClassLoader().getResource("users.json")).getFile()
-    ));
     private final BotManager manager = new BotManager();
     private final Properties properties = new Properties();
     private final ModuleLoader moduleLoader = new ModuleLoader();
     private final HelpAllCommands helpCommand = new HelpAllCommands();
     private final String accessToken;
     private final int groupId;
+    private final ProfileList profileList;
     private final GroupActor groupActor;
 
     public ObedientBot() throws ClientException, ApiException {
@@ -56,6 +54,8 @@ public final class ObedientBot implements RoflanBot {
         this.groupId = Integer.parseInt(properties.getProperty("groupId"));
         this.accessToken = properties.getProperty("accessToken");
         this.groupActor = new GroupActor(groupId, accessToken);
+        PermissionManager.registerPermissionGroups();
+        this.profileList = new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
         Bot.setBot(this);
 
         Groups groups = Loader.getVkApiClient().groups();
@@ -91,6 +91,7 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.getModules().forEach(Module::onLoad);
         helpCommand.initializeHelp();
     }
+
     @Contract(pure = true)
     @Override
     public HelpAllCommands getHelpCommand() {

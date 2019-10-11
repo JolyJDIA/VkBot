@@ -25,7 +25,7 @@ public class GeoLoad implements Module {
             Bot.getBotManager().registerCommand(new GeoCommand(reader));
 
             LocalDateTime from = LocalDateTime.now();
-            long days = DAYS.between(from.toLocalDate(), LocalDate.of(2019, 10, 12));
+            long days = DAYS.between(from.toLocalDate(), LocalDate.of(from.getYear(), 10, 12));
             if (days == 0) {
                 for (int id : Bot.getProfileList().getChats()) {
                     Bot.sendMessage(HappyBirthdayBoatCommand.HAPPY, id);

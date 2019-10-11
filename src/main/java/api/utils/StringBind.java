@@ -43,7 +43,6 @@ public final class StringBind {
                     .messages()
                     .getConversationMembers(Bot.getGroupActor(), sender.getPeerId())
                     .execute();
-            System.out.println(g);
             Optional<ConversationMember> member = g.getItems().stream()
                     .filter(m -> m.getMemberId() == id).findFirst();
             return member.map(ConversationMember::getMemberId).orElse(null);

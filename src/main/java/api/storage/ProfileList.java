@@ -1,9 +1,14 @@
 package api.storage;
 
-import api.file.FileCustom;
+import api.Bot;
+import api.file.JsonCustom;
+import api.permission.PermissionGroup;
+import api.permission.PermissionManager;
 import com.google.gson.*;
-import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
+import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,76 +21,37 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class ProfileList extends FileCustom implements JsonDeserializer<Map<Integer, Map<Integer, User>>> {
-    private final Gson gson;
-    private final HashMap<Integer, Map<Integer, User>> map = new HashMap<>();
+public final class ProfileList extends JsonCustom implements
+        JsonDeserializer<Map<Integer, Map<Integer, User>>>,
+        JsonSerializer<Map<Integer, Map<Integer, User>>> {
+    private Map<Integer, Map<Integer, User>> map = new HashMap<>();
 
     public ProfileList(File file) {
         super(file);
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
-        }
-        if (file.length() == 0) {
-            this.create();
-        }
-        this.gson = new GsonBuilder()
+        this.setGson(new GsonBuilder()
                 .registerTypeAdapter(Map.class, this)
                 .setPrettyPrinting()
                 .setExclusionStrategies(new MyExclusionStrategy())
-                .create();
+                .create());
         this.load();
     }
-
-
-    @Contract(pure = true)
-    public @NotNull Set<Integer> getChats() {
-        return map.keySet();
-    }
-
-    /**
-     * FileChannel
-     */
-    @Override
-    public void create() {
-        try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
-            pw.print("{}");
-            pw.flush();
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    /**
-     * FileChannel
-     */
-
     @Override
     public void load() {
         try (FileInputStream fileInputStream = new FileInputStream(getFile());
              InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
-            this.gson.fromJson(inputStreamReader, new MapTypeToken().getType());
+            this.map = this.getGson().fromJson(inputStreamReader, new MapTypeToken().getType());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    /**
-     * FileChannel
-     */
 
-    @Override
-    public void save() {
-        try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
-            pw.print(gson.toJson(map));
-            pw.flush();
-        } catch (UnsupportedEncodingException | FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Contract(pure = true)
+    public @NotNull Set<Integer> getChats() {
+        return map.keySet();
     }
+
     private boolean hasUser(@NotNull User user) {
         return map.containsKey(user.getPeerId()) && map.get(user.getPeerId()).containsKey(user.getUserId());
     }
@@ -113,8 +79,19 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             user = users.get(userId);
         } else {
             user = new User(peerId, userId);
+            //ГАВНО КАКОЕ-ТО
+            try {
+                Loader.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
+                        .stream().filter(e -> {
+                            Boolean isAdmin = e.getIsAdmin();
+                            return (e.getMemberId() == userId) && (isAdmin != null && isAdmin);
+                        }).findFirst()
+                        .ifPresent(e -> user.setGroup(PermissionManager.getPermGroup("admin")));
+            } catch (ApiException | ClientException e) {
+                e.printStackTrace();
+            }
             users.put(userId, user);
-            this.save();
+            this.save(map, new MapTypeToken().getType());
         }
         return user;
     }
@@ -127,9 +104,9 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             consumer.accept(entity);
             users.put(userId, entity);
         }
-        this.save();
+        this.save(map, new MapTypeToken().getType());
     }
-    public void setRank(int peerId, int userId, String rank) {
+    public void setRank(int peerId, int userId, PermissionGroup rank) {
         addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setGroup(rank));
     }
     public void setPrefix(int peerId, int userId, String prefix) {
@@ -138,7 +115,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
     public void setSuffix(int peerId, int userId, String suffix) {
         addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setSuffix(suffix));
     }
-    public void setRank(User user, String rank) {
+    public void setRank(User user, PermissionGroup rank) {
         if(user == null) {
             return;
         }
@@ -167,7 +144,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             return;
         }
         users.remove(user.getUserId());
-        this.save();
+        this.save(map, new MapTypeToken().getType());
     }
 
     public void remove(int peerId, int userId) {
@@ -179,7 +156,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             return;
         }
         users.remove(userId);
-        this.save();
+        this.save(map, new MapTypeToken().getType());
     }
 
     /**
@@ -200,7 +177,7 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
             for (Map.Entry<String, JsonElement> valueEntry : object.entrySet()) {
                 JsonObject element = valueEntry.getValue().getAsJsonObject();
                 int id = Integer.parseInt(valueEntry.getKey());
-                String group = element.get("group").getAsString();
+                PermissionGroup group = PermissionManager.getPermGroup(element.get("group").getAsString());
                 String prefix = element.get("prefix").getAsString();
                 String suffix = element.get("suffix").getAsString();
                 users.put(id, new User(chat, id, group, prefix, suffix));
@@ -210,20 +187,23 @@ public final class ProfileList extends FileCustom implements JsonDeserializer<Ma
         return map;
     }
 
-
-    private static class MapTypeToken extends TypeToken<Map<Integer, Map<Integer, User>>> {
+    @Override
+    public @NotNull JsonElement serialize(@NotNull Map<Integer, Map<Integer, User>> data, Type type, JsonSerializationContext context) {
+        JsonObject object = new JsonObject();
+        for(Map.Entry<Integer, Map<Integer, User>> chat : data.entrySet()) {
+            JsonObject peer = new JsonObject();
+            for(Map.Entry<Integer, User> users : chat.getValue().entrySet()) {
+                JsonObject user = new JsonObject();
+                User account = users.getValue();
+                user.addProperty("group", account.getGroup().getName());
+                user.addProperty("prefix", account.getPrefix());
+                user.addProperty("suffix", account.getSuffix());
+                peer.add(String.valueOf(users.getKey()), user);
+            }
+            object.add(String.valueOf(chat.getKey()), peer);
+        }
+        return object;
     }
 
-    private static class MyExclusionStrategy implements ExclusionStrategy {
-        @Override
-        public final boolean shouldSkipField(@NotNull FieldAttributes f) {
-            return f.getAnnotation(Expose.class) != null;
-        }
-
-        @Contract(pure = true)
-        @Override
-        public final boolean shouldSkipClass(Class<?> c) {
-            return false;
-        }
-    }
+    private static class MapTypeToken extends TypeToken<Map<Integer, Map<Integer, User>>> {}
 }

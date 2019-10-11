@@ -16,5 +16,4 @@ public abstract class FileCustom implements FileBuilder {
     public final File getFile() {
         return file;
     }
-
 }
