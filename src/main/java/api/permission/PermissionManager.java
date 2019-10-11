@@ -32,6 +32,8 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
         manager = new PermissionManager(new File(
                 Objects.requireNonNull(Loader.class.getClassLoader().getResource("permissions.json")).getFile()
         ));
+        addGroup(new PermissionGroup("default", Sets.newHashSet(""), "ПОТРИБЛЯТЬ", null));
+        addGroup(new PermissionGroup("admin", Sets.newHashSet("*"), "АДМИН", null));
     }
     @Contract(pure = true)
     public static PermissionManager getInstance() {
@@ -53,6 +55,11 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
         getMapGroup().put(name, new PermissionGroup(name, Sets.newHashSet(permissions), prefix, null));
         getInstance().save(getMapGroup());
     }
+    private static void addGroup(PermissionGroup group) {
+        getMapGroup().put(group.getName(), group);
+        getInstance().save(getMapGroup());
+    }
+    @Contract(pure = true)
     public static PermissionGroup getDefault() {
         return getMapGroup().get("default");
     }

@@ -27,6 +27,7 @@ public class PermissionGroup {
         this.suffix = suffix;
     }
 
+    @Contract(pure = true)
     public final String getName() {
         return name;
     }
