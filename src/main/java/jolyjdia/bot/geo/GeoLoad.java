@@ -1,18 +1,13 @@
 package jolyjdia.bot.geo;
 
 import api.Bot;
-import api.command.defaults.HappyBirthdayBoatCommand;
 import api.module.Module;
 import com.maxmind.geoip2.DatabaseReader;
 import jolyjdia.bot.Loader;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 public class GeoLoad implements Module {
 
@@ -24,7 +19,7 @@ public class GeoLoad implements Module {
             ).build();
             Bot.getBotManager().registerCommand(new GeoCommand(reader));
 
-            LocalDateTime from = LocalDateTime.now();
+            /**SLocalDateTime from = LocalDateTime.now();
             long days = DAYS.between(from.toLocalDate(), LocalDate.of(from.getYear(), 10, 12));
             if (days == 0) {
                 for (int id : Bot.getProfileList().getChats()) {
@@ -32,7 +27,7 @@ public class GeoLoad implements Module {
                 }
                 Bot.editChat(HappyBirthdayBoatCommand.HAPPY, 2000000001);
             }
-            /**String reply = String.format(HappyBirthdayBoatCommand.TO, days);
+            tring reply = String.format(HappyBirthdayBoatCommand.TO, days);
             Bot.sendMessage(reply, 2000000001);
             Bot.sendMessage(reply, 2000000018);
             Bot.sendMessage(reply, 2000000013);

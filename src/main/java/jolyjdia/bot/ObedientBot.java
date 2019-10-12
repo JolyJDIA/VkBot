@@ -144,6 +144,13 @@ public final class ObedientBot implements RoflanBot {
     public BotScheduler getScheduler() {
         return scheduler;
     }
+
+    /**
+     * ПОФИКСИТЬ СЛУЧАЙНОЕ ВЫПОЛНЕНИЕ
+     * @param msg
+     * @param peerId
+     * @param attachments
+     */
     @Override
     public void sendMessage(String msg, int peerId, String... attachments) {
         try {

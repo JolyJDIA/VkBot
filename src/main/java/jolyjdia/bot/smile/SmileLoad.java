@@ -11,30 +11,31 @@ import com.google.common.collect.ImmutableMap;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class SmileLoad implements Module, Listener {
     private static final Map<String, String> SMILIES = ImmutableMap.<String, String>builder()
-            .put(":54inside:", "310289867_457244162")
-            .put(":smallinside:", "310289867_457244164")
-            .put(":chtoblyat:", "310289867_457244165")
-            .put(":din:", "310289867_457244163")
-            .put(":ban:", "310289867_457244151")
-            .put(":god:", "310289867_457244147")
-            .put(":dawg:", "310289867_457244146")
-            .put(":sit:", "310289867_457244143")
-            .put(":bottle:", "310289867_457244149")
-            .put(":uk:", "310289867_457244145")
-            .put(":plak:", "310289867_457244150")
-            .put(":bb:", "310289867_457244175")
-            .put(":roflanebalo:", "310289867_457244176")
-            .put(":boat:", "310289867_457244257")
+            .put("54inside", "310289867_457244162")
+            .put("smallinside", "310289867_457244164")
+            .put("chtoblyat", "310289867_457244165")
+            .put("din", "310289867_457244163")
+            .put("ban", "310289867_457244151")
+            .put("god", "310289867_457244147")
+            .put("dawg", "310289867_457244146")
+            .put("sit", "310289867_457244143")
+            .put("bottle", "310289867_457244149")
+            .put("uk", "310289867_457244145")
+            .put("plak", "310289867_457244150")
+            .put("bb", "310289867_457244175")
+            .put("roflanebalo", "310289867_457244176")
+            .put("boat", "310289867_457244257")
+            .put("ledokolchik", "526616439_457240875")
             .build();
     private static final ImmutableList.Builder<List<KeyboardButton>> BOARD = ImmutableList.builder();
 
@@ -46,7 +47,7 @@ public class SmileLoad implements Module, Listener {
                 list = new ArrayList<>();
                 BOARD.add(list);
             }
-            list.add(KeyboardUtils.create(label, KeyboardButtonColor.PRIMARY));
+            list.add(KeyboardUtils.create(':'+label+':', KeyboardButtonColor.PRIMARY));
             ++i;
         }
     }
@@ -62,13 +63,8 @@ public class SmileLoad implements Module, Listener {
         if(text.isEmpty()) {
             return;
         }
-        if(text.contains("леша") || text.contains("леха")) {
-            e.getUser().sendMessageFromHisChat("ГЕЙ");
+        for(String smile : StringUtils.substringsBetween(text, ":", ":")) {
+            e.getUser().sendMessageFromHisChat(null, "photo" + SMILIES.get(smile));
         }
-        SMILIES.forEach((key, value) -> {
-            if(Pattern.compile(key).matcher(text).find()) {
-                e.getUser().sendMessageFromHisChat(null, "photo" + value);
-            }
-        });
     }
 }

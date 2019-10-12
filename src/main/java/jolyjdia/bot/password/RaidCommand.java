@@ -1,24 +1,18 @@
 package jolyjdia.bot.password;
 
-import api.Bot;
 import api.command.Command;
 import api.scheduler.RoflanRunnable;
 import api.storage.User;
 import api.utils.MathUtils;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class RaidCommand extends Command {
     private static final String[] NAMES = {
-            "МИКРОЗАВР",
             "УНТЕРМЕНШ",
-            "МИКРОСЛАВ",
+            "БОЙ НЭКСТ ДОР",
             "МИКРОЧЕЛ",
-            "КУЛЕБЯКА",
-            "БОЙ НЭКСТ ДОР"
+            "КУЛЕБЯКА"
     };
 
     private RaidRunnable runnable;
@@ -30,9 +24,8 @@ public class RaidCommand extends Command {
     @Override
     public final void execute(User user, @NotNull String[] args) {
         if(args.length == 1) {
-            try {
                 StringBuilder builder = new StringBuilder();
-                Loader.getVkApiClient()
+                /*Loader.getVkApiClient()
                         .messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId())
                         .execute()
                         .getItems()
@@ -44,21 +37,25 @@ public class RaidCommand extends Command {
                                     && id != 199686399
                                     && id != 442053514
                                     && id != 526616439
+                                    && id != 276992948//Настя
+                                    && id != 541147678//FreshTea
+
+                                    //КЛАСС
+                                    && id != 160280940
+                                    && id != 146944869
+
                             );
-                        })
-                        .forEach(member -> builder.append("[id")
-                                        .append(member.getMemberId())
-                                        .append('|')
-                                        .append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
-                                        .append("]\n"));
+                        })*/
+                        builder.append("[id357961738|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
+                                .append("]\n").append("[id192559701|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
+                                .append("]\n[id503903106|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
+                                .append("]\n[id481298154|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)]).append("]\n");
                 if(builder.length() <= 0) {
                     return;
                 }
-                runnable = new RaidRunnable(user, builder.toString().repeat(20));
+                runnable = new RaidRunnable(user, builder.toString().repeat(35));
                 runnable.runTaskTimer(0, 2);
-            } catch (ApiException | ClientException e) {
-                e.printStackTrace();
-            }
+
         } else if(args.length == 2) {
             if(args[1].equalsIgnoreCase("stop")) {
                 runnable.cancel();
