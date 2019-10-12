@@ -4,7 +4,7 @@ import api.Bot;
 import api.command.Command;
 import api.permission.PermissionManager;
 import api.storage.User;
-import api.utils.StringBind;
+import api.utils.VkUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public class RankCommand extends Command {
             if (noPermission(sender)) {
                 return;
             }
-            Integer id = StringBind.getUserId(args[1], sender);
+            Integer id = VkUtils.getUserId(args[1], sender);
             if(id == null) {
                 sender.sendMessageFromHisChat("Пользователя нет в беседе");
                 return;

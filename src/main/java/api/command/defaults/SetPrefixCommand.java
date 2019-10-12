@@ -3,7 +3,7 @@ package api.command.defaults;
 import api.Bot;
 import api.command.Command;
 import api.storage.User;
-import api.utils.StringBind;
+import api.utils.VkUtils;
 
 public class SetPrefixCommand extends Command {
     public SetPrefixCommand() {
@@ -17,7 +17,7 @@ public class SetPrefixCommand extends Command {
         String prefix = args[1];
         Integer id = null;
         if(args.length == 3) {
-            id = StringBind.getUserId(args[1], sender);
+            id = VkUtils.getUserId(args[1], sender);
             if (id == null) {
                 return;
             }

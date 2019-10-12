@@ -1,17 +1,12 @@
 package api.utils;
 
-import api.Bot;
-import api.storage.User;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.messages.ConversationMember;
-import com.vk.api.sdk.objects.messages.responses.GetConversationMembersResponse;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public final class StringBind {
 
@@ -31,41 +26,44 @@ public final class StringBind {
             builder.append(' ');
         }
     }
+    @Contract("null -> true")
+    public static boolean isEmpty(CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+
+    @Contract("null, _, _ -> null")
+    public static @Nullable List<String> substringsBetween(String str, String open, String close) {
+        if (str == null || isEmpty(open) || isEmpty(close)) {
+            return null;
+        }
+        final int strLen = str.length();
+        if (strLen == 0) {
+            return Collections.emptyList();
+        }
+        final int closeLen = close.length();
+        final int openLen = open.length();
+        final List<String> list = new ArrayList<>();
+        int pos = 0;
+        while (pos < strLen - closeLen) {
+            int start = str.indexOf(open, pos);
+            if (start < 0) {
+                break;
+            }
+            start += openLen;
+            final int end = str.indexOf(close, start);
+            if (end < 0) {
+                break;
+            }
+            list.add(str.substring(start, end));
+            pos = end + closeLen;
+        }
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
 
     public static @NotNull String toString(@NotNull String[] a) {
         return toString(1, a);
-    }
-
-    public static @Nullable Integer getUserId(@NotNull String s, @NotNull User sender) {
-        try {
-            int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
-            GetConversationMembersResponse g = Loader.getVkApiClient()
-                    .messages()
-                    .getConversationMembers(Bot.getGroupActor(), sender.getPeerId())
-                    .execute();
-            Optional<ConversationMember> member = g.getItems().stream()
-                    .filter(m -> m.getMemberId() == id).findFirst();
-            return member.map(ConversationMember::getMemberId).orElse(null);
-        } catch (ApiException | ClientException e) {
-            sender.sendMessageFromHisChat("Пользователя нет в беседе");
-        }
-        return null;
-    }
-    /**
-     * @param a
-     * @return id
-     * @throws NumberFormatException
-     */
-    public static int getIdNick(@NotNull String a) {
-        return Integer.parseInt(a.substring(3).split("\\|")[0]);
-    }
-
-    /**
-     * @param a
-     * @return id
-     * @throws NumberFormatException
-     */
-    public static int getIdString(String a) {
-        return Integer.parseInt(a);
     }
 }

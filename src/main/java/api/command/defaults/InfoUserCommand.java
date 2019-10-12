@@ -3,7 +3,7 @@ package api.command.defaults;
 import api.Bot;
 import api.command.Command;
 import api.storage.User;
-import api.utils.StringBind;
+import api.utils.VkUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class InfoUserCommand extends Command {
         if(args.length == 1) {
             info += getInfo(sender.getGroup().getName(), sender.getPrefix(), sender.getSuffix());
         } else if(args.length == 2) {
-            Integer id = StringBind.getUserId(args[1], sender);
+            Integer id = VkUtils.getUserId(args[1], sender);
             if (id == null) {
                 return;
             }

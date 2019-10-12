@@ -6,12 +6,12 @@ import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.module.Module;
 import api.utils.KeyboardUtils;
+import api.utils.StringBind;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -63,8 +63,10 @@ public class SmileLoad implements Module, Listener {
         if(text.isEmpty()) {
             return;
         }
-        for(String smile : StringUtils.substringsBetween(text, ":", ":")) {
-            e.getUser().sendMessageFromHisChat(null, "photo" + SMILIES.get(smile));
+        List<String> smiles = StringBind.substringsBetween(text, ":", ":");
+        if(smiles == null || smiles.isEmpty()) {
+            return;
         }
+        smiles.forEach(smile -> e.getUser().sendMessageFromHisChat(null, "photo" + SMILIES.get(smile)));
     }
 }
