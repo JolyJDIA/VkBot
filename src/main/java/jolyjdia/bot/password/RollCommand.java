@@ -17,16 +17,16 @@ public class RollCommand extends Command {
         }
         if(args.length >= 2 && args.length < 4) {
             try {
-                int a = Integer.parseInt(args[1]);
+                int start = Integer.parseInt(args[1]);
                 if (args.length == 2) {
-                    sender.sendMessageFromChat(String.valueOf(MathUtils.random(a)));
+                    sender.sendMessageFromChat(String.valueOf(MathUtils.random(start)));
                 } else {
-                    int max = Integer.parseInt(args[2]);
-                    if(max < a) {
+                    int end = Integer.parseInt(args[2]);
+                    if(end < start) {
                         sender.sendMessageFromChat("Максимальное число должно быть больше минимального");
                         return;
                     }
-                    sender.sendMessageFromChat(String.valueOf(MathUtils.random(a, max)));
+                    sender.sendMessageFromChat(String.valueOf(MathUtils.random(start, end)));
                 }
             } catch (NumberFormatException e) {
                 sender.sendMessageFromChat("Это не число!");

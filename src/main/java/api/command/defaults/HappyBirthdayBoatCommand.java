@@ -24,7 +24,7 @@ public class HappyBirthdayBoatCommand extends Command {
     public final void execute(@NonNls User sender, @NotNull String[] args) {
         if(args.length == 1) {
             LocalDate from = LocalDate.now();
-            LocalDate to = LocalDate.of(2019, 10, 12);
+            LocalDate to = LocalDate.of(from.getYear()+1, 10, 12);
             long days = DAYS.between(from, to);
             if(days == 0) {
                 Bot.editChat(HAPPY, 2000000001);
