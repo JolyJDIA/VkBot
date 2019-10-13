@@ -19,19 +19,12 @@ public final class MathUtils {
 	@Contract(pure = true)
 	private MathUtils() {}
 
-	public static int random(String min, String max) {
-		int maxI = 100;
-		int minI = 1;
-		try {
-			maxI = Integer.parseInt(max);
-			minI = Integer.parseInt(min);
-		} catch (NumberFormatException ignored) {}
-		return (int) (Math.random() * (maxI - minI) + 1) + minI;
-	}
 	public static int random(int min, int max) {
-		return (int) (Math.random() * (max - min) + 1) + min;
+		return min == max ? min : min + RANDOM.nextInt((max - min)+1);
 	}
-
+	public static int random(int max) {
+		return random(1, max);
+	}
 	@Contract(pure = true)
 	public static double swap(int a, int b) {
 		a ^= b;

@@ -24,7 +24,11 @@ public class RaidCommand extends Command {
     @Override
     public final void execute(User user, @NotNull String[] args) {
         if(args.length == 1) {
-                StringBuilder builder = new StringBuilder();
+            if(this.runnable != null) {
+                user.sendMessageFromHisChat("Рейд уже где-то запущен");
+                return;
+            }
+            StringBuilder builder = new StringBuilder();
                 /*Loader.getVkApiClient()
                         .messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId())
                         .execute()
@@ -46,16 +50,15 @@ public class RaidCommand extends Command {
 
                             );
                         })*/
-                        builder.append("[id357961738|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
-                                .append("]\n").append("[id192559701|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
-                                .append("]\n[id503903106|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
-                                .append("]\n[id481298154|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)]).append("]\n");
-                if(builder.length() <= 0) {
-                    return;
-                }
-                runnable = new RaidRunnable(user, builder.toString().repeat(35));
-                runnable.runTaskTimer(0, 2);
-
+            builder.append("[id357961738|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
+                    .append("]\n").append("[id192559701|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
+                    .append("]\n[id503903106|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)])
+                    .append("]\n[id481298154|").append(NAMES[MathUtils.RANDOM.nextInt(NAMES.length)]).append("]\n");
+            if(builder.length() <= 0) {
+                return;
+            }
+            this.runnable = new RaidRunnable(user, builder.toString().repeat(35));
+            this.runnable.runTaskTimer(0, 2);
         } else if(args.length == 2) {
             if(args[1].equalsIgnoreCase("stop")) {
                 runnable.cancel();
