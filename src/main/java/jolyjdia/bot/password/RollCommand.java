@@ -18,10 +18,6 @@ public class RollCommand extends Command {
         if(args.length >= 2 && args.length < 4) {
             try {
                 int a = Integer.parseInt(args[1]);
-                if(a < 0) {
-                    sender.sendMessageFromHisChat("Минимальное число должно быть положительным");
-                    return;
-                }
                 if (args.length == 2) {
                     sender.sendMessageFromHisChat(String.valueOf(MathUtils.random(a)));
                 } else {
