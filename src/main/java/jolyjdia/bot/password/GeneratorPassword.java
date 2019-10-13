@@ -2,6 +2,7 @@ package jolyjdia.bot.password;
 
 import api.Bot;
 import api.event.EventLabel;
+import api.event.Listener;
 import api.event.messages.SendCommandEvent;
 import api.module.Module;
 import com.google.common.collect.Maps;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class GeneratorPassword implements Module {
+public class GeneratorPassword implements Module, Listener {
     private final Map<Integer, Long> cooldown = Maps.newHashMap();
 
     @Override
@@ -18,6 +19,7 @@ public class GeneratorPassword implements Module {
         Bot.getBotManager().registerCommand(new RaidCommand());
         Bot.getBotManager().registerCommand(new RollCommand());
         Bot.getBotManager().registerCommand(new FlipCommand());
+        Bot.getBotManager().registerEvent(this);
 
         Bot.getScheduler().scheduleSyncRepeatingTask(() ->
                         cooldown.entrySet().removeIf(e -> (e.getValue() - System.currentTimeMillis()) < 1L),
