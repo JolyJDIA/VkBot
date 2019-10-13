@@ -107,7 +107,7 @@ public abstract class Command {
         PermissionGroup group = user.getGroup();
         boolean access = group.hasPermission(permission);
         if(!access) {
-            user.sendMessageFromHisChat(noPermissionMessage);
+            user.sendMessageFromChat(noPermissionMessage);
         }
         return access;
     }
@@ -124,7 +124,7 @@ public abstract class Command {
         PermissionGroup group = user.getGroup();
         boolean noAccess = group.notPermission(permission);
         if(noAccess) {
-            user.sendMessageFromHisChat(noPermissionMessage);
+            user.sendMessageFromChat(noPermissionMessage);
         }
         return noAccess;
     }

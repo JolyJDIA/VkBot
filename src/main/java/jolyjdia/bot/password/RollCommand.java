@@ -13,23 +13,23 @@ public class RollCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            sender.sendMessageFromHisChat(String.valueOf(MathUtils.RANDOM.nextInt(100) + 1));
+            sender.sendMessageFromChat(String.valueOf(MathUtils.RANDOM.nextInt(100) + 1));
         }
         if(args.length >= 2 && args.length < 4) {
             try {
                 int a = Integer.parseInt(args[1]);
                 if (args.length == 2) {
-                    sender.sendMessageFromHisChat(String.valueOf(MathUtils.random(a)));
+                    sender.sendMessageFromChat(String.valueOf(MathUtils.random(a)));
                 } else {
                     int max = Integer.parseInt(args[2]);
                     if(max < a) {
-                        sender.sendMessageFromHisChat("Максимальное число должно быть больше минимального");
+                        sender.sendMessageFromChat("Максимальное число должно быть больше минимального");
                         return;
                     }
-                    sender.sendMessageFromHisChat(String.valueOf(MathUtils.random(a, max)));
+                    sender.sendMessageFromChat(String.valueOf(MathUtils.random(a, max)));
                 }
             } catch (NumberFormatException e) {
-                sender.sendMessageFromHisChat("Это не число!");
+                sender.sendMessageFromChat("Это не число!");
             }
         }
     }

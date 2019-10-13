@@ -30,7 +30,7 @@ public class GeneratorPassword implements Module, Listener {
     public final void onCommand(@NotNull SendCommandEvent e) {
         int userId = e.getUser().getUserId();
         if (cooldown.containsKey(userId)) {
-            e.getUser().sendMessageFromHisChat("Подождите 1 секунду, перед тем, как использовать команду снова");
+            e.getUser().sendMessageFromChat("Подождите 1 секунду, перед тем, как использовать команду снова");
             e.setCancelled(true);
         } else {
             cooldown.put(userId, System.currentTimeMillis());

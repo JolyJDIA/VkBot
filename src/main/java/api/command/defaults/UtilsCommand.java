@@ -23,7 +23,7 @@ public class UtilsCommand extends Command {
             return;
         }
         switch (args[0]) {
-            case "utils" -> sender.sendMessageFromHisChat(String.valueOf(getAlias()));
+            case "utils" -> sender.sendMessageFromChat(String.valueOf(getAlias()));
             case "uptime" -> {
                 RuntimeMXBean mxBean = ManagementFactory.getRuntimeMXBean();
                 long uptime = mxBean.getUptime();
@@ -31,11 +31,11 @@ public class UtilsCommand extends Command {
                 @NonNls String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(uptime),
                         TimeUnit.MILLISECONDS.toMinutes(uptime) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(uptime)),
                         TimeUnit.MILLISECONDS.toSeconds(uptime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(uptime)));
-                sender.sendMessageFromHisChat("Время работы " + hms);
+                sender.sendMessageFromChat("Время работы " + hms);
             }
             case "calendar" -> {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: hhч mmм ssс\nДата: dd.MM.yyyy");
-                sender.sendMessageFromHisChat(formatter.format(LocalDateTime.now()));
+                sender.sendMessageFromChat(formatter.format(LocalDateTime.now()));
             }
         }
     }

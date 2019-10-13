@@ -28,7 +28,7 @@ public final class VkUtils {
                     .filter(m -> m.getMemberId() == id).findFirst();
             return member.map(ConversationMember::getMemberId).orElse(null);
         } catch (ApiException | ClientException e) {
-            sender.sendMessageFromHisChat("Пользователя нет в беседе");
+            sender.sendMessageFromChat("Пользователя нет в беседе");
         }
         return null;
     }

@@ -26,7 +26,7 @@ public class InfoUserCommand extends Command {
             }
             User target = Bot.getProfileList().getUser(sender.getPeerId(), id);
             if(target == null) {
-                sender.sendMessageFromHisChat("Не удалось найти этого пользователя в базе");
+                sender.sendMessageFromChat("Не удалось найти этого пользователя в базе");
                 return;
             }
 
@@ -34,7 +34,7 @@ public class InfoUserCommand extends Command {
         } else {
             return;
         }
-        sender.sendMessageFromHisChat(info);
+        sender.sendMessageFromChat(info);
     }
     @NonNls
     @Contract(pure = true)

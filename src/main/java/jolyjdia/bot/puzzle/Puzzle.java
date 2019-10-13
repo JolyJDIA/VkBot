@@ -50,7 +50,7 @@ public class Puzzle implements Module, Listener {
         Message msg = e.getMessage();
         if(msg.getText().equalsIgnoreCase(String.valueOf(answer))) {
             this.next = true;
-            e.getUser().sendMessageFromHisChat("Ура! Вы угадали ответ!");
+            e.getUser().sendMessageFromChat("Ура! Вы угадали ответ!");
         }
     }
     public static class GeneratePuzzleCommand extends Command {
@@ -67,7 +67,7 @@ public class Puzzle implements Module, Listener {
                 if (puzzle.next) {
                     puzzle.generate();
                 }
-                sender.sendMessageFromHisChat(puzzle.getStringFormatAnswer());
+                sender.sendMessageFromChat(puzzle.getStringFormatAnswer());
             }
         }
     }

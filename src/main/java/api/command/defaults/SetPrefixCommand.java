@@ -26,7 +26,7 @@ public class SetPrefixCommand extends Command {
             return;
         }
         if(prefix.length() > 16) {
-            sender.sendMessageFromHisChat("Слышь, дружок-пирожок, - большой префикс");
+            sender.sendMessageFromChat("Слышь, дружок-пирожок, - большой префикс");
             return;
         }
         if(id != null) {
@@ -34,6 +34,6 @@ public class SetPrefixCommand extends Command {
         } else {
             Bot.getProfileList().setPrefix(sender, prefix);
         }
-        sender.sendMessageFromHisChat("Вы успешно изменили префикс");
+        sender.sendMessageFromChat("Вы успешно изменили префикс");
     }
 }

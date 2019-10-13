@@ -70,7 +70,7 @@ public class User  {
         this.prefix = prefix;
     }
 
-    public final void sendMessageFromHisChat(String message, String... attachment) {
+    public final void sendMessageFromChat(String message, String... attachment) {
         Bot.sendMessage(message, peerId, attachment);
     }
 }

@@ -28,12 +28,12 @@ public class TranslateCommand extends Command {
                 try {
                     translate = YandexTraslate.translate(lang, StringBind.toString(args));
                 } catch (IOException e) {
-                    sender.sendMessageFromHisChat("Ошибка");
+                    sender.sendMessageFromChat("Ошибка");
                     return;
                 }
-                sender.sendMessageFromHisChat(translate);
+                sender.sendMessageFromChat(translate);
             } else {
-                sender.sendMessageFromHisChat("Использование: " + getUseCommand());
+                sender.sendMessageFromChat("Использование: " + getUseCommand());
             }
         });
     }

@@ -16,7 +16,7 @@ public class ReloadCommand extends Command {
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length == 1) {
             Bot.getModuleLoader().reloadModule();
-            sender.sendMessageFromHisChat("Перезагрузка завершена\nМой планировщик: Привет из Thread-2");
+            sender.sendMessageFromChat("Перезагрузка завершена\nМой планировщик: Привет из Thread-2");
         }
     }
 }

@@ -22,7 +22,7 @@ public class BroadcastMessageCommand extends Command {
                     Bot.sendMessage(text, id);
                 }
             } else {
-                sender.sendMessageFromHisChat("У вас нет прав");
+                sender.sendMessageFromChat("У вас нет прав");
             }
         }
     }

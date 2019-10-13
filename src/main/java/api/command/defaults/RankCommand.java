@@ -30,7 +30,7 @@ public class RankCommand extends Command {
             }
             Integer id = VkUtils.getUserId(args[1], sender);
             if(id == null) {
-                sender.sendMessageFromHisChat("Пользователя нет в беседе");
+                sender.sendMessageFromChat("Пользователя нет в беседе");
                 return;
             }
             if (PermissionManager.getPermGroup(args[2]) == null) {
@@ -38,13 +38,13 @@ public class RankCommand extends Command {
                 for (String s : PermissionManager.getMapGroup().keySet()) {
                     builder.append(s).append('\n');
                 }
-                sender.sendMessageFromHisChat(builder.toString());
+                sender.sendMessageFromChat(builder.toString());
                 return;
             }
             Bot.getProfileList().setRank(sender.getPeerId(), id, PermissionManager.getPermGroup(args[2]));
-            sender.sendMessageFromHisChat("Вы успешно выдали права");
+            sender.sendMessageFromChat("Вы успешно выдали права");
         } else {
-            sender.sendMessageFromHisChat("Использование: " + getUseCommand());
+            sender.sendMessageFromChat("Использование: " + getUseCommand());
         }
     }
 }

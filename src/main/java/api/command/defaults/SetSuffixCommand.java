@@ -27,7 +27,7 @@ public class SetSuffixCommand extends Command {
             return;
         }
         if(suffix.length() > 16) {
-            sender.sendMessageFromHisChat("Слышь, дружок-пирожок, - большой суффикс");
+            sender.sendMessageFromChat("Слышь, дружок-пирожок, - большой суффикс");
             return;
         }
         if(id != null) {
@@ -35,6 +35,6 @@ public class SetSuffixCommand extends Command {
         } else {
             Bot.getProfileList().setSuffix(sender, suffix);
         }
-        sender.sendMessageFromHisChat("Вы успешно изменили суффикс");
+        sender.sendMessageFromChat("Вы успешно изменили суффикс");
     }
 }

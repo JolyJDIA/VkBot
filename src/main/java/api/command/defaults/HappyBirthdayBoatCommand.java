@@ -29,7 +29,7 @@ public class HappyBirthdayBoatCommand extends Command {
             if(days == 0) {
                 Bot.editChat(HAPPY, 2000000001);
             }
-            sender.sendMessageFromHisChat(String.format(TO, days));
+            sender.sendMessageFromChat(String.format(TO, days));
         }
     }
 }

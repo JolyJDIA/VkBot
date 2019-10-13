@@ -20,7 +20,7 @@ public class TickPerSecondCommand extends Command {
             for (double tps : Bot.getScheduler().getAverageTPS()) {
                 builder.append(format(tps)).append(", ");
             }
-            sender.sendMessageFromHisChat(
+            sender.sendMessageFromChat(
                     builder.substring(0, builder.length()-2) +
                     "\n-------------------------------------"+
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
@@ -30,9 +30,9 @@ public class TickPerSecondCommand extends Command {
         //удалить
         if(args.length == 2) {
             try {
-                sender.sendMessageFromHisChat(humanReadableByteCount(Long.parseLong(args[1])));
+                sender.sendMessageFromChat(humanReadableByteCount(Long.parseLong(args[1])));
             } catch (NumberFormatException e) {
-                sender.sendMessageFromHisChat("Это не число");
+                sender.sendMessageFromChat("Это не число");
             }
         }
     }

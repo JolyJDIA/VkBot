@@ -25,7 +25,7 @@ public class RaidCommand extends Command {
     public final void execute(User user, @NotNull String[] args) {
         if(args.length == 1) {
             if(this.runnable != null) {
-                user.sendMessageFromHisChat("Рейд уже где-то запущен");
+                user.sendMessageFromChat("Рейд уже где-то запущен");
                 return;
             }
             StringBuilder builder = new StringBuilder();
@@ -77,7 +77,7 @@ public class RaidCommand extends Command {
 
         @Override
         public void run() {
-            user.sendMessageFromHisChat(message);
+            user.sendMessageFromChat(message);
         }
     }
 }
