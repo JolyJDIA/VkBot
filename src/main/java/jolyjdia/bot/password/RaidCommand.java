@@ -3,7 +3,6 @@ package jolyjdia.bot.password;
 import api.command.Command;
 import api.scheduler.RoflanRunnable;
 import api.storage.User;
-import api.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -13,17 +12,9 @@ import java.util.Map;
 
 public class RaidCommand extends Command {
     private final Map<Integer, RoflanRunnable> raids = new HashMap<>();
-    private static final String[] NAMES = {
-            "УНТЕРМЕНШ",
-            "БОЙ НЭКСТ ДОР",
-            "МИКРОЧЕЛ",
-            "КУЛЕБЯКА"
-    };
-    @NonNls private static final String DAYNI = "[id357961738|" + NAMES[MathUtils.RANDOM.nextInt(NAMES.length)] +
-            "]\n[id192559701|" + NAMES[MathUtils.RANDOM.nextInt(NAMES.length)] +
-            "]\n[id503903106|" + NAMES[MathUtils.RANDOM.nextInt(NAMES.length)] +
-            "]\n[id481298154|" + NAMES[MathUtils.RANDOM.nextInt(NAMES.length)] + "]\n".repeat(35);
 
+    @NonNls private static final String CHELIBOSI =
+            "[id357961738|УНТЕРМЕНШ]\n[id192559701|БОЙ НЭКСТ ДОР]\n[id503903106|МИКРОЧЕЛ]\n[id481298154|КУЛЕБЯКА]\n".repeat(35);
 
     RaidCommand() {
         super("raid");
@@ -37,7 +28,7 @@ public class RaidCommand extends Command {
                 user.sendMessageFromChat("Рейд уже запущен");
                 return;
             }
-            RaidRunnable raidRunnable = new RaidRunnable(user, DAYNI);
+            RaidRunnable raidRunnable = new RaidRunnable(user, CHELIBOSI);
             raidRunnable.runTaskTimer(0, 2);
 
             raids.put(user.getPeerId(), raidRunnable);
