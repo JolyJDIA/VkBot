@@ -43,7 +43,7 @@ public final class ObedientBot implements RoflanBot {
     private final ProfileList profileList;
     private final GroupActor groupActor;
 
-    public ObedientBot() throws ClientException, ApiException {
+    ObedientBot() throws ClientException, ApiException {
         try (InputStream inputStream = Loader.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (inputStream != null) {
                 properties.load(inputStream);
