@@ -3,15 +3,15 @@ package jolyjdia.bot.password;
 import api.command.Command;
 import api.scheduler.RoflanRunnable;
 import api.storage.User;
+import com.google.common.collect.Maps;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class RaidCommand extends Command {
-    private final Map<Integer, RoflanRunnable> raids = new HashMap<>();
+    private final Map<Integer, RoflanRunnable> raids = Maps.newHashMap();
 
     @NonNls private static final String CHELIBOSI =
             "[id357961738|УНТЕРМЕНШ]\n[id192559701|БОЙ НЭКСТ ДОР]\n[id503903106|МИКРОЧЕЛ]\n[id481298154|КУЛЕБЯКА]\n".repeat(35);
