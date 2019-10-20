@@ -14,7 +14,8 @@ public class RaidCommand extends Command {
     private final Map<Integer, RoflanRunnable> raids = Maps.newHashMap();
 
     @NonNls private static final String CHELIBOSI =
-            "[id357961738|УНТЕРМЕНШ]\n[id192559701|БОЙ НЭКСТ ДОР]\n[id503903106|МИКРОЧЕЛ]\n[id481298154|КУЛЕБЯКА]\n".repeat(35);
+            "[id357961738|УНТЕРМЕНШ]\n[id192559701|БОЙ НЭКСТ ДОР]\n[id503903106|МИКРОЧЕЛ]\n[id481298154|КУЛЕБЯКА]\n"
+            .repeat(35);
 
     RaidCommand() {
         super("raid");
