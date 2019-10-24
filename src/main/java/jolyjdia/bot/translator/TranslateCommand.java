@@ -20,7 +20,7 @@ public class TranslateCommand extends Command {
 
     @Override
     public final void execute(@NonNls User sender, @NotNull String[] args) {
-        Bot.getScheduler().runTaskAsynchronously(() -> {
+        Bot.getScheduler().runTask(() -> {
             if (args.length >= 2) {
                 String text = StringBind.toString(args);
                 Language lang = isEnglish(text) ? Language.RUSSIAN : Language.ENGLISH;

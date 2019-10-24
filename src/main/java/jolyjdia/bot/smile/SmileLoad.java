@@ -67,6 +67,10 @@ public class SmileLoad implements Module, Listener {
         if(smiles == null || smiles.isEmpty()) {
             return;
         }
-        smiles.forEach(smile -> e.getUser().sendMessageFromChat(null, "photo" + SMILIES.get(smile)));
+        smiles.forEach(smile -> {
+            if(SMILIES.containsKey(smile)) {
+                e.getUser().sendMessageFromChat(null, "photo" + SMILIES.get(smile));
+            }
+        });
     }
 }

@@ -18,7 +18,6 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
-import jolyjdia.bot.minecraft.CraftClient;
 import jolyjdia.bot.password.GeneratorPassword;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.shoutbox.ShoutboxMain;
@@ -26,12 +25,13 @@ import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public final class ObedientBot implements RoflanBot {
     private final BotScheduler scheduler = new BotScheduler();
@@ -87,7 +87,7 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.registerModule(new ShoutboxMain());
         moduleLoader.registerModule(new GeneratorPassword());
         moduleLoader.registerModule(new SmileLoad());
-        moduleLoader.registerModule(new CraftClient());
+       // moduleLoader.registerModule(new CraftClient());
     }
     private void loadModule() {
         moduleLoader.getModules().forEach(Module::onLoad);
@@ -148,23 +148,26 @@ public final class ObedientBot implements RoflanBot {
     }
 
     /**
-     * ПОФИКСИТЬ СЛУЧАЙНОЕ ВЫПОЛНЕНИЕ
      * @param msg
      * @param peerId
      * @param attachments
      */
+
+    private static final Pattern COMPILE = Pattern.compile(" ");
     @Override
-    public void sendMessage(String msg, int peerId, String... attachments) {
+    public void sendMessage(String msg, int peerId, @NotNull String... attachments) {
         try {
-            MessagesSendQuery messagesSendQuery = send(peerId);
-            if(msg != null && !msg.isEmpty()) {
-                messagesSendQuery.message(msg);
+            if (attachments.length != 0 || (msg != null && !msg.isEmpty())) {
+                MessagesSendQuery query = send(peerId);
+                if (msg != null && !msg.isEmpty()) {
+                    query.message(msg);
+                }
+                if (attachments.length > 0) {
+                    String array = COMPILE.matcher(Arrays.toString(attachments).substring(1)).replaceAll("");
+                    query.attachment(array.substring(0, array.length()-1));
+                }
+                query.execute();
             }
-            String attachment = builderAttachment(attachments);
-            if(attachment != null) {
-                messagesSendQuery.attachment(attachment);
-            }
-            messagesSendQuery.execute();
         } catch (ApiException | ClientException ignored) {}
     }
     @Override
@@ -185,17 +188,5 @@ public final class ObedientBot implements RoflanBot {
                 .randomId(MathUtils.RANDOM.nextInt(10000))
                 .groupId(groupId)
                 .peerId(peerId);
-    }
-    private static @Nullable String builderAttachment(@NotNull String... attachments) {
-        if (attachments.length > 1) {
-            StringBuilder builder = new StringBuilder();
-            for (String s : attachments) {
-                builder.append(s).append(", ");
-            }
-            return builder.substring(0, builder.length() - 2);
-        } else if(attachments.length == 1) {
-            return attachments[0];
-        }
-        return null;
     }
 }

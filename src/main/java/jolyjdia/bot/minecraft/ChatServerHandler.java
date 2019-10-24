@@ -2,11 +2,11 @@ package jolyjdia.bot.minecraft;
 
 import api.Bot;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class ChatServerHandler extends ChannelInboundHandlerAdapter {
-
+public class ChatServerHandler extends SimpleChannelInboundHandler<Object> {
+    private final INetHandler packetListener = new NetHandlerPlayClient();
     @Override
     public final void handlerAdded(@NotNull ChannelHandlerContext ctx) {
         System.out.println("коннект");
@@ -17,7 +17,9 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("дисконнект");
     }
     @Override
-    public final void channelRead(ChannelHandlerContext context, @NotNull Object o) {
-        Bot.sendMessage(o.toString(), 310289867);
+    public final void channelRead0(ChannelHandlerContext context, @NotNull Object packet) {
+       // System.out.println(packet);
+        //((Packet<INetHandler>) packet).processPacket(this.packetListener, context.channel());
+        Bot.sendMessage(packet.toString(), 310289867);
     }
 }

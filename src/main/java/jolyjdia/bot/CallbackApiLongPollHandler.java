@@ -67,6 +67,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                     .findFirst()
                     .ifPresent(c -> c.execute(user, args));
             @NonNls long end = System.currentTimeMillis() - start;
+            System.out.println(Thread.currentThread().getId());
             LOGGER.log(Level.INFO, "КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
             return;
         }

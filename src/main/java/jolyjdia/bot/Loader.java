@@ -18,7 +18,7 @@ public class Loader {
         try {
             handler.run();
         } catch (ApiException | ClientException | RuntimeException e) {
-            System.out.println("ПРОИЗОШЕЛ СБОЙ, ЗАПУСКАЮСЬ ЗАНОВО");
+            System.out.println("ТЕХНИЧЕСКИЕ ШОКОЛАДКИ");
             handler = new CallbackApiLongPollHandler(vkApiClient, bot.getGroupActor());
             handler.run();
         }
