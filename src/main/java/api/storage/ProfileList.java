@@ -35,7 +35,6 @@ public final class ProfileList extends JsonCustom implements
                 .create());
         this.load();
     }
-    @Override
     public void load() {
         try (FileInputStream fileInputStream = new FileInputStream(getFile());
              InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {

@@ -4,7 +4,6 @@ import api.file.JsonCustom;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 
 public final class PermissionManager extends JsonCustom implements JsonDeserializer<Map<String, PermissionGroup>> {
     @NonNls public static final String ADMIN = "admin";
@@ -32,11 +30,7 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
         this.load(new MapTypeToken().getType());
     }
     public static void registerPermissionGroups() {
-        manager = new PermissionManager(new File(
-                Objects.requireNonNull(Loader.class.getClassLoader().getResource("permissions.json")).getFile()
-        ));
-        addGroup(new PermissionGroup(DEFAULT, Sets.newHashSet(""), "ПОТРИБЛЯТЬ", null));
-        addGroup(new PermissionGroup(ADMIN, Sets.newHashSet("*"), "АДМИН", null));
+        manager = new PermissionManager(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\permissions.json"));
     }
     @Contract(pure = true)
     public static PermissionManager getInstance() {

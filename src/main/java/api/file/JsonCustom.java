@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -28,19 +29,20 @@ public class JsonCustom extends FileCustom {
     }
 
     @Contract(pure = true)
-    public Gson getGson() {
+    public final Gson getGson() {
         return gson;
     }
 
-    public final void load(Type type) {
+    public final @Nullable <T> T load(Type type) {
         try (FileInputStream fileInputStream = new FileInputStream(getFile());
              InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
-            this.gson.fromJson(inputStreamReader, type);
+            return this.gson.fromJson(inputStreamReader, type);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
     /**
      * FileChannel
@@ -67,10 +69,6 @@ public class JsonCustom extends FileCustom {
         }
     }
 
-    @Override
-    public void save() {}
-
-    @Override
     public final void create() {
         try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
             pw.print("{}");
@@ -81,10 +79,6 @@ public class JsonCustom extends FileCustom {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void load() {}
-
     public static class MyExclusionStrategy implements ExclusionStrategy {
         @Override
         public final boolean shouldSkipField(@NotNull FieldAttributes f) {

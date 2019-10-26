@@ -1,9 +1,20 @@
 {
+  "default": {
+    "permissions": [
+      ""
+    ],
+    "prefix": "ПОТРИБЛЯТЬ"
+  },
+  "admin": {
+    "permissions": [
+      "*"
+    ],
+    "prefix": "АДМИН"
+  },
   "moder": {
     "permissions": [
-      "roflanbot.settitle"
+      ""
     ],
-    "suffix": "TEST",
     "prefix": "МОДЕР"
   }
 }

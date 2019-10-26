@@ -4,11 +4,11 @@ import org.jetbrains.annotations.Contract;
 
 import java.io.File;
 
-public abstract class FileCustom implements FileBuilder {
+public class FileCustom {
     private final File file;
 
     @Contract(pure = true)
-    protected FileCustom(File file) {
+    FileCustom(File file) {
         this.file = file;
     }
 
