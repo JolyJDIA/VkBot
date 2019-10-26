@@ -20,6 +20,6 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<Object> {
     public final void channelRead0(ChannelHandlerContext context, @NotNull Object packet) {
        // System.out.println(packet);
         //((Packet<INetHandler>) packet).processPacket(this.packetListener, context.channel());
-        Bot.sendMessage(packet.toString(), 310289867);
+        Bot.sendMessage(packet.toString(), 2000000016);
     }
 }

@@ -6,10 +6,11 @@ import api.utils.MathUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import java.security.SecureRandom;
 import java.util.Locale;
-import java.util.Random;
 
 public class PasswordCommand extends Command {
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     @NonNls private static final String STRING = "abcdefghijklmnopqrstuvwxyz0123456789";
 
     PasswordCommand() {
@@ -19,8 +20,7 @@ public class PasswordCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            String password = new Random()
-                    .ints(40, 33, 122)
+            String password = SECURE_RANDOM.ints(40, 33, 122)
                     .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                     .toString();
             sender.sendMessageFromChat(password);
@@ -42,7 +42,7 @@ public class PasswordCommand extends Command {
         }
         StringBuilder password = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            int index = MathUtils.RANDOM.nextInt(STRING.length());
+            int index = SECURE_RANDOM.nextInt(STRING.length());
             String value = String.valueOf(STRING.charAt(index));
             if(MathUtils.RANDOM.nextBoolean()) {
                 value = value.toUpperCase(Locale.ENGLISH);
