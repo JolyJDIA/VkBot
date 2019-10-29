@@ -7,9 +7,11 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public class TickPerSecondCommand extends Command {
+
     public TickPerSecondCommand() {
         super("gc");
         setAlias("lag", "tps");
+
     }
     @Override
     public final void execute(@NonNls User sender, @NotNull String[] args) {
@@ -29,11 +31,11 @@ public class TickPerSecondCommand extends Command {
         }
         //удалить
         if(args.length == 2) {
-            try {
-                sender.sendMessageFromChat(humanReadableByteCount(Long.parseLong(args[1])));
-            } catch (NumberFormatException e) {
-                sender.sendMessageFromChat("Это не число");
-            }
+            Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
+                long totalMemory = Runtime.getRuntime().totalMemory();
+                long freeMemory = Runtime.getRuntime().freeMemory();
+                System.out.println(humanReadableByteCount((totalMemory - freeMemory)) + " / " +humanReadableByteCount(totalMemory));
+            }, 2, 2);
         }
     }
     @NonNls

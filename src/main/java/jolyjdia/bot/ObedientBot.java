@@ -8,7 +8,9 @@ import api.module.Module;
 import api.module.ModuleLoader;
 import api.permission.PermissionManager;
 import api.scheduler.BotScheduler;
+import api.storage.MySQL;
 import api.storage.ProfileList;
+import api.storage.UserBackend;
 import api.utils.MathUtils;
 import com.vk.api.sdk.actions.Groups;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -20,7 +22,6 @@ import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.password.GeneratorPassword;
 import jolyjdia.bot.puzzle.Puzzle;
-import jolyjdia.bot.shoutbox.ShoutboxMain;
 import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
 import org.jetbrains.annotations.Contract;
@@ -39,9 +40,9 @@ public final class ObedientBot implements RoflanBot {
     private final Properties properties = new Properties();
     private final ModuleLoader moduleLoader = new ModuleLoader();
     private final HelpAllCommands helpCommand = new HelpAllCommands();
+    private final UserBackend backend;
     private final String accessToken;
     private final int groupId;
-    private final ProfileList profileList;
     private final GroupActor groupActor;
 
     ObedientBot() throws ClientException, ApiException {
@@ -52,18 +53,21 @@ public final class ObedientBot implements RoflanBot {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        PermissionManager.registerPermissionGroups();
         this.groupId = Integer.parseInt(properties.getProperty("groupId"));
         this.accessToken = properties.getProperty("accessToken");
         this.groupActor = new GroupActor(groupId, accessToken);
-        PermissionManager.registerPermissionGroups();
-        this.profileList = new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
+
         Bot.setBot(this);
+        this.backend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
+                new MySQL(properties.getProperty("username"), "", properties.getProperty("url")) :
+                new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
 
         Groups groups = Loader.getVkApiClient().groups();
         if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
             groups.setLongPollSettings(groupActor, groupActor.getGroupId())
                     .enabled(true)
-                    .apiVersion("5.101")
+                    .apiVersion("5.103")
                     .wallPostNew(true)
                     .messageNew(true)
                     .audioNew(true)
@@ -84,10 +88,10 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.registerModule(new YandexTraslate());
         moduleLoader.registerModule(new GeoLoad());
         moduleLoader.registerModule(new Puzzle());
-        moduleLoader.registerModule(new ShoutboxMain());
+        //moduleLoader.registerModule(new ShoutboxMain());
         moduleLoader.registerModule(new GeneratorPassword());
         moduleLoader.registerModule(new SmileLoad());
-       // moduleLoader.registerModule(new CraftClient());
+        //moduleLoader.registerModule(new CraftClient());
     }
     private void loadModule() {
         moduleLoader.getModules().forEach(Module::onLoad);
@@ -132,8 +136,8 @@ public final class ObedientBot implements RoflanBot {
 
     @Contract(pure = true)
     @Override
-    public ProfileList getProfileList() {
-        return profileList;
+    public UserBackend getProfileList() {
+        return backend;
     }
 
     @Contract(pure = true)

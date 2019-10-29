@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class ProfileList extends JsonCustom implements
+public final class ProfileList extends JsonCustom implements UserBackend,
         JsonDeserializer<Map<Integer, Map<Integer, User>>>,
         JsonSerializer<Map<Integer, Map<Integer, User>>> {
     private Map<Integer, Map<Integer, User>> map = new HashMap<>();
@@ -80,12 +80,13 @@ public final class ProfileList extends JsonCustom implements
             user = new User(peerId, userId);
             //ГАВНО КАКОЕ-ТО
             try {
-                Loader.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
-                        .stream().filter(e -> {
+                if(Loader.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
+                        .stream().anyMatch(e -> {
                             Boolean isAdmin = e.getIsAdmin();
                             return (e.getMemberId() == userId) && (isAdmin != null && isAdmin);
-                        }).findFirst()
-                        .ifPresent(e -> user.setGroup(PermissionManager.getPermGroup(PermissionManager.ADMIN)));
+                        })) {
+                    user.setGroup(PermissionManager.getPermGroup(PermissionManager.ADMIN));
+                }
             } catch (ApiException | ClientException e) {
                 e.printStackTrace();
             }
@@ -94,7 +95,7 @@ public final class ProfileList extends JsonCustom implements
         }
         return user;
     }
-    public void addIfAbsentAndConsumer(@NotNull User entity, @NotNull Consumer<? super User> consumer) {
+    private void addIfAbsentAndConsumer(@NotNull User entity, @NotNull Consumer<? super User> consumer) {
         Map<Integer, User> users = map.computeIfAbsent(entity.getPeerId(), k -> new HashMap<>());
         int userId = entity.getUserId();
         if(users.containsKey(userId)) {
@@ -157,6 +158,16 @@ public final class ProfileList extends JsonCustom implements
         users.remove(userId);
         this.save(map, new MapTypeToken().getType());
     }
+    public void save(Map<Integer, Map<Integer, User>> object, Type type) {
+        try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
+            pw.print(getGson().toJson(object, type));
+            pw.flush();
+        } catch (UnsupportedEncodingException | FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * @param jsonElement
@@ -176,7 +187,7 @@ public final class ProfileList extends JsonCustom implements
             for (Map.Entry<String, JsonElement> valueEntry : object.entrySet()) {
                 JsonObject element = valueEntry.getValue().getAsJsonObject();
                 int id = Integer.parseInt(valueEntry.getKey());
-                PermissionGroup group = PermissionManager.getPermGroup(element.get("group").getAsString());
+                String group = element.get("group").getAsString();
                 String prefix = element.get("prefix").getAsString();
                 String suffix = element.get("suffix").getAsString();
                 users.put(id, new User(chat, id, group, prefix, suffix));

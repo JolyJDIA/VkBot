@@ -1,3 +1,4 @@
+/*
 package api.command.defaults;
 
 import api.Bot;
@@ -36,4 +37,4 @@ public class SetPrefixCommand extends Command {
         }
         sender.sendMessageFromChat("Вы успешно изменили префикс");
     }
-}
+}*/

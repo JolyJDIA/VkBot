@@ -3,7 +3,7 @@ package api;
 import api.command.HelpAllCommands;
 import api.module.ModuleLoader;
 import api.scheduler.BotScheduler;
-import api.storage.ProfileList;
+import api.storage.UserBackend;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import org.jetbrains.annotations.Contract;
@@ -40,7 +40,7 @@ import java.util.Properties;
         return roflanBot.getScheduler();
     }
 
-    public static ProfileList getProfileList() {
+    public static UserBackend getProfileList() {
         return roflanBot.getProfileList();
     }
 

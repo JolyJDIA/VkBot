@@ -1,3 +1,4 @@
+/*
 package api.command.defaults;
 
 import api.Bot;
@@ -38,3 +39,4 @@ public class SetSuffixCommand extends Command {
         sender.sendMessageFromChat("Вы успешно изменили суффикс");
     }
 }
+*/

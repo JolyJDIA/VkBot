@@ -44,7 +44,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         }
         MessageAction action = msg.getAction();
         if(action != null && action.getType() == MessageActionStatus.CHAT_KICK_USER) {
-            Bot.getProfileList().remove(msg.getPeerId(), msg.getFromId());
+            //Bot.getProfileList().remove(msg.getPeerId(), msg.getFromId());
             return;
         }
         @NonNls String text = msg.getText();

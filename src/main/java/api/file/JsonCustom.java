@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -33,36 +32,11 @@ public class JsonCustom extends FileCustom {
         return gson;
     }
 
-    public final @Nullable <T> T load(Type type) {
+    public final void load(Type type) {
         try (FileInputStream fileInputStream = new FileInputStream(getFile());
              InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
-            return this.gson.fromJson(inputStreamReader, type);
+            this.gson.fromJson(inputStreamReader, type);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    /**
-     * FileChannel
-     */
-
-    public final void save(Object object, Type type) {
-        try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
-            pw.print(gson.toJson(object, type));
-            pw.flush();
-        } catch (UnsupportedEncodingException | FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public final void save(Object object) {
-        try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
-            pw.print(gson.toJson(object));
-            pw.flush();
-        } catch (UnsupportedEncodingException | FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -74,6 +48,16 @@ public class JsonCustom extends FileCustom {
             pw.print("{}");
             pw.flush();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public final void save(Object object) {
+        try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
+            pw.print(gson.toJson(object));
+            pw.flush();
+        } catch (UnsupportedEncodingException | FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

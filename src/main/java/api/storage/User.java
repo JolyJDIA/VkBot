@@ -9,32 +9,32 @@ import org.jetbrains.annotations.Contract;
 public class User  {
     @Expose(serialize = false, deserialize = false) private final int peerId;
     @Expose(serialize = false, deserialize = false) private final int userId;
-    private PermissionGroup group = PermissionManager.getDefault();
+    private PermissionGroup group;
     private String prefix = "";
     private String suffix = "";
 
     @Contract(pure = true)
+    //change place
     public User(int peerId, int userId) {
         this.peerId = peerId;
         this.userId = userId;
-    }
-    @Contract(pure = true)
-    public User(int peerId, int userId, PermissionGroup group) {
-        this(peerId, userId);
-        this.group = group;
+        this.group = PermissionManager.getDefault();
     }
 
     @Contract(pure = true)
-    public User(int peerId, int userId, PermissionGroup group, String prefix) {
+    private User(int peerId, int userId, String group) {
+        this.peerId = peerId;
+        this.userId = userId;
+        this.group = PermissionManager.getPermGroup(group);
+    }
+
+    @Contract(pure = true)
+    public User(int peerId, int userId, String group, String prefix, String suffix) {
         this(peerId, userId, group);
         this.prefix = prefix;
-    }
-
-    @Contract(pure = true)
-    public User(int peerId, int userId, PermissionGroup group, String prefix, String suffix) {
-        this(peerId, userId, group, prefix);
         this.suffix = suffix;
     }
+
     @Contract(pure = true)
     public final int getUserId() {
         return userId;
