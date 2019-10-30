@@ -117,31 +117,12 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     public void setRank(int peerId, int userId, PermissionGroup rank) {
         addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setGroup(rank));
     }
-    public void setPrefix(int peerId, int userId, String prefix) {
-        addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setPrefix(prefix));
-    }
-    public void setSuffix(int peerId, int userId, String suffix) {
-        addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setSuffix(suffix));
-    }
     @Override
     public void setRank(User user, PermissionGroup rank) {
         if(user == null) {
             return;
         }
         addIfAbsentAndConsumer(user, userId -> userId.setGroup(rank));
-    }
-    public void setPrefix(User user, String prefix) {
-        if(user == null) {
-            return;
-        }
-        addIfAbsentAndConsumer(user, userId -> userId.setPrefix(prefix));
-    }
-
-    public void setSuffix(User user, String suffix) {
-        if(user == null) {
-            return;
-        }
-        addIfAbsentAndConsumer(user, userId -> userId.setSuffix(suffix));
     }
 
     public void remove(@NotNull User user) {
@@ -197,9 +178,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
                 JsonObject element = valueEntry.getValue().getAsJsonObject();
                 int id = Integer.parseInt(valueEntry.getKey());
                 String group = element.get("group").getAsString();
-                String prefix = element.get("prefix").getAsString();
-                String suffix = element.get("suffix").getAsString();
-                users.put(id, new User(chat, id, group, prefix, suffix));
+                users.put(id, new User(chat, id, group));
             }
             map.put(chat, users);
         }
@@ -215,8 +194,6 @@ public final class ProfileList extends JsonCustom implements UserBackend,
                 JsonObject user = new JsonObject();
                 User account = users.getValue();
                 user.addProperty("group", account.getGroup().getName());
-                user.addProperty("prefix", account.getPrefix());
-                user.addProperty("suffix", account.getSuffix());
                 peer.add(String.valueOf(users.getKey()), user);
             }
             object.add(String.valueOf(chat.getKey()), peer);

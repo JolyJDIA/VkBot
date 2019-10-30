@@ -132,7 +132,7 @@ public class MySQL implements UserBackend {
             try (ResultSet rs = ps.executeQuery()) {
                 //КЭШИРУЮ
                 return loadUserInCache(rs.next() ?
-                        new User(peerId, userId, rs.getString(1), "", "")
+                        new User(peerId, userId, rs.getString(1))
                         : initializationNewUser(peerId, userId));
             }
         } catch (SQLException e) {
