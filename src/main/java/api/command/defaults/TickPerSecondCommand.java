@@ -28,14 +28,16 @@ public class TickPerSecondCommand extends Command {
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
                     "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory));
-        }
-        //удалить
-        if(args.length == 2) {
+        } else if(args.length == 2 && args[1].equalsIgnoreCase("debug")) {
             Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
                 long totalMemory = Runtime.getRuntime().totalMemory();
-                long freeMemory = Runtime.getRuntime().freeMemory();
-                System.out.println(humanReadableByteCount((totalMemory - freeMemory)) + " / " +humanReadableByteCount(totalMemory));
-            }, 2, 2);
+                long used = totalMemory - Runtime.getRuntime().freeMemory();
+                String format = humanReadableByteCount((used));
+                if(used > 50000000) {
+                    sender.sendMessageFromChat("Сожрало: "+format+ '!');
+                }
+                Bot.sendMessage(format + " / " +humanReadableByteCount(totalMemory), sender.getUserId());
+            }, 10, 10);
         }
     }
     @NonNls

@@ -10,6 +10,7 @@ public class User  {
     @Expose(serialize = false, deserialize = false) private final int peerId;
     @Expose(serialize = false, deserialize = false) private final int userId;
     private PermissionGroup group;
+    private boolean isOwner;
 
     @Contract(pure = true)
     //change place

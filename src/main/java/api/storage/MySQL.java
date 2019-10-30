@@ -44,8 +44,8 @@ public class MySQL implements UserBackend {
             try (Statement statement = connection.createStatement()) {
                 statement.execute("""
                     CREATE TABLE IF NOT EXISTS `vkbot` (
-                    `peerId` INT(36) NOT NULL,
-                    `userId` INT(36) NOT NULL,
+                    `peerId` INT(36) UNSIGNED NOT NULL,
+                    `userId` INT(36) UNSIGNED NOT NULL,
                     `group` VARCHAR(16) NOT NULL,
                     PRIMARY KEY (`userId`, `peerId`))
                     CHARACTER SET utf8 COLLATE utf8_general_ci
@@ -126,6 +126,8 @@ public class MySQL implements UserBackend {
         if(hasUser(peerId, userId)) {
             return chats.get(peerId).getIfPresent(userId);
         }
+        //check admin and return
+
         try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
             ps.setInt(1, peerId);
             ps.setInt(2, userId);
