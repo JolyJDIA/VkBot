@@ -15,7 +15,6 @@ public class Loader {
     public static void main(String[] args) throws ClientException, ApiException {
         ObedientBot bot = new ObedientBot();
         new Thread(new EventUpdater(bot)).start();
-
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(vkApiClient, bot.getGroupActor());
 
         try {

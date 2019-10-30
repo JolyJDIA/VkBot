@@ -5,7 +5,6 @@ import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Maps;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -18,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.*;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +32,7 @@ public class MySQL implements UserBackend {
     @NonNls private static final String DELETE =
             "DELETE FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
 
-    private final Map<Integer, Cache<Integer, User>> chats = Maps.newHashMap();
+    private final Map<Integer, Cache<Integer, User>> chats = new WeakHashMap<>();
 
     public MySQL(String username, String password, @NonNls String url) {
         MysqlDataSource data = new MysqlDataSource();

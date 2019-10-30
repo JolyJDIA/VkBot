@@ -60,14 +60,14 @@ public final class ObedientBot implements RoflanBot {
         PermissionManager.registerPermissionGroups();
         Bot.setBot(this);
         this.userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
-                new MySQL(properties.getProperty("username"), "", properties.getProperty("url")) :
+                new MySQL(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
                 new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
 
         Groups groups = Loader.getVkApiClient().groups();
         if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
             groups.setLongPollSettings(groupActor, groupActor.getGroupId())
                     .enabled(true)
-                    .apiVersion("5.103")
+                    .apiVersion("5.101")
                     .wallPostNew(true)
                     .messageNew(true)
                     .audioNew(true)
