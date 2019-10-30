@@ -23,14 +23,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MySQL implements UserBackend {
-    @NonNls
-    private static final Logger LOGGER = Logger.getLogger(MySQL.class.getName());
+    @NonNls private static final Logger LOGGER = Logger.getLogger(MySQL.class.getName());
     private Connection connection;
     @NonNls private static final String INSERT_OR_UPDATE_GROUP =
             "INSERT INTO `vkbot` (`peerId`, `userId`, `group`) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE `group` = ?";
     @NonNls private static final String SELECT =
             "SELECT * FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
-
     @NonNls private static final String DELETE =
             "DELETE FROM `vkbot` WHERE `peerId` = ? AND `userId` = ?";
 
@@ -157,7 +155,7 @@ public class MySQL implements UserBackend {
         User user = new User(peerId, userId);
         try {
             if(Loader.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
-                    .stream().anyMatch(e -> {
+                    .stream().filter(e -> e.getMemberId() == userId).anyMatch(e -> {
                         Boolean isOwner = e.getIsOwner();
                         Boolean isAdmin = e.getIsAdmin();
                         return (isOwner != null && isOwner) || (isAdmin != null && isAdmin);
