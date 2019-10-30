@@ -47,6 +47,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     }
 
     @Contract(pure = true)
+    @Override
     public @NotNull Set<Integer> getChats() {
         return map.keySet();
     }
@@ -63,7 +64,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         }
         return null;
     }
-
+    @Override
     public @Nullable User getUser(int peerId, int userId) {
         if (hasUser(peerId, userId)) {
             return map.get(peerId).get(userId);
@@ -71,6 +72,12 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         return null;
     }
 
+    @Override
+    public void deleteUser(int peerId, int userId) {
+
+    }
+
+    @Override
     public User addIfAbsentAndReturn(int peerId, int userId) {
         Map<Integer, User> users = map.computeIfAbsent(peerId, k -> new HashMap<>());
         User user;
@@ -106,6 +113,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         }
         this.save(map, new MapTypeToken().getType());
     }
+    @Override
     public void setRank(int peerId, int userId, PermissionGroup rank) {
         addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setGroup(rank));
     }
@@ -115,6 +123,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     public void setSuffix(int peerId, int userId, String suffix) {
         addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setSuffix(suffix));
     }
+    @Override
     public void setRank(User user, PermissionGroup rank) {
         if(user == null) {
             return;

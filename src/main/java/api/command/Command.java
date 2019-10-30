@@ -118,15 +118,7 @@ public abstract class Command {
      * @return true Если у пользователя нет разрешения
      */
     public final boolean noPermission(User user) {
-        if (permission == null || permission.isEmpty()) {
-            return false;
-        }
-        PermissionGroup group = user.getGroup();
-        boolean noAccess = group.notPermission(permission);
-        if(noAccess) {
-            user.sendMessageFromChat(noPermissionMessage);
-        }
-        return noAccess;
+        return !hasPermission(user);
     }
     @Contract(pure = true)
     protected final @NotNull String getUseCommand() {

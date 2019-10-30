@@ -41,7 +41,7 @@ public class PermissionGroup {
      * @return true, если доступ разрешен, в противном случае false
      */
     public final boolean notPermission(String permission) {
-        return !(checkStar(permission) || this.permissions.contains(permission.toLowerCase(Locale.ENGLISH)));
+        return !hasPermission(permission);
     }
 
     /**

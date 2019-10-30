@@ -28,7 +28,7 @@ public class MySQL implements UserBackend {
     @NonNls private static final String INSERT_OR_UPDATE_GROUP =
             "INSERT INTO `vkbot` (`peerId`, `userId`, `group`) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE `group` = ?";
     @NonNls private static final String SELECT =
-            "SELECT * FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
+            "SELECT `group` FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
     @NonNls private static final String DELETE =
             "DELETE FROM `vkbot` WHERE `peerId` = ? AND `userId` = ?";
 
@@ -73,10 +73,12 @@ public class MySQL implements UserBackend {
         });
     }
     @Contract(pure = true)
+    @Override
     public final @NotNull Set<Integer> getChats() {
         return chats.keySet();
     }
 
+    @Override
     public final void setRank(int peerId, int userId, PermissionGroup rank) {
         if(!hasUser(peerId, userId)) {
             return;
@@ -85,6 +87,7 @@ public class MySQL implements UserBackend {
         user.setGroup(rank);
         saveOrUpdateGroup(user);
     }
+    @Override
     public final void setRank(User user, PermissionGroup rank) {
         if(user == null) {
             return;
@@ -98,7 +101,7 @@ public class MySQL implements UserBackend {
     private boolean hasUser(int peerId, int userId) {
         return chats.containsKey(peerId) && chats.get(peerId).asMap().containsKey(userId);
     }
-    public @Nullable User getUser(@NotNull User user) {
+    public final @Nullable User getUser(@NotNull User user) {
         if (hasUser(user)) {
             return chats.get(user.getPeerId()).getIfPresent(user.getUserId());
         }
@@ -121,8 +124,10 @@ public class MySQL implements UserBackend {
         users.put(user.getUserId(), user);
         return user;
     }
+    @Override
     public final @Nullable User addIfAbsentAndReturn(int peerId, int userId) {
         if(hasUser(peerId, userId)) {
+            System.out.println("ЕСТЬ");
             return chats.get(peerId).getIfPresent(userId);
         }
         try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
@@ -131,7 +136,7 @@ public class MySQL implements UserBackend {
             try (ResultSet rs = ps.executeQuery()) {
                 //КЭШИРУЮ
                 return loadUserInCache(rs.next() ?
-                        new User(peerId, userId, rs.getString(3), "", "")
+                        new User(peerId, userId, rs.getString(1), "", "")
                         : initializationNewUser(peerId, userId));
             }
         } catch (SQLException e) {
@@ -139,7 +144,8 @@ public class MySQL implements UserBackend {
         }
         return null;
     }
-    public void deleteUser(int peerId, int userId) {
+    @Override
+    public final void deleteUser(int peerId, int userId) {
         if(hasUser(peerId, userId)) {
             chats.get(peerId).invalidate(userId);
         }
@@ -151,7 +157,7 @@ public class MySQL implements UserBackend {
             e.printStackTrace();
         }
     }
-    public static @NotNull User initializationNewUser(int peerId, int userId) {
+    private static @NotNull User initializationNewUser(int peerId, int userId) {
         User user = new User(peerId, userId);
         try {
             if(Loader.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()

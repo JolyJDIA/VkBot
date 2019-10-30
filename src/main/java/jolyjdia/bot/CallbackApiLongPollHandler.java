@@ -11,6 +11,8 @@ import api.event.messages.ReplyMessageEvent;
 import api.event.messages.SendCommandEvent;
 import api.event.post.NewPostWallEvent;
 import api.event.post.RepostWallEvent;
+import api.event.user.UserJoinEvent;
+import api.event.user.UserLeaveEvent;
 import api.storage.User;
 import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
 import com.vk.api.sdk.client.VkApiClient;
@@ -43,9 +45,20 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             return;
         }
         MessageAction action = msg.getAction();
-        if(action != null && action.getType() == MessageActionStatus.CHAT_KICK_USER) {
-            //Bot.getProfileList().remove(msg.getPeerId(), msg.getFromId());
-            return;
+        if(action != null) {
+            MessageActionStatus type = action.getType();
+            if(type == MessageActionStatus.CHAT_KICK_USER) {
+                Bot.getProfileList().deleteUser(msg.getPeerId(), msg.getFromId());
+
+                //ВОЗМОЖНО ПОТОМ ИЗМЕНЮ ПАРАМЕТРЫ НА User
+                UserLeaveEvent event = new UserLeaveEvent(msg.getPeerId(), msg.getFromId());
+                submitEvent(event);
+                return;
+            } else if(type == MessageActionStatus.CHAT_INVITE_USER || type == MessageActionStatus.CHAT_INVITE_USER_BY_LINK) {
+                //ВОЗМОЖНО ПОТОМ ИЗМЕНЮ ПАРАМЕТРЫ НА User
+                UserJoinEvent event = new UserJoinEvent(msg.getPeerId(), msg.getFromId());
+                submitEvent(event);
+            }
         }
         @NonNls String text = msg.getText();
         User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
