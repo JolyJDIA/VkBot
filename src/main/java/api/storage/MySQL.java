@@ -32,7 +32,7 @@ public class MySQL implements UserBackend {
     @NonNls private static final String DELETE =
             "DELETE FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
 
-    private final Map<Integer, Cache<Integer, User>> chats = new WeakHashMap<>();
+    private final Map<Integer, Cache<Integer, User>> chats = new WeakHashMap<>();//Хз, зачем) На всякий)
 
     public MySQL(String username, String password, @NonNls String url) {
         MysqlDataSource data = new MysqlDataSource();
