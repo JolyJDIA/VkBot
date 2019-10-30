@@ -48,7 +48,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         if(action != null) {
             MessageActionStatus type = action.getType();
             if(type == MessageActionStatus.CHAT_KICK_USER) {
-                Bot.getProfileList().deleteUser(msg.getPeerId(), msg.getFromId());
+                Bot.getUserBackend().deleteUser(msg.getPeerId(), msg.getFromId());
 
                 //ВОЗМОЖНО ПОТОМ ИЗМЕНЮ ПАРАМЕТРЫ НА User
                 UserLeaveEvent event = new UserLeaveEvent(msg.getPeerId(), msg.getFromId());
@@ -61,7 +61,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             }
         }
         @NonNls String text = msg.getText();
-        User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
             SendCommandEvent event = new SendCommandEvent(user, args);
@@ -94,7 +94,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         if(msg.getPeerId().equals(msg.getFromId())) {
             return;
         }
-        User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         ReplyMessageEvent event = new ReplyMessageEvent(user, msg);
         submitEvent(event);
     }
@@ -104,7 +104,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         if(msg.getPeerId().equals(msg.getFromId())) {
             return;
         }
-        User user = Bot.getProfileList().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         EditMessageEvent event = new EditMessageEvent(user, msg);
         submitEvent(event);
     }

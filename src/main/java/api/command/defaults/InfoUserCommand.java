@@ -25,7 +25,7 @@ public class InfoUserCommand extends Command {
             if (id == null) {
                 return;
             }
-            User target = Bot.getProfileList().getUser(sender.getPeerId(), id);
+            User target = Bot.getUserBackend().getUser(sender.getPeerId(), id);
             if(target == null) {
                 sender.sendMessageFromChat("Не удалось найти этого пользователя в базе");
                 return;

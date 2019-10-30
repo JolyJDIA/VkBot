@@ -41,7 +41,7 @@ public class RankCommand extends Command {
                 sender.sendMessageFromChat(builder.toString());
                 return;
             }
-            Bot.getProfileList().setRank(sender.getPeerId(), id, PermissionManager.getPermGroup(args[2]));
+            Bot.getUserBackend().setRank(sender.getPeerId(), id, PermissionManager.getPermGroup(args[2]));
             sender.sendMessageFromChat("Вы успешно выдали права");
         } else {
             sender.sendMessageFromChat("Использование: " + getUseCommand());

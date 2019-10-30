@@ -40,7 +40,7 @@ public final class ObedientBot implements RoflanBot {
     private final Properties properties = new Properties();
     private final ModuleLoader moduleLoader = new ModuleLoader();
     private final HelpAllCommands helpCommand = new HelpAllCommands();
-    private final UserBackend backend;
+    private final UserBackend userBackend;
     private final String accessToken;
     private final int groupId;
     private final GroupActor groupActor;
@@ -53,13 +53,13 @@ public final class ObedientBot implements RoflanBot {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        PermissionManager.registerPermissionGroups();
         this.groupId = Integer.parseInt(properties.getProperty("groupId"));
         this.accessToken = properties.getProperty("accessToken");
         this.groupActor = new GroupActor(groupId, accessToken);
 
+        PermissionManager.registerPermissionGroups();
         Bot.setBot(this);
-        this.backend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
+        this.userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
                 new MySQL(properties.getProperty("username"), "", properties.getProperty("url")) :
                 new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
 
@@ -88,9 +88,9 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.registerModule(new YandexTraslate());
         moduleLoader.registerModule(new GeoLoad());
         moduleLoader.registerModule(new Puzzle());
-        //moduleLoader.registerModule(new ShoutboxMain());
         moduleLoader.registerModule(new GeneratorPassword());
         moduleLoader.registerModule(new SmileLoad());
+        //moduleLoader.registerModule(new ShoutboxMain());
         //moduleLoader.registerModule(new CraftClient());
     }
     private void loadModule() {
@@ -136,8 +136,8 @@ public final class ObedientBot implements RoflanBot {
 
     @Contract(pure = true)
     @Override
-    public UserBackend getProfileList() {
-        return backend;
+    public UserBackend getUserBackend() {
+        return userBackend;
     }
 
     @Contract(pure = true)

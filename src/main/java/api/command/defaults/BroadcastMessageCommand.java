@@ -19,7 +19,7 @@ public class BroadcastMessageCommand extends Command {
             if(sender.getUserId() == ADMIN) {
                 sender.sendMessageFromChat("Объявление отправится только активным беседам!");
                 String text = StringBind.toString(args);
-                for(int id : Bot.getProfileList().getChats()) {
+                for(int id : Bot.getUserBackend().getChats()) {
                     Bot.sendMessage(text, id);
                 }
             } else {

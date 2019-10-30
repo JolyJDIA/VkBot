@@ -13,7 +13,7 @@ public interface RoflanBot {
     void sendMessage(String message, int peerId, String... attachment);
     void sendKeyboard(String message, int peerId, Keyboard keyboard);
     void editChat(String title, int peerId);
-    UserBackend getProfileList();
+    UserBackend getUserBackend();
     BotManager getBotManager();
     BotScheduler getScheduler();
     int getGroupId();

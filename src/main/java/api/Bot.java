@@ -40,8 +40,8 @@ import java.util.Properties;
         return roflanBot.getScheduler();
     }
 
-    public static UserBackend getProfileList() {
-        return roflanBot.getProfileList();
+    public static UserBackend getUserBackend() {
+        return roflanBot.getUserBackend();
     }
 
     public static Properties getConfig() {
