@@ -19,26 +19,32 @@ import java.sql.*;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MySQL implements UserBackend {
+    @NonNls
+    private static final Logger LOGGER = Logger.getLogger(MySQL.class.getName());
     private Connection connection;
     @NonNls private static final String INSERT_OR_UPDATE_GROUP =
-            "INSERT INTO `vkbot` (`peerId`, `userId`, `group`) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE `group` = ?;";
+            "INSERT INTO `vkbot` (`peerId`, `userId`, `group`) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE `group` = ?";
     @NonNls private static final String SELECT =
-            "SELECT * FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1;";
+            "SELECT * FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
+
+    @NonNls private static final String DELETE =
+            "DELETE FROM `vkbot` WHERE `peerId` = ? AND `userId` = ?";
 
     private final Map<Integer, Cache<Integer, User>> chats = Maps.newHashMap();
+
     public MySQL(String username, String password, @NonNls String url) {
-        Bot.getScheduler().runTaskAsynchronously(() -> {
-            MysqlDataSource data = new MysqlDataSource();
-            data.setUser(username);
-            data.setPassword(password);
-            data.setUrl(url + "?useUnicode=true&characterEncoding=UTF-8");
-            try {
-                this.connection = data.getConnection();
-                try (Statement statement = connection.createStatement()) {
-                    statement.execute("""
+        MysqlDataSource data = new MysqlDataSource();
+        data.setUser(username);
+        data.setPassword(password);
+        data.setUrl(url + "?useUnicode=true&characterEncoding=UTF-8");
+        try {
+            this.connection = data.getConnection();
+            try (Statement statement = connection.createStatement()) {
+                statement.execute("""
                     CREATE TABLE IF NOT EXISTS `vkbot` (
                     `peerId` INT(36) NOT NULL,
                     `userId` INT(36) NOT NULL,
@@ -46,11 +52,13 @@ public class MySQL implements UserBackend {
                     PRIMARY KEY (`userId`, `peerId`))
                     CHARACTER SET utf8 COLLATE utf8_general_ci
                     """);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-        });
+            LOGGER.log(Level.INFO, "MySQL Connected!");
+        } catch (SQLException e) {
+            LOGGER.log(Level.WARNING, "MySQL Connect Error: " + e + " Connection to database has failed ! Core will use flatDatabase");
+            //TODO: JSON база
+            e.printStackTrace();
+        }
     }
     private final void saveOrUpdateGroup(User user) {
         Bot.getScheduler().runTaskAsynchronously(() -> {
@@ -70,14 +78,21 @@ public class MySQL implements UserBackend {
     public final @NotNull Set<Integer> getChats() {
         return chats.keySet();
     }
+
     public final void setRank(int peerId, int userId, PermissionGroup rank) {
-        addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setGroup(rank));
+        if(!hasUser(peerId, userId)) {
+            return;
+        }
+        User user = chats.get(peerId).asMap().getOrDefault(userId, new User(peerId, userId));
+        user.setGroup(rank);
+        saveOrUpdateGroup(user);
     }
     public final void setRank(User user, PermissionGroup rank) {
         if(user == null) {
             return;
         }
-        addIfAbsentAndConsumer(user, user1 -> user1.setGroup(rank));
+        user.setGroup(rank);
+        saveOrUpdateGroup(user);
     }
     private boolean hasUser(@NotNull User user) {
         return chats.containsKey(user.getPeerId()) && chats.get(user.getPeerId()).asMap().containsKey(user.getUserId());
@@ -99,51 +114,53 @@ public class MySQL implements UserBackend {
         }
         return null;
     }
-
-    private void addIfAbsentAndConsumer(@NotNull User user, @NotNull Consumer<? super User> consumer) {
-        Cache<Integer, User> users = chats.computeIfAbsent(user.getPeerId(), k -> CacheBuilder.newBuilder()
-                .maximumSize(20)
-                .expireAfterAccess(30, TimeUnit.MINUTES)
-                .build());
-        int userId = user.getUserId();
-        if(users.asMap().containsKey(userId)) {
-            consumer.accept(users.getIfPresent(userId));
-        } else {
-            consumer.accept(user);
-            users.put(userId, user);
-        }
-        saveOrUpdateGroup(user);
-    }
     @Contract("_ -> param1")
     private final @NotNull User loadUserInCache(@NotNull User user) {
         Cache<Integer, User> users = chats.computeIfAbsent(user.getPeerId(), k -> CacheBuilder.newBuilder()
-                .maximumSize(20)
+                .maximumSize(50)
                 .expireAfterAccess(30, TimeUnit.MINUTES)
                 .build());
         users.put(user.getUserId(), user);
         return user;
     }
     public final @Nullable User addIfAbsentAndReturn(int peerId, int userId) {
+        if(hasUser(peerId, userId)) {
+            return chats.get(peerId).getIfPresent(userId);
+        }
         try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
             ps.setInt(1, peerId);
             ps.setInt(2, userId);
             try (ResultSet rs = ps.executeQuery()) {
+                //КЭШИРУЮ
                 return loadUserInCache(rs.next() ?
                         new User(peerId, userId, rs.getString(3), "", "")
-                        : initNewUser(peerId, userId));
+                        : initializationNewUser(peerId, userId));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-    public static @NotNull User initNewUser(int peerId, int userId) {
+    public void deleteUser(int peerId, int userId) {
+        if(hasUser(peerId, userId)) {
+            chats.get(peerId).invalidate(userId);
+        }
+        try (PreparedStatement ps = connection.prepareStatement(DELETE)) {
+            ps.setInt(1, peerId);
+            ps.setInt(2, userId);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static @NotNull User initializationNewUser(int peerId, int userId) {
         User user = new User(peerId, userId);
         try {
             if(Loader.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
                     .stream().anyMatch(e -> {
+                        Boolean isOwner = e.getIsOwner();
                         Boolean isAdmin = e.getIsAdmin();
-                        return (e.getMemberId() == userId) && (isAdmin != null && isAdmin);
+                        return (isOwner != null && isOwner) || (isAdmin != null && isAdmin);
                     })) {
                 user.setGroup(PermissionManager.getPermGroup(PermissionManager.ADMIN));
             }
@@ -152,4 +169,34 @@ public class MySQL implements UserBackend {
         }
         return user;
     }
+    /*
+    private final void initializationChatAdmin(int peerId) {
+        Bot.getScheduler().runTaskAsynchronously(() -> {
+            try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
+                for(ConversationMember member : Loader.getVkApiClient().messages()
+                        .getConversationMembers(Bot.getGroupActor(), peerId)
+                        .execute()
+                        .getItems()) {
+                    if(member.getMemberId() < 0) {
+                        continue;
+                    }
+                    Boolean isOwner = member.getIsOwner();
+                    Boolean isAdmin = member.getIsAdmin();
+                    if((isOwner != null && isOwner) || (isAdmin != null && isAdmin)) {
+                        ps.setInt(1, peerId);
+                        ps.setInt(2, member.getMemberId());
+                        ps.setString(3, PermissionManager.ADMIN);
+
+                        ps.setString(4, PermissionManager.ADMIN);
+                        ps.addBatch();
+                    }
+                }
+                ps.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ApiException | ClientException e) {
+                e.printStackTrace();
+            }
+        });
+    }*/
 }

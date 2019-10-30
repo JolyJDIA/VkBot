@@ -19,6 +19,7 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
     @NonNls public static final String DEFAULT = "default";
     private final Map<String, PermissionGroup> groups = new HashMap<>();
     private static PermissionManager manager;
+    //TODO: ПОЛЯ Главных рангов
 
     public PermissionManager(File file) {
         super(file);
@@ -59,6 +60,11 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
     @Contract(pure = true)
     public static PermissionGroup getDefault() {
         return getMapGroup().get(DEFAULT);
+    }
+
+    @Contract(pure = true)
+    public static PermissionGroup getAdmin() {
+        return getMapGroup().get(ADMIN);
     }
 
     /**
