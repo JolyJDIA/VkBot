@@ -80,9 +80,6 @@ public class MySQL implements UserBackend {
 
     @Override
     public final void setRank(int peerId, int userId, PermissionGroup rank) {
-        if(!hasUser(peerId, userId)) {
-            return;
-        }
         User user = chats.get(peerId).asMap().getOrDefault(userId, new User(peerId, userId));
         user.setGroup(rank);
         saveOrUpdateGroup(user);
@@ -127,7 +124,6 @@ public class MySQL implements UserBackend {
     @Override
     public final @Nullable User addIfAbsentAndReturn(int peerId, int userId) {
         if(hasUser(peerId, userId)) {
-            System.out.println("ЕСТЬ");
             return chats.get(peerId).getIfPresent(userId);
         }
         try (PreparedStatement ps = connection.prepareStatement(SELECT)) {

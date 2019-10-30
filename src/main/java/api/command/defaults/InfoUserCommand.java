@@ -2,6 +2,7 @@ package api.command.defaults;
 
 import api.Bot;
 import api.command.Command;
+import api.permission.PermissionGroup;
 import api.storage.User;
 import api.utils.VkUtils;
 import org.jetbrains.annotations.Contract;
@@ -18,7 +19,7 @@ public class InfoUserCommand extends Command {
     public final void execute(@NotNull User sender, @NotNull String[] args) {
         @NonNls String info = "Айди-беседа: "+sender.getPeerId()+ '\n';
         if(args.length == 1) {
-            info += getInfo(sender.getGroup().getName(), sender.getPrefix(), sender.getSuffix());
+            info += getInfo(sender.getGroup());
         } else if(args.length == 2) {
             Integer id = VkUtils.getUserId(args[1], sender);
             if (id == null) {
@@ -30,7 +31,7 @@ public class InfoUserCommand extends Command {
                 return;
             }
 
-            info += getInfo(target.getGroup().getName(), target.getPrefix(), target.getSuffix());
+            info += getInfo(target.getGroup());
         } else {
             return;
         }
@@ -38,9 +39,9 @@ public class InfoUserCommand extends Command {
     }
     @NonNls
     @Contract(pure = true)
-    private static @NotNull String getInfo(String group, String prefix, String suffix) {
-        return "Ранг: "+group + '\n' +
-                "Префикс: "+prefix + '\n' +
-                "Суффикс: "+ suffix;
+    private static @NotNull String getInfo(@NotNull PermissionGroup group) {
+        return "Ранг: "+group.getName() + '\n' +
+                "Префикс: "+group.getPrefix() + '\n' +
+                "Суффикс: "+ group.getSuffix();
     }
 }
