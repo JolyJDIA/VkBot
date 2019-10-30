@@ -30,7 +30,7 @@ public class MySQL implements UserBackend {
     @NonNls private static final String SELECT =
             "SELECT `group` FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
     @NonNls private static final String DELETE =
-            "DELETE FROM `vkbot` WHERE `peerId` = ? AND `userId` = ?";
+            "DELETE FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
 
     private final Map<Integer, Cache<Integer, User>> chats = Maps.newHashMap();
 
