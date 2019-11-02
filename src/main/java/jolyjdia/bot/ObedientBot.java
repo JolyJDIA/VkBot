@@ -20,6 +20,7 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
+import jolyjdia.bot.newcalculator.internal.InitCalc;
 import jolyjdia.bot.password.GeneratorPassword;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.smile.SmileLoad;
@@ -90,6 +91,7 @@ public final class ObedientBot implements RoflanBot {
         moduleLoader.registerModule(new Puzzle());
         moduleLoader.registerModule(new GeneratorPassword());
         moduleLoader.registerModule(new SmileLoad());
+        moduleLoader.registerModule(new InitCalc());
         //moduleLoader.registerModule(new ShoutboxMain());
         //moduleLoader.registerModule(new CraftClient());
     }
