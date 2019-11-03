@@ -17,6 +17,7 @@ public class ParserException extends ExpressionException {
         super(position, getPrefix(position) + ": " + message);
     }
 
+    @NonNls
     @Contract(pure = true)
     private static @NotNull String getPrefix(int position) {
         return position < 0 ? "Parser error" : ("Parser error at " + (position + 1));

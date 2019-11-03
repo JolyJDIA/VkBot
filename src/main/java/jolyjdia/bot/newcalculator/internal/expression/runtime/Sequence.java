@@ -3,7 +3,6 @@ package jolyjdia.bot.newcalculator.internal.expression.runtime;
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
 import jolyjdia.bot.newcalculator.internal.expression.parser.ParserException;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -11,12 +10,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class Sequence extends Node {
-
     private final RValue[] sequence;
 
     public Sequence(int position, RValue... sequence) {
         super(position);
-
         this.sequence = sequence;
     }
 
@@ -33,21 +30,6 @@ public class Sequence extends Node {
             ret = invokable.getValue();
         }
         return ret;
-    }
-
-    @Override
-    public final @NotNull String toString() {
-        StringBuilder sb = new StringBuilder("seq(");
-        boolean first = false;
-        for (RValue invokable : sequence) {
-            if (first) {
-                sb.append(", ");
-            }
-            sb.append(invokable);
-            first = true;
-        }
-
-        return sb.append(')').toString();
     }
 
     @Override

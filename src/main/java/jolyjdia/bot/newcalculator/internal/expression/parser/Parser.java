@@ -8,6 +8,7 @@ import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.OperatorToken
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.Token;
 import jolyjdia.bot.newcalculator.internal.expression.runtime.*;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public final class Parser {
         };
     }
 
-    private RValue parseExpression(boolean canBeEmpty) throws ParserException {
+    private @NotNull RValue parseExpression(boolean canBeEmpty) throws ParserException {
         LinkedList<Identifiable> halfProcessed = new LinkedList<>();
         boolean expressionStart = true;
         loop: while (position < tokens.size()) {
@@ -155,7 +156,7 @@ public final class Parser {
         }
     }
 
-    private RValue parseBracket() throws ParserException {
+    private @NotNull RValue parseBracket() throws ParserException {
         consumeCharacter('(');
         final RValue ret = parseExpression(false);
         consumeCharacter(')');
@@ -163,7 +164,7 @@ public final class Parser {
     }
 
 
-    private void assertCharacter(char character) throws ParserException {
+    private void assertCharacter(@NonNls char character) throws ParserException {
         final Token next = peek();
         if (next.id() != character) {
             throw new ParserException(next.getPosition(), "Expected '" + character + '\'');

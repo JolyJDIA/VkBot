@@ -2,10 +2,8 @@ package jolyjdia.bot.newcalculator.internal.expression.runtime;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
-public final class Constant extends Node {
-
+public class Constant extends Node {
     private final double value;
 
     public Constant(double value) {
@@ -15,31 +13,25 @@ public final class Constant extends Node {
 
     @Contract(pure = true)
     @Override
-    public double getValue() {
+    public final double getValue() {
         return value;
     }
 
     @Override
     @Contract(pure = true)
-    public RValue optimize() {
+    public final RValue optimize() {
         return this;
     }
 
     @Override
     @Contract(pure = true)
-    public RValue bindVariables(Expression expression) {
+    public final RValue bindVariables(Expression expression) {
         return this;
     }
 
-    @Override
-    @Contract(pure = true)
-    public @NotNull String toString() {
-        return String.valueOf(value);
-    }
-
     @Contract(pure = true)
     @Override
-    public char id() {
+    public final char id() {
         return 'c';
     }
 

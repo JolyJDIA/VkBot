@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class UnaryOperator extends PseudoToken {
-
     final String operator;
 
     public UnaryOperator(@NotNull OperatorToken operatorToken) {
@@ -21,12 +20,6 @@ public class UnaryOperator extends PseudoToken {
     @Override
     public final char id() {
         return 'p';
-    }
-
-    @Override
-    @Contract(pure = true)
-    public final @NotNull String toString() {
-        return "UnaryOperator(" + operator + ')';
     }
 
 }
