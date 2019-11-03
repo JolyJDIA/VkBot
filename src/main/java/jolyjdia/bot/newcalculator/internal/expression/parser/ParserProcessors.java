@@ -69,7 +69,7 @@ final class ParserProcessors {
             }
         }
 
-        RValue rhsInvokable = processBinaryOpsLA(rhs, level -1);
+        RValue rhsInvokable = processBinaryOpsLA(rhs, level - 1);
         if (operator == null) {
             return rhsInvokable;
         }

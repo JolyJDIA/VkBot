@@ -44,12 +44,10 @@ public final class Lexer {
             }
 
             @NonNls final char ch = peek();
-
             if (containsChar(ch)) {
                 tokens.add(new CharacterToken(position++, ch));
                 continue;
             }
-
             final Matcher numberMatcher = numberPattern.matcher(expression.substring(position));
             if (numberMatcher.lookingAt()) {
                 String numberPart = numberMatcher.group(1);
@@ -77,7 +75,6 @@ public final class Lexer {
 
             throw new LexerException(position, "Unknown character " + ch);
         } while (position < expression.length());
-        System.out.println(tokens);
         return tokens;
     }
 
