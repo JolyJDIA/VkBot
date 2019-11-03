@@ -1,8 +1,8 @@
 package jolyjdia.bot.newcalculator.internal.expression.runtime;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
+import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 import jolyjdia.bot.newcalculator.internal.expression.Identifiable;
-import jolyjdia.bot.newcalculator.internal.expression.parser.ParserException;
 
 public interface RValue extends Identifiable {
 
@@ -10,6 +10,6 @@ public interface RValue extends Identifiable {
 
     RValue optimize();
 
-    RValue bindVariables(Expression expression) throws ParserException;
+    RValue bindVariables(Expression expression) throws ExpressionException;
 
 }

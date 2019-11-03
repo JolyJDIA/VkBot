@@ -1,7 +1,7 @@
 package jolyjdia.bot.newcalculator.internal.expression.runtime;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.parser.ParserException;
+import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 
 public interface LValue extends RValue {
 
@@ -11,6 +11,6 @@ public interface LValue extends RValue {
     LValue optimize();
 
     @Override
-    LValue bindVariables(Expression expression) throws ParserException;
+    LValue bindVariables(Expression expression) throws ExpressionException;
 
 }

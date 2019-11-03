@@ -1,6 +1,7 @@
 package jolyjdia.bot.newcalculator.internal.expression.parser;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
+import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 import jolyjdia.bot.newcalculator.internal.expression.Identifiable;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.IdentifierToken;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.NumberToken;
@@ -45,15 +46,15 @@ public final class Parser {
         this.expression = expression;
     }
 
-    public static @NotNull RValue parse(List<? extends Token> tokens, Expression expression) throws ParserException {
+    public static @NotNull RValue parse(List<? extends Token> tokens, Expression expression) throws ExpressionException {
         return new Parser(tokens, expression).parse();
     }
 
-    private @NotNull RValue parse() throws ParserException {
+    private @NotNull RValue parse() throws ExpressionException {
         final RValue ret = parseStatements();
         if (position < tokens.size()) {
             final Token token = peek();
-            throw new ParserException(token.getPosition(), "Extra token at the end of the input: " + token);
+            throw new ExpressionException(token.getPosition(), "Дополнительный токен в конце ввода: " + token);
         }
 
         ret.bindVariables(expression);
@@ -61,7 +62,7 @@ public final class Parser {
         return ret;
     }
 
-    private RValue parseStatements() throws ParserException {
+    private RValue parseStatements() throws ExpressionException {
         List<RValue> statements = new ArrayList<>();
         if (position < tokens.size()) {
             statements.add(parseExpression(true));
@@ -74,7 +75,7 @@ public final class Parser {
         };
     }
 
-    private @NotNull RValue parseExpression(boolean canBeEmpty) throws ParserException {
+    private @NotNull RValue parseExpression(boolean canBeEmpty) throws ExpressionException {
         LinkedList<Identifiable> halfProcessed = new LinkedList<>();
         boolean expressionStart = true;
         loop: while (position < tokens.size()) {
@@ -138,7 +139,7 @@ public final class Parser {
         return tokens.get(position);
     }
 
-    private @NotNull Function parseFunctionCall(IdentifierToken identifierToken) throws ParserException {
+    private @NotNull Function parseFunctionCall(IdentifierToken identifierToken) throws ExpressionException {
         consumeCharacter('(');
 
         try {
@@ -152,11 +153,11 @@ public final class Parser {
             ++position;
             return Functions.getFunction(identifierToken.getPosition(), identifierToken.value, args.toArray(new RValue[0]));
         } catch (NoSuchMethodException e) {
-            throw new ParserException(identifierToken.getPosition(), "Function '" + identifierToken.value + "' not found", e);
+            throw new ExpressionException(identifierToken.getPosition(), "Функция " + identifierToken.value + " не найдена", e);
         }
     }
 
-    private @NotNull RValue parseBracket() throws ParserException {
+    private @NotNull RValue parseBracket() throws ExpressionException {
         consumeCharacter('(');
         final RValue ret = parseExpression(false);
         consumeCharacter(')');
@@ -164,13 +165,13 @@ public final class Parser {
     }
 
 
-    private void assertCharacter(@NonNls char character) throws ParserException {
+    private void assertCharacter(@NonNls char character) throws ExpressionException {
         final Token next = peek();
         if (next.id() != character) {
-            throw new ParserException(next.getPosition(), "Expected '" + character + '\'');
+            throw new ExpressionException(next.getPosition(), "Ожидаемый " + character);
         }
     }
-    private void consumeCharacter(char character) throws ParserException {
+    private void consumeCharacter(char character) throws ExpressionException {
         assertCharacter(character);
         ++position;
     }

@@ -1,6 +1,7 @@
 package jolyjdia.bot.newcalculator.internal.expression.parser;
 
 import com.google.common.collect.ImmutableMap;
+import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 import jolyjdia.bot.newcalculator.internal.expression.Identifiable;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.OperatorToken;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.Token;
@@ -46,10 +47,10 @@ final class ParserProcessors {
     @Contract(pure = true)
     private ParserProcessors() {}
 
-    static @NotNull RValue processExpression(LinkedList<Identifiable> input) throws ParserException {
+    static @NotNull RValue processExpression(LinkedList<Identifiable> input) throws ExpressionException {
         return Objects.requireNonNull(processBinaryOpsLA(input, 1));
     }
-    private static @Nullable RValue processBinaryOpsLA(@NotNull LinkedList<Identifiable> input, int level) throws ParserException {
+    private static @Nullable RValue processBinaryOpsLA(@NotNull LinkedList<Identifiable> input, int level) throws ExpressionException {
         if (level < 0) {
             return processUnaryOps(input);
         }
@@ -67,7 +68,6 @@ final class ParserProcessors {
                 }
 
                 operator = BINARY_OP[level].get(((OperatorToken) identifiable).operator);
-                System.out.println(operator);
                 if (operator == null) {
                     continue;
                 }
@@ -90,12 +90,12 @@ final class ParserProcessors {
             return null;
         }
     }
-    private static @Nullable RValue processUnaryOps(@NotNull LinkedList<Identifiable> input) throws ParserException {
+    private static @Nullable RValue processUnaryOps(@NotNull LinkedList<Identifiable> input) throws ExpressionException {
         @NonNls final Identifiable center;
         Deque<UnaryOperator> postfixes = new LinkedList<>();
         do {
             if (input.isEmpty()) {
-                throw new ParserException(-1, "Expression missing.");
+                throw new ExpressionException(-1, "Выражение отсутствует");
             }
 
             final Identifiable last = input.removeLast();
@@ -110,7 +110,7 @@ final class ParserProcessors {
         } while (true);
 
         if (!(center instanceof RValue)) {
-            throw new ParserException(center.getPosition(), "Expected expression, found " + center);
+            throw new ExpressionException(center.getPosition(), "Ожидаемое выражение, найдено " + center);
         }
 
         input.addAll(postfixes);
@@ -137,11 +137,11 @@ final class ParserProcessors {
             }
 
             if (last instanceof Token) {
-                throw new ParserException(lastPosition, "Extra token found in expression: " + last);
+                throw new ExpressionException(lastPosition, "Нет такого токена: " + last);
             } else if (last instanceof RValue) {
-                throw new ParserException(lastPosition, "Extra expression found: " + last);
+                throw new ExpressionException(lastPosition, "Нет такого выражения: " + last);
             } else {
-                throw new ParserException(lastPosition, "Extra element found: " + last);
+                throw new ExpressionException(lastPosition, "Нет такого элемента: " + last);
             }
         }
         return ret;

@@ -1,6 +1,7 @@
 package jolyjdia.bot.newcalculator.internal.expression.parser;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
+import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 import jolyjdia.bot.newcalculator.internal.expression.runtime.LValue;
 import jolyjdia.bot.newcalculator.internal.expression.runtime.RValue;
 import org.jetbrains.annotations.Contract;
@@ -41,10 +42,10 @@ public class UnboundVariable extends PseudoToken implements LValue {
     }
 
     @Override
-    public final @NotNull LValue bindVariables(@NotNull Expression expression) throws ParserException {
+    public final @NotNull LValue bindVariables(@NotNull Expression expression) throws ExpressionException {
         final RValue variable = expression.getVariable(name);
         if (variable == null) {
-            throw new ParserException(getPosition(), "переменная " + name + " не найдена");
+            throw new ExpressionException(getPosition(), "Переменная " + name + " не найдена");
         }
         return (LValue) variable;
     }

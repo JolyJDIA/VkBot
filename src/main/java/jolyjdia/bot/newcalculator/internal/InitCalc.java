@@ -6,6 +6,7 @@ import api.module.Module;
 import api.storage.User;
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
 import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
+import org.jetbrains.annotations.NonNls;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -27,7 +28,7 @@ public class InitCalc implements Module {
             super("calc");
         }
         @Override
-        public final void execute(User sender, String[] args) {
+        public final void execute(@NonNls User sender, String[] args) {
 
             String list = Arrays.asList(args).subList(1, args.length).toString().substring(1);
             list = list.substring(0, list.length() -1);
@@ -35,7 +36,7 @@ public class InitCalc implements Module {
             try {
                 result = Expression.compile(list).evaluate();
             } catch (ExpressionException e) {
-                sender.sendMessageFromChat("Че за бред ты высрал?");
+                sender.sendMessageFromChat("Че за бред ты высрал?\n"+e.getMessage());
                 return;
             }
             sender.sendMessageFromChat(Double.isNaN(result) ? "NaN" : DECIMAL_FORMAT.format(result));

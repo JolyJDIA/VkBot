@@ -1,7 +1,7 @@
 package jolyjdia.bot.newcalculator.internal.expression.runtime;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.parser.ParserException;
+import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 import org.jetbrains.annotations.Contract;
 
 import java.lang.reflect.Method;
@@ -48,7 +48,7 @@ public class LValueFunction extends Function implements LValue {
 
     @Contract("_ -> this")
     @Override
-    public final LValue bindVariables(Expression expression) throws ParserException {
+    public final LValue bindVariables(Expression expression) throws ExpressionException {
         super.bindVariables(expression);
         return this;
     }

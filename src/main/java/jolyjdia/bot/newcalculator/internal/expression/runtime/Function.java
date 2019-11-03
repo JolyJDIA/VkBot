@@ -1,7 +1,7 @@
 package jolyjdia.bot.newcalculator.internal.expression.runtime;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.parser.ParserException;
+import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Retention;
@@ -65,7 +65,7 @@ public class Function extends Node {
     }
 
     @Override
-    public RValue bindVariables(Expression expression) throws ParserException {
+    public RValue bindVariables(Expression expression) throws ExpressionException {
         for (int i = 0; i < args.length; ++i) {
             args[i] = args[i].bindVariables(expression);
         }

@@ -1,7 +1,7 @@
 package jolyjdia.bot.newcalculator.internal.expression.runtime;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.parser.ParserException;
+import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,7 +62,7 @@ public class Sequence extends Node {
 
     @Contract("_, _ -> this")
     @Override
-    public final RValue bindVariables(Expression expression) throws ParserException {
+    public final RValue bindVariables(Expression expression) throws ExpressionException {
         for (int i = 0; i < sequence.length; ++i) {
             sequence[i] = sequence[i].bindVariables(expression);
         }
