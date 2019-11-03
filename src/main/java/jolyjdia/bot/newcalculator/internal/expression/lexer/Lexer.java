@@ -108,7 +108,7 @@ public final class Lexer {
         return false;
     }
 
-    private @Nullable Token evaluate(String tokenName, int startPosition) {
+    private @Nullable Token evaluate(String tokenName, int startPosition) {//replace on char
         if (position < expression.length()) {
             final char next = peek();
 
