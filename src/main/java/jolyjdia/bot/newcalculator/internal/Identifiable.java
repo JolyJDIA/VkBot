@@ -1,8 +1,5 @@
 package jolyjdia.bot.newcalculator.internal;
 
-/**
- * A common superinterface for everything passed to parser processors.
- */
 public interface Identifiable {
 
     /**
