@@ -17,19 +17,10 @@ import java.util.*;
 final class ParserProcessors {
     private static final Map<String, String> UNARY_OP_MAP = ImmutableMap.<String, String>builder()
             .put("-", "neg")
-            .put("!", "not")
             .put("~", "inv")
             .put("x!", "fac")
             .build();
-    /**private static final Map<String, String> BINARY_OP = ImmutableMap.<String, String>builder()
-            .put("-", "sub")
-            .put("+", "add")
-            .put("%", "mod")
-            .put("/", "div")
-            .put("*", "mul")
-            .put("**", "pow")
-            .put("^", "pow")
-            .build();*/
+
     private static final ImmutableMap<String, String>[] BINARY_OP = new ImmutableMap[3];
     static {
         BINARY_OP[0] = ImmutableMap.of(

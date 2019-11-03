@@ -2,6 +2,7 @@ package jolyjdia.bot.newcalculator.internal.expression.lexer;
 
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.*;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,13 +38,12 @@ public final class Lexer {
             }
 
             Token token = evaluate(null, position);
-            System.out.println(token);
             if (token != null) {
                 tokens.add(token);
                 continue;
             }
 
-            final char ch = peek();
+            @NonNls final char ch = peek();
 
             if (containsChar(ch)) {
                 tokens.add(new CharacterToken(position++, ch));
@@ -75,7 +75,7 @@ public final class Lexer {
                 }
             }
 
-            throw new LexerException(position, "Unknown character '" + ch);
+            throw new LexerException(position, "Unknown character " + ch);
         } while (position < expression.length());
         System.out.println(tokens);
         return tokens;
@@ -95,10 +95,18 @@ public final class Lexer {
     @Contract(pure = true)
     private static boolean containsChar(char point) {
         for (char c : CHARS) {
-            if (c != point) {
-                continue;
+            if (c == point) {
+                return true;
             }
-            return true;
+        }
+        return false;
+    }
+    @Contract(pure = true)
+    private static boolean containsOper(char codePoint) {
+        for (char c : OPERATORS) {
+            if (c == codePoint) {
+                return true;
+            }
         }
         return false;
     }
@@ -122,16 +130,5 @@ public final class Lexer {
         }
 
         return new OperatorToken(startPosition, tokenName);
-    }
-
-    @Contract(pure = true)
-    private static boolean containsOper(char codePoint) {
-        for (char c : OPERATORS) {
-            if (c != codePoint) {
-                continue;
-            }
-            return true;
-        }
-        return false;
     }
 }
