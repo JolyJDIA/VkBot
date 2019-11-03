@@ -6,14 +6,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Lexer {
-
+    private static final char[] OPERATORS = {'+', '-', '*', '/', '^', '%', '!', '~'};
+    private static final char[] CHARS = {'(', ')', ','};
+    private static final Pattern numberPattern = Pattern.compile("^([0-9]*(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?)");
+    private static final Pattern identifierPattern = Pattern.compile("^([A-Za-z][0-9A-Za-z_]*)");
     private final String expression;
     private int position;
 
@@ -26,56 +27,6 @@ public final class Lexer {
         return new Lexer(expression).tokenize();
     }
 
-    private static final DecisionTree operatorTree = new DecisionTree(null,
-            '+', new DecisionTree("+",
-            '=', new DecisionTree("+="),
-            '+', new DecisionTree("++")
-    ),
-            '-', new DecisionTree("-",
-            '=', new DecisionTree("-="),
-            '-', new DecisionTree("--")
-    ),
-            '*', new DecisionTree("*",
-            '=', new DecisionTree("*="),
-            '*', new DecisionTree("**")
-    ),
-            '/', new DecisionTree("/",
-            '=', new DecisionTree("/=")
-    ),
-            '%', new DecisionTree("%",
-            '=', new DecisionTree("%=")
-    ),
-            '^', new DecisionTree("^",
-            '=', new DecisionTree("^=")
-    ),
-            '=', new DecisionTree("=",
-            '=', new DecisionTree("==")
-    ),
-            '!', new DecisionTree("!",
-            '=', new DecisionTree("!=")
-    ),
-            '<', new DecisionTree("<",
-            '<', new DecisionTree("<<"),
-            '=', new DecisionTree("<=")
-    ),
-            '>', new DecisionTree(">",
-            '>', new DecisionTree(">>"),
-            '=', new DecisionTree(">=")
-    ),
-            '&', new DecisionTree(null, // not implemented
-            '&', new DecisionTree("&&")
-    ),
-            '|', new DecisionTree(null, // not implemented
-            '|', new DecisionTree("||")
-    ),
-            '~', new DecisionTree("~",
-            '=', new DecisionTree("~=")
-    ));
-
-    private static final String OPERATORS = "()";
-    private static final Pattern numberPattern = Pattern.compile("^([0-9]*(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?)");
-    private static final Pattern identifierPattern = Pattern.compile("^([A-Za-z][0-9A-Za-z_]*)");
-
     private @NotNull List<Token> tokenize() throws LexerException {
         List<Token> tokens = new ArrayList<>();
 
@@ -85,7 +36,8 @@ public final class Lexer {
                 break;
             }
 
-            Token token = evaluate(operatorTree.subTrees, operatorTree.tokenName, position);
+            Token token = evaluate(null, position);
+            System.out.println(token);
             if (token != null) {
                 tokens.add(token);
                 continue;
@@ -125,7 +77,7 @@ public final class Lexer {
 
             throw new LexerException(position, "Unknown character '" + ch);
         } while (position < expression.length());
-
+        System.out.println(tokens);
         return tokens;
     }
 
@@ -140,22 +92,24 @@ public final class Lexer {
         }
     }
 
-    private static boolean containsChar(char codePoint) {
-        for (int i = 0; i < OPERATORS.length(); i++) {
-            if (OPERATORS.charAt(i) == codePoint) {
-                return true;
+    @Contract(pure = true)
+    private static boolean containsChar(char point) {
+        for (char c : CHARS) {
+            if (c != point) {
+                continue;
             }
+            return true;
         }
         return false;
     }
-    private @Nullable Token evaluate(Map<Character, DecisionTree> subTrees, String tokenName, int startPosition) {
+
+    private @Nullable Token evaluate(String tokenName, int startPosition) {
         if (position < expression.length()) {
             final char next = peek();
 
-            final DecisionTree subTree = subTrees.get(next);
-            if (subTree != null) {
+            if (containsOper(next)) {
                 ++position;
-                final Token subTreeResult = evaluate(subTree.subTrees, subTree.tokenName, startPosition);
+                final Token subTreeResult = evaluate(String.valueOf(next), startPosition);
                 if (subTreeResult != null) {
                     return subTreeResult;
                 }
@@ -170,30 +124,14 @@ public final class Lexer {
         return new OperatorToken(startPosition, tokenName);
     }
 
-    private static final class DecisionTree {
-        private final String tokenName;
-        private final Map<Character, DecisionTree> subTrees = new HashMap<>();
-
-        private DecisionTree(String tokenName, @NotNull Object... args) {
-            this.tokenName = tokenName;
-
-            if (args.length % 2 != 0) {
-                throw new UnsupportedOperationException("You need to pass an even number of arguments.");
+    @Contract(pure = true)
+    private static boolean containsOper(char codePoint) {
+        for (char c : OPERATORS) {
+            if (c != codePoint) {
+                continue;
             }
-
-            for (int i = 0; i < args.length; i += 2) {
-                if (!(args[i] instanceof Character)) {
-                    throw new UnsupportedOperationException("Argument #" + i + " expected to be 'Character', not '" + args[i].getClass().getName() + "'.");
-                }
-                if (!(args[i + 1] instanceof DecisionTree)) {
-                    throw new UnsupportedOperationException("Argument #" + (i + 1) + " expected to be 'DecisionTree', not '" + args[i + 1].getClass().getName() + "'.");
-                }
-
-                Character next = (Character) args[i];
-                DecisionTree subTree = (DecisionTree) args[i + 1];
-
-                subTrees.put(next, subTree);
-            }
+            return true;
         }
+        return false;
     }
 }
