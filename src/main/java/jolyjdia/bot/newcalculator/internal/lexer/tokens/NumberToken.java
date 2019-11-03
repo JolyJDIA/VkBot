@@ -1,4 +1,4 @@
-package jolyjdia.bot.newcalculator.internal.expression.lexer.tokens;
+package jolyjdia.bot.newcalculator.internal.lexer.tokens;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;

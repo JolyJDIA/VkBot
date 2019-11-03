@@ -1,6 +1,6 @@
-package jolyjdia.bot.newcalculator.internal.expression.lexer;
+package jolyjdia.bot.newcalculator.internal.lexer;
 
-import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
+import jolyjdia.bot.newcalculator.internal.ExpressionException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

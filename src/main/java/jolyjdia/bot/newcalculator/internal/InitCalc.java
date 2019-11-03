@@ -4,8 +4,6 @@ import api.Bot;
 import api.command.Command;
 import api.module.Module;
 import api.storage.User;
-import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
 import org.jetbrains.annotations.NonNls;
 
 import java.text.DecimalFormat;

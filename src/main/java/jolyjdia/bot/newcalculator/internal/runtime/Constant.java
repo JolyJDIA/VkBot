@@ -1,6 +1,6 @@
-package jolyjdia.bot.newcalculator.internal.expression.runtime;
+package jolyjdia.bot.newcalculator.internal.runtime;
 
-import jolyjdia.bot.newcalculator.internal.expression.Expression;
+import jolyjdia.bot.newcalculator.internal.Expression;
 import org.jetbrains.annotations.Contract;
 
 public class Constant extends Node {

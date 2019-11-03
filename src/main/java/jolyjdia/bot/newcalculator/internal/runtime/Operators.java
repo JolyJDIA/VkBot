@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jolyjdia.bot.newcalculator.internal.expression.runtime;
+package jolyjdia.bot.newcalculator.internal.runtime;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

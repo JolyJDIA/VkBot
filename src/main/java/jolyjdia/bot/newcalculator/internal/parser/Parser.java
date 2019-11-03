@@ -1,13 +1,13 @@
-package jolyjdia.bot.newcalculator.internal.expression.parser;
+package jolyjdia.bot.newcalculator.internal.parser;
 
-import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
-import jolyjdia.bot.newcalculator.internal.expression.Identifiable;
-import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.IdentifierToken;
-import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.NumberToken;
-import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.OperatorToken;
-import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.Token;
-import jolyjdia.bot.newcalculator.internal.expression.runtime.*;
+import jolyjdia.bot.newcalculator.internal.Expression;
+import jolyjdia.bot.newcalculator.internal.ExpressionException;
+import jolyjdia.bot.newcalculator.internal.Identifiable;
+import jolyjdia.bot.newcalculator.internal.lexer.tokens.IdentifierToken;
+import jolyjdia.bot.newcalculator.internal.lexer.tokens.NumberToken;
+import jolyjdia.bot.newcalculator.internal.lexer.tokens.OperatorToken;
+import jolyjdia.bot.newcalculator.internal.lexer.tokens.Token;
+import jolyjdia.bot.newcalculator.internal.runtime.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
