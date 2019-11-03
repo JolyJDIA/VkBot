@@ -91,7 +91,7 @@ final class ParserProcessors {
         }
     }
     private static @Nullable RValue processUnaryOps(@NotNull LinkedList<Identifiable> input) throws ParserException {
-        final Identifiable center;
+        @NonNls final Identifiable center;
         Deque<UnaryOperator> postfixes = new LinkedList<>();
         do {
             if (input.isEmpty()) {

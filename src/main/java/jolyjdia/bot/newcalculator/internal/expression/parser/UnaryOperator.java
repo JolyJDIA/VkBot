@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class UnaryOperator extends PseudoToken {
     final String operator;
 
-    public UnaryOperator(@NotNull OperatorToken operatorToken) {
+    UnaryOperator(@NotNull OperatorToken operatorToken) {
         this(operatorToken.getPosition(), operatorToken.operator);
     }
 

@@ -27,13 +27,13 @@ public class LValueFunction extends Function implements LValue {
     }
 
     @Override
-    public final double assign(double value) throws EvaluationException {
+    public final double assign(double value) {
         setterArgs[setterArgs.length - 1] = value;
         return invokeMethod(setter, setterArgs);
     }
 
     @Override
-    public final LValue optimize() throws EvaluationException {
+    public final LValue optimize() {
         final RValue optimized = super.optimize();
         if (optimized == this) {
             return this;

@@ -6,9 +6,9 @@ import jolyjdia.bot.newcalculator.internal.expression.parser.ParserException;
 
 public interface RValue extends Identifiable {
 
-    double getValue() throws EvaluationException;
+    double getValue();
 
-    RValue optimize() throws EvaluationException;
+    RValue optimize();
 
     RValue bindVariables(Expression expression) throws ParserException;
 

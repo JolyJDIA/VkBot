@@ -24,21 +24,17 @@ public class Function extends Node {
     }
 
     @Override
-    public final double getValue() throws EvaluationException {
+    public final double getValue() {
         return invokeMethod(method, args);
     }
 
-    static double invokeMethod(@NotNull Method method, Object[] args) throws EvaluationException {
+    static double invokeMethod(@NotNull Method method, Object[] args) {
         try {
             return (Double) method.invoke(null, args);
-        } catch (InvocationTargetException e) {
-            if (e.getTargetException() instanceof EvaluationException) {
-                throw (EvaluationException) e.getTargetException();
-            }
-            throw new EvaluationException(-1, "Exception caught while evaluating expression", e.getTargetException());
-        } catch (IllegalAccessException e) {
-            throw new EvaluationException(-1, "Internal error while evaluating expression", e);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
         }
+        return 0;
     }
 
     @Override
@@ -47,7 +43,7 @@ public class Function extends Node {
     }
 
     @Override
-    public RValue optimize() throws EvaluationException {
+    public RValue optimize() {
         final RValue[] optimizedArgs = new RValue[args.length];
         boolean optimizable = !method.isAnnotationPresent(Dynamic.class);
         int position = getPosition();
@@ -73,7 +69,6 @@ public class Function extends Node {
         for (int i = 0; i < args.length; ++i) {
             args[i] = args[i].bindVariables(expression);
         }
-
         return this;
     }
 

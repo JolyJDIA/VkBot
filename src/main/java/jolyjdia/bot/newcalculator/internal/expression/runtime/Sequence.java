@@ -24,7 +24,7 @@ public class Sequence extends Node {
     }
 
     @Override
-    public final double getValue() throws EvaluationException {
+    public final double getValue() {
         double ret = 0;
         for (RValue invokable : sequence) {
             ret = invokable.getValue();
@@ -33,7 +33,7 @@ public class Sequence extends Node {
     }
 
     @Override
-    public final RValue optimize() throws EvaluationException {
+    public final RValue optimize() {
         final List<RValue> newSequence = new ArrayList<>();
 
         @Nullable RValue droppedLast = null;

@@ -6,7 +6,6 @@ import api.module.Module;
 import api.storage.User;
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
 import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
-import jolyjdia.bot.newcalculator.internal.expression.runtime.EvaluationException;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -35,9 +34,6 @@ public class InitCalc implements Module {
             double result;
             try {
                 result = Expression.compile(list).evaluate();
-            } catch (EvaluationException e) {
-                e.printStackTrace();
-                return;
             } catch (ExpressionException e) {
                 sender.sendMessageFromChat("Че за бред ты высрал?");
                 return;

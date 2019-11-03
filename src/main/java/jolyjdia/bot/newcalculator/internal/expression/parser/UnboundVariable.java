@@ -1,16 +1,15 @@
 package jolyjdia.bot.newcalculator.internal.expression.parser;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.runtime.EvaluationException;
 import jolyjdia.bot.newcalculator.internal.expression.runtime.LValue;
 import jolyjdia.bot.newcalculator.internal.expression.runtime.RValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class UnboundVariable extends PseudoToken implements LValue {
-    @NonNls
-    private final String name;
+    @NonNls private final String name;
 
     UnboundVariable(int position, String name) {
         super(position);
@@ -23,31 +22,30 @@ public class UnboundVariable extends PseudoToken implements LValue {
         return 'V';
     }
 
-    @Contract(" -> fail")
+    @Contract(pure = true)
     @Override
-    public final double getValue() throws EvaluationException {
-        throw new EvaluationException(getPosition(), "Tried to evaluate unbound variable!");
+    public final double getValue() {
+        return 0;
     }
 
-    @Contract(" -> fail")
     @Override
-    public final LValue optimize() throws EvaluationException {
-        throw new EvaluationException(getPosition(), "Tried to optimize unbound variable!");
+    @Contract(pure = true)
+    public final @Nullable LValue optimize() {
+        return null;
     }
 
-    @Contract("_ -> fail")
+    @Contract(pure = true)
     @Override
-    public final double assign(double value) throws EvaluationException {
-        throw new EvaluationException(getPosition(), "Tried to assign unbound variable!");
+    public final double assign(double value) {
+        return 0;
     }
 
     @Override
     public final @NotNull LValue bindVariables(@NotNull Expression expression) throws ParserException {
         final RValue variable = expression.getVariable(name);
         if (variable == null) {
-            throw new ParserException(getPosition(), "Variable '" + name + "' not found");
+            throw new ParserException(getPosition(), "переменная " + name + " не найдена");
         }
-
         return (LValue) variable;
     }
 

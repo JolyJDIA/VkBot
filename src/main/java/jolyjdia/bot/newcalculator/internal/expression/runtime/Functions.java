@@ -117,113 +117,113 @@ public final class Functions {
     }
 
 
-    public static double sin(@NotNull RValue x) throws EvaluationException {
+    public static double sin(@NotNull RValue x) {
         return Math.sin(x.getValue());
     }
 
-    public static double cos(@NotNull RValue x) throws EvaluationException {
+    public static double cos(@NotNull RValue x) {
         return Math.cos(x.getValue());
     }
 
-    public static double tan(@NotNull RValue x) throws EvaluationException {
+    public static double tan(@NotNull RValue x) {
         return Math.tan(x.getValue());
     }
 
 
-    public static double asin(@NotNull RValue x) throws EvaluationException {
+    public static double asin(@NotNull RValue x) {
         return Math.asin(x.getValue());
     }
 
-    public static double acos(@NotNull RValue x) throws EvaluationException {
+    public static double acos(@NotNull RValue x) {
         return Math.acos(x.getValue());
     }
 
-    public static double atan(@NotNull RValue x) throws EvaluationException {
+    public static double atan(@NotNull RValue x) {
         return Math.atan(x.getValue());
     }
 
-    public static double atan2(@NotNull RValue y, @NotNull RValue x) throws EvaluationException {
+    public static double atan2(@NotNull RValue y, @NotNull RValue x) {
         return Math.atan2(y.getValue(), x.getValue());
     }
 
 
-    public static double sinh(@NotNull RValue x) throws EvaluationException {
+    public static double sinh(@NotNull RValue x) {
         return Math.sinh(x.getValue());
     }
 
-    public static double cosh(@NotNull RValue x) throws EvaluationException {
+    public static double cosh(@NotNull RValue x) {
         return Math.cosh(x.getValue());
     }
 
-    public static double tanh(@NotNull RValue x) throws EvaluationException {
+    public static double tanh(@NotNull RValue x) {
         return Math.tanh(x.getValue());
     }
 
 
-    public static double sqrt(@NotNull RValue x) throws EvaluationException {
+    public static double sqrt(@NotNull RValue x) {
         return Math.sqrt(x.getValue());
     }
 
-    public static double cbrt(@NotNull RValue x) throws EvaluationException {
+    public static double cbrt(@NotNull RValue x) {
         return Math.cbrt(x.getValue());
     }
 
 
-    public static double abs(@NotNull RValue x) throws EvaluationException {
+    public static double abs(@NotNull RValue x) {
         return Math.abs(x.getValue());
     }
 
-    public static double min(@NotNull RValue a, @NotNull RValue b) throws EvaluationException {
+    public static double min(@NotNull RValue a, @NotNull RValue b) {
         return Math.min(a.getValue(), b.getValue());
     }
 
-    public static double min(@NotNull RValue a, @NotNull RValue b, @NotNull RValue c) throws EvaluationException {
+    public static double min(@NotNull RValue a, @NotNull RValue b, @NotNull RValue c) {
         return Math.min(a.getValue(), Math.min(b.getValue(), c.getValue()));
     }
 
-    public static double max(@NotNull RValue a, @NotNull RValue b) throws EvaluationException {
+    public static double max(@NotNull RValue a, @NotNull RValue b) {
         return Math.max(a.getValue(), b.getValue());
     }
 
-    public static double max(@NotNull RValue a, @NotNull RValue b, @NotNull RValue c) throws EvaluationException {
+    public static double max(@NotNull RValue a, @NotNull RValue b, @NotNull RValue c) {
         return Math.max(a.getValue(), Math.max(b.getValue(), c.getValue()));
     }
 
 
-    public static double ceil(@NotNull RValue x) throws EvaluationException {
+    public static double ceil(@NotNull RValue x) {
         return Math.ceil(x.getValue());
     }
 
-    public static double floor(@NotNull RValue x) throws EvaluationException {
+    public static double floor(@NotNull RValue x) {
         return Math.floor(x.getValue());
     }
 
-    public static double rint(@NotNull RValue x) throws EvaluationException {
+    public static double rint(@NotNull RValue x) {
         return Math.rint(x.getValue());
     }
 
-    public static double round(@NotNull RValue x) throws EvaluationException {
+    public static double round(@NotNull RValue x) {
         return Math.round(x.getValue());
     }
 
-    public static double exp(@NotNull RValue x) throws EvaluationException {
+    public static double exp(@NotNull RValue x) {
         return Math.exp(x.getValue());
     }
 
-    public static double ln(@NotNull RValue x) throws EvaluationException {
+    public static double ln(@NotNull RValue x) {
         return Math.log(x.getValue());
     }
 
-    public static double log(@NotNull RValue x) throws EvaluationException {
+    public static double log(@NotNull RValue x) {
         return Math.log(x.getValue());
     }
 
-    public static double log10(@NotNull RValue x) throws EvaluationException {
+    public static double log10(@NotNull RValue x) {
         return Math.log10(x.getValue());
     }
 
 
-    public static double rotate(@NotNull LValue x, @NotNull LValue y, @NotNull RValue angle) throws EvaluationException {
+    public static double rotate(@NotNull LValue x, @NotNull LValue y, @NotNull RValue angle) {
         final double f = angle.getValue();
 
         final double cosF = Math.cos(f);
@@ -238,7 +238,7 @@ public final class Functions {
         return 0.0;
     }
 
-    public static double swap(@NotNull LValue x, @NotNull LValue y) throws EvaluationException {
+    public static double swap(@NotNull LValue x, @NotNull LValue y) {
         final double tmp = x.getValue();
 
         x.assign(y.getValue());

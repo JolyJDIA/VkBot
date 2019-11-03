@@ -5,7 +5,6 @@ import jolyjdia.bot.newcalculator.internal.expression.lexer.Lexer;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.Token;
 import jolyjdia.bot.newcalculator.internal.expression.parser.Parser;
 import jolyjdia.bot.newcalculator.internal.expression.runtime.Constant;
-import jolyjdia.bot.newcalculator.internal.expression.runtime.EvaluationException;
 import jolyjdia.bot.newcalculator.internal.expression.runtime.RValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +37,7 @@ public final class Expression {
         root = Parser.parse(tokens, this);
     }
 
-    public double evaluate() throws EvaluationException {
+    public double evaluate() {
         pushInstance();
         try {
             return root.getValue();
