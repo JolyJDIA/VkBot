@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 final class ParserProcessors {
-    private static final Map<String, String> UNARY_OP_MAP = ImmutableMap.<String, String>builder()
+    private static final Map<String, String> UNARY_OP = ImmutableMap.<String, String>builder()
             .put("-", "neg")
             .put("~", "inv")
             .put("x!", "fac")
@@ -116,7 +116,7 @@ final class ParserProcessors {
                     continue;
                 }
 
-                String opName = UNARY_OP_MAP.get(operator);
+                String opName = UNARY_OP.get(operator);
                 if (opName != null) {
                     try {
                         ret = Operators.getOperator(lastPosition, opName, ret);
