@@ -55,7 +55,7 @@ public final class Lexer {
                     try {
                         tokens.add(new NumberToken(position, Double.parseDouble(numberPart)));
                     } catch (NumberFormatException e) {
-                        throw new LexerException(position, "Number parsing failed", e);
+                        throw new LexerException(position, "Что за число?", e);
                     }
 
                     position += numberPart.length();
@@ -73,11 +73,11 @@ public final class Lexer {
                 }
             }
 
-            throw new LexerException(position, "Unknown character " + ch);
+            throw new LexerException(position, "Неизвестный символ " + ch);
         } while (position < expression.length());
+
         return tokens;
     }
-
     @Contract(pure = true)
     private char peek() {
         return expression.charAt(position);

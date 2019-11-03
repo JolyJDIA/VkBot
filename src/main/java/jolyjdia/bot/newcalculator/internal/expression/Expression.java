@@ -33,7 +33,7 @@ public final class Expression {
         this(Lexer.tokenize(expression));
     }
 
-    private Expression(List<? extends Token> tokens) throws ExpressionException {
+    private Expression(List<Token> tokens) throws ExpressionException {
         root = Parser.parse(tokens, this);
     }
 

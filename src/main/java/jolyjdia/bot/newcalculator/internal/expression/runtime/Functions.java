@@ -116,7 +116,6 @@ public final class Functions {
         overloads.add(overload);
     }
 
-
     public static double sin(@NotNull RValue x) {
         return Math.sin(x.getValue());
     }
@@ -124,7 +123,6 @@ public final class Functions {
     public static double cos(@NotNull RValue x) {
         return Math.cos(x.getValue());
     }
-
     public static double tan(@NotNull RValue x) {
         return Math.tan(x.getValue());
     }
@@ -180,7 +178,6 @@ public final class Functions {
     public static double min(@NotNull RValue a, @NotNull RValue b, @NotNull RValue c) {
         return Math.min(a.getValue(), Math.min(b.getValue(), c.getValue()));
     }
-
     public static double max(@NotNull RValue a, @NotNull RValue b) {
         return Math.max(a.getValue(), b.getValue());
     }
@@ -188,8 +185,6 @@ public final class Functions {
     public static double max(@NotNull RValue a, @NotNull RValue b, @NotNull RValue c) {
         return Math.max(a.getValue(), Math.max(b.getValue(), c.getValue()));
     }
-
-
     public static double ceil(@NotNull RValue x) {
         return Math.ceil(x.getValue());
     }

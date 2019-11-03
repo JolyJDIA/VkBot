@@ -107,6 +107,7 @@ public final class Parser {
                     expressionStart = false;
                     break;
 
+                case ',':
                 case ')':
                     break loop;
                 case 'o':
@@ -147,13 +148,26 @@ public final class Parser {
                 ++position;
                 return Functions.getFunction(identifierToken.getPosition(), identifierToken.value);
             }
-
             List<RValue> args = new ArrayList<>();
-            args.add(parseExpression(false));
-            ++position;
+
+            loop: while (true) {
+                args.add(parseExpression(false));
+
+                final Token current = peek();
+                ++position;
+
+                switch (current.id()) {
+                    case ',':
+                        continue;
+                    case ')':
+                        break loop;
+                    default:
+                        throw new ExpressionException(current.getPosition(), "Unmatched opening bracket");
+                }
+            }
             return Functions.getFunction(identifierToken.getPosition(), identifierToken.value, args.toArray(new RValue[0]));
         } catch (NoSuchMethodException e) {
-            throw new ExpressionException(identifierToken.getPosition(), "Функция " + identifierToken.value + " не найдена", e);
+            throw new ExpressionException(identifierToken.getPosition(), "Функция '" + identifierToken.value + " не найдена", e);
         }
     }
 
