@@ -20,7 +20,7 @@ final class ParserProcessors {
             .put("~", "inv")
             .put("x!", "fac")
             .build();
-  /*  private static final Map<String, String> BINARY_OP = ImmutableMap.<String, String>builder()
+    /**private static final Map<String, String> BINARY_OP = ImmutableMap.<String, String>builder()
             .put("-", "sub")
             .put("+", "add")
             .put("%", "mod")
@@ -29,24 +29,30 @@ final class ParserProcessors {
             .put("**", "pow")
             .put("^", "pow")
             .build();*/
-    private static final ImmutableMap<String, String>[] binaryOpMapsLA = new ImmutableMap[3];
+    private static final ImmutableMap<String, String>[] BINARY_OP = new ImmutableMap[3];
     static {
-        binaryOpMapsLA[0] = ImmutableMap.of("**", "pow");
-        binaryOpMapsLA[1] = ImmutableMap.of("%", "mod", "*", "mul", "/", "div");
-        binaryOpMapsLA[2] = ImmutableMap.of("+", "add", "-", "sub");
+        BINARY_OP[0] = ImmutableMap.of(
+                "%", "mod",
+                "*", "mul",
+                "/", "div"
+        );
+        BINARY_OP[1] = ImmutableMap.of(
+                "+", "add",
+                "-", "sub",
+                "^", "pow"
+        );
     }
 
     @Contract(pure = true)
     private ParserProcessors() {}
 
     static @NotNull RValue processExpression(LinkedList<Identifiable> input) throws ParserException {
-        return Objects.requireNonNull(processBinaryOpsLA(input, binaryOpMapsLA.length - 1));
+        return Objects.requireNonNull(processBinaryOpsLA(input, 1));
     }
     private static @Nullable RValue processBinaryOpsLA(@NotNull LinkedList<Identifiable> input, int level) throws ParserException {
         if (level < 0) {
             return processUnaryOps(input);
         }
-
         LinkedList<Identifiable> lhs = new LinkedList<>();
         LinkedList<Identifiable> rhs = new LinkedList<>();
         String operator = null;
@@ -60,7 +66,8 @@ final class ParserProcessors {
                     continue;
                 }
 
-                operator = binaryOpMapsLA[level].get(((OperatorToken) identifiable).operator);
+                operator = BINARY_OP[level].get(((OperatorToken) identifiable).operator);
+                System.out.println(operator);
                 if (operator == null) {
                     continue;
                 }
@@ -71,20 +78,18 @@ final class ParserProcessors {
             }
         }
 
-        RValue rhsInvokable = processBinaryOpsLA(rhs, level - 1);
+        RValue rhsInvokable = processBinaryOpsLA(rhs, level -1);
         if (operator == null) {
             return rhsInvokable;
         }
 
         RValue lhsInvokable = processBinaryOpsLA(lhs, level);
-
         try {
             return Operators.getOperator(input.get(0).getPosition(), operator, lhsInvokable, rhsInvokable);
         } catch (NoSuchMethodException e) {
             return null;
         }
     }
-
     private static @Nullable RValue processUnaryOps(@NotNull LinkedList<Identifiable> input) throws ParserException {
         final Identifiable center;
         Deque<UnaryOperator> postfixes = new LinkedList<>();
