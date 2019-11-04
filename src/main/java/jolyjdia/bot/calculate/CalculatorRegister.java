@@ -29,7 +29,7 @@ public class CalculatorRegister implements Module, Listener {
     }
     public static void main(String[] args) throws ExpressionException {
 		long start = System.currentTimeMillis();
-		double result = Expression.compile("(((5-442)-(5+4-1)*2)-1+0.5^2-7+pi^3-(sin(20)*cos(30+pi)+5-2)*574)-1*1024-1023+45455-0.554+0.54-3.14").evaluate();
+		double result = Expression.compile("pi+2").evaluate();
 		long end = System.currentTimeMillis() -start;
 		System.out.println("Ответ: " + result + "\nВермя выполнения: " + end + "ms");
 		/**
