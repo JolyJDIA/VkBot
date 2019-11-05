@@ -17,7 +17,7 @@ public final class Expression {
 
     private static final ThreadLocal<Stack<Expression>> instance = new ThreadLocal<>();
 
-    private final Map<String, RValue> constants = ImmutableMap.of(
+    private static final Map<String, RValue> constants = ImmutableMap.of(
             "e", new Constant(Math.E),
             "pi", new Constant(Math.PI)
     );
