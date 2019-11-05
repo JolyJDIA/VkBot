@@ -1,6 +1,7 @@
 package jolyjdia.bot.newcalculator.internal.expression;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.Lexer;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.Token;
 import jolyjdia.bot.newcalculator.internal.expression.parser.Parser;
@@ -12,8 +13,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.*;
 
 public final class Expression {
+    private static final ExecutorService SERVICE = Executors.newCachedThreadPool(
+            new ThreadFactoryBuilder()
+                    .setDaemon(true)
+                    .build());
     private static final ThreadLocal<Stack<Expression>> INSTANCE = new ThreadLocal<>();
     private static final Map<String, RValue> CONSTANTS = ImmutableMap.of(
             "pi", new Constant(Math.PI),
@@ -34,8 +40,23 @@ public final class Expression {
     private Expression(List<? extends Token> tokens) throws ExpressionException {
         root = Parser.parse(tokens, this);
     }
-
     public double evaluate() {
+        Future<Double> result = SERVICE.submit(this::evaluateRoot);
+        try {
+            return result.get(100, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            result.cancel(true);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private double evaluateRoot() {
         pushInstance();
         try {
             return root.getValue();

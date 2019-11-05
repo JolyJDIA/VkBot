@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableMap;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
+import jolyjdia.bot.shoutbox.similarity.Cosine;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -57,11 +58,15 @@ public class SmileLoad implements Module, Listener {
         Bot.getBotManager().registerEvent(this);
         Bot.getBotManager().registerCommand(new SmileCommand());
     }
+    private static final Cosine COSINE = new Cosine(3);
     @EventLabel
     public static void onMsg(@NotNull NewMessageEvent e) {
         String text = e.getMessage().getText().toLowerCase(Locale.ENGLISH);
         if(text.isEmpty()) {
             return;
+        }
+        if(COSINE.similarity(text, "леша") >= 0.6 || COSINE.similarity(text, "лёша") >= 0.6) {
+            e.getUser().sendMessageFromChat(null, "audio310289867_456241810");
         }
         List<String> smiles = StringBind.substringsBetween(text, ":", ":");
         if(smiles == null || smiles.isEmpty()) {

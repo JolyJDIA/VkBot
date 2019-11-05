@@ -26,6 +26,12 @@ public class User  {
         this.userId = userId;
         this.group = PermissionManager.getPermGroup(group);
     }
+    @Contract(pure = true)
+    public User(int peerId, int userId, PermissionGroup group) {
+        this.peerId = peerId;
+        this.userId = userId;
+        this.group = group;
+    }
 
 
     @Contract(pure = true)

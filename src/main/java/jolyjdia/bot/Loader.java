@@ -1,12 +1,10 @@
 package jolyjdia.bot;
 
-import api.Bot;
 import api.RoflanBot;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
-import com.vk.api.sdk.objects.groups.LongPollServer;
 import org.jetbrains.annotations.Contract;
 
 public class Loader {
@@ -24,9 +22,6 @@ public class Loader {
             handler = new CallbackApiLongPollHandler(vkApiClient, bot.getGroupActor());
             handler.run();
         }
-    }
-    private static LongPollServer getLongPollServer() throws ClientException, ApiException {
-        return vkApiClient.groupsLongPoll().getLongPollServer(Bot.getGroupActor(), Bot.getGroupId()).execute();
     }
     @Contract(pure = true)
     public static VkApiClient getVkApiClient() {

@@ -80,7 +80,17 @@ public class MySQL implements UserBackend {
 
     @Override
     public final void setRank(int peerId, int userId, PermissionGroup rank) {
-        User user = chats.get(peerId).asMap().getOrDefault(userId, new User(peerId, userId));
+        Cache<Integer, User> map = chats.computeIfAbsent(peerId, k -> CacheBuilder.newBuilder()
+                .maximumSize(50)
+                .expireAfterAccess(30, TimeUnit.MINUTES)
+                .build());
+        User user;
+        if(map.asMap().containsKey(userId)) {
+            user = chats.get(peerId).asMap().get(userId);
+        } else {
+            user = new User(peerId, userId);
+            map.put(userId, user);
+        }
         user.setGroup(rank);
         saveOrUpdateGroup(user);
     }
