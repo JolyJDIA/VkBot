@@ -32,6 +32,7 @@ public class InitCalc implements Module {
 
             String list = Arrays.asList(args).subList(1, args.length).toString().substring(1);
             list = list.substring(0, list.length() -1);
+            long start = System.currentTimeMillis();
             double result;
             try {
                 result = Expression.compile(list).evaluate();
@@ -39,7 +40,8 @@ public class InitCalc implements Module {
                 sender.sendMessageFromChat("Че за бред ты высрал?\n"+e.getMessage());
                 return;
             }
-            sender.sendMessageFromChat(Double.isNaN(result) ? "NaN" : DECIMAL_FORMAT.format(result));
+            long end = System.currentTimeMillis() - start;
+            sender.sendMessageFromChat(Double.isNaN(result) ? "NaN" : DECIMAL_FORMAT.format(result) + "\nВыполнилось за "+end+"ms");
         }
     }
 }

@@ -7,24 +7,32 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 public class UtilsCommand extends Command {
     public UtilsCommand() {
         super("utils", "команды-утилиты");
-        setAlias("uptime", "calendar");
+        setAlias("uptime", "calendar", "convert_ts", "current_ts");
     }
 
     @Override
     public final void execute(@NonNls User sender, @NotNull String[] args) {
-        if(args.length != 1) {
-            return;
-        }
         switch (args[0]) {
-            case "utils" -> sender.sendMessageFromChat(String.valueOf(getAlias()));
+            case "utils" -> {
+                if(args.length != 1) {
+                    return;
+                }
+                sender.sendMessageFromChat(String.valueOf(getAlias()));
+            }
             case "uptime" -> {
+                if(args.length != 1) {
+                    return;
+                }
                 RuntimeMXBean mxBean = ManagementFactory.getRuntimeMXBean();
                 long uptime = mxBean.getUptime();
 
@@ -34,8 +42,29 @@ public class UtilsCommand extends Command {
                 sender.sendMessageFromChat("Время работы " + hms);
             }
             case "calendar" -> {
+                if(args.length != 1) {
+                    return;
+                }
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: hhч mmм ssс\nДата: dd.MM.yyyy");
                 sender.sendMessageFromChat(formatter.format(LocalDateTime.now()));
+            }
+            case "convert_ts" -> {
+                if(args.length != 2) {
+                    return;
+                }
+                try {
+                    long millis = Long.parseLong(args[1]);
+                    LocalDateTime ofInstant = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC);
+                    sender.sendMessageFromChat(String.valueOf(ofInstant));
+                } catch (NumberFormatException e) {
+                    sender.sendMessageFromChat("Это не число(long)");
+                }
+            }
+            case "current_ts" -> {
+                if(args.length != 1) {
+                    return;
+                }
+                sender.sendMessageFromChat(String.valueOf(ZonedDateTime.now().toInstant().toEpochMilli()));
             }
         }
     }
