@@ -43,7 +43,7 @@ public class UnboundVariable extends PseudoToken implements LValue {
 
     @Override
     public final @NotNull LValue bindVariables(@NotNull Expression expression) throws ExpressionException {
-        final RValue variable = expression.getVariable(name);
+        final RValue variable = Expression.getVariable(name);
         if (variable == null) {
             throw new ExpressionException(getPosition(), "Переменная " + name + " не найдена");
         }

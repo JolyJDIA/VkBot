@@ -14,12 +14,10 @@ import java.util.Map;
 import java.util.Stack;
 
 public final class Expression {
-
-    private static final ThreadLocal<Stack<Expression>> instance = new ThreadLocal<>();
-
-    private static final Map<String, RValue> constants = ImmutableMap.of(
-            "e", new Constant(Math.E),
-            "pi", new Constant(Math.PI)
+    private static final ThreadLocal<Stack<Expression>> INSTANCE = new ThreadLocal<>();
+    private static final Map<String, RValue> CONSTANTS = ImmutableMap.of(
+            "pi", new Constant(Math.PI),
+            "e", new Constant(Math.E)
     );
 
     private final RValue root;
@@ -46,26 +44,26 @@ public final class Expression {
         }
     }
 
-    public RValue getVariable(String name) {
-        return constants.get(name);
+    public static RValue getVariable(String name) {
+        return CONSTANTS.get(name);
     }
 
     private void pushInstance() {
-        Stack<Expression> threadLocalExprStack = instance.get();
+        Stack<Expression> threadLocalExprStack = INSTANCE.get();
         if (threadLocalExprStack == null) {
-            instance.set(threadLocalExprStack = new Stack<>());
+            INSTANCE.set(threadLocalExprStack = new Stack<>());
         }
 
         threadLocalExprStack.push(this);
     }
 
     private static void popInstance() {
-        Stack<Expression> threadLocalExprStack = instance.get();
+        Stack<Expression> threadLocalExprStack = INSTANCE.get();
 
         threadLocalExprStack.pop();
 
         if (threadLocalExprStack.isEmpty()) {
-            instance.set(null);
+            INSTANCE.set(null);
         }
     }
 }

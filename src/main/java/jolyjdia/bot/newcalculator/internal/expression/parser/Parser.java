@@ -96,7 +96,7 @@ public final class Parser {
                     if (next.id() == '(') {
                         halfProcessed.add(parseFunctionCall(identifierToken));
                     } else {
-                        final RValue variable = expression.getVariable(identifierToken.value);
+                        final RValue variable = Expression.getVariable(identifierToken.value);
                         halfProcessed.add(Objects.requireNonNullElseGet(variable, () -> new UnboundVariable(identifierToken.getPosition(), identifierToken.value)));
                     }
                     expressionStart = false;
