@@ -42,7 +42,7 @@ public class InitCalc implements Module {
                 sender.sendMessageFromChat("Че за бред ты высрал?\n"+e.getMessage());
                 return;
             }
-            sender.sendMessageFromChat(Double.isNaN(result) ? "NaN" : DECIMAL_FORMAT.format(result) + "\nВыполнилось за "+end+"ms");
+            sender.sendMessageFromChat(Double.isNaN(result) ? "NaN" : DECIMAL_FORMAT.format(result) + "\nВыполнено за "+end+"ms");
         }
     }
 }

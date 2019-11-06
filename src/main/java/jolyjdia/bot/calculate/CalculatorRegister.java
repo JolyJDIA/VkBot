@@ -46,6 +46,6 @@ public class CalculatorRegister implements Module, Listener {
 		if(!OUTPUT.matcher(answer).matches()) {
 			return;
 		}
-		e.getUser().sendMessageFromChat(answer+"\nВыполнилось за: "+end+"ms");
+		e.getUser().sendMessageFromChat(answer+"\nВыполнено за: "+end+"ms");
 	}
 }
