@@ -51,12 +51,10 @@ public final class Parser {
     private @NotNull RValue parse() throws ExpressionException {
         final RValue ret = parseStatements();
         if (position < tokens.size()) {
-            final Token token = peek();
-            throw new ExpressionException(token.getPosition(), "Дополнительный токен в конце ввода: " + token);
+            throw new ExpressionException(-1, "Дополнительный токен в конце ввода: ");
         }
 
         ret.bindVariables(expression);
-
         return ret;
     }
 
@@ -103,7 +101,7 @@ public final class Parser {
                     halfProcessed.add(parseBracket());
                     expressionStart = false;
                     break;
-
+                case ',':
                 case ')':
                     break loop;
                 case 'o':
@@ -139,12 +137,22 @@ public final class Parser {
             ++position;
             return Functions.getFunction(identifierToken.getPosition(), identifierToken.value);
         }
-
         List<RValue> args = new ArrayList<>();
-        args.add(parseExpression());
-        ++position;
-        System.out.println(args.get(0));
-        return Functions.getFunction(identifierToken.getPosition(), identifierToken.value, args.get(0));
+
+        loop: while (true) {
+            args.add(parseExpression());
+
+            final Token current = peek();
+            ++position;
+
+            switch (current.id()) {
+                case ',':
+                    continue;
+                case ')':
+                    break loop;
+            }
+        }
+        return Functions.getFunction(identifierToken.getPosition(), identifierToken.value, args.toArray(new RValue[0]));
     }
 
     private @NotNull RValue parseBracket() throws ExpressionException {

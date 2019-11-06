@@ -36,9 +36,9 @@ public final class Functions {
                     issetter = true;
                     continue;
                 }
-                if (!RValue.class.isAssignableFrom(parameter)) {
-                    throw new IllegalArgumentException("Method takes arguments that can't be cast to RValue.");
-                }
+              //  if (!RValue.class.isAssignableFrom(parameter)) {
+              //      throw new IllegalArgumentException("Method takes arguments that can't be cast to RValue.");
+             //   }
                 accum <<= 2;
 
                 accum |= LValue.class.isAssignableFrom(parameter) ? 3 : 1;
@@ -52,7 +52,7 @@ public final class Functions {
             if (this.isSetter) {
                 return false;
             }
-            if (this.method.getParameterTypes().length != args.length) { // TODO: optimize
+            if (this.method.getParameterTypes().length != args.length) {
                 return false;
             }
             int accum = 0;
@@ -64,7 +64,6 @@ public final class Functions {
         }
     }
 
-    @Contract("_, _, _ -> new")
     public static @NotNull Function getFunction(int position, String name, RValue... args) {
         final Method getter = getMethod(name, args);
         return new Function(position, getter, args);
@@ -80,29 +79,15 @@ public final class Functions {
                 return overload.method;
             }
         }
+
         return null;
     }
     private static final Map<String, List<Overload>> functions = new HashMap<>();
     static {
         for (Method method : Functions.class.getMethods()) {
-            try {
-                addFunction(method);
-            } catch (IllegalArgumentException ignored) {}
+            List<Overload> overloads = functions.computeIfAbsent(method.getName(), k -> new ArrayList<>());
+            overloads.add(new Overload(method));
         }
-    }
-
-    /**
-     * @param method
-     * @throws IllegalArgumentException
-     */
-    private static void addFunction(@NotNull Method method) {
-        final String methodName = method.getName();
-
-        Overload overload = new Overload(method);
-
-        List<Overload> overloads = functions.computeIfAbsent(methodName, k -> new ArrayList<>());
-
-        overloads.add(overload);
     }
 
     public static double sin(@NotNull RValue x) {
@@ -116,7 +101,6 @@ public final class Functions {
     public static double tan(@NotNull RValue x) {
         return Math.tan(x.getValue());
     }
-
 
     public static double asin(@NotNull RValue x) {
         return Math.asin(x.getValue());
@@ -204,7 +188,6 @@ public final class Functions {
         return Math.log10(x.getValue());
     }
 
-
     public static double rotate(@NotNull LValue x, @NotNull LValue y, @NotNull RValue angle) {
         final double f = angle.getValue();
 
@@ -218,55 +201,5 @@ public final class Functions {
         y.assign(xOld * sinF + yOld * cosF);
 
         return 0.0;
-    }
-
-    public static double swap(@NotNull LValue x, @NotNull LValue y) {
-        final double tmp = x.getValue();
-
-        x.assign(y.getValue());
-        y.assign(tmp);
-
-        return 0.0;
-    }
-
-    private final Map<Integer, double[]> megabuf = new HashMap<>();
-
-    @Contract(pure = true)
-    public Map<Integer, double[]> getMegabuf() {
-        return megabuf;
-    }
-
-    private static double[] getSubBuffer(@NotNull Map<? super Integer, double[]> megabuf, Integer key) {
-        return megabuf.computeIfAbsent(key, k -> new double[1024]);
-    }
-
-    private static double getBufferItem(final Map<? super Integer, double[]> megabuf, final int index) {
-        return getSubBuffer(megabuf, index & -1024)[index & 1023];
-    }
-
-    private static double setBufferItem(final Map<? super Integer, double[]> megabuf, final int index, double value) {
-        return getSubBuffer(megabuf, index & -1024)[index & 1023] = value;
-    }
-
-    private static double findClosest(Map<? super Integer, double[]> megabuf, double x, double y, double z, int index, int count, int stride) {
-        int closestIndex = -1;
-        double minDistanceSquared = Double.MAX_VALUE;
-
-        for (int i = 0; i < count; ++i) {
-            double currentX = getBufferItem(megabuf, index) - x;
-            double currentY = getBufferItem(megabuf, index+1) - y;
-            double currentZ = getBufferItem(megabuf, index+2) - z;
-
-            double distanceSquared = currentX*currentX + currentY*currentY + currentZ*currentZ;
-
-            if (distanceSquared < minDistanceSquared) {
-                minDistanceSquared = distanceSquared;
-                closestIndex = index;
-            }
-
-            index += stride;
-        }
-
-        return closestIndex;
     }
 }

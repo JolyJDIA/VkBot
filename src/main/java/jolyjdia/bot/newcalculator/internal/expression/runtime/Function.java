@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 
 public class Function extends Node {
     private final Method method;
-    private final RValue[] args;
+    public final RValue[] args;
 
     Function(int position, Method method, RValue... args) {
         super(position);
