@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class RaidCommand extends Command {
@@ -23,10 +22,10 @@ public class RaidCommand extends Command {
         super("raid");
         setAlias("access");
     }
-    private static final Map<String, Integer> access = new HashMap<>();
+    private static final Map<String, Integer> access = Maps.newHashMap();
     static {
         access.put("Завр", 310289867);
-       // access.put("Валера", 526616439);
+        access.put("Валера", 526616439);
         access.put("Юджин", 190345817);
         access.put("Изи мама", 526212430);
         access.put("Богардо", 323998691);
