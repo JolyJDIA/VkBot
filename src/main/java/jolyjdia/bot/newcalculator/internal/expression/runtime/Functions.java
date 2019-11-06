@@ -58,7 +58,7 @@ public final class Functions {
             int accum = 0;
             for (RValue argument : args) {
                 accum <<= 2;
-                accum |= argument instanceof LValue ? 3 : 1;
+                accum |= LValue.class.isAssignableFrom(argument.getClass()) ? 3 : 1;
             }
             return (accum & mask) == mask;
         }
