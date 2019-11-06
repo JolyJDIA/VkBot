@@ -2,6 +2,7 @@ package jolyjdia.bot.newcalculator.internal.expression.runtime;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -35,11 +36,9 @@ public final class Functions {
                     issetter = true;
                     continue;
                 }
-
                 if (!RValue.class.isAssignableFrom(parameter)) {
                     throw new IllegalArgumentException("Method takes arguments that can't be cast to RValue.");
                 }
-
                 accum <<= 2;
 
                 accum |= LValue.class.isAssignableFrom(parameter) ? 3 : 1;
@@ -49,50 +48,40 @@ public final class Functions {
         }
 
         @Contract(pure = true)
-        boolean matches(boolean isSetter, RValue... args) {
-            if (this.isSetter != isSetter) {
+        boolean matches(RValue... args) {
+            if (this.isSetter) {
                 return false;
             }
-
             if (this.method.getParameterTypes().length != args.length) { // TODO: optimize
                 return false;
             }
-
             int accum = 0;
             for (RValue argument : args) {
                 accum <<= 2;
-
                 accum |= argument instanceof LValue ? 3 : 1;
             }
-
             return (accum & mask) == mask;
         }
     }
 
     @Contract("_, _, _ -> new")
-    public static @NotNull Function getFunction(int position, String name, RValue... args) throws NoSuchMethodException {
-        final Method getter = getMethod(name, false, args);
-        try {
-            Method setter = getMethod(name, true, args);
-            return new LValueFunction(position, getter, setter, args);
-        } catch (NoSuchMethodException e) {
-            return new Function(position, getter, args);
-        }
+    public static @NotNull Function getFunction(int position, String name, RValue... args) {
+        final Method getter = getMethod(name, args);
+        return new Function(position, getter, args);
     }
 
-    private static Method getMethod(String name, boolean isSetter, RValue... args) throws NoSuchMethodException {
+    private static @Nullable Method getMethod(String name, RValue... args) {
         final List<Overload> overloads = functions.get(name);
-        if (overloads != null) {
-            for (Overload overload : overloads) {
-                if (overload.matches(isSetter, args)) {
-                    return overload.method;
-                }
+        if (overloads == null) {
+            return null;
+        }
+        for (Overload overload : overloads) {
+            if (overload.matches(args)) {
+                return overload.method;
             }
         }
-
-        throw new NoSuchMethodException(); // TODO: return null (check for side-effects first)
+        return null;
     }
-
     private static final Map<String, List<Overload>> functions = new HashMap<>();
     static {
         for (Method method : Functions.class.getMethods()) {
@@ -115,7 +104,6 @@ public final class Functions {
 
         overloads.add(overload);
     }
-
 
     public static double sin(@NotNull RValue x) {
         return Math.sin(x.getValue());
@@ -146,7 +134,6 @@ public final class Functions {
         return Math.atan2(y.getValue(), x.getValue());
     }
 
-
     public static double sinh(@NotNull RValue x) {
         return Math.sinh(x.getValue());
     }
@@ -159,7 +146,6 @@ public final class Functions {
         return Math.tanh(x.getValue());
     }
 
-
     public static double sqrt(@NotNull RValue x) {
         return Math.sqrt(x.getValue());
     }
@@ -167,7 +153,6 @@ public final class Functions {
     public static double cbrt(@NotNull RValue x) {
         return Math.cbrt(x.getValue());
     }
-
 
     public static double abs(@NotNull RValue x) {
         return Math.abs(x.getValue());
@@ -180,7 +165,6 @@ public final class Functions {
     public static double min(@NotNull RValue a, @NotNull RValue b, @NotNull RValue c) {
         return Math.min(a.getValue(), Math.min(b.getValue(), c.getValue()));
     }
-
     public static double max(@NotNull RValue a, @NotNull RValue b) {
         return Math.max(a.getValue(), b.getValue());
     }
@@ -188,8 +172,6 @@ public final class Functions {
     public static double max(@NotNull RValue a, @NotNull RValue b, @NotNull RValue c) {
         return Math.max(a.getValue(), Math.max(b.getValue(), c.getValue()));
     }
-
-
     public static double ceil(@NotNull RValue x) {
         return Math.ceil(x.getValue());
     }

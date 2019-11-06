@@ -13,7 +13,6 @@ public class Calculate {
 
     public Calculate(String userInput) {
         this.formattedUserInput = new Parser().parse(COMPILE.matcher(userInput).replaceAll(""));
-        System.out.println(formattedUserInput);
     }
     private final BigDecimal condenseExpression(@NotNull String operator, int indexVal) {
         BigDecimal x = BigDecimal.ZERO;

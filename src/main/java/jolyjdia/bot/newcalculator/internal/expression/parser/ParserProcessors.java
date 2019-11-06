@@ -79,6 +79,7 @@ final class ParserProcessors {
 
         RValue lhsInvokable = processBinaryOpsLA(lhs, level);
         try {
+            assert lhsInvokable != null;
             return Operators.getOperator(input.get(0).getPosition(), operator, lhsInvokable, rhsInvokable);
         } catch (NoSuchMethodException e) {
             return null;

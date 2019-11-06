@@ -2,20 +2,15 @@ package jolyjdia.bot.newcalculator.internal.expression.runtime;
 
 import jolyjdia.bot.newcalculator.internal.expression.Expression;
 import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class Function extends Node {
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @interface Dynamic { }
-
-    final Method method;
-    final RValue[] args;
+    private final Method method;
+    private final RValue[] args;
 
     Function(int position, Method method, RValue... args) {
         super(position);
@@ -28,7 +23,7 @@ public class Function extends Node {
         return invokeMethod(method, args);
     }
 
-    static double invokeMethod(@NotNull Method method, Object[] args) {
+    private static double invokeMethod(@NotNull Method method, Object[] args) {
         try {
             return (Double) method.invoke(null, args);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -37,15 +32,16 @@ public class Function extends Node {
         return 0;
     }
 
+    @Contract(pure = true)
     @Override
-    public char id() {
+    public final char id() {
         return 'f';
     }
 
     @Override
-    public RValue optimize() {
+    public final @NotNull RValue optimize() {
         final RValue[] optimizedArgs = new RValue[args.length];
-        boolean optimizable = !method.isAnnotationPresent(Dynamic.class);
+        boolean optimizable = true;
         int position = getPosition();
         for (int i = 0; i < args.length; ++i) {
             final RValue optimized = optimizedArgs[i] = args[i].optimize();
@@ -64,8 +60,9 @@ public class Function extends Node {
                 new Function(position, method, optimizedArgs);
     }
 
+    @Contract("_ -> this")
     @Override
-    public RValue bindVariables(Expression expression) throws ExpressionException {
+    public final RValue bindVariables(Expression expression) throws ExpressionException {
         for (int i = 0; i < args.length; ++i) {
             args[i] = args[i].bindVariables(expression);
         }

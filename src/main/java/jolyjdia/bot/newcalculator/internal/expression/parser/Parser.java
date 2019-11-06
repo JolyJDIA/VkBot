@@ -7,7 +7,10 @@ import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.IdentifierTok
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.NumberToken;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.OperatorToken;
 import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.Token;
-import jolyjdia.bot.newcalculator.internal.expression.runtime.*;
+import jolyjdia.bot.newcalculator.internal.expression.runtime.Constant;
+import jolyjdia.bot.newcalculator.internal.expression.runtime.Function;
+import jolyjdia.bot.newcalculator.internal.expression.runtime.Functions;
+import jolyjdia.bot.newcalculator.internal.expression.runtime.RValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 public final class Parser {
+
     private static final class NullToken extends Token {
         private NullToken(int position) {
             super(position);
@@ -27,12 +31,6 @@ public final class Parser {
         @Override
         public char id() {
             return '\0';
-        }
-
-        @Override
-        @Contract(pure = true)
-        public @NotNull String toString() {
-            return "NullToken";
         }
     }
 
@@ -65,17 +63,16 @@ public final class Parser {
     private RValue parseStatements() throws ExpressionException {
         List<RValue> statements = new ArrayList<>();
         if (position < tokens.size()) {
-            statements.add(parseExpression(true));
+            statements.add(parseExpression());
         }
-
-        return switch (statements.size()) {
-            case 0 -> new Sequence(peek().getPosition());
-            case 1 -> statements.get(0);
-            default -> new Sequence(peek().getPosition(), statements.toArray(new RValue[0]));
-        };
+        if (statements.size() == 1) {
+            return statements.get(0);
+        } else {
+            throw new IllegalStateException("Unexpected value: " + statements.size());
+        }
     }
 
-    private @NotNull RValue parseExpression(boolean canBeEmpty) throws ExpressionException {
+    private @NotNull RValue parseExpression() throws ExpressionException {
         LinkedList<Identifiable> halfProcessed = new LinkedList<>();
         boolean expressionStart = true;
         loop: while (position < tokens.size()) {
@@ -125,10 +122,6 @@ public final class Parser {
                     break;
             }
         }
-
-        if (halfProcessed.isEmpty() && canBeEmpty) {
-            return new Sequence(peek().getPosition());
-        }
         return ParserProcessors.processExpression(halfProcessed);
     }
 
@@ -142,24 +135,21 @@ public final class Parser {
     private @NotNull Function parseFunctionCall(IdentifierToken identifierToken) throws ExpressionException {
         consumeCharacter('(');
 
-        try {
-            if (peek().id() == ')') {
-                ++position;
-                return Functions.getFunction(identifierToken.getPosition(), identifierToken.value);
-            }
-
-            List<RValue> args = new ArrayList<>();
-            args.add(parseExpression(false));
+        if (peek().id() == ')') {
             ++position;
-            return Functions.getFunction(identifierToken.getPosition(), identifierToken.value, args.toArray(new RValue[0]));
-        } catch (NoSuchMethodException e) {
-            throw new ExpressionException(identifierToken.getPosition(), "Функция " + identifierToken.value + " не найдена", e);
+            return Functions.getFunction(identifierToken.getPosition(), identifierToken.value);
         }
+
+        List<RValue> args = new ArrayList<>();
+        args.add(parseExpression());
+        ++position;
+        System.out.println(args.get(0));
+        return Functions.getFunction(identifierToken.getPosition(), identifierToken.value, args.get(0));
     }
 
     private @NotNull RValue parseBracket() throws ExpressionException {
         consumeCharacter('(');
-        final RValue ret = parseExpression(false);
+        final RValue ret = parseExpression();
         consumeCharacter(')');
         return ret;
     }

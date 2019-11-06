@@ -17,7 +17,6 @@ public class ExpressionException extends Exception {
         this.position = position;
     }
 
-
     @Contract(pure = true)
     public final int getPosition() {
         return position;
