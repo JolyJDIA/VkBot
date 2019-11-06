@@ -56,7 +56,6 @@ public final class Lexer {
                 }
             }
         } while (position < expression.length());
-        System.out.println(tokens);
         return tokens;
     }
     @Contract(pure = true)
