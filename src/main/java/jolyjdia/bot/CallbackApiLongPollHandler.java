@@ -78,8 +78,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                         return c.getName().equalsIgnoreCase(args[0])
                                 || (alias != null && !alias.isEmpty()
                                 && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0])));
-                    })
-                    .findFirst()
+                    }).findFirst()
                     .ifPresent(c -> {
                         SendCommandEvent event = new SendCommandEvent(user, args);
                         submitEvent(event);
