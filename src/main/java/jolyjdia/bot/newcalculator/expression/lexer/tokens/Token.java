@@ -1,6 +1,6 @@
-package jolyjdia.bot.newcalculator.internal.expression.lexer.tokens;
+package jolyjdia.bot.newcalculator.expression.lexer.tokens;
 
-import jolyjdia.bot.newcalculator.internal.expression.Identifiable;
+import jolyjdia.bot.newcalculator.expression.Identifiable;
 import org.jetbrains.annotations.Contract;
 
 public abstract class Token implements Identifiable {

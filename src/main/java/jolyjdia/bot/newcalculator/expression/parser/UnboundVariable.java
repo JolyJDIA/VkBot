@@ -1,9 +1,9 @@
-package jolyjdia.bot.newcalculator.internal.expression.parser;
+package jolyjdia.bot.newcalculator.expression.parser;
 
-import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
-import jolyjdia.bot.newcalculator.internal.expression.runtime.LValue;
-import jolyjdia.bot.newcalculator.internal.expression.runtime.RValue;
+import jolyjdia.bot.newcalculator.expression.Expression;
+import jolyjdia.bot.newcalculator.expression.ExpressionException;
+import jolyjdia.bot.newcalculator.expression.runtime.LValue;
+import jolyjdia.bot.newcalculator.expression.runtime.RValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

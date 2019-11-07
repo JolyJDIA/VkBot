@@ -1,6 +1,6 @@
-package jolyjdia.bot.newcalculator.internal.expression.parser;
+package jolyjdia.bot.newcalculator.expression.parser;
 
-import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.OperatorToken;
+import jolyjdia.bot.newcalculator.expression.lexer.tokens.OperatorToken;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

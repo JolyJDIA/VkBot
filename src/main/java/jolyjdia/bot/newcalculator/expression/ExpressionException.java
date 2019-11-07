@@ -1,4 +1,4 @@
-package jolyjdia.bot.newcalculator.internal.expression;
+package jolyjdia.bot.newcalculator.expression;
 
 import org.jetbrains.annotations.Contract;
 

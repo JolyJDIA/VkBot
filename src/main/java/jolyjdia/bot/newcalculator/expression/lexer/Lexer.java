@@ -1,6 +1,6 @@
-package jolyjdia.bot.newcalculator.internal.expression.lexer;
+package jolyjdia.bot.newcalculator.expression.lexer;
 
-import jolyjdia.bot.newcalculator.internal.expression.lexer.tokens.*;
+import jolyjdia.bot.newcalculator.expression.lexer.tokens.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

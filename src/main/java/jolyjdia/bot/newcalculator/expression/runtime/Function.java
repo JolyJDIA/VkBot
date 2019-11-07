@@ -1,7 +1,7 @@
-package jolyjdia.bot.newcalculator.internal.expression.runtime;
+package jolyjdia.bot.newcalculator.expression.runtime;
 
-import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
+import jolyjdia.bot.newcalculator.expression.Expression;
+import jolyjdia.bot.newcalculator.expression.ExpressionException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

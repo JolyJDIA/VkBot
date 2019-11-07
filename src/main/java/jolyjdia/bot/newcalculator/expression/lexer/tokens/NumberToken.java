@@ -1,27 +1,27 @@
-package jolyjdia.bot.newcalculator.internal.expression.lexer.tokens;
+package jolyjdia.bot.newcalculator.expression.lexer.tokens;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-public class CharacterToken extends Token {
-    @NonNls private final char character;
+public class NumberToken extends Token {
+    @NonNls public final double value;
 
-    public CharacterToken(int position, char character) {
+    public NumberToken(int position, double value) {
         super(position);
-        this.character = character;
+        this.value = value;
     }
 
     @Contract(pure = true)
     @Override
     public final char id() {
-        return character;
+        return '0';
     }
 
     @Override
     @Contract(pure = true)
     public final @NotNull String toString() {
-        return "CharacterToken(" + character + ')';
+        return "NumberToken(" + value + ')';
     }
 
 }

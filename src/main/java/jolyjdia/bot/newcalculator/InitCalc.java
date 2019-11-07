@@ -1,11 +1,11 @@
-package jolyjdia.bot.newcalculator.internal;
+package jolyjdia.bot.newcalculator;
 
 import api.Bot;
 import api.command.Command;
 import api.module.Module;
 import api.storage.User;
-import jolyjdia.bot.newcalculator.internal.expression.Expression;
-import jolyjdia.bot.newcalculator.internal.expression.ExpressionException;
+import jolyjdia.bot.newcalculator.expression.Expression;
+import jolyjdia.bot.newcalculator.expression.ExpressionException;
 import org.jetbrains.annotations.NonNls;
 
 import java.text.DecimalFormat;

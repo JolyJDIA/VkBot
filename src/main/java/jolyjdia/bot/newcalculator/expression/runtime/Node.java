@@ -1,13 +1,13 @@
-package jolyjdia.bot.newcalculator.internal.expression.parser;
+package jolyjdia.bot.newcalculator.expression.runtime;
 
-import jolyjdia.bot.newcalculator.internal.expression.Identifiable;
 import org.jetbrains.annotations.Contract;
 
-public abstract class PseudoToken implements Identifiable {
+public abstract class Node implements RValue {
+
     private final int position;
 
     @Contract(pure = true)
-    PseudoToken(int position) {
+    Node(int position) {
         this.position = position;
     }
 
@@ -16,5 +16,4 @@ public abstract class PseudoToken implements Identifiable {
     public final int getPosition() {
         return position;
     }
-
 }
