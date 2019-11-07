@@ -76,7 +76,7 @@ public class RaidCommand extends Command {
                 sender.sendMessageFromChat("Ошибка! Слишком маленькая задержка, начинай с 2-х");
                 return;
             }
-            String text = StringBind.toString(2, args)+ '\n';
+            @NonNls String text = StringBind.toString(2, args)+ '\n';
             text = text.repeat(lenghtNotify(text.length()));
             startRaid(sender, text, period);
         }
