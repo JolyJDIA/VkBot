@@ -15,6 +15,9 @@ public class ReloadCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if (args.length == 1) {
+            if(noPermission(sender)) {
+                return;
+            }
             Bot.getModuleLoader().reloadModule();
             sender.sendMessageFromChat("Перезагрузка завершена\nМой планировщик: Привет из Thread-2");
         }

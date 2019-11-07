@@ -120,6 +120,7 @@ public abstract class Command {
     public final boolean noPermission(User user) {
         return !hasPermission(user);
     }
+
     @Contract(pure = true)
     protected final @NotNull String getUseCommand() {
         return '/' + name + (arguments != null && !arguments.isEmpty() ? ' ' + arguments : "");
