@@ -4,9 +4,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -93,23 +90,9 @@ public final class MathUtils {
 			doubleArray[i] = func.apply(doubleArray[i]);
 		}
 	}
-
-	public static double[] opposite(double[] vector) {
-		return multiply(vector, -1);
-	}
-
 	public static double[] multiply(@NotNull double[] vector, double factor) {
 		double[] output = vector.clone();
 		applyFunc(output, e -> e * factor);
 		return output;
-	}
-
-	@Contract(pure = true)
-	public static double normalize(double value, double min, double max) {
-		return (value - min) / (max - min);
-	}
-
-	public static double round(double value, RoundingMode mode) {
-		return BigDecimal.valueOf(value).round(new MathContext(2, mode)).doubleValue();
 	}
 }
