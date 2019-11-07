@@ -78,6 +78,11 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     }
 
     @Override
+    public void deleteChat(int peerId) {
+        map.remove(peerId);
+    }
+
+    @Override
     public User addIfAbsentAndReturn(int peerId, int userId) {
         Map<Integer, User> users = map.computeIfAbsent(peerId, k -> new HashMap<>());
         User user;

@@ -1,4 +1,4 @@
-package jolyjdia.bot.password;
+package jolyjdia.bot.utils;
 
 import api.command.Command;
 import api.storage.User;

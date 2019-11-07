@@ -11,4 +11,5 @@ public interface UserBackend {
     void setRank(User user, PermissionGroup rank);
     User getUser(int peerId, int userId);
     void deleteUser(int peerId, int userId);
+    void deleteChat(int peerId);
 }

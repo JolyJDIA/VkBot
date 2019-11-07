@@ -1,4 +1,4 @@
-package jolyjdia.bot.password;
+package jolyjdia.bot.utils;
 
 import api.Bot;
 import api.event.EventLabel;
@@ -26,7 +26,7 @@ public class GeneratorPassword implements Module, Listener {
                 0, 50);
     }
 
-    @EventLabel
+    @EventLabel(ignoreCancelled = true)
     public final void onCommand(@NotNull SendCommandEvent e) {
         int userId = e.getUser().getUserId();
         if (cooldown.containsKey(userId)) {

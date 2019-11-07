@@ -29,7 +29,7 @@ public final class Lexer {
     private @NotNull List<Token> tokenize() {
         List<Token> tokens = new ArrayList<>();
         do {
-            skipWhitespace();
+       //     skipWhitespace();
             char peek = peek();
             if(containsOper(peek)) {
                 tokens.add(new OperatorToken(position++, String.valueOf(peek)));

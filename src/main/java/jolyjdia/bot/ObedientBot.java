@@ -21,10 +21,10 @@ import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.newcalculator.internal.InitCalc;
-import jolyjdia.bot.password.GeneratorPassword;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
+import jolyjdia.bot.utils.GeneratorPassword;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

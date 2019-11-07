@@ -31,6 +31,8 @@ public class MySQL implements UserBackend {
             "SELECT `group` FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
     @NonNls private static final String DELETE =
             "DELETE FROM `vkbot` WHERE `peerId` = ? AND `userId` = ? LIMIT 1";
+    @NonNls private static final String DELETE_CHAT =
+            "DELETE FROM `vkbot` WHERE `peerId` = ?";
 
     private final Map<Integer, Cache<Integer, User>> chats = new WeakHashMap<>();//Хз, зачем) На всякий)
 
@@ -165,6 +167,18 @@ public class MySQL implements UserBackend {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public final void deleteChat(int peerId) {
+        chats.remove(peerId);
+        try (PreparedStatement ps = connection.prepareStatement(DELETE_CHAT)) {
+            ps.setInt(1, peerId);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static @NotNull User initializationNewUser(int peerId, int userId) {
         User user = new User(peerId, userId);
         try {
