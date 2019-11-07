@@ -35,9 +35,9 @@ public class InitCalc implements Module {
             double result;
             long end;
             try {
-                long start = System.nanoTime();
+                long start = System.currentTimeMillis();
                 result = Expression.compile(list).evaluate();
-                end = System.nanoTime() - start;
+                end = System.currentTimeMillis() - start;
             } catch (ExpressionException e) {
                 sender.sendMessageFromChat("Че за бред ты высрал?\n"+e.getMessage());
                 return;

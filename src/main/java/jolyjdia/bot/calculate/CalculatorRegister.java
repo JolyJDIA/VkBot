@@ -40,9 +40,9 @@ public class CalculatorRegister implements Module, Listener {
 		if (!CalculatorManager.MATH.matcher(text).matches()) {
 			return;
 		}
-		long start = System.nanoTime();
+		long start = System.currentTimeMillis();
 		@NonNls String answer = new Calculate(text).solveExpression();
-		long end = System.nanoTime() - start;
+		long end = System.currentTimeMillis() - start;
 		if(!OUTPUT.matcher(answer).matches()) {
 			return;
 		}
