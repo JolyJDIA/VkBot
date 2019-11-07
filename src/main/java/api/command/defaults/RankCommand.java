@@ -18,6 +18,9 @@ public class RankCommand extends Command {
 
     @Override
     public final void execute(@NonNls User sender, @NotNull String[] args) {
+        if (noPermission(sender)) {
+            return;
+        }
         if(args.length >= 4) {
             if (args[0].equalsIgnoreCase("addrank")) {
                 PermissionManager.addGroup(args[1], args[2], ArrayUtils.subarray(args, 3, args.length));
@@ -25,9 +28,6 @@ public class RankCommand extends Command {
             }
         }
         if (args.length == 3) {
-            if (noPermission(sender)) {
-                return;
-            }
             Integer id = VkUtils.getUserId(args[1], sender);
             if(id == null) {
                 sender.sendMessageFromChat("Пользователя нет в беседе");
