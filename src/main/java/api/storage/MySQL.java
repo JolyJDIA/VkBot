@@ -5,7 +5,7 @@ import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import jolyjdia.bot.Loader;
@@ -40,7 +40,7 @@ public class MySQL implements UserBackend {
         MysqlDataSource data = new MysqlDataSource();
         data.setUser(username);
         data.setPassword(password);
-        data.setUrl(url + "?useUnicode=true&characterEncoding=UTF-8");
+        data.setUrl(url + "?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC");
         try {
             this.connection = data.getConnection();
             try (Statement statement = connection.createStatement()) {

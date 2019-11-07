@@ -65,11 +65,12 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
+            /*//Может и впихну в удачно выполненную команду, а может и нет
             SendCommandEvent event = new SendCommandEvent(user, args);
             submitEvent(event);
             if(event.isCancelled()) {
                 return;
-            }
+            }*/
             long start = System.currentTimeMillis();
             Bot.getBotManager().getRegisteredCommands().stream()
                     .filter(c -> {
@@ -79,7 +80,14 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                                 && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0])));
                     })
                     .findFirst()
-                    .ifPresent(c -> c.execute(user, args));
+                    .ifPresent(c -> {
+                        SendCommandEvent event = new SendCommandEvent(user, args);
+                        submitEvent(event);
+                        if(event.isCancelled()) {
+                            return;
+                        }
+                        c.execute(user, args);
+                    });
             @NonNls long end = System.currentTimeMillis() - start;
             LOGGER.log(Level.INFO, "КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
             return;
