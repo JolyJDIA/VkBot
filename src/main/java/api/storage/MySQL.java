@@ -188,7 +188,7 @@ public class MySQL implements UserBackend {
                         Boolean isAdmin = e.getIsAdmin();
                         return (isOwner != null && isOwner) || (isAdmin != null && isAdmin);
                     })) {
-                user.setGroup(PermissionManager.getPermGroup(PermissionManager.ADMIN));
+                user.setGroup(PermissionManager.getAdmin());
             }
         } catch (ApiException | ClientException e) {
             e.printStackTrace();
