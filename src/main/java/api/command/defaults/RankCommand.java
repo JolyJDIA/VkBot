@@ -2,6 +2,7 @@ package api.command.defaults;
 
 import api.Bot;
 import api.command.Command;
+import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import api.storage.User;
 import api.utils.VkUtils;
@@ -41,7 +42,12 @@ public class RankCommand extends Command {
                 sender.sendMessageFromChat(builder.toString());
                 return;
             }
-            Bot.getUserBackend().setRank(sender.getPeerId(), id, PermissionManager.getPermGroup(args[2]));
+            PermissionGroup group = PermissionManager.getPermGroup(args[2]);
+            if(sender.getGroup() == group) {
+                sender.sendMessageFromChat("У вас уже есть данный ранг");
+                return;
+            }
+            Bot.getUserBackend().setRank(sender.getPeerId(), id, group);
             sender.sendMessageFromChat("Вы успешно выдали права");
         } else {
             sender.sendMessageFromChat("Использование: " + getUseCommand());

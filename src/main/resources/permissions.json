@@ -13,7 +13,7 @@
   },
   "moder": {
     "permissions": [
-      ""
+      "roflanbot.settitle"
     ],
     "prefix": "МОДЕР"
   }
