@@ -36,9 +36,7 @@ public class RankCommand extends Command {
             }
             if (PermissionManager.getPermGroup(args[2]) == null) {
                 StringBuilder builder = new StringBuilder("Данного ранга не существует, возможные варианты:\n");
-                for (String s : PermissionManager.getMapGroup().keySet()) {
-                    builder.append(s).append('\n');
-                }
+                PermissionManager.getMapGroup().keySet().forEach(s -> builder.append(s).append('\n'));
                 sender.sendMessageFromChat(builder.toString());
                 return;
             }
