@@ -49,7 +49,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             MessageActionStatus type = action.getType();
             if(type == MessageActionStatus.CHAT_KICK_USER) {
                 Bot.getUserBackend().deleteUser(msg.getPeerId(), msg.getFromId());
-                //Удаление базы беседы
+                //Удаляю из бд беседу
 
                 //ВОЗМОЖНО ПОТОМ ИЗМЕНЮ ПАРАМЕТРЫ НА User
                 UserLeaveEvent event = new UserLeaveEvent(msg.getPeerId(), msg.getFromId());
