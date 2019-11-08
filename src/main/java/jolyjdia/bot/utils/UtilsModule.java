@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class GeneratorPassword implements Module, Listener {
+public class UtilsModule implements Module, Listener {
     private final Map<Integer, Long> cooldown = Maps.newHashMap();
 
     @Override

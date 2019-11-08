@@ -23,7 +23,7 @@ import jolyjdia.bot.newcalculator.InitCalc;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
-import jolyjdia.bot.utils.GeneratorPassword;
+import jolyjdia.bot.utils.UtilsModule;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -92,7 +92,7 @@ public final class Bot {
         moduleLoader.registerModule(new YandexTraslate());
         moduleLoader.registerModule(new GeoLoad());
         moduleLoader.registerModule(new Puzzle());
-        moduleLoader.registerModule(new GeneratorPassword());
+        moduleLoader.registerModule(new UtilsModule());
         moduleLoader.registerModule(new SmileLoad());
         moduleLoader.registerModule(new InitCalc());
     }
