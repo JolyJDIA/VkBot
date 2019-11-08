@@ -10,9 +10,11 @@ import api.storage.ProfileList;
 import api.storage.UserBackend;
 import api.utils.MathUtils;
 import com.vk.api.sdk.actions.Groups;
+import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.calculate.CalculatorRegister;
@@ -38,6 +40,7 @@ public final class Bot {
     private static final Properties properties = new Properties();
     private static final ModuleLoader moduleLoader = new ModuleLoader();
     private static final HelpAllCommands helpCommand = new HelpAllCommands();
+    private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
     private static final UserBackend userBackend;
     private static final int groupId;
     private static final String accessToken;
@@ -60,7 +63,7 @@ public final class Bot {
                 new MySQL(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
                 new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
 
-        Groups groups = Loader.getVkApiClient().groups();
+        Groups groups = vkApiClient.groups();
         try {
             if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
                 groups.setLongPollSettings(groupActor, groupActor.getGroupId())
@@ -145,6 +148,11 @@ public final class Bot {
         return scheduler;
     }
 
+    @Contract(pure = true)
+    public static VkApiClient getVkApiClient() {
+        return vkApiClient;
+    }
+
     private static final Pattern COMPILE = Pattern.compile(" ");
 
     public static void sendMessage(String msg, int peerId, @NotNull String... attachments) {
@@ -171,11 +179,11 @@ public final class Bot {
 
     public static void editChat(String title, int peerId) {
         try {
-            Loader.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId - 2000000000, title).execute();
+            vkApiClient.messages().editChat(Bot.getGroupActor(), peerId - 2000000000, title).execute();
         } catch (ApiException | ClientException ignored) {}
     }
     private static MessagesSendQuery send(int peerId) {
-        return Loader.getVkApiClient().messages()
+        return vkApiClient.messages()
                 .send(groupActor)
                 .randomId(MathUtils.RANDOM.nextInt(10000))
                 .groupId(groupId)

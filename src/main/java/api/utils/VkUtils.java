@@ -6,7 +6,6 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.ConversationMember;
 import com.vk.api.sdk.objects.messages.responses.GetConversationMembersResponse;
 import jolyjdia.bot.Bot;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +19,7 @@ public final class VkUtils {
     public static @Nullable Integer getUserId(@NotNull String s, @NotNull User sender) {
         try {
             int id = s.charAt(0) == '[' ? getIdNick(s) : getIdString(s);
-            GetConversationMembersResponse g = Loader.getVkApiClient()
+            GetConversationMembersResponse g = Bot.getVkApiClient()
                     .messages()
                     .getConversationMembers(Bot.getGroupActor(), sender.getPeerId())
                     .execute();

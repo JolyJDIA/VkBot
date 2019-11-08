@@ -7,7 +7,6 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import jolyjdia.bot.Bot;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +24,7 @@ public class CacheUsers {
                 }
             });
     public static @NotNull UserInfo getUserInfo(int id) throws ClientException, ApiException {
-        UserXtrCounters users = Loader.getVkApiClient().users().get(Bot.getGroupActor()).userIds(String.valueOf(id)).execute().get(0);
+        UserXtrCounters users = Bot.getVkApiClient().users().get(Bot.getGroupActor()).userIds(String.valueOf(id)).execute().get(0);
         return new UserInfo(users.getFirstName(), users.getLastName());
     }
 

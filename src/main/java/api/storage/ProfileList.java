@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import jolyjdia.bot.Bot;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -92,7 +91,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             user = new User(peerId, userId);
             //ГАВНО КАКОЕ-ТО
             try {
-                if(Loader.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
+                if(Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
                         .stream().anyMatch(e -> {
                             Boolean isAdmin = e.getIsAdmin();
                             return (e.getMemberId() == userId) && (isAdmin != null && isAdmin);

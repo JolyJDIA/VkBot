@@ -8,7 +8,6 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import jolyjdia.bot.Bot;
-import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -182,7 +181,7 @@ public class MySQL implements UserBackend {
     private static @NotNull User initializationNewUser(int peerId, int userId) {
         User user = new User(peerId, userId);
         try {
-            if(Loader.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
+            if(Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
                     .stream().filter(e -> e.getMemberId() == userId).anyMatch(e -> {
                         Boolean isOwner = e.getIsOwner();
                         Boolean isAdmin = e.getIsAdmin();
