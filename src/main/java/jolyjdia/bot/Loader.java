@@ -10,7 +10,7 @@ public class Loader {
             while (!Thread.currentThread().isInterrupted()) {
                 Bot.getScheduler().mainThreadHeartbeat();
                 try {
-                    Thread.sleep(40);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -19,7 +19,8 @@ public class Loader {
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
         try {
             handler.run();
-        } catch (ApiException | ClientException e) {
+        } catch (ApiException | ClientException | RuntimeException e) {
+            System.out.println("ТЕХНИЧЕСКИЕ ШОКОЛАДКИ");
             handler.run();
         }
     }
