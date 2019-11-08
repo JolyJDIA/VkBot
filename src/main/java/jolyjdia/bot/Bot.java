@@ -39,8 +39,8 @@ public final class Bot {
     private static final ModuleLoader moduleLoader = new ModuleLoader();
     private static final HelpAllCommands helpCommand = new HelpAllCommands();
     private static final UserBackend userBackend;
-    private static final String accessToken;
     private static final int groupId;
+    private static final String accessToken;
     private static final GroupActor groupActor;
 
     static {
