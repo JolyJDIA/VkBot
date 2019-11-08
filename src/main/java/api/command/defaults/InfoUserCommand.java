@@ -1,10 +1,10 @@
 package api.command.defaults;
 
-import api.Bot;
 import api.command.Command;
 import api.permission.PermissionGroup;
 import api.storage.User;
 import api.utils.VkUtils;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

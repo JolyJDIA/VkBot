@@ -1,7 +1,7 @@
 package jolyjdia.bot.translator;
 
-import api.Bot;
 import api.module.Module;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

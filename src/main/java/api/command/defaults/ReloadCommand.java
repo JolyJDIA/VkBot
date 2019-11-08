@@ -1,8 +1,8 @@
 package api.command.defaults;
 
-import api.Bot;
 import api.command.Command;
 import api.storage.User;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
 public class ReloadCommand extends Command {

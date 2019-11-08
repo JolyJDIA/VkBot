@@ -22,8 +22,6 @@ public final class FileSerializer {
     public static void serialize(String path, Serializable obj) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path))) {
             out.writeObject(obj);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,8 +30,6 @@ public final class FileSerializer {
     public static @Nullable Object deserialize(String path) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path))) {
             return in.readObject();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

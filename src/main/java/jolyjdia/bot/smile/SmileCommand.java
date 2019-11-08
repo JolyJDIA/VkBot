@@ -1,9 +1,9 @@
 package jolyjdia.bot.smile;
 
-import api.Bot;
 import api.command.Command;
 import api.storage.User;
 import api.utils.KeyboardUtils;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
 public class SmileCommand extends Command {

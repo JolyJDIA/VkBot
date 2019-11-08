@@ -1,11 +1,11 @@
 package jolyjdia.bot.calculate;
 
-import api.Bot;
 import api.event.EventLabel;
 import api.event.EventPriority;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.module.Module;
+import jolyjdia.bot.Bot;
 import jolyjdia.bot.calculate.calculator.Calculate;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

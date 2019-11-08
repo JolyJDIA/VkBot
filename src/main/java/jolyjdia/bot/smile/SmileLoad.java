@@ -1,6 +1,5 @@
 package jolyjdia.bot.smile;
 
-import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
@@ -12,6 +11,7 @@ import com.google.common.collect.ImmutableMap;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
+import jolyjdia.bot.Bot;
 import jolyjdia.bot.shoutbox.similarity.Cosine;
 import org.jetbrains.annotations.NotNull;
 

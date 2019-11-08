@@ -1,9 +1,9 @@
 package jolyjdia.bot.newcalculator;
 
-import api.Bot;
 import api.command.Command;
 import api.module.Module;
 import api.storage.User;
+import jolyjdia.bot.Bot;
 import jolyjdia.bot.newcalculator.expression.Expression;
 import jolyjdia.bot.newcalculator.expression.ExpressionException;
 import org.jetbrains.annotations.NonNls;
@@ -32,7 +32,7 @@ public class InitCalc implements Module {
 
             String list = Arrays.asList(args).subList(1, args.length).toString().substring(1);
             list = list.substring(0, list.length() -1);
-            double result;
+            String result;
             long end;
             try {
                 long start = System.currentTimeMillis();
@@ -42,7 +42,10 @@ public class InitCalc implements Module {
                 sender.sendMessageFromChat("Че за бред ты высрал?\n"+e.getMessage());
                 return;
             }
-            sender.sendMessageFromChat(Double.isNaN(result) ? "NaN" : DECIMAL_FORMAT.format(result) + "\nВыполнено за "+end+"ms");
+            if(result.isEmpty()) {
+                return;
+            }
+            sender.sendMessageFromChat(result + "\nВыполнено за "+end+"ms");
         }
     }
 }

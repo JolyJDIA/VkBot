@@ -1,8 +1,8 @@
 package jolyjdia.bot.geo;
 
-import api.Bot;
 import api.module.Module;
 import com.maxmind.geoip2.DatabaseReader;
+import jolyjdia.bot.Bot;
 import jolyjdia.bot.Loader;
 
 import java.io.File;

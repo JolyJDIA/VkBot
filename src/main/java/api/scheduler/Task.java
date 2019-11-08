@@ -1,6 +1,6 @@
 package api.scheduler;
 
-import api.Bot;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

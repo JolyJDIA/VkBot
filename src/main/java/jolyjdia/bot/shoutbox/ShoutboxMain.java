@@ -1,11 +1,11 @@
 package jolyjdia.bot.shoutbox;
 
-import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.module.Module;
 import com.vk.api.sdk.objects.messages.Message;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

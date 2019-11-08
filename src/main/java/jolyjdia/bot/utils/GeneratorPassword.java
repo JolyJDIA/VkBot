@@ -1,11 +1,11 @@
 package jolyjdia.bot.utils;
 
-import api.Bot;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.SendCommandEvent;
 import api.module.Module;
 import com.google.common.collect.Maps;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

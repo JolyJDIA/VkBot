@@ -1,11 +1,11 @@
 package api.utils;
 
-import api.Bot;
 import api.storage.User;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.ConversationMember;
 import com.vk.api.sdk.objects.messages.responses.GetConversationMembersResponse;
+import jolyjdia.bot.Bot;
 import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -32,20 +32,10 @@ public final class VkUtils {
         }
         return null;
     }
-    /**
-     * @param a
-     * @return id
-     * @throws NumberFormatException
-     */
     public static int getIdNick(@NotNull String a) {
         return Integer.parseInt(a.substring(3).split("\\|")[0]);
     }
 
-    /**
-     * @param a
-     * @return id
-     * @throws NumberFormatException
-     */
     public static int getIdString(String a) {
         return Integer.parseInt(a);
     }

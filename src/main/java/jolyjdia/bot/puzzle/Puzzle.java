@@ -1,6 +1,5 @@
 package jolyjdia.bot.puzzle;
 
-import api.Bot;
 import api.command.Command;
 import api.event.EventLabel;
 import api.event.Listener;
@@ -9,6 +8,7 @@ import api.module.Module;
 import api.storage.User;
 import api.utils.MathUtils;
 import com.vk.api.sdk.objects.messages.Message;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

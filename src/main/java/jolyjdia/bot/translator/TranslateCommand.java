@@ -1,9 +1,9 @@
 package jolyjdia.bot.translator;
 
-import api.Bot;
 import api.command.Command;
 import api.storage.User;
 import api.utils.StringBind;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

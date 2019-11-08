@@ -1,6 +1,6 @@
 package api.command;
 
-import api.Bot;
+import jolyjdia.bot.Bot;
 import jolyjdia.bot.calculate.calculator.MathFunctions;
 import org.jetbrains.annotations.Contract;
 

@@ -1,11 +1,11 @@
 package api.command.defaults;
 
-import api.Bot;
 import api.command.Command;
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import api.storage.User;
 import api.utils.VkUtils;
+import jolyjdia.bot.Bot;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

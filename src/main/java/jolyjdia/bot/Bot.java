@@ -1,8 +1,5 @@
 package jolyjdia.bot;
 
-import api.Bot;
-import api.BotManager;
-import api.RoflanBot;
 import api.command.HelpAllCommands;
 import api.module.Module;
 import api.module.ModuleLoader;
@@ -35,18 +32,18 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public final class ObedientBot implements RoflanBot {
-    private final BotScheduler scheduler = new BotScheduler();
-    private final BotManager manager = new BotManager();
-    private final Properties properties = new Properties();
-    private final ModuleLoader moduleLoader = new ModuleLoader();
-    private final HelpAllCommands helpCommand = new HelpAllCommands();
-    private final UserBackend userBackend;
-    private final String accessToken;
-    private final int groupId;
-    private final GroupActor groupActor;
+public final class Bot {
+    private static final BotScheduler scheduler = new BotScheduler();
+    private static final BotManager manager = new BotManager();
+    private static final Properties properties = new Properties();
+    private static final ModuleLoader moduleLoader = new ModuleLoader();
+    private static final HelpAllCommands helpCommand = new HelpAllCommands();
+    private static final UserBackend userBackend;
+    private static final String accessToken;
+    private static final int groupId;
+    private static final GroupActor groupActor;
 
-    ObedientBot() throws ClientException, ApiException {
+    static {
         try (InputStream inputStream = Loader.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (inputStream != null) {
                 properties.load(inputStream);
@@ -54,37 +51,40 @@ public final class ObedientBot implements RoflanBot {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.groupId = Integer.parseInt(properties.getProperty("groupId"));
-        this.accessToken = properties.getProperty("accessToken");
-        this.groupActor = new GroupActor(groupId, accessToken);
+        groupId = Integer.parseInt(properties.getProperty("groupId"));
+        accessToken = properties.getProperty("accessToken");
+        groupActor = new GroupActor(groupId, accessToken);
 
         PermissionManager.registerPermissionGroups();
-        Bot.setBot(this);
-        this.userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
+        userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
                 new MySQL(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
                 new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
 
         Groups groups = Loader.getVkApiClient().groups();
-        if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
-            groups.setLongPollSettings(groupActor, groupActor.getGroupId())
-                    .enabled(true)
-                    .apiVersion("5.101")
-                    .wallPostNew(true)
-                    .messageNew(true)
-                    .audioNew(true)
-                    .groupJoin(true)
-                    .groupLeave(true)
-                    .messageReply(true)
-                    .messageEdit(true)
-                    .messageAllow(true)
-                    .messageDeny(true)
-                    .messageTypingState(true)
-                    .execute();
+        try {
+            if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
+                groups.setLongPollSettings(groupActor, groupActor.getGroupId())
+                        .enabled(true)
+                        .apiVersion("5.101")
+                        .wallPostNew(true)
+                        .messageNew(true)
+                        .audioNew(true)
+                        .groupJoin(true)
+                        .groupLeave(true)
+                        .messageReply(true)
+                        .messageEdit(true)
+                        .messageAllow(true)
+                        .messageDeny(true)
+                        .messageTypingState(true)
+                        .execute();
+            }
+        } catch (ApiException | ClientException e) {
+            e.printStackTrace();
         }
         registerModules();
         loadModule();
     }
-    private void registerModules() {
+    private static void registerModules() {
         moduleLoader.registerModule(new CalculatorRegister());
         moduleLoader.registerModule(new YandexTraslate());
         moduleLoader.registerModule(new GeoLoad());
@@ -95,73 +95,59 @@ public final class ObedientBot implements RoflanBot {
         //moduleLoader.registerModule(new ShoutboxMain());
         //moduleLoader.registerModule(new CraftClient());
     }
-    private void loadModule() {
+    private static void loadModule() {
         moduleLoader.getModules().forEach(Module::onLoad);
         helpCommand.initializeHelp();
     }
 
     @Contract(pure = true)
-    @Override
-    public HelpAllCommands getHelpCommand() {
+    public static HelpAllCommands getHelpCommand() {
         return helpCommand;
     }
 
     @Contract(pure = true)
-    @Override
-    public ModuleLoader getModuleLoader() {
+    public static ModuleLoader getModuleLoader() {
         return moduleLoader;
     }
 
     @Contract(pure = true)
-    @Override
-    public GroupActor getGroupActor() {
+    public static GroupActor getGroupActor() {
         return groupActor;
     }
 
     @Contract(pure = true)
-    @Override
-    public int getGroupId() {
+    public static int getGroupId() {
         return groupId;
     }
 
     @Contract(pure = true)
-    @Override
-    public String getAccessToken() {
+    public static String getAccessToken() {
         return accessToken;
     }
 
     @Contract(pure = true)
-    @Override
-    public Properties getConfig() {
+    public static Properties getConfig() {
         return properties;
     }
 
     @Contract(pure = true)
-    @Override
-    public UserBackend getUserBackend() {
+    public static UserBackend getUserBackend() {
         return userBackend;
     }
 
     @Contract(pure = true)
-    @Override
-    public BotManager getBotManager() {
+    public static BotManager getBotManager() {
         return manager;
     }
+
     @Contract(pure = true)
-    @Override
-    public BotScheduler getScheduler() {
+    public static BotScheduler getScheduler() {
         return scheduler;
     }
 
-    /**
-     * @param msg
-     * @param peerId
-     * @param attachments
-     */
-
     private static final Pattern COMPILE = Pattern.compile(" ");
-    @Override
-    public void sendMessage(String msg, int peerId, @NotNull String... attachments) {
+
+    public static void sendMessage(String msg, int peerId, @NotNull String... attachments) {
         try {
             if (attachments.length != 0 || (msg != null && !msg.isEmpty())) {
                 MessagesSendQuery query = send(peerId);
@@ -176,19 +162,19 @@ public final class ObedientBot implements RoflanBot {
             }
         } catch (ApiException | ClientException ignored) {}
     }
-    @Override
-    public void sendKeyboard(String msg, int peerId, Keyboard keyboard) {
+
+    public static void sendKeyboard(String msg, int peerId, Keyboard keyboard) {
         try {
             send(peerId).keyboard(keyboard).message(msg).execute();
         } catch (ApiException | ClientException ignored) {}
     }
-    @Override
-    public void editChat(String title, int peerId) {
+
+    public static void editChat(String title, int peerId) {
         try {
             Loader.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId - 2000000000, title).execute();
         } catch (ApiException | ClientException ignored) {}
     }
-    private MessagesSendQuery send(int peerId) {
+    private static MessagesSendQuery send(int peerId) {
         return Loader.getVkApiClient().messages()
                 .send(groupActor)
                 .randomId(MathUtils.RANDOM.nextInt(10000))

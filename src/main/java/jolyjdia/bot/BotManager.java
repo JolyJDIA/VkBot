@@ -1,4 +1,4 @@
-package api;
+package jolyjdia.bot;
 
 import api.command.Command;
 import api.command.defaults.*;

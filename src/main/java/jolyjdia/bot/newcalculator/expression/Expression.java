@@ -10,7 +10,10 @@ import jolyjdia.bot.newcalculator.expression.runtime.RValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -23,6 +26,10 @@ public final class Expression {
             "pi", new Constant(Math.PI),
             "e", new Constant(Math.E)
     );
+    private static final DecimalFormat DECIMAL_FORMAT = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
+    static {
+        DECIMAL_FORMAT.applyPattern("#,##0.#####");
+    }
 
     private final RValue root;
 
@@ -38,10 +45,11 @@ public final class Expression {
     private Expression(List<? extends Token> tokens) throws ExpressionException {
         this.root = Parser.parse(tokens, this);
     }
-    public double evaluate() {
+    public String evaluate() {
         Future<Double> result = SERVICE.submit(root::getValue);
         try {
-            return result.get(100, TimeUnit.MILLISECONDS);
+            double reply = result.get(100, TimeUnit.MILLISECONDS);
+            return Double.isNaN(reply) ? "NaN" : DECIMAL_FORMAT.format(reply);
         } catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
@@ -51,7 +59,7 @@ public final class Expression {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return 0;
+        return "";
     }
 
     public static RValue getVariable(String name) {

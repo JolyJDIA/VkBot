@@ -1,6 +1,5 @@
 package jolyjdia.bot;
 
-import api.Bot;
 import api.event.Event;
 import api.event.board.BoardPostEditEvent;
 import api.event.board.BoardPostNewEvent;

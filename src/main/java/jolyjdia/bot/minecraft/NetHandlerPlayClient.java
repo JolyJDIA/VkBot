@@ -1,6 +1,6 @@
 package jolyjdia.bot.minecraft;
 
-import api.Bot;
+import jolyjdia.bot.Bot;
 
 public class NetHandlerPlayClient implements INetHandlerPlayClient {
 

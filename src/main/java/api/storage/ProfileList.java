@@ -1,6 +1,5 @@
 package api.storage;
 
-import api.Bot;
 import api.file.JsonCustom;
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
@@ -8,6 +7,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import jolyjdia.bot.Bot;
 import jolyjdia.bot.Loader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

@@ -1,9 +1,9 @@
 package api.storage;
 
-import api.Bot;
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import com.google.gson.annotations.Expose;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 
 public class User  {
