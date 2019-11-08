@@ -35,8 +35,8 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 public final class Bot {
-    private static final BotScheduler scheduler = new BotScheduler();
     private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
+    private static final BotScheduler scheduler = new BotScheduler();
     private static final BotManager manager = new BotManager();
     private static final Properties properties = new Properties();
     private static final ModuleLoader moduleLoader = new ModuleLoader();
