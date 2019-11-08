@@ -50,14 +50,11 @@ public final class Expression {
         try {
             double reply = result.get(100, TimeUnit.MILLISECONDS);
             return Double.isNaN(reply) ? "NaN" : DECIMAL_FORMAT.format(reply);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
             e.printStackTrace();
             result.cancel(true);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
         }
         return "";
     }
