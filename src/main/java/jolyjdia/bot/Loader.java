@@ -6,14 +6,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 public class Loader {
 
     public static void main(String[] args) throws ClientException, ApiException {
-        new Thread(new EventUpdater()).start();
-        CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
-        handler.run();
-    }
-    private static final class EventUpdater implements Runnable {
-
-        @Override
-        public void run() {
+        new Thread(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 Bot.getScheduler().mainThreadHeartbeat();
                 try {
@@ -22,6 +15,8 @@ public class Loader {
                     e.printStackTrace();
                 }
             }
-        }
+        }).start();
+        CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
+        handler.run();
     }
 }
