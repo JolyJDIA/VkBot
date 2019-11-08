@@ -10,21 +10,14 @@ import jolyjdia.bot.calculate.calculator.Calculate;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class CalculatorRegister implements Module, Listener {
 	private static final Pattern OUTPUT = Pattern.compile("^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$");
-	private static final DecimalFormat DECIMAL_FORMAT = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
-	static {
-		DECIMAL_FORMAT.applyPattern("#,##0.#####");
-	}
+	private static final Pattern MATH = Pattern.compile("[a-zA-Z.\\d+\\-*/()^ ]*");
 	@Override
 	public final void onLoad() {
 		Bot.getBotManager().registerEvent(this);
-		//Bot.getBotManager().registerCommand(new CalculatorCommand());
     }
 	@EventLabel(priority = EventPriority.HIGH)
 	public static void onSend(@NotNull NewMessageEvent e) {
@@ -32,12 +25,7 @@ public class CalculatorRegister implements Module, Listener {
 		if(text.isEmpty()) {
 			return;
 		}
-	/*	int peerId = msg.getPeerId();
-		if (CalculatorManager.isPersonalConversation(peerId, msg.getFromId())) {
-			CalculatorManager.actionsCalculator(peerId, text);
-			return;
-		}*/
-		if (!CalculatorManager.MATH.matcher(text).matches()) {
+		if (!MATH.matcher(text).matches()) {
 			return;
 		}
 		long start = System.currentTimeMillis();

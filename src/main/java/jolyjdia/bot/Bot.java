@@ -177,7 +177,7 @@ public final class Bot {
 
     public static void editChat(String title, int peerId) {
         try {
-            vkApiClient.messages().editChat(Bot.getGroupActor(), peerId - 2000000000, title).execute();
+            vkApiClient.messages().editChat(groupActor, peerId - 2000000000, title).execute();
         } catch (ApiException | ClientException ignored) {}
     }
     private static MessagesSendQuery send(int peerId) {
