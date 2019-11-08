@@ -16,10 +16,7 @@ public class PasswordCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            String password = SECURE_RANDOM.ints(20, 48, 122)
-                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                    .toString();
-            sender.sendMessageFromChat(password);
+            sender.sendMessageFromChat(generatePassword(20));
         } else if(args.length == 2) {
             int size;
             try {
@@ -32,10 +29,13 @@ public class PasswordCommand extends Command {
                 sender.sendMessageFromChat("Длина пароля ограничена 50 символами");
                 return;
             }
-            String password = SECURE_RANDOM.ints(size, 48, 122)
-                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                    .toString();
-            sender.sendMessageFromChat(password);
+            sender.sendMessageFromChat(generatePassword(size));
         }
+    }
+    @NotNull
+    private static String generatePassword(int lenght) {
+        return SECURE_RANDOM.ints(lenght, 48, 122)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }
