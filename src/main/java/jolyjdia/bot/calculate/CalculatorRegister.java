@@ -28,12 +28,10 @@ public class CalculatorRegister implements Module, Listener {
 		if (!MATH.matcher(text).matches()) {
 			return;
 		}
-		long start = System.currentTimeMillis();
 		@NonNls String answer = new Calculate(text).solveExpression();
-		long end = System.currentTimeMillis() - start;
 		if(!OUTPUT.matcher(answer).matches()) {
 			return;
 		}
-		e.getUser().sendMessageFromChat(answer+"\nВыполнено за: "+end+"ms");
+		e.getUser().sendMessageFromChat(answer);
 	}
 }

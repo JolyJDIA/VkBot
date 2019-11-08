@@ -26,11 +26,8 @@ public class InitCalc implements Module {
             String list = Arrays.asList(args).subList(1, args.length).toString().substring(1);
             list = list.substring(0, list.length() -1);
             String result;
-            long end;
             try {
-                long start = System.currentTimeMillis();
                 result = Expression.compile(list).evaluate();
-                end = System.currentTimeMillis() - start;
             } catch (ExpressionException e) {
                 sender.sendMessageFromChat("Че за бред ты высрал?\n"+e.getMessage());
                 return;
@@ -38,7 +35,7 @@ public class InitCalc implements Module {
             if(result.isEmpty()) {
                 return;
             }
-            sender.sendMessageFromChat(result + "\nВыполнено за "+end+"ms");
+            sender.sendMessageFromChat(result);
         }
     }
 }
