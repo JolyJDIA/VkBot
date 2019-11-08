@@ -86,33 +86,15 @@ public class BotScheduler {
     public final @NotNull Task scheduleAsyncRepeatingTask(Runnable runnable, int delay, int period) {
         return async(runnable, delay, period);
     }
-    /**
-     * ВАЩЕ НА ЭТО ПОХУЙ ИБО НА ЭТОТ ВСЕ РАВНО ОТДЕЛЬНЫЙ ПОТОК
-     * @param consumer
-     * @param delay
-     * @return
-     */
     @Deprecated
     public final @NotNull Task scheduleAsyncRepeatingTask(Consumer<Task> consumer, int delay, int period) {
         return async(consumer, delay, period);
     }
-    /**
-     * ВАЩЕ НА ЭТО ПОХУЙ ИБО НА ЭТОТ ВСЕ РАВНО ОТДЕЛЬНЫЙ ПОТОК
-     * @param consumer
-     * @param delay
-     * @return
-     */
+
     @Deprecated
     public final @NotNull Task scheduleAsyncDelayTask(Runnable runnable, int delay) {
         return async(runnable, delay, Task.NO_REPEATING);
     }
-
-    /**
-     * ВАЩЕ НА ЭТО ПОХУЙ ИБО НА ЭТОТ ВСЕ РАВНО ОТДЕЛЬНЫЙ ПОТОК
-     * @param consumer
-     * @param delay
-     * @return
-     */
     @Deprecated
     public final @NotNull Task scheduleAsyncDelayTask(Consumer<Task> consumer, int delay) {
         return async(consumer, delay, Task.NO_REPEATING);

@@ -33,7 +33,7 @@ public class GeoCommand extends Command {
     }
     @Override
     public final void execute(User sender, String[] args) {
-        Bot.getScheduler().runTask(() -> {
+        Bot.getScheduler().runTaskAsynchronously(() -> {
             if (noPermission(sender)) {
                 return;
             }
