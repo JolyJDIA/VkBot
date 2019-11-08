@@ -15,12 +15,12 @@ public final class BotManager {
     private final List<Handler> listeners = new ArrayList<>();
     private final Set<Command> commands = new HashSet<>();
 
-    public BotManager() {
+    BotManager() {
         registerCommand(new HelpCommand());
         registerCommand(new ReloadCommand());
         registerCommand(new RankCommand());
         registerCommand(new InfoUserCommand());
-       // registerCommand(new SetPrefixCommand());
+        //registerCommand(new SetPrefixCommand());
         //registerCommand(new SetSuffixCommand());
         registerCommand(new TickPerSecondCommand());
         registerCommand(new EditTitleChatCommand());

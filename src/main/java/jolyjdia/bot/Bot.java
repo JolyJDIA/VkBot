@@ -36,11 +36,11 @@ import java.util.regex.Pattern;
 
 public final class Bot {
     private static final BotScheduler scheduler = new BotScheduler();
+    private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
     private static final BotManager manager = new BotManager();
     private static final Properties properties = new Properties();
     private static final ModuleLoader moduleLoader = new ModuleLoader();
     private static final HelpAllCommands helpCommand = new HelpAllCommands();
-    private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
     private static final UserBackend userBackend;
     private static final int groupId;
     private static final String accessToken;
@@ -95,8 +95,6 @@ public final class Bot {
         moduleLoader.registerModule(new GeneratorPassword());
         moduleLoader.registerModule(new SmileLoad());
         moduleLoader.registerModule(new InitCalc());
-        //moduleLoader.registerModule(new ShoutboxMain());
-        //moduleLoader.registerModule(new CraftClient());
     }
     private static void loadModule() {
         moduleLoader.getModules().forEach(Module::onLoad);
