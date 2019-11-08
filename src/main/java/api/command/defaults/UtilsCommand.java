@@ -45,7 +45,7 @@ public class UtilsCommand extends Command {
                 if(args.length != 1) {
                     return;
                 }
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: hhч mmм ssс\nДата: dd.MM.yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: HHч mmм ssс\nДата: dd.MM.yyyy");
                 sender.sendMessageFromChat(formatter.format(LocalDateTime.now()));
             }
             case "convert_ts" -> {
