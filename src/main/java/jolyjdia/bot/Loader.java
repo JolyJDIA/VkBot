@@ -17,6 +17,10 @@ public class Loader {
             }
         }).start();
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
-        handler.run();
+        try {
+            handler.run();
+        } catch (ApiException | ClientException e) {
+            handler.run();
+        }
     }
 }
