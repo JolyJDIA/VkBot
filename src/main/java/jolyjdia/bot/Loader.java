@@ -8,13 +8,7 @@ public class Loader {
     public static void main(String[] args) throws ClientException, ApiException {
         new Thread(new EventUpdater()).start();
         CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
-
-        try {
-            handler.run();
-        } catch (ApiException | ClientException | RuntimeException e) {
-            System.out.println("ТЕХНИЧЕСКИЕ ШОКОЛАДКИ");
-            handler.run();
-        }
+        handler.run();
     }
     private static final class EventUpdater implements Runnable {
 
