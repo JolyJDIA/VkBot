@@ -13,7 +13,6 @@ public class Loader {
             handler.run();
         } catch (ApiException | ClientException | RuntimeException e) {
             System.out.println("ТЕХНИЧЕСКИЕ ШОКОЛАДКИ");
-            handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
             handler.run();
         }
     }
