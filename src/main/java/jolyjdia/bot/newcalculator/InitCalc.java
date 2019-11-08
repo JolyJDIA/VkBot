@@ -8,10 +8,7 @@ import jolyjdia.bot.newcalculator.expression.Expression;
 import jolyjdia.bot.newcalculator.expression.ExpressionException;
 import org.jetbrains.annotations.NonNls;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.Locale;
 
 public class InitCalc implements Module {
 
@@ -20,10 +17,6 @@ public class InitCalc implements Module {
         Bot.getBotManager().registerCommand(new CalcCommand());
     }
     private static class CalcCommand extends Command {
-        private static final DecimalFormat DECIMAL_FORMAT = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
-        static {
-            DECIMAL_FORMAT.applyPattern("#,##0.#####");
-        }
         CalcCommand() {
             super("calc");
         }
