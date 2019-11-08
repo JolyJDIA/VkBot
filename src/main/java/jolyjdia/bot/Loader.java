@@ -32,7 +32,7 @@ public class Loader {
             while (!Thread.currentThread().isInterrupted()) {
                 Bot.getScheduler().mainThreadHeartbeat();
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(40);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
