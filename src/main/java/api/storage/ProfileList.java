@@ -30,7 +30,6 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         this.setGson(new GsonBuilder()
                 .registerTypeAdapter(Map.class, this)
                 .setPrettyPrinting()
-                .setExclusionStrategies(new MyExclusionStrategy())
                 .create());
         this.load();
     }
@@ -38,8 +37,6 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         try (FileInputStream fileInputStream = new FileInputStream(getFile());
              InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
             this.map = this.getGson().fromJson(inputStreamReader, new MapTypeToken().getType());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,11 +66,6 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             return map.get(peerId).get(userId);
         }
         return null;
-    }
-
-    @Override
-    public void deleteUser(int peerId, int userId) {
-
     }
 
     @Override
@@ -140,8 +132,8 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         users.remove(user.getUserId());
         this.save(map, new MapTypeToken().getType());
     }
-
-    public void remove(int peerId, int userId) {
+    @Override
+    public void deleteUser(int peerId, int userId) {
         if (!map.containsKey(peerId)) {
             return;
         }
@@ -156,20 +148,10 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
             pw.print(getGson().toJson(object, type));
             pw.flush();
-        } catch (UnsupportedEncodingException | FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    /**
-     * @param jsonElement
-     * @param type
-     * @param context
-     * @return
-     * @throws JsonParseException
-     */
     @Override
     public Map<Integer, Map<Integer, User>> deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext context) {
         JsonObject obj = jsonElement.getAsJsonObject();

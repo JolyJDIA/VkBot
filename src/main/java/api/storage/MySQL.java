@@ -59,7 +59,7 @@ public class MySQL implements UserBackend {
             e.printStackTrace();
         }
     }
-    private final void saveOrUpdateGroup(User user) {
+    public final void saveOrUpdateGroup(User user) {
         Bot.getScheduler().runTaskAsynchronously(() -> {
             try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
                 ps.setInt(1, user.getPeerId());
@@ -124,7 +124,7 @@ public class MySQL implements UserBackend {
         return null;
     }
     @Contract("_ -> param1")
-    private final @NotNull User loadUserInCache(@NotNull User user) {
+    private @NotNull User loadUserInCache(@NotNull User user) {
         Cache<Integer, User> users = chats.computeIfAbsent(user.getPeerId(), k -> CacheBuilder.newBuilder()
                 .maximumSize(50)
                 .expireAfterAccess(30, TimeUnit.MINUTES)

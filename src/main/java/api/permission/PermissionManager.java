@@ -19,14 +19,12 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
     @NonNls public static final String DEFAULT = "default";
     private final Map<String, PermissionGroup> groups = new HashMap<>();
     private static PermissionManager manager;
-    //TODO: ПОЛЯ Главных рангов
 
     public PermissionManager(File file) {
         super(file);
         this.setGson(new GsonBuilder()
                 .registerTypeAdapter(Map.class, this)
                 .setPrettyPrinting()
-                .setExclusionStrategies(new MyExclusionStrategy())
                 .create());
         this.load(new MapTypeToken().getType());
     }

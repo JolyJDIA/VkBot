@@ -2,18 +2,21 @@ package api.storage;
 
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
-import com.google.gson.annotations.Expose;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-public class User  {
-    @Expose(serialize = false, deserialize = false) private final int peerId;
-    @Expose(serialize = false, deserialize = false) private final int userId;
+import java.io.IOException;
+import java.io.Serializable;
+
+public class User implements Serializable {
+    private static final long serialVersionUID = 4943570635312868405L;
+    private transient int peerId;
+    private transient int userId;
     private PermissionGroup group;
-    private boolean isOwner;
+    //private boolean isOwner;
 
     @Contract(pure = true)
-    //change place
     public User(int peerId, int userId) {
         this.peerId = peerId;
         this.userId = userId;
@@ -32,7 +35,6 @@ public class User  {
         this.userId = userId;
         this.group = group;
     }
-
 
     @Contract(pure = true)
     public final int getUserId() {
@@ -55,5 +57,15 @@ public class User  {
 
     public final void sendMessageFromChat(String message, String... attachment) {
         Bot.sendMessage(message, peerId, attachment);
+    }
+    private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        this.peerId = stream.readInt();
+        this.userId = stream.readInt();
+        this.group = (PermissionGroup)stream.readObject();
+        stream.close();
+    }
+    private void writeObject(@NotNull java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.close();
     }
 }
