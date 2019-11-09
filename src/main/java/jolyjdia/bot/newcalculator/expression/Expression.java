@@ -11,9 +11,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -26,10 +24,7 @@ public final class Expression {
             "pi", new Constant(Math.PI),
             "e", new Constant(Math.E)
     );
-    private static final DecimalFormat DECIMAL_FORMAT = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
-    static {
-        DECIMAL_FORMAT.applyPattern("#,##0.#####");
-    }
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,##0.#####");
 
     private final RValue root;
 
