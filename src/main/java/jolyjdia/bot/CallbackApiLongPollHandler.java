@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     @NonNls private static final Logger LOGGER = Logger.getLogger(CallbackApiLongPollHandler.class.getName());
-
   //  private final CommandExecutor executor = new CommandExecutor(Runtime.getRuntime().availableProcessors());
 
     CallbackApiLongPollHandler(VkApiClient client, GroupActor actor) {
