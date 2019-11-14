@@ -24,6 +24,7 @@ public final class MathUtils {
 	public static int random(int max) {
 		return random(1, max);
 	}
+
 	@Contract(pure = true)
 	public static double swap(int a, int b) {
 		a ^= b;

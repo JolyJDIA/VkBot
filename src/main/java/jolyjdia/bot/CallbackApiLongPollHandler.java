@@ -50,35 +50,27 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                 Bot.getUserBackend().deleteUser(msg.getPeerId(), msg.getFromId());
                 //Удаляю из бд беседу
 
-                //ВОЗМОЖНО ПОТОМ ИЗМЕНЮ ПАРАМЕТРЫ НА User
                 UserLeaveEvent event = new UserLeaveEvent(msg.getPeerId(), msg.getFromId());
                 submitEvent(event);
-                return;
             } else if(type == MessageActionStatus.CHAT_INVITE_USER || type == MessageActionStatus.CHAT_INVITE_USER_BY_LINK) {
-                //ВОЗМОЖНО ПОТОМ ИЗМЕНЮ ПАРАМЕТРЫ НА User
                 UserJoinEvent event = new UserJoinEvent(msg.getPeerId(), msg.getFromId());
                 submitEvent(event);
             }
+            return;
         }
         @NonNls String text = msg.getText();
         User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
-            String[] args = text.substring(1).split(" ");//убираю '/' и получаю аргументы
-            /*//Может и впихну в удачно выполненную команду, а может и нет
-            SendCommandEvent event = new SendCommandEvent(user, args);
-            submitEvent(event);
-            if(event.isCancelled()) {
-                return;
-            }*/
+            String[] args = text.substring(1).split(" ");
             long start = System.currentTimeMillis();
             Bot.getBotManager().getRegisteredCommands().stream()
                     .filter(c -> {
+                        if(c.getName().equalsIgnoreCase(args[0])) {
+                            return true;
+                        }
                         Set<String> alias = c.getAlias();
-                        return c.getName().equalsIgnoreCase(args[0])
-                                || (alias != null && !alias.isEmpty()
-                                && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0])));
-                    }).findFirst()
-                    .ifPresent(c -> {
+                        return (alias != null && !alias.isEmpty()) && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0]));
+                    }).findFirst().ifPresent(c -> {
                         SendCommandEvent event = new SendCommandEvent(user, args);
                         submitEvent(event);
                         if(event.isCancelled()) {
