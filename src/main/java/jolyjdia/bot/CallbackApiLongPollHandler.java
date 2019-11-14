@@ -52,32 +52,32 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
                 UserLeaveEvent event = new UserLeaveEvent(msg.getPeerId(), msg.getFromId());
                 submitEvent(event);
+                return;
             } else if(type == MessageActionStatus.CHAT_INVITE_USER || type == MessageActionStatus.CHAT_INVITE_USER_BY_LINK) {
                 UserJoinEvent event = new UserJoinEvent(msg.getPeerId(), msg.getFromId());
                 submitEvent(event);
+                return;
             }
-            return;
         }
         @NonNls String text = msg.getText();
         User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");
             long start = System.currentTimeMillis();
-            Bot.getBotManager().getRegisteredCommands().stream()
-                    .filter(c -> {
-                        if(c.getName().equalsIgnoreCase(args[0])) {
-                            return true;
-                        }
-                        Set<String> alias = c.getAlias();
-                        return (alias != null && !alias.isEmpty()) && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0]));
-                    }).findFirst().ifPresent(c -> {
-                        SendCommandEvent event = new SendCommandEvent(user, args);
-                        submitEvent(event);
-                        if(event.isCancelled()) {
-                            return;
-                        }
-                        c.execute(user, args);
-                    });
+            Bot.getBotManager().getRegisteredCommands().stream().filter(c -> {
+                if(c.getName().equalsIgnoreCase(args[0])) {
+                    return true;
+                }
+                Set<String> alias = c.getAlias();
+                return (alias != null && !alias.isEmpty()) && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0]));
+            }).findFirst().ifPresent(c -> {
+                SendCommandEvent event = new SendCommandEvent(user, args);
+                submitEvent(event);
+                if(event.isCancelled()) {
+                    return;
+                }
+                c.execute(user, args);
+            });
             @NonNls long end = System.currentTimeMillis() - start;
             LOGGER.log(Level.INFO, "КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
             return;
