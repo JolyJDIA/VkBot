@@ -37,7 +37,7 @@ public class TranslateCommand extends Command {
             }
         });
     }
-    private static boolean isEnglish(@NotNull String text) {
+    public static boolean isEnglish(@NotNull String text) {
         for(int i = 0; i < text.length(); ++i) {
             String c = String.valueOf(text.charAt(i));
             if(!COMPILE.matcher(c).matches()) {

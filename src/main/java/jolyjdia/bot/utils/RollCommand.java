@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class RollCommand extends Command {
     RollCommand() {
-        super("roll");
+        super("roll", "<Мин> <Макс>", "случайное число в заданном диапазоне");
     }
 
     @Override

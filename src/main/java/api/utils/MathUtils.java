@@ -1,10 +1,12 @@
 package api.utils;
 
+import jolyjdia.bot.utils.nn.matrix.Matrix;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -70,6 +72,23 @@ public final class MathUtils {
 			dist += Math.pow(vectorA[i] - vectorB[i], 2);
 		}
 		return Math.sqrt(dist);
+	}
+	public static int pickIndexFromRandomVector(@NotNull Matrix probs) {
+		double mass = 1.0;
+		for (int i = 0; i < probs.w.length; i++) {
+			double prob = probs.w[i] / mass;
+			if (RANDOM.nextDouble() < prob) {
+				return i;
+			}
+			mass -= probs.w[i];
+		}
+		return 0;
+	}
+
+	public static double median(List<Double> vals) {
+		Collections.sort(vals);
+		int mid = vals.size()/2;
+		return vals.size() % 2 == 1 ? vals.get(mid) : (vals.get(mid - 1) + vals.get(mid)) / 2;
 	}
 
 	public static @NotNull List<Double> toList(double[] doubleArray) {

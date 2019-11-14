@@ -19,6 +19,7 @@ public class UtilsModule implements Module, Listener {
         Bot.getBotManager().registerCommand(new RaidCommand());
         Bot.getBotManager().registerCommand(new RollCommand());
         Bot.getBotManager().registerCommand(new FlipCommand());
+        Bot.getBotManager().registerCommand(new NeuralCommand());
         Bot.getBotManager().registerEvent(this);
 
         Bot.getScheduler().scheduleSyncRepeatingTask(() ->

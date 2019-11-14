@@ -32,8 +32,7 @@ public class PasswordCommand extends Command {
             sender.sendMessageFromChat(generatePassword(size));
         }
     }
-    @NotNull
-    private static String generatePassword(int lenght) {
+    private static @NotNull String generatePassword(int lenght) {
         return SECURE_RANDOM.ints(lenght, 48, 122)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();

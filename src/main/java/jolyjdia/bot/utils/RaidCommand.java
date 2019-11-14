@@ -20,16 +20,8 @@ public class RaidCommand extends Command {
 
     RaidCommand() {
         super("raid");
+        setPermission("roflanboat.raid", "Ты кто такой, чтобы это сделать? Команда не найдена, крч\nВведи пароль: /access <Пароль>");
         setAlias("access");
-    }
-    private static final Map<String, Integer> access = Maps.newHashMap();
-    static {
-        access.put("Завр", 310289867);
-        access.put("Валера", 526616439);
-        access.put("Юджин", 190345817);
-        access.put("Изи мама", 526212430);
-        access.put("Богардо", 323998691);
-        access.put("Алекха", 199686399);
     }
 
     private static final String PASSWORD = "boat";
@@ -42,43 +34,42 @@ public class RaidCommand extends Command {
                 return;
             }
             sender.sendMessageFromChat("Успешно)");
-            access.put("NotFound", sender.getUserId());
-            return;
-        }
-        if(access.values().stream().allMatch(e -> e != sender.getUserId())) {
-            sender.sendMessageFromChat("Ты кто такой, чтобы это сделать? Команда не найдена, крч\nВведи пароль: /access <Пароль>");
-            return;
-        }
-        if(args.length == 1) {
-            if(raids.containsKey(sender.getPeerId())) {
-                sender.sendMessageFromChat("Рейд уже запущен");
+            STAFF_ADMIN.put("NotFound", sender.getUserId());
+        } else {
+            if(noPermission(sender)) {
                 return;
             }
-            startRaid(sender, CHELIBOSI, 3);
-        } else if(args.length == 2) {
-            if(args[1].equalsIgnoreCase("stop")) {
-                if(!raids.containsKey(sender.getPeerId())) {
-                    sender.sendMessageFromChat("Рейд еще не запущен");
+            if (args.length == 1) {
+                if (raids.containsKey(sender.getPeerId())) {
+                    sender.sendMessageFromChat("Рейд уже запущен");
                     return;
                 }
-                RoflanRunnable runnable = raids.remove(sender.getPeerId());
-                runnable.cancel();
-                sender.sendMessageFromChat("ZA WARDO");
+                startRaid(sender, CHELIBOSI, 3);
+            } else if (args.length == 2) {
+                if (args[1].equalsIgnoreCase("stop")) {
+                    if (!raids.containsKey(sender.getPeerId())) {
+                        sender.sendMessageFromChat("Рейд еще не запущен");
+                        return;
+                    }
+                    RoflanRunnable runnable = raids.remove(sender.getPeerId());
+                    runnable.cancel();
+                    sender.sendMessageFromChat("ZA WARDO");
+                }
+            } else {
+                int period;
+                try {
+                    period = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    period = 3;
+                }
+                if (period < 2) {
+                    sender.sendMessageFromChat("Ошибка! Слишком маленькая задержка, начинай с 2-х");
+                    return;
+                }
+                @NonNls String text = StringBind.toString(2, args) + '\n';
+                text = text.repeat(lenghtNotify(text.length()));
+                startRaid(sender, text, period);
             }
-        } else {
-            int period;
-            try {
-                period = Integer.parseInt(args[1]);
-            } catch (NumberFormatException e) {
-                period = 3;
-            }
-            if(period < 2) {
-                sender.sendMessageFromChat("Ошибка! Слишком маленькая задержка, начинай с 2-х");
-                return;
-            }
-            @NonNls String text = StringBind.toString(2, args)+ '\n';
-            text = text.repeat(lenghtNotify(text.length()));
-            startRaid(sender, text, period);
         }
     }
     @Contract(pure = true)
