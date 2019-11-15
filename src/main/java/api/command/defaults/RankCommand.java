@@ -45,7 +45,7 @@ public class RankCommand extends Command {
                 sender.sendMessageFromChat("У вас уже есть данный ранг");
                 return;
             }
-            Bot.getUserBackend().setRank(sender, group);
+            Bot.getUserBackend().setRank(sender.getPeerId(), id, group);
             sender.sendMessageFromChat("Вы успешно выдали права");
         } else {
             sender.sendMessageFromChat("Использование: " + getUseCommand());

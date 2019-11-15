@@ -34,9 +34,8 @@ public class NeuralCommand extends Command {
             try {
                 DataSet data = new TextGeneration("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\brycov.txt");
 
-                lstm = NeuralNetworkHelper.makeLstmWithInputBottleneck(
+                lstm = NeuralNetworkHelper.makeLstm(
                         data.inputDimension,
-                        10,
                         200,
                         1,
                         data.outputDimension,

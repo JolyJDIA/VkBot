@@ -16,12 +16,10 @@ public class BroadcastMessageCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length > 1) {
-            if(sender.getUserId() == ZAVR) {
+            if(STAFF_ADMIN.containsValue(sender.getUserId())) {
                 sender.sendMessageFromChat("Объявление отправится только активным беседам!");
                 String text = StringBind.toString(args);
-                for(int id : Bot.getUserBackend().getChats()) {
-                    Bot.sendMessage(text, id);
-                }
+                Bot.getUserBackend().getChats().forEach(id -> Bot.sendMessage(text, id));
             } else {
                 sender.sendMessageFromChat("У вас нет прав");
             }

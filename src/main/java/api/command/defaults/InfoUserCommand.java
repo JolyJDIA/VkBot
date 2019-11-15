@@ -19,19 +19,18 @@ public class InfoUserCommand extends Command {
     public final void execute(@NotNull User sender, @NotNull String[] args) {
         @NonNls String info = "Айди-беседа: "+sender.getPeerId()+ '\n';
         if(args.length == 1) {
-            info += getInfo(sender.getGroup());
+            info += getInfo(sender);
         } else if(args.length == 2) {
             Integer id = VkUtils.getUserId(args[1], sender);
             if (id == null) {
                 return;
             }
-            User target = Bot.getUserBackend().getUser(sender.getPeerId(), id);
+            User target = Bot.getUserBackend().addIfAbsentAndReturn(sender.getPeerId(), id);
             if(target == null) {
                 sender.sendMessageFromChat("Не удалось найти этого пользователя в базе");
                 return;
             }
-
-            info += getInfo(target.getGroup());
+            info += getInfo(target);
         } else {
             return;
         }
@@ -39,8 +38,9 @@ public class InfoUserCommand extends Command {
     }
     @NonNls
     @Contract(pure = true)
-    private static @NotNull String getInfo(@NotNull PermissionGroup group) {
-        return "Ранг: "+group.getName() + '\n' +
+    private static @NotNull String getInfo(@NotNull User user) {
+        PermissionGroup group = user.getGroup();
+        return "Ранг: "+group.getName() + (user.isOwner() ? "(OWNER)\n" : '\n') +
                 "Префикс: "+group.getPrefix() + '\n' +
                 "Суффикс: "+ group.getSuffix();
     }

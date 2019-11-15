@@ -85,10 +85,8 @@ public class MySQL implements UserBackend {
                 .maximumSize(50)
                 .expireAfterAccess(30, TimeUnit.MINUTES)
                 .build());
-        User user;
-        if(map.asMap().containsKey(userId)) {
-            user = chats.get(peerId).asMap().get(userId);
-        } else {
+        User user = map.getIfPresent(userId);
+        if(user == null) {
             user = new User(peerId, userId);
             map.put(userId, user);
         }
@@ -101,24 +99,12 @@ public class MySQL implements UserBackend {
             return;
         }
         user.setGroup(rank);
+        System.out.println(user.getGroup().getName());
         saveOrUpdateGroup(user);
     }
-    private boolean hasUser(@NotNull User user) {
-        return chats.containsKey(user.getPeerId()) && chats.get(user.getPeerId()).asMap().containsKey(user.getUserId());
-    }
-    private boolean hasUser(int peerId, int userId) {
-        return chats.containsKey(peerId) && chats.get(peerId).asMap().containsKey(userId);
-    }
-    public final @Nullable User getUser(@NotNull User user) {
-        if (hasUser(user)) {
-            return chats.get(user.getPeerId()).getIfPresent(user.getUserId());
-        }
-        return null;
-    }
-
     @Override
     public final @Nullable User getUser(int peerId, int userId) {
-        if (hasUser(peerId, userId)) {
+        if(chats.containsKey(peerId)) {
             return chats.get(peerId).getIfPresent(userId);
         }
         return null;
@@ -133,29 +119,32 @@ public class MySQL implements UserBackend {
         return user;
     }
     @Override
-    public final @Nullable User addIfAbsentAndReturn(int peerId, int userId) {
-        if(hasUser(peerId, userId)) {
-            return chats.get(peerId).getIfPresent(userId);
+    public final @NotNull User addIfAbsentAndReturn(int peerId, int userId) {
+        User user = getUser(peerId, userId);
+        if(user != null) {
+            return user;
         }
-        //check admin and return
-
+        User newUser = new User(peerId, userId);
+        if(isOwner(peerId, userId)) {
+            newUser.setGroup(PermissionManager.getAdmin());
+            newUser.setOwner(true);
+        }
         try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
             ps.setInt(1, peerId);
             ps.setInt(2, userId);
             try (ResultSet rs = ps.executeQuery()) {
-                //КЭШИРУЮ
-                return loadUserInCache(rs.next() ?
-                        new User(peerId, userId, rs.getString(1))
-                        : initializationNewUser(peerId, userId));
+                if(rs.next()) {
+                    newUser.setGroup(PermissionManager.getPermGroup(rs.getString(1)));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return loadUserInCache(newUser);
     }
     @Override
     public final void deleteUser(int peerId, int userId) {
-        if(hasUser(peerId, userId)) {
+        if(chats.containsKey(peerId)) {
             chats.get(peerId).invalidate(userId);
         }
         try (PreparedStatement ps = connection.prepareStatement(DELETE)) {
@@ -178,50 +167,18 @@ public class MySQL implements UserBackend {
         }
     }
 
-    private static @NotNull User initializationNewUser(int peerId, int userId) {
-        User user = new User(peerId, userId);
+    private static boolean isOwner(int peerId, int userId) {
         try {
-            if(Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
-                    .stream().filter(e -> e.getMemberId() == userId).anyMatch(e -> {
+            return Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), peerId).execute().getItems().stream()
+                    .filter(e -> e.getMemberId() == userId)
+                    .anyMatch(e -> {
                         Boolean isOwner = e.getIsOwner();
                         Boolean isAdmin = e.getIsAdmin();
                         return (isOwner != null && isOwner) || (isAdmin != null && isAdmin);
-                    })) {
-                user.setGroup(PermissionManager.getAdmin());
-            }
+                    });
         } catch (ApiException | ClientException e) {
             e.printStackTrace();
         }
-        return user;
+        return false;
     }
-    /*
-    private final void initializationChatAdmin(int peerId) {
-        Bot.getScheduler().runTaskAsynchronously(() -> {
-            try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
-                for(ConversationMember member : Loader.getVkApiClient().messages()
-                        .getConversationMembers(Bot.getGroupActor(), peerId)
-                        .execute()
-                        .getItems()) {
-                    if(member.getMemberId() < 0) {
-                        continue;
-                    }
-                    Boolean isOwner = member.getIsOwner();
-                    Boolean isAdmin = member.getIsAdmin();
-                    if((isOwner != null && isOwner) || (isAdmin != null && isAdmin)) {
-                        ps.setInt(1, peerId);
-                        ps.setInt(2, member.getMemberId());
-                        ps.setString(3, PermissionManager.ADMIN);
-
-                        ps.setString(4, PermissionManager.ADMIN);
-                        ps.addBatch();
-                    }
-                }
-                ps.executeBatch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ApiException | ClientException e) {
-                e.printStackTrace();
-            }
-        });
-    }*/
 }

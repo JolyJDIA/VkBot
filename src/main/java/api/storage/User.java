@@ -14,7 +14,7 @@ public class User implements Serializable {
     private transient int peerId;
     private transient int userId;
     private PermissionGroup group;
-    //private boolean isOwner;
+    private boolean owner;
 
     @Contract(pure = true)
     public User(int peerId, int userId) {
@@ -34,6 +34,14 @@ public class User implements Serializable {
         this.peerId = peerId;
         this.userId = userId;
         this.group = group;
+    }
+
+    public final void setOwner(boolean owner) {
+        this.owner = owner;
+    }
+    @Contract(pure = true)
+    public final boolean isOwner() {
+        return owner;
     }
 
     @Contract(pure = true)
