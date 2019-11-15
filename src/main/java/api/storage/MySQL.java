@@ -124,23 +124,22 @@ public class MySQL implements UserBackend {
         if(user != null) {
             return user;
         }
-        User newUser = new User(peerId, userId);
         if(isOwner(peerId, userId)) {
-            newUser.setGroup(PermissionManager.getAdmin());
-            newUser.setOwner(true);
+            User owner = new User(peerId, userId);
+            owner.setGroup(PermissionManager.getAdmin());
+            owner.setOwner(true);
+            return loadUserInCache(owner);
         }
         try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
             ps.setInt(1, peerId);
             ps.setInt(2, userId);
             try (ResultSet rs = ps.executeQuery()) {
-                if(rs.next()) {
-                    newUser.setGroup(PermissionManager.getPermGroup(rs.getString(1)));
-                }
+                return loadUserInCache(rs.next() ? new User(peerId, userId, rs.getString(1)) : new User(peerId, userId));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return loadUserInCache(newUser);
+        return loadUserInCache(new User(peerId, userId));
     }
     @Override
     public final void deleteUser(int peerId, int userId) {
