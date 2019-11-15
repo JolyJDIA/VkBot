@@ -125,8 +125,7 @@ public class MySQL implements UserBackend {
             return user;
         }
         if(isOwner(peerId, userId)) {
-            User owner = new User(peerId, userId);
-            owner.setGroup(PermissionManager.getAdmin());
+            User owner = new User(peerId, userId, PermissionManager.getAdmin());
             owner.setOwner(true);
             return loadUserInCache(owner);
         }
