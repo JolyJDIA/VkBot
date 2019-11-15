@@ -7,10 +7,9 @@ import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
 public class BroadcastMessageCommand extends Command {
-    public static final int ZAVR = 310289867;
     public BroadcastMessageCommand() {
-        super("broadcastMessage");
-        setAlias("globalMsg");
+        super("broadcast");
+        setAlias("ad");
     }
 
     @Override
