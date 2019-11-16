@@ -34,17 +34,18 @@ public class NeuralCommand extends Command {
             try {
                 DataSet data = new TextGeneration("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\brycov.txt");
 
-                lstm = NeuralNetworkHelper.makeLstm(
+                lstm = NeuralNetworkHelper.makeRnn(
                         data.inputDimension,
                         200,
                         1,
                         data.outputDimension,
                         data.getModelOutputUnitToUse(),
+                        data.getModelOutputUnitToUse(),
                         0.08);
 
                 new TrainerNeural.BuilderTrainer()
                         .setDataSet(data)
-                        .setLearningRate(0.005)
+                        .setLearningRate(0.0001)
                         .setTrainingEpoch(9999)
                         .setMinLoss(0.1)
                         .setModel(lstm)
