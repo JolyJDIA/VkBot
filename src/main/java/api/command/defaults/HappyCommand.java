@@ -28,7 +28,8 @@ public class HappyCommand extends Command {
     @NonNls
     private static @NotNull String getFormat(int month, int day) {
         LocalDateTime baseDate = LocalDateTime.now();
-        LocalDateTime newDate = LocalDateTime.of(getYear(month, day), month, day, 0, 0);
+        int year = month < baseDate.getMonthValue() || day < baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
+        LocalDateTime newDate = LocalDateTime.of(year, month, day, 0, 0);
         long diff = newDate.toInstant(ZoneOffset.UTC).toEpochMilli() - baseDate.toInstant(ZoneOffset.UTC).toEpochMilli();
         return toFormat(TimeUnit.MILLISECONDS.toDays(diff), TimeFormatter.DAYS) + ' ' +
                 toFormat(TimeUnit.MILLISECONDS.toHours(diff) % 24, TimeFormatter.HOURS) + ' ' +
@@ -63,9 +64,5 @@ public class HappyCommand extends Command {
         public String[] getDeclination() {
             return declination;
         }
-    }
-    private static int getYear(int month, int days) {
-        LocalDateTime baseDate = LocalDateTime.now();
-        return month < baseDate.getMonthValue() || days < baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
     }
 }
