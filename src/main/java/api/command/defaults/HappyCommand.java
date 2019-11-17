@@ -37,12 +37,12 @@ public class HappyCommand extends Command {
     }
     @NonNls
     @Contract(pure = true)
-    public static @NotNull String toFormat(long num, TimeFormatter formatter) {
-        long preLastDigit = num % 100 / 10;
+    public static @NotNull String toFormat(long x, TimeFormatter formatter) {
+        long preLastDigit = x % 100 / 10;
         if (preLastDigit == 1) {
-            return num+" "+formatter.getDeclination()[0];
+            return x+" "+formatter.getDeclination()[0];
         }
-        return num+" "+switch ((int) (num % 10)) {
+        return x+" "+switch ((int) (x % 10)) {
             case 1 -> formatter.getDeclination()[1];
             case 2, 3, 4 -> formatter.getDeclination()[2];
             default -> formatter.getDeclination()[0];
