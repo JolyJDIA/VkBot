@@ -58,7 +58,17 @@ public final class MathUtils {
 		}
 		return sum / angles.length;
 	}
-
+	public static int pickIndexFromRandomVector(@NotNull Matrix probs) {
+		double mass = 1.0;
+		for (int i = 0; i < probs.w.length; i++) {
+			double prob = probs.w[i] / mass;
+			if (RANDOM.nextDouble() < prob) {
+				return i;
+			}
+			mass -= probs.w[i];
+		}
+		return 0;
+	}
 	public static double stddev(double[] angles) {
 		double mean = mean(angles);
 		double output = 0;
@@ -73,17 +83,6 @@ public final class MathUtils {
 			dist += Math.pow(vectorA[i] - vectorB[i], 2);
 		}
 		return Math.sqrt(dist);
-	}
-	public static int pickIndexFromRandomVector(@NotNull Matrix probs) {
-		double mass = 1.0;
-		for (int i = 0; i < probs.w.length; i++) {
-			double prob = probs.w[i] / mass;
-			if (RANDOM.nextDouble() < prob) {
-				return i;
-			}
-			mass -= probs.w[i];
-		}
-		return 0;
 	}
 
 	public static double median(List<Double> vals) {

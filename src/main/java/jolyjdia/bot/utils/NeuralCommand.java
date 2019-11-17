@@ -11,7 +11,7 @@ import jolyjdia.bot.utils.nn.model.Model;
 import org.jetbrains.annotations.NotNull;
 
 public class NeuralCommand extends Command {
-    private static Model lstm;
+    private static Model model;
     static {
         train();
     }
@@ -23,7 +23,7 @@ public class NeuralCommand extends Command {
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
             try {
-                sender.sendMessageFromChat(TextGeneration.generateText(lstm, 200, 0.5));
+                sender.sendMessageFromChat(TextGeneration.generateText(model, 100, 0.3));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -32,23 +32,23 @@ public class NeuralCommand extends Command {
     private static void train() {
         Bot.getScheduler().runTaskAsynchronously(() -> {
             try {
-                DataSet data = new TextGeneration("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\brycov.txt");
+                DataSet data = new TextGeneration("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\word2vec.txt");
 
-                lstm = NeuralNetworkHelper.makeRnn(
+                model = NeuralNetworkHelper.makeRnn(
                         data.inputDimension,
                         200,
                         1,
                         data.outputDimension,
                         data.getModelOutputUnitToUse(),
                         data.getModelOutputUnitToUse(),
-                        0.08);
+                        0.02);
 
                 new TrainerNeural.BuilderTrainer()
                         .setDataSet(data)
-                        .setLearningRate(0.0001)
+                        .setLearningRate(0.00005)
                         .setTrainingEpoch(9999)
                         .setMinLoss(0.1)
-                        .setModel(lstm)
+                        .setModel(model)
                         .build();
             } catch (Exception e) {
                 e.printStackTrace();

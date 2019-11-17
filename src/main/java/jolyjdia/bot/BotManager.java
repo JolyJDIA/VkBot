@@ -26,7 +26,7 @@ public final class BotManager {
         registerCommand(new EditTitleChatCommand());
         registerCommand(new BroadcastMessageCommand());
         registerCommand(new UtilsCommand());
-        registerCommand(new HappyBirthdayBoatCommand());
+        registerCommand(new HappyCommand());
     }
 
     public void registerEvent(@NotNull Listener listener) {

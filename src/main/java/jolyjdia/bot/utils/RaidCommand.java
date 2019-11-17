@@ -32,7 +32,7 @@ public class RaidCommand extends Command {
                 sender.sendMessageFromChat("Даун, ливни из жизни");
                 return;
             }
-            sender.sendMessageFromChat("Успешно)");
+            sender.sendMessageFromChat("Успешно, сын дерьма ебанного");
             STAFF_ADMIN.put("NotFound", sender.getUserId());
         } else {
             if(noPermission(sender)) {
