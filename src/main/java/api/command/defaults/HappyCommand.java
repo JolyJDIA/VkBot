@@ -11,21 +11,15 @@ import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 
 public class HappyCommand extends Command {
-    public static final String HAPPY =
-            "\uD83D\uDC9E\uD83C\uDF7A\uD83D\uDD25Happy Birthday RoflanBoat\uD83D\uDC9E\uD83C\uDF7A\uD83D\uDD25";
-
-    public static final String TO = "\uD83D\uDD25ДР-ROFLANBOAT ЧЕРЕЗ : %s \uD83D\uDD25";
-
     public HappyCommand() {
         super("др");
         setAlias("нг");
     }
-
     @Override
     public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length == 1) {
             if(args[0].equalsIgnoreCase("др")) {
-                sender.sendMessageFromChat(String.format(TO, getFormat(10, 12)));
+                sender.sendMessageFromChat("\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 ЧЕРЕЗ : "+getFormat(10, 12));
             } else if(args[0].equalsIgnoreCase("нг")) {
                 sender.sendMessageFromChat("❄Новый Год через: "+getFormat(1, 1)+ '❄');
             }
@@ -36,14 +30,10 @@ public class HappyCommand extends Command {
         LocalDateTime baseDate = LocalDateTime.now();
         LocalDateTime newDate = LocalDateTime.of(getYear(month, day), month, day, 0, 0);
         long diff = newDate.toInstant(ZoneOffset.UTC).toEpochMilli() - baseDate.toInstant(ZoneOffset.UTC).toEpochMilli();
-        long days = TimeUnit.MILLISECONDS.toDays(diff);
-        long hours = TimeUnit.MILLISECONDS.toHours(diff) % 24;
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(diff) % 60;
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(diff) % 60;
-        return toFormat(days, TimeFormatter.DAYS) + ' ' +
-                toFormat(hours, TimeFormatter.HOURS) + ' ' +
-                toFormat(minutes, TimeFormatter.MINUTES) + ' ' +
-                toFormat(seconds, TimeFormatter.SECONDS);
+        return toFormat(TimeUnit.MILLISECONDS.toDays(diff), TimeFormatter.DAYS) + ' ' +
+                toFormat(TimeUnit.MILLISECONDS.toHours(diff) % 24, TimeFormatter.HOURS) + ' ' +
+                toFormat(TimeUnit.MILLISECONDS.toMinutes(diff) % 60, TimeFormatter.MINUTES) + ' ' +
+                toFormat(TimeUnit.MILLISECONDS.toSeconds(diff) % 60, TimeFormatter.SECONDS);
     }
     @NonNls
     @Contract(pure = true)
