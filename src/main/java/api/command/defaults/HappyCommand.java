@@ -31,7 +31,7 @@ public class HappyCommand extends Command {
             } catch (ApiException | ClientException e) {
                 e.printStackTrace();
             }
-        }, 0, 2000);
+        }, 0, 1200);
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
                 Bot.getVkApiClient().account().setOnline(VkUtils.USER_ACTOR).voip(false).execute();
@@ -55,7 +55,9 @@ public class HappyCommand extends Command {
         LocalDateTime baseDate = LocalDateTime.now();
         int year = month < baseDate.getMonthValue() || day < baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
         LocalDateTime newDate = LocalDateTime.of(year, month, day, 0, 0);
+
         Duration duration = Duration.between(baseDate, newDate);
+
         return toFormat(duration.toDays(), TimeFormatter.DAYS) + ' ' +
                 toFormat(duration.toHours() % 24, TimeFormatter.HOURS) + ' ' +
                 toFormat(duration.toMinutes() % 60, TimeFormatter.MINUTES);
@@ -65,6 +67,7 @@ public class HappyCommand extends Command {
         LocalDateTime baseDate = LocalDateTime.now();
         int year = month < baseDate.getMonthValue() || day < baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
         LocalDateTime newDate = LocalDateTime.of(year, month, day, 0, 0);
+
         Duration duration = Duration.between(baseDate, newDate);
 
         return toFormat(duration.toDays(), TimeFormatter.DAYS) + ' ' +
