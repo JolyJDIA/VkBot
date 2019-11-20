@@ -2,6 +2,12 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.storage.User;
+import api.utils.StringBind;
+import api.utils.VkUtils;
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
+import com.vk.api.sdk.objects.video.Video;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,12 +18,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class UtilsCommand extends Command {
     public UtilsCommand() {
         super("utils", "команды-утилиты");
-        setAlias("uptime", "calendar", "convert_ts", "current_ts");
+        setAlias("uptime", "calendar", "convert_ts", "current_ts", "search");
     }
 
     @Override
@@ -65,6 +72,24 @@ public class UtilsCommand extends Command {
                     return;
                 }
                 sender.sendMessageFromChat(String.valueOf(ZonedDateTime.now().toInstant().toEpochMilli()));
+            }
+            case "search" -> {
+                if(args.length < 2) {
+                    return;
+                }
+                StringBuilder builder = new StringBuilder();
+                String title = StringBind.toString(1, args);
+                try {
+                    List<Video> videos = Bot.getVkApiClient().videos().search(VkUtils.USER_ACTOR, title)
+                            .execute().getItems();
+                    for (Video video : videos) {
+                        builder.append("video").append(video.getOwnerId()).append('_').append(video.getId()).append(',');
+                    }
+                    builder.substring(0, builder.length() - 1);
+                    sender.sendMessageFromChat(null, builder.toString());
+                } catch (ApiException | ClientException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

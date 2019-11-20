@@ -12,6 +12,7 @@ public final class StringBind {
 
     @Contract(pure = true)
     private StringBind() {}
+
     public static @NotNull String toString(int start, @NotNull String[] a) {
         int iMax = a.length - 1;
         if (iMax == -1) {

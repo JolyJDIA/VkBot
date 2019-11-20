@@ -2,18 +2,43 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.storage.User;
+import api.utils.VkUtils;
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.concurrent.TimeUnit;
 
 public class HappyCommand extends Command {
     public HappyCommand() {
         super("др");
         setAlias("нг");
+        Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
+            try {
+                Bot.getVkApiClient().status()
+                        .set(VkUtils.USER_ACTOR)
+                        .text("❄Новый Год через: "+getFormatStatus(1, 1)+ '❄')
+                        .execute();
+                Bot.getVkApiClient().status()
+                        .set(VkUtils.USER_ACTOR)
+                        .groupId(Bot.getGroupId())
+                        .text("❄Новый Год через: "+getFormatStatus(1, 1)+ '❄')
+                        .execute();
+            } catch (ApiException | ClientException e) {
+                e.printStackTrace();
+            }
+        }, 0, 2000);
+        Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
+            try {
+                Bot.getVkApiClient().account().setOnline(VkUtils.USER_ACTOR).voip(false).execute();
+            } catch (ApiException | ClientException e) {
+                e.printStackTrace();
+            }
+        }, 0, 6000);
     }
     @Override
     public final void execute(@NonNls User sender, @NotNull String[] args) {
@@ -26,19 +51,30 @@ public class HappyCommand extends Command {
         }
     }
     @NonNls
+    private static @NotNull String getFormatStatus(int month, int day) {
+        LocalDateTime baseDate = LocalDateTime.now();
+        int year = month < baseDate.getMonthValue() || day < baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
+        LocalDateTime newDate = LocalDateTime.of(year, month, day, 0, 0);
+        Duration duration = Duration.between(baseDate, newDate);
+        return toFormat(duration.toDays(), TimeFormatter.DAYS) + ' ' +
+                toFormat(duration.toHours() % 24, TimeFormatter.HOURS) + ' ' +
+                toFormat(duration.toMinutes() % 60, TimeFormatter.MINUTES);
+    }
+    @NonNls
     private static @NotNull String getFormat(int month, int day) {
         LocalDateTime baseDate = LocalDateTime.now();
         int year = month < baseDate.getMonthValue() || day < baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
         LocalDateTime newDate = LocalDateTime.of(year, month, day, 0, 0);
-        long diff = newDate.toInstant(ZoneOffset.UTC).toEpochMilli() - baseDate.toInstant(ZoneOffset.UTC).toEpochMilli();
-        return toFormat(TimeUnit.MILLISECONDS.toDays(diff), TimeFormatter.DAYS) + ' ' +
-                toFormat(TimeUnit.MILLISECONDS.toHours(diff) % 24, TimeFormatter.HOURS) + ' ' +
-                toFormat(TimeUnit.MILLISECONDS.toMinutes(diff) % 60, TimeFormatter.MINUTES) + ' ' +
-                toFormat(TimeUnit.MILLISECONDS.toSeconds(diff) % 60, TimeFormatter.SECONDS);
+        Duration duration = Duration.between(baseDate, newDate);
+
+        return toFormat(duration.toDays(), TimeFormatter.DAYS) + ' ' +
+                toFormat(duration.toHours() % 24, TimeFormatter.HOURS) + ' ' +
+                toFormat(duration.toMinutes() % 60, TimeFormatter.MINUTES) + ' ' +
+                toFormat(duration.toSeconds() % 60, TimeFormatter.SECONDS);
     }
     @NonNls
     @Contract(pure = true)
-    public static @NotNull String toFormat(long x, TimeFormatter formatter) {
+    private static @NotNull String toFormat(long x, TimeFormatter formatter) {
         long preLastDigit = x % 100 / 10;
         if (preLastDigit == 1) {
             return x+" "+formatter.getDeclination()[0];

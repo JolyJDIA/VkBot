@@ -25,7 +25,7 @@ public abstract class Command {
         STAFF_ADMIN.put("Изи мама", 526212430);
         STAFF_ADMIN.put("Богардо", 323998691);
         STAFF_ADMIN.put("Алекха", 199686399);
-        STAFF_ADMIN.put("АРТЕМКА", 477425490);
+        STAFF_ADMIN.put("Артемка", 477425490);
     }
 
     @Contract(pure = true)
