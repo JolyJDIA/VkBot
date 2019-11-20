@@ -82,11 +82,14 @@ public class HappyCommand extends Command {
         if (preLastDigit == 1) {
             return x+" "+formatter.getDeclination()[0];
         }
-        return x+" "+switch ((int) (x % 10)) {
-            case 1 -> formatter.getDeclination()[1];
-            case 2, 3, 4 -> formatter.getDeclination()[2];
-            default -> formatter.getDeclination()[0];
-        };
+        long y = x % 10;
+        if(y == 1) {
+            return x+" "+formatter.getDeclination()[1];
+        } else if(y == 2 || y == 3 || y == 4) {
+            return x+" "+formatter.getDeclination()[2];
+        } else {
+            return x+" "+formatter.getDeclination()[0];
+        }
     }
     public enum TimeFormatter {
         DAYS("дней", "день", "дня"),
