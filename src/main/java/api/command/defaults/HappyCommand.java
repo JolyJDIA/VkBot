@@ -2,8 +2,9 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.storage.User;
-import api.utils.TemporalDuration;
 import api.utils.VkUtils;
+import api.utils.timeformat.TemporalDuration;
+import api.utils.timeformat.TimeFormatter;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import jolyjdia.bot.Bot;
@@ -42,18 +43,15 @@ public class HappyCommand extends Command {
     public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length == 1) {
             if(args[0].equalsIgnoreCase("др")) {
-                String date = TemporalDuration.of(10, 12, 0,0).toString();
+                String date = TemporalDuration.of(10, 12, 0,0).toFormat();
                 sender.sendMessageFromChat("\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 через: "+date + "\uD83D\uDD25");
             } else if(args[0].equalsIgnoreCase("нг")) {
-                sender.sendMessageFromChat(String.format(NEW_YEAR, TemporalDuration.of(1, 1, 0,0).toString()));
+                sender.sendMessageFromChat(String.format(NEW_YEAR, TemporalDuration.of(1, 1, 0,0).toFormat()));
             }
         }
     }
 
-    public static String getNewYearInStatus() {
-        return TemporalDuration.of(1, 1, 0,0)
-                .toFormat(TemporalDuration.TimeFormatter.DAYS,
-                        TemporalDuration.TimeFormatter.HOURS,
-                        TemporalDuration.TimeFormatter.MINUTES);
+    public static @NotNull String getNewYearInStatus() {
+        return TemporalDuration.of(1, 1, 0,0).toFormat(TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES);
     }
 }
