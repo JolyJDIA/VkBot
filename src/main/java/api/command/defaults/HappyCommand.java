@@ -2,18 +2,16 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.storage.User;
+import api.utils.TemporalDuration;
 import api.utils.VkUtils;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 public class HappyCommand extends Command {
+    private static final String NEW_YEAR = "\uD83D\uDD25\uD83E\uDD76Новый Год через: %s\uD83E\uDD76\uD83D\uDD25";
     public HappyCommand() {
         super("др");
         setAlias("нг");
@@ -21,12 +19,12 @@ public class HappyCommand extends Command {
             try {
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
-                        .text("❄Новый Год через: "+getFormatStatus(1, 1)+'❄')
+                        .text(String.format(NEW_YEAR, getNewYearInStatus()))
                         .execute();
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
                         .groupId(Bot.getGroupId())
-                        .text("❄Новый Год через: "+getFormatStatus(1, 1)+ '❄')
+                        .text(String.format(NEW_YEAR, getNewYearInStatus()))
                         .execute();
             } catch (ApiException | ClientException e) {
                 e.printStackTrace();
@@ -44,66 +42,18 @@ public class HappyCommand extends Command {
     public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length == 1) {
             if(args[0].equalsIgnoreCase("др")) {
-                sender.sendMessageFromChat("\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 через: "+getFormat(10, 12) + "\uD83D\uDD25");
+                String date = TemporalDuration.of(10, 12, 0,0).toString();
+                sender.sendMessageFromChat("\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 через: "+date + "\uD83D\uDD25");
             } else if(args[0].equalsIgnoreCase("нг")) {
-                sender.sendMessageFromChat("❄Новый Год через: "+getFormat(1, 1)+ '❄');
+                sender.sendMessageFromChat(String.format(NEW_YEAR, TemporalDuration.of(1, 1, 0,0).toString()));
             }
         }
     }
-    public static Duration getBetween(int month, int day) {
-        LocalDateTime baseDate = LocalDateTime.now();
-        int year = month < baseDate.getMonthValue() || day <= baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
-        LocalDateTime newDate = LocalDateTime.of(year, month, day, 0, 0);
 
-        return Duration.between(baseDate, newDate);
-    }
-
-    @NonNls
-    private static @NotNull String getFormatStatus(int month, int day) {
-        Duration duration = getBetween(month, day);
-
-        return toFormat(duration.toDays(), TimeFormatter.DAYS) + ' ' +
-                toFormat(duration.toHours() % 24, TimeFormatter.HOURS) + ' ' +
-                toFormat(duration.toMinutes() % 60, TimeFormatter.MINUTES);
-    }
-    @NonNls
-    private static @NotNull String getFormat(int month, int day) {
-        Duration duration = getBetween(month, day);
-        return toFormat(duration.toDays(), TimeFormatter.DAYS) + ' ' +
-                toFormat(duration.toHours() % 24, TimeFormatter.HOURS) + ' ' +
-                toFormat(duration.toMinutes() % 60, TimeFormatter.MINUTES) + ' ' +
-                toFormat(duration.toSeconds() % 60, TimeFormatter.SECONDS);
-    }
-    @NonNls
-    @Contract(pure = true)
-    private static @NotNull String toFormat(long x, TimeFormatter formatter) {
-        long preLastDigit = x % 100 / 10;
-        if (preLastDigit == 1) {
-            return x+" "+formatter.getDeclination()[0];
-        }
-        long y = x % 10;
-        if(y == 1) {
-            return x+" "+formatter.getDeclination()[1];
-        } else if(y == 2 || y == 3 || y == 4) {
-            return x+" "+formatter.getDeclination()[2];
-        } else {
-            return x+" "+formatter.getDeclination()[0];
-        }
-    }
-    public enum TimeFormatter {
-        DAYS("дней", "день", "дня"),
-        HOURS("часов", "час", "часа"),
-        MINUTES("минут", "минута", "минуты"),
-        SECONDS("секунд", "секунда", "секунды");
-        private final String[] declination;
-        @Contract(pure = true)
-        TimeFormatter(String... declination) {
-            this.declination = declination;
-        }
-
-        @Contract(pure = true)
-        public String[] getDeclination() {
-            return declination;
-        }
+    public static String getNewYearInStatus() {
+        return TemporalDuration.of(1, 1, 0,0)
+                .toFormat(TemporalDuration.TimeFormatter.DAYS,
+                        TemporalDuration.TimeFormatter.HOURS,
+                        TemporalDuration.TimeFormatter.MINUTES);
     }
 }
