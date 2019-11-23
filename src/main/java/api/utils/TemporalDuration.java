@@ -6,13 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoField;
-import java.time.temporal.UnsupportedTemporalTypeException;
-
-import static java.time.temporal.ChronoField.*;
 
 public class TemporalDuration {
-    private static final TimeFormatter[] date = {TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES, TimeFormatter.SECONDS};
+    private static final TimeFormatter[] DEFAULT_FORMAT = {TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES, TimeFormatter.SECONDS};
 
     //23 11 -> 24 11 - не прибавляю
     //23 11 -> 20 11 - прибавляю
@@ -35,12 +31,12 @@ public class TemporalDuration {
 
     @Override
     public final @NotNull String toString() {
-        return toFormat(date);
+        return toFormat(DEFAULT_FORMAT);
     }
     public final @NotNull String toFormat(@NotNull TimeFormatter... timeFormatter) {
         StringBuilder buf = new StringBuilder();
         for(TimeFormatter formatter : timeFormatter) {
-            long x = formatter.getLong(duration);
+            long x = formatter.getCallable().call(duration);
             long preLastDigit = x % 100 / 10;
             if (preLastDigit == 1) {
                 buf.append(x).append(formatter.getDeclination()[0]);
@@ -57,45 +53,29 @@ public class TemporalDuration {
         }
         return buf.toString();
     }
+    @FunctionalInterface
+    private interface CallebleField {
+        long call(Duration duration);
+    }
     public enum TimeFormatter {
-        YEARS(YEAR, " лет ", " год ", " года "),
-        MONTHS(MONTH_OF_YEAR, " месяцев ", " месяц ", " месяца "),
-        DAYS(DAY_OF_YEAR, " дней ", " день ", " дня "),
-        HOURS(HOUR_OF_DAY, " часов ", " час ", " часа "),
-        MINUTES(MINUTE_OF_HOUR, " минут ", " минута ", " минуты "),
-        SECONDS(SECOND_OF_MINUTE, " секунд ", " секунда ", " секунды ");
+        DAYS(Duration::toDays, " дней ", " день ", " дня "),
+        HOURS(Duration::toHours, " часов ", " час ", " часа "),
+        MINUTES(Duration::toMinutes, " минут ", " минута ", " минуты "),
+        SECONDS(Duration::toSeconds, " секунд ", " секунда ", " секунды ");
         private final String[] declination;
-        private final ChronoField field;
+        private final CallebleField callable;
         @Contract(pure = true)
-        TimeFormatter(ChronoField field, String... declination) {
+        TimeFormatter(CallebleField callable, String... declination) {
+            this.callable = callable;
             this.declination = declination;
-            this.field = field;
         }
         @Contract(pure = true)
         public String[] getDeclination() {
             return declination;
         }
 
-        @Contract(pure = true)
-        public ChronoField getField() {
-            return field;
-        }
-        private final long getLong(Duration duration) {
-            switch (field) {
-                case DAY_OF_YEAR -> {
-                    return duration.toDays();
-                }
-                case HOUR_OF_DAY -> {
-                    return duration.toHours() % 24;
-                }
-                case MINUTE_OF_HOUR -> {
-                    return duration.toMinutes() % 60;
-                }
-                case SECOND_OF_MINUTE -> {
-                    return duration.toSeconds() % 60;
-                }
-            }
-            throw new UnsupportedTemporalTypeException("Unsupported field: " + field);
+        public CallebleField getCallable() {
+            return callable;
         }
     }
 }
