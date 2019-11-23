@@ -11,7 +11,6 @@ public class SmileCommand extends Command {
     SmileCommand(SmileLoad load) {
         super("smile");
         this.load = load;
-        setPermission("roflansmile.load", "У тебя нет прав(");
     }
 
     @Override
@@ -22,7 +21,8 @@ public class SmileCommand extends Command {
             if(args[1].equalsIgnoreCase("close")) {
                 Bot.sendKeyboard("close", sender.getPeerId(), KeyboardUtils.EMPTY_KEYBOARD);
             } else if(args[1].equalsIgnoreCase("load")) {
-                if(noPermission(sender)) {
+                if(!STAFF_ADMIN.containsValue(sender.getUserId())) {
+                    sender.sendMessageFromChat("У вас нет прав");
                     return;
                 }
                 load.loadEmoticonsAlbum();

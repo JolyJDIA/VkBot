@@ -75,6 +75,9 @@ public class SmileLoad implements Module, Listener {
         List<KeyboardButton> list = null;
         int i = 0;
         for (String label : smilies.keySet()) {
+            if(i >= 30) {
+                break;
+            }
             if (i % 4 == 0) {
                 list = new ArrayList<>(4);
                 board.add(list);
