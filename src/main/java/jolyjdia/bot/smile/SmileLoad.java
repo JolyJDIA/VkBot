@@ -78,7 +78,7 @@ public class SmileLoad implements Module, Listener {
             if(i >= 30) {
                 break;
             }
-            if (i % 4 == 0) {
+            if (i % 5 == 0) {
                 list = new ArrayList<>(4);
                 board.add(list);
             }
