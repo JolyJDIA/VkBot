@@ -1,5 +1,6 @@
 package jolyjdia.bot.utils;
 
+import jolyjdia.bot.Bot;
 import jolyjdia.bot.utils.nn.DemoData;
 import jolyjdia.bot.utils.nn.NeuralNetworkHelper;
 import jolyjdia.bot.utils.nn.TestData;
@@ -11,12 +12,27 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class PhotoNetwork {
-    private final Model model;
+    private Model model;
 
-    private static int strPos(int g) {//РЕНДЕР ПИКСЕЛЕЙ(типо пикселей xD)
-        return g >= 250 ? 0 : 1;
+    public static double[] photo(BufferedImage image) {
+        double[] array = new double[10000];
+        if (image == null) {
+            return array;
+        }
+        int i = 0;
+        for (int y = 0; y < 100; ++y) {
+            for (int x = 0; x < 100; ++x) {
+                int rgb = 0xff000000 | image.getRGB(x, y);
+                int value = (int) ((((rgb >> 16) & 0xFF) * 0.2989) + ((rgb & 0xFF) * 0.5870) + (((rgb >> 8) & 0xFF) * 0.1140));
+               // array[i] = value == 0 ? 0 : 1.0/(255/value);
+                array[i] = value >= 250 ? 0 : 1;
+                ++i;
+            }
+        }
+        return array;
     }
 
     public static double[] photo(String s) {
@@ -35,43 +51,57 @@ public class PhotoNetwork {
             for (int x = 0; x < 100; ++x) {
                 int rgb = 0xff000000 | image.getRGB(x, y);
                 int value = (int) ((((rgb >> 16) & 0xFF) * 0.2989) + ((rgb & 0xFF) * 0.5870) + (((rgb >> 8) & 0xFF) * 0.1140));
-                array[i] = strPos(value);
+               // array[i] = value == 0 ? 0 : 1.0/(255/value);
+                array[i] = value >= 250 ? 0 : 1;
                 ++i;
             }
         }
         return array;
     }
 
-    public PhotoNetwork() throws Exception {
-        double[][] input = new double[2][10000];
-        double[][] output = new double[2][10000];
-
-        input[0] = photo("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\ВХОД1.png");
-        input[1] = photo("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\ВХОД2.png");
-       // input[2] = photo("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\ВХОД3.png");
-
-        output[0] = photo("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\ВЫХОД1.png");
-        output[1] = photo("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\ВЫХОД2.png");
-      //  output[2] = photo("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\ВЫХОД3.png");
-
-        DemoData data = new DemoData(input, output);
-        model = NeuralNetworkHelper.makeLstm(
-                data.inputDimension,
-                200,
-                1,
-                data.outputDimension,
-                data.getModelOutputUnitToUse(),
-                0.08);
-
-        new TrainerNeural.BuilderTrainer()
-                .setTrainingEpoch(99999)
-                .setLearningRate(0.001)
-                .setModel(model)
-                .setDataSet(data)
-                .setMinLoss(1.1)
-                .build();
+    public PhotoNetwork() {
+        try {
+            File pathDir = new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\train");
+            double[][] input = new double[Objects.requireNonNull(pathDir.list()).length][10000];
+            double[][] output = new double[Objects.requireNonNull(pathDir.list()).length][10000];
+            String[] pathsFilesAndDir = pathDir.list();
+            assert pathsFilesAndDir != null;
+            int i = 0;
+            for(String path : pathsFilesAndDir) {
+                String s = path.substring(0, path.length()-4);
+                if(s.charAt(1) != 'Ы') {
+                    int index = Integer.parseInt(s.substring(4));
+                    input[index] = photo("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\train\\" + path);
+                    output[index] = photo("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\train\\ВЫХОД"+((i % 2 == 0) ? "1" : "2")+".png");
+                    ++i;
+                }
+            }
+            DemoData data = new DemoData(input, output);
+            model = NeuralNetworkHelper.makeFeedForward(
+                    data.inputDimension,
+                    500,
+                    1,
+                    data.outputDimension,
+                    data.getModelOutputUnitToUse(),
+                    data.getModelOutputUnitToUse(),
+                    0.08);
+            Bot.getScheduler().runTaskAsynchronously(() -> {
+                try {
+                    new TrainerNeural.BuilderTrainer()
+                            .setTrainingEpoch(99999)
+                            .setLearningRate(0.001)
+                            .setModel(model)
+                            .setDataSet(data)
+                            .setMinLoss(0.05)
+                            .build();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
-
     public final Model getModel() {
         return model;
     }

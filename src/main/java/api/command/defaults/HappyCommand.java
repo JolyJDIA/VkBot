@@ -21,7 +21,7 @@ public class HappyCommand extends Command {
             try {
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
-                        .text("❄Новый Год через: "+getFormatStatus(1, 1)+ '❄')
+                        .text("❄Новый Год через: "+getFormatStatus(1, 1)+'❄')
                         .execute();
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
@@ -31,7 +31,7 @@ public class HappyCommand extends Command {
             } catch (ApiException | ClientException e) {
                 e.printStackTrace();
             }
-        }, 0, 1200);
+        }, 0, 2000);
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
                 Bot.getVkApiClient().account().setOnline(VkUtils.USER_ACTOR).voip(false).execute();
@@ -44,19 +44,23 @@ public class HappyCommand extends Command {
     public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length == 1) {
             if(args[0].equalsIgnoreCase("др")) {
-                sender.sendMessageFromChat("\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 ЧЕРЕЗ : "+getFormat(10, 12));
+                sender.sendMessageFromChat("\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 через: "+getFormat(10, 12) + "\uD83D\uDD25");
             } else if(args[0].equalsIgnoreCase("нг")) {
                 sender.sendMessageFromChat("❄Новый Год через: "+getFormat(1, 1)+ '❄');
             }
         }
     }
-    @NonNls
-    private static @NotNull String getFormatStatus(int month, int day) {
+    public static Duration getBetween(int month, int day) {
         LocalDateTime baseDate = LocalDateTime.now();
-        int year = month < baseDate.getMonthValue() || day < baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
+        int year = month < baseDate.getMonthValue() || day <= baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
         LocalDateTime newDate = LocalDateTime.of(year, month, day, 0, 0);
 
-        Duration duration = Duration.between(baseDate, newDate);
+        return Duration.between(baseDate, newDate);
+    }
+
+    @NonNls
+    private static @NotNull String getFormatStatus(int month, int day) {
+        Duration duration = getBetween(month, day);
 
         return toFormat(duration.toDays(), TimeFormatter.DAYS) + ' ' +
                 toFormat(duration.toHours() % 24, TimeFormatter.HOURS) + ' ' +
@@ -64,12 +68,7 @@ public class HappyCommand extends Command {
     }
     @NonNls
     private static @NotNull String getFormat(int month, int day) {
-        LocalDateTime baseDate = LocalDateTime.now();
-        int year = month < baseDate.getMonthValue() || day < baseDate.getDayOfMonth() ? baseDate.getYear()+1 : baseDate.getYear();
-        LocalDateTime newDate = LocalDateTime.of(year, month, day, 0, 0);
-
-        Duration duration = Duration.between(baseDate, newDate);
-
+        Duration duration = getBetween(month, day);
         return toFormat(duration.toDays(), TimeFormatter.DAYS) + ' ' +
                 toFormat(duration.toHours() % 24, TimeFormatter.HOURS) + ' ' +
                 toFormat(duration.toMinutes() % 60, TimeFormatter.MINUTES) + ' ' +
