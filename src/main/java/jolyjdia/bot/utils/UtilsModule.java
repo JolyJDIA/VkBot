@@ -52,7 +52,7 @@ public class UtilsModule implements Module, Listener {
     @EventLabel
     public static void onPost(@NotNull NewPostWallEvent e) {
         Wallpost wallpost = e.getWallpost();
-        Bot.getUserBackend().getChats().forEach(id -> MessageReceiver.sendMessage(null, id, VkUtils.attachment(wallpost)));
+        Bot.getUserBackend().getChats().forEach(id -> MessageReceiver.sendMessage(id, VkUtils.attachment(wallpost)));
     }
     @EventLabel
     public final void onPhoto(@NotNull NewMessageEvent e) {

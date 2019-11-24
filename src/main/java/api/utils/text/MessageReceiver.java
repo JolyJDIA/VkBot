@@ -22,6 +22,15 @@ public final class MessageReceiver {
             query.execute();
         } catch (ApiException | ClientException ignored) {}
     }
+    public static void sendMessage(int peerId, @NotNull String attachments) {
+        try {
+            MessagesSendQuery query = builder(peerId);
+            if (!attachments.isEmpty()) {
+                query.attachment(attachments);
+            }
+            query.execute();
+        } catch (ApiException | ClientException ignored) {}
+    }
 
     public static void sendMessage(String msg, int peerId, @NotNull String attachments) {
         try {

@@ -82,7 +82,7 @@ public class PhotoTool {
                     .saveMessagesPhoto(Bot.getGroupActor(), jelement.getAsJsonObject().get("photo").getAsString())
                     .server(jelement.getAsJsonObject().get("server").getAsInt())
                     .hash(jelement.getAsJsonObject().get("hash").getAsString()).execute();
-            MessageReceiver.sendMessage(null, peerId, VkUtils.attachment(photos.get(0)));
+            MessageReceiver.sendMessage(peerId, VkUtils.attachment(photos.get(0)));
         } catch (ClientException | ApiException | IOException e ) {
             e.printStackTrace();
         }
