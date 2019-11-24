@@ -67,18 +67,9 @@ public final class Bot {
         try {
             if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
                 groups.setLongPollSettings(groupActor, groupActor.getGroupId())
-                        .enabled(true)
-                        .apiVersion("5.101")
-                        .wallPostNew(true)
-                        .messageNew(true)
-                        .audioNew(true)
-                        .groupJoin(true)
-                        .groupLeave(true)
-                        .messageReply(true)
-                        .messageEdit(true)
-                        .messageAllow(true)
-                        .messageDeny(true)
-                        .messageTypingState(true)
+                        .enabled(true).apiVersion("5.101").wallPostNew(true).messageNew(true)
+                        .audioNew(true).groupJoin(true).groupLeave(true).messageReply(true)
+                        .messageEdit(true).messageAllow(true).messageDeny(true).messageTypingState(true)
                         .execute();
             }
         } catch (ApiException | ClientException e) {

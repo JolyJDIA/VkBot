@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class PermissionManager extends JsonCustom implements JsonDeserializer<Map<String, PermissionGroup>> {
     @NonNls public static final String ADMIN = "admin";
@@ -63,6 +64,10 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
     @Contract(pure = true)
     public static PermissionGroup getAdmin() {
         return getMapGroup().get(ADMIN);
+    }
+
+    public static Set<String> ranks() {
+        return getMapGroup().keySet();
     }
 
     /**

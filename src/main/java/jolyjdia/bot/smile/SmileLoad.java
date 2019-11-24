@@ -103,7 +103,7 @@ public class SmileLoad implements Module, Listener {
                                     .getItems()
                                     .stream()
                                     .filter(p -> (p.getText() != null && !p.getText().isEmpty()))
-                                    .forEach(p -> map.put(p.getText(), "photo" + p.getOwnerId() + '_' + p.getId()));
+                                    .forEach(p -> map.put(p.getText(), VkUtils.attachment(p).orElse("")));
                             this.smilies = map.build();
                         } catch (ApiException | ClientException ex) {
                             ex.printStackTrace();

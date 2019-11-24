@@ -4,6 +4,7 @@ import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 4943570635312868405L;
+    @NonNls
     private transient int peerId;
     private transient int userId;
     private PermissionGroup group;
@@ -75,5 +77,12 @@ public class User implements Serializable {
     private void writeObject(@NotNull java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         out.close();
+    }
+    @Override
+    public final @NotNull String toString() {
+        return "Айди-беседа: " + peerId + '\n' +
+                "Ранг: " + group.getName() + (owner ? "(OWNER)\n" : '\n') +
+                "Префикс: " + group.getPrefix() + '\n' +
+                "Суффикс: " + group.getSuffix();
     }
 }
