@@ -1,4 +1,4 @@
-package api.utils.text;
+package api.utils.chat;
 
 import api.utils.MathUtils;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -9,9 +9,9 @@ import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public final class MessageReceiver {
+public final class MessageChannel {
     @Contract(pure = true)
-    private MessageReceiver() {}
+    private MessageChannel() {}
 
     public static void sendMessage(@NotNull String msg, int peerId) {
         try {
@@ -22,7 +22,7 @@ public final class MessageReceiver {
             query.execute();
         } catch (ApiException | ClientException ignored) {}
     }
-    public static void sendMessage(int peerId, @NotNull String attachments) {
+    public static void sendAttachments(@NotNull String attachments, int peerId) {
         try {
             MessagesSendQuery query = builder(peerId);
             if (!attachments.isEmpty()) {

@@ -7,7 +7,7 @@ import api.event.messages.SendCommandEvent;
 import api.event.post.NewPostWallEvent;
 import api.module.Module;
 import api.utils.VkUtils;
-import api.utils.text.MessageReceiver;
+import api.utils.chat.MessageChannel;
 import com.google.common.collect.Maps;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.messages.MessageAttachment;
@@ -52,7 +52,7 @@ public class UtilsModule implements Module, Listener {
     @EventLabel
     public static void onPost(@NotNull NewPostWallEvent e) {
         Wallpost wallpost = e.getWallpost();
-        Bot.getUserBackend().getChats().forEach(id -> MessageReceiver.sendMessage(id, VkUtils.attachment(wallpost)));
+        Bot.getUserBackend().getChats().forEach(id -> MessageChannel.sendAttachments(VkUtils.attachment(wallpost), id));
     }
     @EventLabel
     public final void onPhoto(@NotNull NewMessageEvent e) {

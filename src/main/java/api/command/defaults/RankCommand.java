@@ -35,12 +35,13 @@ public class RankCommand extends Command {
                 sender.sendMessage(builder.toString());
                 return;
             }
-            PermissionGroup group = PermissionManager.getPermGroup(args[2]);
-            if(sender.getGroup() == group) {
-                sender.sendMessage("У вас уже есть данный ранг");
-                return;
-            }
             VkUtils.getUserId(args[1]).ifPresentOrElse(id -> {
+                /*User target = Bot.getUserBackend().addIfAbsentAndReturn();
+                PermissionGroup group = PermissionManager.getPermGroup(args[2]);
+                if(sender.getGroup() == group) {
+                    sender.sendMessage("У вас уже есть данный ранг");
+                }*/
+                PermissionGroup group = PermissionManager.getPermGroup(args[2]);
                 Bot.getUserBackend().setRank(sender.getPeerId(), id, group);
                 sender.sendMessage("Вы успешно выдали права");
             }, () -> sender.sendMessage("Данного пользователя нет в беседе"));

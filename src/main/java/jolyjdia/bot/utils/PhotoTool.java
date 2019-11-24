@@ -1,7 +1,7 @@
 package jolyjdia.bot.utils;
 
 import api.utils.VkUtils;
-import api.utils.text.MessageReceiver;
+import api.utils.chat.MessageChannel;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -82,7 +82,7 @@ public class PhotoTool {
                     .saveMessagesPhoto(Bot.getGroupActor(), jelement.getAsJsonObject().get("photo").getAsString())
                     .server(jelement.getAsJsonObject().get("server").getAsInt())
                     .hash(jelement.getAsJsonObject().get("hash").getAsString()).execute();
-            MessageReceiver.sendMessage(peerId, VkUtils.attachment(photos.get(0)));
+            MessageChannel.sendAttachments(VkUtils.attachment(photos.get(0)), peerId);
         } catch (ClientException | ApiException | IOException e ) {
             e.printStackTrace();
         }

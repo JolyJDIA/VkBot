@@ -1,6 +1,6 @@
 package jolyjdia.bot.minecraft;
 
-import api.utils.text.MessageReceiver;
+import api.utils.chat.MessageChannel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +20,6 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<Object> {
     public final void channelRead0(ChannelHandlerContext context, @NotNull Object packet) {
        // System.out.println(packet);
         //((Packet<INetHandler>) packet).processPacket(this.packetListener, context.channel());
-        MessageReceiver.sendMessage(packet.toString(), 2000000026);
+        MessageChannel.sendMessage(packet.toString(), 2000000026);
     }
 }

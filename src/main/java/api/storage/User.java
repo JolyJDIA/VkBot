@@ -2,7 +2,7 @@ package api.storage;
 
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
-import api.utils.text.MessageReceiver;
+import api.utils.chat.MessageChannel;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -65,10 +65,10 @@ public class User implements Serializable {
     }
 
     public final void sendMessage(String message, String attachment) {
-        MessageReceiver.sendMessage(message, peerId, attachment);
+        MessageChannel.sendMessage(message, peerId, attachment);
     }
     public final void sendMessage(String message) {
-        MessageReceiver.sendMessage(message, peerId);
+        MessageChannel.sendMessage(message, peerId);
     }
     private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
         this.peerId = stream.readInt();

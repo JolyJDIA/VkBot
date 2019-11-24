@@ -167,9 +167,12 @@ public class MySQL implements UserBackend {
 
     private static boolean isOwner(int peerId, int userId) {
         try {
-            return Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), peerId).execute().getItems().stream()
-                    .filter(e -> e.getMemberId() == userId)
+            return Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), peerId).execute().getItems()
+                    .stream()
                     .anyMatch(e -> {
+                        if(e.getMemberId() != userId) {
+                            return false;
+                        }
                         Boolean isOwner = e.getIsOwner();
                         Boolean isAdmin = e.getIsAdmin();
                         return (isOwner != null && isOwner) || (isAdmin != null && isAdmin);
