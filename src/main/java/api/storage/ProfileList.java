@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -61,11 +62,11 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         return null;
     }
     @Override
-    public @Nullable User getUser(int peerId, int userId) {
+    public @NotNull Optional<User> getUser(int peerId, int userId) {
         if (hasUser(peerId, userId)) {
-            return map.get(peerId).get(userId);
+            return Optional.of(map.get(peerId).get(userId));
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

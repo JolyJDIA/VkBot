@@ -11,10 +11,10 @@ import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.sql.*;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +39,7 @@ public class MySQL implements UserBackend {
         MysqlDataSource data = new MysqlDataSource();
         data.setUser(username);
         data.setPassword(password);
-        data.setUrl(url + "?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC");
+        data.setUrl(url + "?useUnicode=false&characterEncoding=UTF-8&serverTimezone=UTC");
         try {
             this.connection = data.getConnection();
             try (Statement statement = connection.createStatement()) {
@@ -62,11 +62,12 @@ public class MySQL implements UserBackend {
     public final void saveOrUpdateGroup(User user) {
         Bot.getScheduler().runTaskAsynchronously(() -> {
             try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
+                String group = user.getGroup().getName();
                 ps.setInt(1, user.getPeerId());
                 ps.setInt(2, user.getUserId());
-                ps.setString(3, user.getGroup().getName());
+                ps.setString(3, group);
 
-                ps.setString(4, user.getGroup().getName());
+                ps.setString(4, group);
                 ps.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -82,7 +83,7 @@ public class MySQL implements UserBackend {
     @Override
     public final void setRank(int peerId, int userId, PermissionGroup rank) {
         Cache<Integer, User> map = chats.computeIfAbsent(peerId, k -> CacheBuilder.newBuilder()
-                .maximumSize(50)
+                .maximumSize(100)
                 .expireAfterAccess(30, TimeUnit.MINUTES)
                 .build());
         User user = map.getIfPresent(userId);
@@ -99,20 +100,19 @@ public class MySQL implements UserBackend {
             return;
         }
         user.setGroup(rank);
-        System.out.println(user.getGroup().getName());
         saveOrUpdateGroup(user);
     }
     @Override
-    public final @Nullable User getUser(int peerId, int userId) {
+    public final @NotNull Optional<User> getUser(int peerId, int userId) {
         if(chats.containsKey(peerId)) {
-            return chats.get(peerId).getIfPresent(userId);
+            return Optional.ofNullable(chats.get(peerId).getIfPresent(userId));
         }
-        return null;
+        return Optional.empty();
     }
     @Contract("_ -> param1")
     private @NotNull User loadUserInCache(@NotNull User user) {
         Cache<Integer, User> users = chats.computeIfAbsent(user.getPeerId(), k -> CacheBuilder.newBuilder()
-                .maximumSize(50)
+                .maximumSize(100)
                 .expireAfterAccess(30, TimeUnit.MINUTES)
                 .build());
         users.put(user.getUserId(), user);
@@ -120,25 +120,23 @@ public class MySQL implements UserBackend {
     }
     @Override
     public final @NotNull User addIfAbsentAndReturn(int peerId, int userId) {
-        User user = getUser(peerId, userId);
-        if(user != null) {
-            return user;
-        }
-        if(isOwner(peerId, userId)) {
-            User owner = new User(peerId, userId, PermissionManager.getAdmin());
-            owner.setOwner(true);
-            return loadUserInCache(owner);
-        }
-        try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
-            ps.setInt(1, peerId);
-            ps.setInt(2, userId);
-            try (ResultSet rs = ps.executeQuery()) {
-                return loadUserInCache(rs.next() ? new User(peerId, userId, rs.getString(1)) : new User(peerId, userId));
+        return getUser(peerId, userId).orElseGet(() -> {
+            if(isOwner(peerId, userId)) {
+                User owner = new User(peerId, userId, PermissionManager.getAdmin());
+                owner.setOwner(true);
+                return loadUserInCache(owner);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return loadUserInCache(new User(peerId, userId));
+            try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
+                ps.setInt(1, peerId);
+                ps.setInt(2, userId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    return loadUserInCache(rs.next() ? new User(peerId, userId, rs.getString(1)) : new User(peerId, userId));
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return loadUserInCache(new User(peerId, userId));
+        });
     }
     @Override
     public final void deleteUser(int peerId, int userId) {
