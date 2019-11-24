@@ -1,7 +1,6 @@
 package api.command;
 
 import jolyjdia.bot.Bot;
-import jolyjdia.bot.calculate.calculator.MathFunctions;
 import org.jetbrains.annotations.Contract;
 
 public class HelpAllCommands {
@@ -21,9 +20,9 @@ public class HelpAllCommands {
                 });
         this.helpCommand = builder.toString();
         builder.setLength(0);
-        for (String s : MathFunctions.ADV_OPERATOR_LIST) {//РЕФЛЕКСИЯ
+        /*for (String s : MathFunctions.ADV_OPERATOR_LIST) {//РЕФЛЕКСИЯ
             builder.append(s).append("(число)\n");
-        }
+        }*/
         this.helpMath = builder.toString();
     }
 

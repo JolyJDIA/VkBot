@@ -1,13 +1,13 @@
-package jolyjdia.bot.newcalculator.expression.lexer.tokens;
+package jolyjdia.bot.calculator.lexer.tokens;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-public class IdentifierToken extends Token {
-    @NonNls public final String value;
+public class NumberToken extends Token {
+    @NonNls public final double value;
 
-    public IdentifierToken(int position, String value) {
+    public NumberToken(int position, double value) {
         super(position);
         this.value = value;
     }
@@ -15,13 +15,13 @@ public class IdentifierToken extends Token {
     @Contract(pure = true)
     @Override
     public final char id() {
-        return 'i';
+        return '0';
     }
 
     @Override
     @Contract(pure = true)
     public final @NotNull String toString() {
-        return "IdentifierToken(" + value + ')';
+        return "NumberToken(" + value + ')';
     }
 
 }

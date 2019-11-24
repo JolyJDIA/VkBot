@@ -1,12 +1,12 @@
-package jolyjdia.bot.newcalculator.expression.parser;
+package jolyjdia.bot.calculator.parser;
 
 import com.google.common.collect.ImmutableMap;
-import jolyjdia.bot.newcalculator.expression.ExpressionException;
-import jolyjdia.bot.newcalculator.expression.Identifiable;
-import jolyjdia.bot.newcalculator.expression.lexer.tokens.OperatorToken;
-import jolyjdia.bot.newcalculator.expression.lexer.tokens.Token;
-import jolyjdia.bot.newcalculator.expression.runtime.Operators;
-import jolyjdia.bot.newcalculator.expression.runtime.RValue;
+import jolyjdia.bot.calculator.ExpressionException;
+import jolyjdia.bot.calculator.Identifiable;
+import jolyjdia.bot.calculator.lexer.tokens.OperatorToken;
+import jolyjdia.bot.calculator.lexer.tokens.Token;
+import jolyjdia.bot.calculator.runtime.Operators;
+import jolyjdia.bot.calculator.runtime.RValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

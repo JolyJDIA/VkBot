@@ -1,4 +1,4 @@
-package jolyjdia.bot.newcalculator.expression;
+package jolyjdia.bot.calculator;
 
 public interface Identifiable {
     char id();

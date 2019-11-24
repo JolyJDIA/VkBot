@@ -1,7 +1,7 @@
-package jolyjdia.bot.newcalculator.expression.runtime;
+package jolyjdia.bot.calculator.runtime;
 
-import jolyjdia.bot.newcalculator.expression.Expression;
-import jolyjdia.bot.newcalculator.expression.ExpressionException;
+import jolyjdia.bot.calculator.Expression;
+import jolyjdia.bot.calculator.ExpressionException;
 
 public interface LValue extends RValue {
 
