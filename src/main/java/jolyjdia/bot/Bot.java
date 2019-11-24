@@ -8,15 +8,12 @@ import api.scheduler.BotScheduler;
 import api.storage.MySQL;
 import api.storage.ProfileList;
 import api.storage.UserBackend;
-import api.utils.MathUtils;
 import com.vk.api.sdk.actions.Groups;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
-import com.vk.api.sdk.objects.messages.Keyboard;
-import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.calculate.CalculatorRegister;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.newcalculator.InitCalc;
@@ -25,14 +22,11 @@ import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
 import jolyjdia.bot.utils.UtilsModule;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 public final class Bot {
     private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
@@ -140,42 +134,5 @@ public final class Bot {
     @Contract(pure = true)
     public static VkApiClient getVkApiClient() {
         return vkApiClient;
-    }
-
-    private static final Pattern COMPILE = Pattern.compile(" ");
-
-    public static void sendMessage(String msg, int peerId, @NotNull String... attachments) {
-        try {
-            if (attachments.length != 0 || (msg != null && !msg.isEmpty())) {
-                MessagesSendQuery query = send(peerId);
-                if (msg != null && !msg.isEmpty()) {
-                    query.message(msg);
-                }
-                if (attachments.length > 0) {
-                    String array = COMPILE.matcher(Arrays.toString(attachments).substring(1)).replaceAll("");
-                    query.attachment(array.substring(0, array.length()-1));
-                }
-                query.execute();
-            }
-        } catch (ApiException | ClientException ignored) {}
-    }
-
-    public static void sendKeyboard(String msg, int peerId, Keyboard keyboard) {
-        try {
-            send(peerId).keyboard(keyboard).message(msg).execute();
-        } catch (ApiException | ClientException ignored) {}
-    }
-
-    public static void editChat(String title, int peerId) {
-        try {
-            vkApiClient.messages().editChat(groupActor, peerId - 2000000000, title).execute();
-        } catch (ApiException | ClientException ignored) {}
-    }
-    private static MessagesSendQuery send(int peerId) {
-        return vkApiClient.messages()
-                .send(groupActor)
-                .randomId(MathUtils.RANDOM.nextInt(10000))
-                .groupId(groupId)
-                .peerId(peerId);
     }
 }

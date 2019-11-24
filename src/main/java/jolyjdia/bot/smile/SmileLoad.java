@@ -15,7 +15,6 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import jolyjdia.bot.Bot;
-import jolyjdia.bot.shoutbox.similarity.Cosine;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -35,16 +34,11 @@ public class SmileLoad implements Module, Listener {
         Bot.getBotManager().registerEvent(this);
         Bot.getBotManager().registerCommand(new SmileCommand(this));
     }
-    private static final Cosine COSINE = new Cosine(3);
-
     @EventLabel
     public final void onMsg(@NotNull NewMessageEvent e) {
         String text = e.getMessage().getText().toLowerCase(Locale.ENGLISH);
         if(text.isEmpty()) {
             return;
-        }
-        if(COSINE.similarity(text, "леша") >= 0.6 || COSINE.similarity(text, "лёша") >= 0.6) {
-            e.getUser().sendMessageFromChat(null, "audio310289867_456241810");
         }
         List<String> smiles = StringBind.substringsBetween(text, ":", ":");
         if(smiles == null || smiles.isEmpty()) {
@@ -52,7 +46,7 @@ public class SmileLoad implements Module, Listener {
         }
         smiles.forEach(smile -> {
             if(smilies.containsKey(smile)) {
-                e.getUser().sendMessageFromChat(null, smilies.get(smile));
+                e.getUser().sendMessage(null, smilies.get(smile));
             }
         });
     }
@@ -103,7 +97,7 @@ public class SmileLoad implements Module, Listener {
                                     .getItems()
                                     .stream()
                                     .filter(p -> (p.getText() != null && !p.getText().isEmpty()))
-                                    .forEach(p -> map.put(p.getText(), VkUtils.attachment(p).orElse("")));
+                                    .forEach(p -> map.put(p.getText(), VkUtils.attachment(p)));
                             this.smilies = map.build();
                         } catch (ApiException | ClientException ex) {
                             ex.printStackTrace();

@@ -15,13 +15,13 @@ public class HelpCommand extends Command {
     @Override
     public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length == 1) {
-            sender.sendMessageFromChat(Bot.getHelpCommand().getHelpCommand());
+            sender.sendMessage(Bot.getHelpCommand().getHelpCommand());
         } else if (args.length == 2) {
             if(args[1].equalsIgnoreCase("math")) {
-                sender.sendMessageFromChat(Bot.getHelpCommand().getHelpMath());
+                sender.sendMessage(Bot.getHelpCommand().getHelpMath());
             }
         } else {
-            sender.sendMessageFromChat("Использование: " + getUseCommand());
+            sender.sendMessage("Использование: " + getUseCommand());
         }
     }
 }

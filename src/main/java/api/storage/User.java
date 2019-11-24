@@ -2,7 +2,7 @@ package api.storage;
 
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
-import jolyjdia.bot.Bot;
+import api.utils.text.MessageReceiver;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -12,8 +12,7 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 4943570635312868405L;
-    @NonNls
-    private transient int peerId;
+    @NonNls private transient int peerId;
     private transient int userId;
     private PermissionGroup group;
     private boolean owner;
@@ -65,13 +64,17 @@ public class User implements Serializable {
         this.group = group;
     }
 
-    public final void sendMessageFromChat(String message, String... attachment) {
-        Bot.sendMessage(message, peerId, attachment);
+    public final void sendMessage(String message, String attachment) {
+        MessageReceiver.sendMessage(message, peerId, attachment);
+    }
+    public final void sendMessage(String message) {
+        MessageReceiver.sendMessage(message, peerId);
     }
     private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
         this.peerId = stream.readInt();
         this.userId = stream.readInt();
         this.group = (PermissionGroup)stream.readObject();
+        this.owner = stream.readBoolean();
         stream.close();
     }
     private void writeObject(@NotNull java.io.ObjectOutputStream out) throws IOException {
@@ -81,6 +84,7 @@ public class User implements Serializable {
     @Override
     public final @NotNull String toString() {
         return "Айди-беседа: " + peerId + '\n' +
+                "Айди-пользователя: " + userId + '\n' +
                 "Ранг: " + group.getName() + (owner ? "(OWNER)\n" : '\n') +
                 "Префикс: " + group.getPrefix() + '\n' +
                 "Суффикс: " + group.getSuffix();

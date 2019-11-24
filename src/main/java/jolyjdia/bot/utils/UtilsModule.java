@@ -7,6 +7,7 @@ import api.event.messages.SendCommandEvent;
 import api.event.post.NewPostWallEvent;
 import api.module.Module;
 import api.utils.VkUtils;
+import api.utils.text.MessageReceiver;
 import com.google.common.collect.Maps;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.messages.MessageAttachment;
@@ -42,7 +43,7 @@ public class UtilsModule implements Module, Listener {
     public final void onCommand(@NotNull SendCommandEvent e) {
         int userId = e.getUser().getUserId();
         if (cooldown.containsKey(userId)) {
-            e.getUser().sendMessageFromChat("Подождите 1 секунду, перед тем, как использовать команду снова");
+            e.getUser().sendMessage("Подождите 1 секунду, перед тем, как использовать команду снова");
             e.setCancelled(true);
         } else {
             cooldown.put(userId, System.currentTimeMillis());
@@ -51,7 +52,7 @@ public class UtilsModule implements Module, Listener {
     @EventLabel
     public static void onPost(@NotNull NewPostWallEvent e) {
         Wallpost wallpost = e.getWallpost();
-        Bot.getUserBackend().getChats().forEach(id -> Bot.sendMessage(null, id, VkUtils.attachment("wall", wallpost.getOwnerId(), wallpost.getId())));
+        Bot.getUserBackend().getChats().forEach(id -> MessageReceiver.sendMessage(null, id, VkUtils.attachment(wallpost)));
     }
     @EventLabel
     public final void onPhoto(@NotNull NewMessageEvent e) {

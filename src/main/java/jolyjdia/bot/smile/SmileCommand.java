@@ -3,7 +3,7 @@ package jolyjdia.bot.smile;
 import api.command.Command;
 import api.storage.User;
 import api.utils.KeyboardUtils;
-import jolyjdia.bot.Bot;
+import api.utils.text.MessageReceiver;
 import org.jetbrains.annotations.NotNull;
 
 public class SmileCommand extends Command {
@@ -16,17 +16,17 @@ public class SmileCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            Bot.sendKeyboard("open", sender.getPeerId(), load.getKeyboard());
+            MessageReceiver.sendKeyboard("open", sender.getPeerId(), load.getKeyboard());
         } else if(args.length == 2) {
             if(args[1].equalsIgnoreCase("close")) {
-                Bot.sendKeyboard("close", sender.getPeerId(), KeyboardUtils.EMPTY_KEYBOARD);
+                MessageReceiver.sendKeyboard("close", sender.getPeerId(), KeyboardUtils.EMPTY_KEYBOARD);
             } else if(args[1].equalsIgnoreCase("load")) {
                 if(!STAFF_ADMIN.containsValue(sender.getUserId())) {
-                    sender.sendMessageFromChat("У вас нет прав");
+                    sender.sendMessage("У вас нет прав");
                     return;
                 }
                 load.loadEmoticonsAlbum();
-                sender.sendMessageFromChat("Смайлы обновлены!");
+                sender.sendMessage("Смайлы обновлены!");
             }
         }
     }

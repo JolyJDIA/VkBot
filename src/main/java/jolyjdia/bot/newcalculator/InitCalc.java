@@ -29,13 +29,13 @@ public class InitCalc implements Module {
             try {
                 result = Expression.compile(list).evaluate();
             } catch (ExpressionException e) {
-                sender.sendMessageFromChat("Че за бред ты высрал?\n"+e.getMessage());
+                sender.sendMessage("Че за бред ты высрал?\n"+e.getMessage());
                 return;
             }
             if(result.isEmpty()) {
                 return;
             }
-            sender.sendMessageFromChat(result);
+            sender.sendMessage(result);
         }
     }
 }

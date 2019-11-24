@@ -22,22 +22,12 @@ public class TickPerSecondCommand extends Command {
             for (double tps : Bot.getScheduler().getAverageTPS()) {
                 builder.append(format(tps)).append(", ");
             }
-            sender.sendMessageFromChat(
+            sender.sendMessage(
                     builder.substring(0, builder.length()-2) +
                     "\n-------------------------------------"+
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
                     "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory));
-        } else if(args.length == 2 && args[1].equalsIgnoreCase("debug")) {
-            Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
-                long totalMemory = Runtime.getRuntime().totalMemory();
-                long used = totalMemory - Runtime.getRuntime().freeMemory();
-                String format = humanReadableByteCount((used));
-                if(used > 50000000) {
-                    sender.sendMessageFromChat("Сожрало: "+format+ '!');
-                }
-                Bot.sendMessage(format + " / " +humanReadableByteCount(totalMemory), sender.getUserId());
-            }, 10, 10);
         }
     }
     @NonNls

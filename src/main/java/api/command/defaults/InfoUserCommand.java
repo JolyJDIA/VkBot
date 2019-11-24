@@ -15,12 +15,12 @@ public class InfoUserCommand extends Command {
     @Override
     public final void execute(@NotNull User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            sender.sendMessageFromChat(sender.toString());
+            sender.sendMessage(sender.toString());
         } else if(args.length == 2) {
             VkUtils.getUserId(args[1]).ifPresentOrElse(id -> {
                 User target = Bot.getUserBackend().addIfAbsentAndReturn(sender.getPeerId(), id);
-                sender.sendMessageFromChat(target.toString());
-            }, () -> sender.sendMessageFromChat("Не удалось найти этого пользователя в базе"));
+                sender.sendMessage(target.toString());
+            }, () -> sender.sendMessage("Не удалось найти этого пользователя в базе"));
         }
     }
 }

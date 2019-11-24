@@ -33,25 +33,25 @@ public final class VkUtils {
             return Optional.empty();
         }
     }
-    @Contract(pure = true)
     @NonNls
-    public static Optional<String> attachment(@NotNull Object body) {
+    @Contract(pure = true)
+    public static @NotNull String attachment(@NotNull Object body) {
         if(!Validable.class.isAssignableFrom(body.getClass())) {
-            return Optional.empty();
+            return "";
         }
         if(Wallpost.class.isAssignableFrom(body.getClass())) {
             Wallpost wallpost = (Wallpost)body;
-            return Optional.of("wall"+wallpost.getOwnerId()+ '_' +wallpost.getId());
+            return "wall"+wallpost.getOwnerId()+ '_' +wallpost.getId();
         } else if(Photo.class.isAssignableFrom(body.getClass())) {
             Photo photo = (Photo)body;
-            return Optional.of("photo"+photo.getOwnerId()+ '_' +photo.getId());
+            return "photo"+photo.getOwnerId()+ '_' +photo.getId();
         } else if(Audio.class.isAssignableFrom(body.getClass())) {
             Audio audio = (Audio)body;
-            return Optional.of("audio"+audio.getId()+ '_' +audio.getId());
+            return "audio"+audio.getId()+ '_' +audio.getId();
         } else if(Video.class.isAssignableFrom(body.getClass())) {
             Video video = (Video)body;
-            return Optional.of("video"+video.getOwnerId()+ '_' +video.getId());
+            return "video"+video.getOwnerId()+ '_' +video.getId();
         }
-        return Optional.empty();
+        return "";
     }
 }

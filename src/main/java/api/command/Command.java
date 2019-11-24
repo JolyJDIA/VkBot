@@ -117,7 +117,7 @@ public abstract class Command {
         }
         boolean hasPermission = STAFF_ADMIN.containsValue(user.getUserId()) || user.getGroup().hasPermission(permission);
         if(!hasPermission) {
-            user.sendMessageFromChat(noPermissionMessage);
+            user.sendMessage(noPermissionMessage);
         }
         return hasPermission;
     }

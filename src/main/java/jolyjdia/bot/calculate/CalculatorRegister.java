@@ -32,6 +32,6 @@ public class CalculatorRegister implements Module, Listener {
 		if(!OUTPUT.matcher(answer).matches()) {
 			return;
 		}
-		e.getUser().sendMessageFromChat(answer);
+		e.getUser().sendMessage(answer);
 	}
 }

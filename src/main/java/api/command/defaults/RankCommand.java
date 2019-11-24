@@ -32,20 +32,20 @@ public class RankCommand extends Command {
             if (PermissionManager.getPermGroup(args[2]) == null) {
                 StringBuilder builder = new StringBuilder("Данного ранга не существует, возможные варианты:\n");
                 PermissionManager.ranks().forEach(s -> builder.append(s).append('\n'));
-                sender.sendMessageFromChat(builder.toString());
+                sender.sendMessage(builder.toString());
                 return;
             }
             PermissionGroup group = PermissionManager.getPermGroup(args[2]);
             if(sender.getGroup() == group) {
-                sender.sendMessageFromChat("У вас уже есть данный ранг");
+                sender.sendMessage("У вас уже есть данный ранг");
                 return;
             }
             VkUtils.getUserId(args[1]).ifPresentOrElse(id -> {
                 Bot.getUserBackend().setRank(sender.getPeerId(), id, group);
-                sender.sendMessageFromChat("Вы успешно выдали права");
-            }, () -> sender.sendMessageFromChat("Данного пользователя нет в беседе"));
+                sender.sendMessage("Вы успешно выдали права");
+            }, () -> sender.sendMessage("Данного пользователя нет в беседе"));
         } else {
-            sender.sendMessageFromChat("Использование: " + getUseCommand());
+            sender.sendMessage("Использование: " + getUseCommand());
         }
     }
 }
