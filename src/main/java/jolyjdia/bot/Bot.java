@@ -51,7 +51,7 @@ public final class Bot {
         accessToken = properties.getProperty("accessToken");
         groupActor = new GroupActor(groupId, accessToken);
 
-        PermissionManager.registerPermissionGroups();
+        PermissionManager.newInstance();
         userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
                 new MySQL(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
                 new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
