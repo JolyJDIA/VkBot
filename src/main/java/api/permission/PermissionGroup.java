@@ -10,10 +10,9 @@ import java.util.Locale;
 public class PermissionGroup {
     @Expose(serialize = false, deserialize = false)
     private final String name;
-
-    private final HashSet<String> permissions;
     private String prefix;
     private String suffix;
+    private final HashSet<String> permissions;
 
     @Contract(pure = true)
     public PermissionGroup(String name, HashSet<String> permissions) {
