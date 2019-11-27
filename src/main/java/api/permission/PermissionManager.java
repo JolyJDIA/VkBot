@@ -1,6 +1,7 @@
 package api.permission;
 
 import api.file.JsonCustom;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -10,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,8 +18,18 @@ import java.util.Set;
 public final class PermissionManager extends JsonCustom implements JsonDeserializer<Map<String, PermissionGroup>> {
     @NonNls public static final String ADMIN = "admin";
     @NonNls public static final String DEFAULT = "default";
-    private final Map<String, PermissionGroup> groups = new HashMap<>();
     private static PermissionManager manager;
+    public static final Map<Integer, String> STAFF_ADMIN = Maps.newHashMap();
+    static {
+        STAFF_ADMIN.put(310289867, "Завр");
+        STAFF_ADMIN.put(526616439, "Валера");
+        STAFF_ADMIN.put(190345817, "Юджин");
+        STAFF_ADMIN.put(526212430, "Изи мама");
+        STAFF_ADMIN.put(323998691, "Богардо");
+        STAFF_ADMIN.put(199686399, "Алекха");
+        STAFF_ADMIN.put(477425490, "Артемка");
+    }
+    private final Map<String, PermissionGroup> groups = Maps.newHashMap();
 
     public PermissionManager(File file) {
         super(file);
@@ -46,6 +56,11 @@ public final class PermissionManager extends JsonCustom implements JsonDeseriali
 
     public static PermissionGroup getPermGroup(String name) {
         return getMapGroup().get(name);
+    }
+
+    @Contract(pure = true)
+    public static boolean isStaff(int userId) {
+        return STAFF_ADMIN.containsKey(userId);
     }
 
     public static void addGroup(String name, String prefix, String... permissions) {

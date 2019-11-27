@@ -15,6 +15,7 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import jolyjdia.bot.Bot;
+import jolyjdia.bot.shoutbox.similarity.Cosine;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -34,11 +35,15 @@ public class SmileLoad implements Module, Listener {
         Bot.getBotManager().registerEvent(this);
         Bot.getBotManager().registerCommand(new SmileCommand(this));
     }
+    private static final Cosine COSINE = new Cosine(3);
     @EventLabel
     public final void onMsg(@NotNull NewMessageEvent e) {
         String text = e.getMessage().getText().toLowerCase(Locale.ENGLISH);
         if(text.isEmpty()) {
             return;
+        }
+        if(COSINE.similarity(text, "иди на кастинк") > 0.6) {
+            e.getUser().sendMessage("сам иди");
         }
         List<String> smiles = StringBind.substringsBetween(text, ":", ":");
         if(smiles == null || smiles.isEmpty()) {

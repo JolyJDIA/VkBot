@@ -70,6 +70,15 @@ public class User implements Serializable {
     public final void sendMessage(String message) {
         MessageChannel.sendMessage(message, peerId);
     }
+
+    @Override
+    public final @NotNull String toString() {
+        return "Айди-беседа: " + peerId + '\n' +
+                "Айди-пользователя: " + userId + '\n' +
+                "Ранг: " + group.getName() + (owner ? "(OWNER)\n" : '\n') +
+                "Префикс: " + group.getPrefix() + '\n' +
+                "Суффикс: " + (group.getSuffix() == null && PermissionManager.isStaff(userId) ? "ЛОДОЧНИК" : group.getSuffix());
+    }
     private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
         this.peerId = stream.readInt();
         this.userId = stream.readInt();
@@ -80,13 +89,5 @@ public class User implements Serializable {
     private void writeObject(@NotNull java.io.ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         out.close();
-    }
-    @Override
-    public final @NotNull String toString() {
-        return "Айди-беседа: " + peerId + '\n' +
-                "Айди-пользователя: " + userId + '\n' +
-                "Ранг: " + group.getName() + (owner ? "(OWNER)\n" : '\n') +
-                "Префикс: " + group.getPrefix() + '\n' +
-                "Суффикс: " + group.getSuffix();
     }
 }

@@ -1,13 +1,12 @@
 package api.command;
 
+import api.permission.PermissionManager;
 import api.storage.User;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
 import java.util.Set;
 
 public abstract class Command {
@@ -17,16 +16,6 @@ public abstract class Command {
     private Set<String> alias;
     private String permission;
     private String noPermissionMessage;
-    protected static final Map<String, Integer> STAFF_ADMIN = Maps.newHashMap();
-    static {
-        STAFF_ADMIN.put("Завр", 310289867);
-        STAFF_ADMIN.put("Валера", 526616439);
-        STAFF_ADMIN.put("Юджин", 190345817);
-        STAFF_ADMIN.put("Изи мама", 526212430);
-        STAFF_ADMIN.put("Богардо", 323998691);
-        STAFF_ADMIN.put("Алекха", 199686399);
-        STAFF_ADMIN.put("Артемка", 477425490);
-    }
 
     @Contract(pure = true)
     protected Command(String name) {
@@ -115,7 +104,7 @@ public abstract class Command {
         if (permission == null || permission.isEmpty()) {
             return true;
         }
-        boolean hasPermission = STAFF_ADMIN.containsValue(user.getUserId()) || user.getGroup().hasPermission(permission);
+        boolean hasPermission = PermissionManager.isStaff(user.getUserId()) || user.getGroup().hasPermission(permission);
         if(!hasPermission) {
             user.sendMessage(noPermissionMessage);
         }

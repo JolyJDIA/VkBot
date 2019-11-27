@@ -1,6 +1,7 @@
 package jolyjdia.bot.utils;
 
 import api.command.Command;
+import api.permission.PermissionManager;
 import api.scheduler.RoflanRunnable;
 import api.storage.User;
 import api.utils.StringBind;
@@ -33,7 +34,7 @@ public class RaidCommand extends Command {
                 return;
             }
             sender.sendMessage("Успешно, сын дерьма ебанного");
-            STAFF_ADMIN.put("NotFound", sender.getUserId());
+            PermissionManager.STAFF_ADMIN.put(sender.getUserId(), "NotFound");
         } else {
             if(noPermission(sender)) {
                 return;

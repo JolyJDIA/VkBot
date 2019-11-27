@@ -1,6 +1,7 @@
 package api.command.defaults;
 
 import api.command.Command;
+import api.permission.PermissionManager;
 import api.storage.User;
 import api.utils.StringBind;
 import api.utils.chat.MessageChannel;
@@ -16,7 +17,7 @@ public class BroadcastMessageCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length > 1) {
-            if(STAFF_ADMIN.containsValue(sender.getUserId())) {
+            if(PermissionManager.isStaff(sender.getUserId())) {
                 sender.sendMessage("Объявление отправится только активным беседам!");
                 String text = StringBind.toString(args);
                 Bot.getUserBackend().getChats().forEach(id -> MessageChannel.sendMessage(text, id));
