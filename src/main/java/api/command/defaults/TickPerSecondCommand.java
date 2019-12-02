@@ -18,7 +18,11 @@ public class TickPerSecondCommand extends Command {
         if (args.length == 1) {
             long totalMemory = Runtime.getRuntime().totalMemory();
             long freeMemory = Runtime.getRuntime().freeMemory();
-            StringBuilder builder = new StringBuilder("tps за последние:\n1м | 5м | 15м:\n");
+            StringBuilder builder = new StringBuilder(
+                    """
+                    tps за последние:
+                    1м | 5м | 15м:
+                    """);
             for (double tps : Bot.getScheduler().getAverageTPS()) {
                 builder.append(format(tps)).append(", ");
             }
@@ -26,7 +30,7 @@ public class TickPerSecondCommand extends Command {
                     builder.substring(0, builder.length()-2) +
                     "\n-------------------------------------"+
                     "\nВся память: " + humanReadableByteCount(totalMemory) +
-                    "\nСъедено памяти  : " + humanReadableByteCount((totalMemory - freeMemory)) +
+                    "\nСъедено памяти: " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory));
         }
     }

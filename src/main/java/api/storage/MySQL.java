@@ -4,6 +4,7 @@ import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Maps;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -16,7 +17,6 @@ import java.sql.*;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +33,7 @@ public class MySQL implements UserBackend {
     @NonNls private static final String DELETE_CHAT =
             "DELETE FROM `vkbot` WHERE `peerId` = ?";
 
-    private final Map<Integer, Cache<Integer, User>> chats = new WeakHashMap<>();//Хз, зачем) На всякий)
+    private final Map<Integer, Cache<Integer, User>> chats = Maps.newHashMap();
 
     public MySQL(String username, String password, @NonNls String url) {
         MysqlDataSource data = new MysqlDataSource();

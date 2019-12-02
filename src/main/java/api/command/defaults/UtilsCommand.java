@@ -18,13 +18,16 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 public class UtilsCommand extends Command {
+
     public UtilsCommand() {
         super("utils", "команды-утилиты");
-        setAlias("uptime", "calendar", "convert_ts", "current_ts", "search");
+        setAlias("uptime", "calendar", "convert_ts", "current_ts", "search", "pattern");
     }
 
     @Override
@@ -78,7 +81,7 @@ public class UtilsCommand extends Command {
                     return;
                 }
                 StringBuilder builder = new StringBuilder();
-                String title = StringBind.toString(1, args);
+                String title = StringBind.toString(args);
                 try {
                     List<Video> videos = Bot.getVkApiClient().videos().search(VkUtils.USER_ACTOR, title)
                             .execute().getItems();
@@ -90,6 +93,13 @@ public class UtilsCommand extends Command {
                 } catch (ApiException | ClientException e) {
                     e.printStackTrace();
                 }
+            }
+            case "pattern" -> {
+                if(args.length < 3) {
+                    return;
+                }
+                Pattern regex = Pattern.compile(args[1]);
+                sender.sendMessage(Arrays.toString(regex.split(StringBind.toString(2, args))));
             }
         }
     }

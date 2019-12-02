@@ -4,7 +4,7 @@ import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class RoflanRunnable implements Runnable {
+public abstract class RoflanRunnable implements Runnable {
     private Task task;
 
     public final void cancel() {
@@ -34,6 +34,4 @@ public class RoflanRunnable implements Runnable {
         this.task = task;
         return task;
     }
-    @Override
-    public void run() {}
 }

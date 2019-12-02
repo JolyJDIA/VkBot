@@ -57,7 +57,7 @@ public class UtilsModule implements Module, Listener {
     @EventLabel
     public final void onPhoto(@NotNull NewMessageEvent e) {
         Message msg = e.getMessage();
-        if(msg.getPeerId() != 2000000002) {
+        if(msg.getPeerId() != 2000000030) {
             return;
         }
         List<MessageAttachment> attachment = msg.getAttachments();

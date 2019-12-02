@@ -8,7 +8,12 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 public final class TemporalDuration {
-    private static final TimeFormatter[] DEFAULT_FORMAT = {TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES, TimeFormatter.SECONDS};
+    private static final TimeFormatter[] DEFAULT_FORMAT = {
+            TimeFormatter.DAYS,
+            TimeFormatter.HOURS,
+            TimeFormatter.MINUTES,
+            TimeFormatter.SECONDS
+    };
 
     private Duration duration;
 
