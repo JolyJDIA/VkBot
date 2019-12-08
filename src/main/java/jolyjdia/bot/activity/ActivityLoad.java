@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class ActivityLoad implements Module {
     private static final Map<String, String> ACTIVITIES = ImmutableMap.<String, String>builder()
-            .put("idea64.exe", "⛾Coding in IntelliJ IDEA(среда разработки)⛾")
+            .put("idea64.exe", "\uD83D\uDCBBCoding in IntelliJ IDEA(среда разработки)")
             .put("Discord.exe", "✅Онлайн в Дискорде")
             .put("Telegram.exe", "✅Онлайн в Телеграме")
             .build();
@@ -49,8 +49,7 @@ public class ActivityLoad implements Module {
 
     @NonNls
     public static @NotNull String getApplications() {
-        return "Сейчас: " +
-                ProcessHandle.allProcesses()
+        StringBuilder builder = ProcessHandle.allProcesses()
                 .map(ProcessHandle::info)
                 .map(ProcessHandle.Info::command)
                 .distinct()
@@ -62,8 +61,9 @@ public class ActivityLoad implements Module {
                 .filter(ACTIVITIES::containsKey)
                 .limit(2)
                 .collect(StringBuilder::new,
-                        (set, item) -> set.append(ACTIVITIES.get(item)).append(' '),
+                        (set, item) -> set.append(ACTIVITIES.get(item)).append(", "),
                         StringBuilder::append);
+        return "Сейчас: " + builder.substring(0, builder.length()-3);
     }
     public static @NotNull String getNewYearInStatus() {
         return TemporalDuration.of(1, 1, 0,0).toFormat(TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES);
