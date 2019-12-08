@@ -63,7 +63,7 @@ public class ActivityLoad implements Module {
                 .limit(2)
                 .collect(StringBuilder::new,
                         (set, item) -> set.append(ACTIVITIES.get(item)).append(' '),
-                        (set, item) -> set.substring(0, set.length() - 3));
+                        StringBuilder::append);
     }
     public static @NotNull String getNewYearInStatus() {
         return TemporalDuration.of(1, 1, 0,0).toFormat(TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES);
