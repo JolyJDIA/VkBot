@@ -71,13 +71,17 @@ public class User implements Serializable {
         MessageChannel.sendMessage(message, peerId);
     }
 
+    public final boolean isStaff() {
+        return PermissionManager.isStaff(userId);
+    }
+
     @Override
     public final @NotNull String toString() {
         return "Айди-беседа: " + peerId + '\n' +
                 "Айди-пользователя: " + userId + '\n' +
                 "Ранг: " + group.getName() + (owner ? "(OWNER)\n" : '\n') +
                 "Префикс: " + group.getPrefix() + '\n' +
-                "Суффикс: " + (group.getSuffix() == null && PermissionManager.isStaff(userId) ? "ЛОДОЧНИК" : group.getSuffix());
+                "Суффикс: " + (group.getSuffix() == null && isStaff() ? "ЛОДОЧНИК" : group.getSuffix());
     }
     private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
         this.peerId = stream.readInt();

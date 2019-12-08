@@ -3,19 +3,23 @@ package api;
 import api.command.Command;
 import api.command.defaults.*;
 import api.event.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public final class BotManager {
-    private final List<Handler> listeners = new ArrayList<>();
-    private final Set<Command> commands = new HashSet<>();
+    private final List<Handler> listeners = Lists.newArrayList();
+    private final Set<Command> commands = Sets.newHashSet();
 
-    BotManager() {
+    public BotManager() {
         registerCommand(new HelpCommand());
         registerCommand(new ReloadCommand());
         registerCommand(new RankCommand());

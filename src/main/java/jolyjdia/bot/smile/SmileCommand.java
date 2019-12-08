@@ -1,7 +1,6 @@
 package jolyjdia.bot.smile;
 
 import api.command.Command;
-import api.permission.PermissionManager;
 import api.storage.User;
 import api.utils.KeyboardUtils;
 import api.utils.chat.MessageChannel;
@@ -22,7 +21,7 @@ public class SmileCommand extends Command {
             if(args[1].equalsIgnoreCase("close")) {
                 MessageChannel.sendKeyboard("close", sender.getPeerId(), KeyboardUtils.EMPTY_KEYBOARD);
             } else if(args[1].equalsIgnoreCase("load")) {
-                if(!PermissionManager.isStaff(sender.getUserId())) {
+                if(!sender.isStaff()) {
                     sender.sendMessage("У вас нет прав");
                     return;
                 }

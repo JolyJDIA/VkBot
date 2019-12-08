@@ -1,6 +1,5 @@
 package api.command;
 
-import api.permission.PermissionManager;
 import api.storage.User;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.Contract;
@@ -104,7 +103,7 @@ public abstract class Command {
         if (permission == null || permission.isEmpty()) {
             return true;
         }
-        boolean hasPermission = PermissionManager.isStaff(user.getUserId()) || user.getGroup().hasPermission(permission);
+        boolean hasPermission = user.isStaff() || user.getGroup().hasPermission(permission);
         if(!hasPermission) {
             user.sendMessage(noPermissionMessage);
         }
