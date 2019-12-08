@@ -63,7 +63,7 @@ public class ActivityLoad implements Module {
                 .collect(StringBuilder::new,
                         (set, item) -> set.append(ACTIVITIES.get(item)).append(", "),
                         StringBuilder::append);
-        return "Моя активность: " + builder.substring(0, builder.length()-3);
+        return "Сейчас: " + builder.substring(0, builder.length()-2);
     }
     public static @NotNull String getNewYearInStatus() {
         return TemporalDuration.of(1, 1, 0,0).toFormat(TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES);
