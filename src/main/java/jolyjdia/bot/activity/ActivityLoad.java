@@ -49,7 +49,8 @@ public class ActivityLoad implements Module {
 
     @NonNls
     public static @NotNull String getApplications() {
-        StringBuilder applications = ProcessHandle.allProcesses()
+        return "Сейчас: " +
+                ProcessHandle.allProcesses()
                 .map(ProcessHandle::info)
                 .map(ProcessHandle.Info::command)
                 .distinct()
@@ -63,7 +64,6 @@ public class ActivityLoad implements Module {
                 .collect(StringBuilder::new,
                         (set, item) -> set.append(ACTIVITIES.get(item)).append(' '),
                         (set, item) -> set.substring(0, set.length() - 3));
-        return "Сейчас: " + applications;
     }
     public static @NotNull String getNewYearInStatus() {
         return TemporalDuration.of(1, 1, 0,0).toFormat(TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES);
