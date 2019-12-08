@@ -14,6 +14,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
+import com.vk.api.sdk.objects.photos.PhotoAlbumFull;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
@@ -84,26 +85,32 @@ public class SmileLoad implements Module, Listener {
     public final void loadEmoticonsAlbum() {
         this.board = ImmutableList.builder();
         try {
+            List<PhotoAlbumFull> albumFulls = Bot.getVkApiClient().photos().getAlbums(VkUtils.USER_ACTOR)
+                    .ownerId(-Bot.getGroupId())
+                    .execute()
+                    .getItems();
             @NonNls ImmutableMap.Builder<String, String> map = ImmutableMap.builder();
-            Bot.getVkApiClient().photos().getAlbums(VkUtils.USER_ACTOR)
-                    .ownerId(-Bot.getGroupId()).execute().getItems().stream()
-                    .filter(e -> e.getTitle().equalsIgnoreCase("emotion"))
-                    .findFirst()
-                    .ifPresent(e -> {
-                        try {
-                            Bot.getVkApiClient().photos().get(VkUtils.USER_ACTOR)
-                                    .ownerId(-Bot.getGroupId())
-                                    .albumId(String.valueOf(e.getId())).execute()
-                                    .getItems()
-                                    .stream()
-                                    .filter(p -> (p.getText() != null && !p.getText().isEmpty()))
-                                    .forEach(p -> map.put(p.getText(), VkUtils.attachment(p)));
-                            this.smilies = map.build();
-                        } catch (ApiException | ClientException ex) {
-                            ex.printStackTrace();
-                        }
-                    });
-            calculateKeyboard();
+            if(albumFulls.stream().anyMatch(e -> {
+                if(!e.getTitle().equalsIgnoreCase("emotion")) {
+                    return false;
+                }
+                try {
+                    Bot.getVkApiClient().photos().get(VkUtils.USER_ACTOR)
+                            .ownerId(-Bot.getGroupId())
+                            .albumId(String.valueOf(e.getId())).execute()
+                            .getItems()
+                            .stream()
+                            .filter(p -> (p.getText() != null && !p.getText().isEmpty()))
+                            .forEach(p -> map.put(p.getText(), VkUtils.attachment(p)));
+                    this.smilies = map.build();
+                    return true;
+                } catch (ApiException | ClientException ex) {
+                    ex.printStackTrace();
+                }
+                return false;
+            })) {
+                calculateKeyboard();
+            }
         } catch (ApiException | ClientException e) {
             e.printStackTrace();
         }

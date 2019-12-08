@@ -1,5 +1,6 @@
 package jolyjdia.bot;
 
+import api.command.Command;
 import api.event.Event;
 import api.event.board.BoardPostEditEvent;
 import api.event.board.BoardPostNewEvent;
@@ -63,20 +64,15 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");
             long start = System.currentTimeMillis();
-            Bot.getBotManager().getRegisteredCommands().stream().filter(c -> {
-                if(c.getName().equalsIgnoreCase(args[0])) {
-                    return true;
+            if(Bot.getBotManager().getRegisteredCommands().stream().noneMatch(cmd -> {
+                if(cmd.getName().equalsIgnoreCase(args[0])) {
+                    return executeCommand(cmd, user, args);
                 }
-                Set<String> alias = c.getAlias();
-                return (alias != null && !alias.isEmpty()) && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0]));
-            }).findFirst().ifPresent(c -> {
-                SendCommandEvent event = new SendCommandEvent(user, args);
-                submitEvent(event);
-                if(event.isCancelled()) {
-                    return;
-                }
-                c.execute(user, args);
-            });
+                Set<String> alias = cmd.getAlias();
+                return (alias != null && !alias.isEmpty())
+                        && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0]))
+                        && executeCommand(cmd, user, args);
+            })) { return; }
             @NonNls long end = System.currentTimeMillis() - start;
             LOGGER.log(Level.INFO, "КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
             return;
@@ -85,7 +81,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         NewMessageEvent event = new NewMessageEvent(user, msg);
         submitEvent(event);
     }
-
     @Override
     public final void messageReply(Integer groupId, @NotNull Message msg) {
         if(msg.getPeerId().equals(msg.getFromId())) {
@@ -132,5 +127,14 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     }
     private static void submitEvent(@NotNull Event event) {
         Bot.getBotManager().getListeners().forEach(handler -> handler.accept(event));
+    }
+    public static boolean executeCommand(@NotNull Command cmd, User user, String[] args) {
+        SendCommandEvent event = new SendCommandEvent(user, args);
+        submitEvent(event);
+        if(event.isCancelled()) {
+            return false;
+        }
+        cmd.execute(user, args);
+        return true;
     }
 }
