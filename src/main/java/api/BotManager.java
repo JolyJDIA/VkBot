@@ -1,4 +1,4 @@
-package jolyjdia.bot;
+package api;
 
 import api.command.Command;
 import api.command.defaults.*;
@@ -20,8 +20,6 @@ public final class BotManager {
         registerCommand(new ReloadCommand());
         registerCommand(new RankCommand());
         registerCommand(new InfoUserCommand());
-        //registerCommand(new SetPrefixCommand());
-        //registerCommand(new SetSuffixCommand());
         registerCommand(new TickPerSecondCommand());
         registerCommand(new EditTitleChatCommand());
         registerCommand(new BroadcastMessageCommand());

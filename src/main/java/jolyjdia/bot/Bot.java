@@ -1,5 +1,6 @@
 package jolyjdia.bot;
 
+import api.BotManager;
 import api.command.HelpAllCommands;
 import api.module.Module;
 import api.module.ModuleLoader;
