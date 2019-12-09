@@ -1,6 +1,5 @@
 package jolyjdia.bot;
 
-import api.command.Command;
 import api.event.Event;
 import api.event.board.BoardPostEditEvent;
 import api.event.board.BoardPostNewEvent;
@@ -26,7 +25,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,13 +63,15 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             String[] args = text.substring(1).split(" ");
             long start = System.currentTimeMillis();
             if(Bot.getBotManager().getRegisteredCommands().stream().noneMatch(cmd -> {
-                if(cmd.getName().equalsIgnoreCase(args[0])) {
-                    return executeCommand(cmd, user, args);
+                if(cmd.equalsCommand(args[0])) {
+                    SendCommandEvent event = new SendCommandEvent(user, args);
+                    submitEvent(event);
+                    if(!event.isCancelled()) {
+                        cmd.execute(user, args);
+                    }
+                    return true;
                 }
-                Set<String> alias = cmd.getAlias();
-                return (alias != null && !alias.isEmpty())
-                        && alias.stream().anyMatch(e -> e.equalsIgnoreCase(args[0]))
-                        && executeCommand(cmd, user, args);
+                return false;
             })) { return; }
             @NonNls long end = System.currentTimeMillis() - start;
             LOGGER.log(Level.INFO, "КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
@@ -127,14 +127,5 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     }
     private static void submitEvent(@NotNull Event event) {
         Bot.getBotManager().getListeners().forEach(handler -> handler.accept(event));
-    }
-    public static boolean executeCommand(@NotNull Command cmd, User user, String[] args) {
-        SendCommandEvent event = new SendCommandEvent(user, args);
-        submitEvent(event);
-        if(event.isCancelled()) {
-            return false;
-        }
-        cmd.execute(user, args);
-        return true;
     }
 }

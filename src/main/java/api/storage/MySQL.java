@@ -84,7 +84,7 @@ public class MySQL implements UserBackend {
     public final void setRank(int peerId, int userId, PermissionGroup rank) {
         Cache<Integer, User> map = chats.computeIfAbsent(peerId, k -> CacheBuilder.newBuilder()
                 .maximumSize(100)
-                .expireAfterAccess(30, TimeUnit.MINUTES)
+                .expireAfterAccess(20, TimeUnit.MINUTES)
                 .build());
         User user = map.getIfPresent(userId);
         if(user == null) {
@@ -113,7 +113,7 @@ public class MySQL implements UserBackend {
     private @NotNull User loadUserInCache(@NotNull User user) {
         Cache<Integer, User> users = chats.computeIfAbsent(user.getPeerId(), k -> CacheBuilder.newBuilder()
                 .maximumSize(100)
-                .expireAfterAccess(30, TimeUnit.MINUTES)
+                .expireAfterAccess(20, TimeUnit.MINUTES)
                 .build());
         users.put(user.getUserId(), user);
         return user;

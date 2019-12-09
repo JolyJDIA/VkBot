@@ -123,4 +123,7 @@ public abstract class Command {
     protected final @NotNull String getUseCommand() {
         return '/' + name + (arguments != null && !arguments.isEmpty() ? ' ' + arguments : "");
     }
+    public boolean equalsCommand(String s2) {
+        return name.equalsIgnoreCase(s2) || (alias != null && !alias.isEmpty()) && alias.stream().anyMatch(e -> e.equalsIgnoreCase(s2));
+    }
 }
