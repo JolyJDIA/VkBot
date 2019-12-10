@@ -1,6 +1,8 @@
 package api.utils;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 public class TimingsHandler {
     private static final int SAMPLE_INTERVAL = 100;
@@ -27,5 +29,9 @@ public class TimingsHandler {
     @Contract(pure = true)
     public final double[] getAverageTPS() {
         return recentTps;
+    }
+    @NonNls
+    public static @NotNull String format(double tps) {
+        return ((tps > 20.0) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
     }
 }

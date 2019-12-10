@@ -40,8 +40,8 @@ public class BotScheduler {
         }
     }
     @Contract(pure = true)
-    public final double[] getAverageTPS() {
-        return timingsHandler.getAverageTPS();
+    public final TimingsHandler getTimingsHandler() {
+        return timingsHandler;
     }
 
     public final @NotNull Task runTask(Runnable runnable) {

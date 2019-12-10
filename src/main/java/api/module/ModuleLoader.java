@@ -13,7 +13,13 @@ public class ModuleLoader {
         return modules;
     }
     public final void reloadModule() {
-        modules.forEach(Module::onReload);
+        modules.forEach(e -> {
+            e.onDisable();
+         //   e.onLoad();
+        });
+    }
+    public final void disableModule() {
+        modules.forEach(Module::onDisable);
     }
     public final void registerModule(Module module) {
         modules.add(module);

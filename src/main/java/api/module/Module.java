@@ -1,7 +1,10 @@
 package api.module;
 
+@FunctionalInterface
 public interface Module {
-    default void onLoad() {}
-    default void onReload() {}
+    void onLoad();
+    default void onDisable() {
+        System.out.println(getClass().getName() + " is not disable");
+    }
 }
 

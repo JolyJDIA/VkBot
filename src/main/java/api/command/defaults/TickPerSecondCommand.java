@@ -2,6 +2,7 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.storage.User;
+import api.utils.TimingsHandler;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +20,12 @@ public class TickPerSecondCommand extends Command {
             long totalMemory = Runtime.getRuntime().totalMemory();
             long freeMemory = Runtime.getRuntime().freeMemory();
             StringBuilder builder = new StringBuilder(
-                    """
-                    tps за последние:
-                    1м | 5м | 15м:
-                    """);
-            for (double tps : Bot.getScheduler().getAverageTPS()) {
-                builder.append(format(tps)).append(", ");
+                    String.format("""
+                            Java version: %s
+                            tps за последние:
+                            1м | 5м | 15м:""", System.getProperty("java.version")));
+            for (double tps : Bot.getScheduler().getTimingsHandler().getAverageTPS()) {
+                builder.append(TimingsHandler.format(tps)).append(", ");
             }
             sender.sendMessage(
                     builder.substring(0, builder.length()-2) +
@@ -33,10 +34,6 @@ public class TickPerSecondCommand extends Command {
                     "\nСъедено памяти: " + humanReadableByteCount((totalMemory - freeMemory)) +
                     "\nСвободно памяти: " + humanReadableByteCount(freeMemory));
         }
-    }
-    @NonNls
-    private static @NotNull String format(double tps) {
-        return ((tps > 20.0) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
     }
     private static String humanReadableByteCount(long bytes) {
         if (bytes < 1000) {

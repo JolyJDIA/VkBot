@@ -2,9 +2,6 @@ package api.command.defaults;
 
 import api.command.Command;
 import api.storage.User;
-import api.utils.VkUtils;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,14 +19,7 @@ public class ReloadCommand extends Command {
                 return;
             }
             if(args[0].equalsIgnoreCase("stop")) {
-                try {
-                    Bot.getVkApiClient().status()
-                            .set(VkUtils.USER_ACTOR)
-                            .text("Осторожно! Злой динозаврик!")
-                            .execute();
-                } catch (ApiException | ClientException e) {
-                    e.printStackTrace();
-                }
+                Bot.getModuleLoader().disableModule();
                 System.exit(-1);
             } else {
                 Bot.getModuleLoader().reloadModule();

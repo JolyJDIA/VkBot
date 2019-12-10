@@ -1,13 +1,14 @@
 package jolyjdia.bot.activity;
 
-import api.command.defaults.HappyCommand;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.module.Module;
+import api.utils.TimingsHandler;
 import api.utils.VkUtils;
 import api.utils.timeformat.TemporalDuration;
 import api.utils.timeformat.TimeFormatter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -23,46 +24,82 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
 public class ActivityLoad implements Module, Listener {
+    public static final List<Callable<String>> STATS = ImmutableList.of(
+            ActivityLoad::getActivityProcesses,
+            () -> TemporalDuration.of(1, 1, 0,0).toFormat(
+                    TimeFormatter.DAYS,
+                    TimeFormatter.HOURS,
+                    TimeFormatter.MINUTES
+            ),
+            () -> "Осторожно!!! Злой динозаврик!",
+            () -> "Я машина",
+            () -> {
+                StringBuilder builder = new StringBuilder("задержка бота");
+                for (double tps : Bot.getScheduler().getTimingsHandler().getAverageTPS()) {
+                    builder.append(TimingsHandler.format(tps)).append(", ");
+                }
+                return builder.toString();
+            },
+            () -> {
+                @NonNls String date = TemporalDuration.of(10, 12, 0,0).toFormat();
+                return "\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 через: "+date + "\uD83D\uDD25";
+            },
+            () -> {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: HHч mmм ssс\nДата: dd.MM.yyyy");
+                return String.format("Время: %s", formatter.format(LocalDateTime.now()));
+            }
+    );
+    private int index;
     private static final Map<String, String> ACTIVITIES = ImmutableMap.<String, String>builder()
             .put("idea64.exe", "\uD83D\uDCBBCoding in IntelliJ IDEA(среда разработки)")
             .put("Discord.exe", "✅Онлайн в Дискорде")
             .put("Telegram.exe", "✅Онлайн в Телеграме")
             .build();
-    private boolean loop;
 
     @Override
     public final void onLoad() {
         Bot.getBotManager().registerEvent(this);
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
+                String text = STATS.get(index).call();
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
-                        .text(this.loop ?
-                                "1.15 релиз: "+TemporalDuration.of(12, 11, 0,0)
-                                        .toFormat(TimeFormatter.DAYS,
-                                                TimeFormatter.HOURS,
-                                                TimeFormatter.MINUTES) :
-                              //  String.format(HappyCommand.NEW_YEAR, getNewYearInStatus()) :
-                                getApplications())
+                        .text(text)
                         .execute();
-                this.loop = !loop;
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
                         .groupId(Bot.getGroupId())
-                        .text(String.format(HappyCommand.NEW_YEAR, getNewYearInStatus()))
+                        .text(text)
                         .execute();
-            } catch (ApiException | ClientException e) {
+                this.index = index == STATS.size()-1 ? 0 : ++index;
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, 2000);
+        }, 0, 1900);
+    }
+
+    @Override
+    public final void onDisable() {
+        try {
+            Bot.getVkApiClient().status()
+                    .set(VkUtils.USER_ACTOR)
+                    .text("Осторожно! Злой динозаврик!")
+                    .execute();
+        } catch (ApiException | ClientException e) {
+            e.printStackTrace();
+        }
     }
 
     @NonNls
-    public static @NotNull String getApplications() {
+    public static @NotNull String getActivityProcesses() {
         StringBuilder builder = ProcessHandle.allProcesses()
                 .map(ProcessHandle::info)
                 .map(ProcessHandle.Info::command)
@@ -79,12 +116,9 @@ public class ActivityLoad implements Module, Listener {
                         StringBuilder::append);
         return "Сейчас: " + builder.substring(0, builder.length()-2);
     }
-    public static @NotNull String getNewYearInStatus() {
-        return TemporalDuration.of(1, 1, 0,0).toFormat(TimeFormatter.DAYS, TimeFormatter.HOURS, TimeFormatter.MINUTES);
-    }
 
     @EventLabel
-    public static void onMsg(NewMessageEvent e) {
+    public static void onMsg(@NotNull NewMessageEvent e) {
         String text = e.getMessage().getText();
         if(text.isEmpty()) {
             return;
