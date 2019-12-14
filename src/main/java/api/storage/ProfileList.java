@@ -3,11 +3,9 @@ package api.storage;
 import api.file.JsonCustom;
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
+import api.utils.VkUtils;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
-import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,20 +80,11 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             user = users.get(userId);
         } else {
             user = new User(peerId, userId);
-            //ГАВНО КАКОЕ-ТО
-            try {
-                if(Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), user.getPeerId()).execute().getItems()
-                        .stream().anyMatch(e -> {
-                            Boolean isAdmin = e.getIsAdmin();
-                            return (e.getMemberId() == userId) && (isAdmin != null && isAdmin);
-                        })) {
-                    user.setGroup(PermissionManager.getPermGroup(PermissionManager.ADMIN));
-                }
-            } catch (ApiException | ClientException e) {
-                e.printStackTrace();
+            if(VkUtils.isOwner(peerId, userId)) {
+                user.setGroup(PermissionManager.getPermGroup(PermissionManager.ADMIN));
             }
             users.put(userId, user);
-            this.save(map, new MapTypeToken().getType());
+            this.saveAll();
         }
         return user;
     }
@@ -108,7 +97,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             consumer.accept(entity);
             users.put(userId, entity);
         }
-        this.save(map, new MapTypeToken().getType());
+        this.saveAll();
     }
     @Override
     public void setRank(int peerId, int userId, PermissionGroup rank) {
@@ -131,7 +120,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             return;
         }
         users.remove(user.getUserId());
-        this.save(map, new MapTypeToken().getType());
+        this.saveAll();
     }
     @Override
     public void deleteUser(int peerId, int userId) {
@@ -143,11 +132,12 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             return;
         }
         users.remove(userId);
-        this.save(map, new MapTypeToken().getType());
+        this.saveAll();
     }
-    public void save(Map<Integer, Map<Integer, User>> object, Type type) {
+    @Override
+    public void saveAll() {
         try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
-            pw.print(getGson().toJson(object, type));
+            pw.print(getGson().toJson(map, new MapTypeToken().getType()));
             pw.flush();
         } catch (IOException e) {
             e.printStackTrace();

@@ -16,6 +16,7 @@ public class User implements Serializable {
     private transient int userId;
     private PermissionGroup group;
     private boolean owner;
+    private transient boolean change;
 
     @Contract(pure = true)
     public User(int peerId, int userId) {
@@ -62,6 +63,7 @@ public class User implements Serializable {
 
     public final void setGroup(PermissionGroup group) {
         this.group = group;
+        this.change = true;
     }
 
     public final void sendMessage(String message, String attachment) {
@@ -73,6 +75,14 @@ public class User implements Serializable {
 
     public final boolean isStaff() {
         return PermissionManager.isStaff(userId);
+    }
+
+    public boolean isChange() {
+        return change;
+    }
+
+    public void setChange(boolean change) {
+        this.change = change;
     }
 
     @Override

@@ -55,4 +55,8 @@ public final class TemporalDuration {
     public @NotNull String toFormat() {
         return toFormat(DEFAULT_FORMAT);
     }
+    @Override
+    public @NotNull String toString() {
+        return toFormat();
+    }
 }

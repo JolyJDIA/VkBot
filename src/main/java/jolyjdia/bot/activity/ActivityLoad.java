@@ -1,5 +1,6 @@
 package jolyjdia.bot.activity;
 
+import api.command.defaults.HappyCommand;
 import api.event.EventLabel;
 import api.event.Listener;
 import api.event.messages.NewMessageEvent;
@@ -13,15 +14,10 @@ import com.google.common.collect.ImmutableMap;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import jolyjdia.bot.Bot;
-import jolyjdia.bot.utils.PhotoTool;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -32,44 +28,47 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 
 public class ActivityLoad implements Module, Listener {
+    private boolean offline;
     public static final List<Callable<String>> STATS = ImmutableList.of(
+            () -> """
+                    Сейчас напиши статус типа дипрессия хачу умиреть
+                    Страницу закрою типа загадочность
+                    В сахраненках будут мальчики и цветы!!!
+                    ~14 лет😎👍🏻😈""",
+            () -> """
+                    Если ты видишь мои слезы
+                    знай
+                    ВИНОВАТА АМЕРИКА😎👍🏻😈""",
             ActivityLoad::getActivityProcesses,
-            () -> TemporalDuration.of(1, 1, 0,0).toFormat(
+            () -> String.format(HappyCommand.NEW_YEAR, TemporalDuration.of(1, 1, 0,0).toFormat(
                     TimeFormatter.DAYS,
                     TimeFormatter.HOURS,
-                    TimeFormatter.MINUTES
+                    TimeFormatter.MINUTES)
             ),
             () -> "Осторожно!!! Злой динозаврик!",
-            () -> "Я машина",
+            () -> "Быстродействие бота " + TimingsHandler.format(Bot.getScheduler().getTimingsHandler().getAverageTPS()[0])+"/20.0",
             () -> {
-                StringBuilder builder = new StringBuilder("задержка бота");
-                for (double tps : Bot.getScheduler().getTimingsHandler().getAverageTPS()) {
-                    builder.append(TimingsHandler.format(tps)).append(", ");
-                }
-                return builder.toString();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: HHч mmм ssс Дата: dd.MM.yyyy");
+                return formatter.format(LocalDateTime.now());
             },
-            () -> {
-                @NonNls String date = TemporalDuration.of(10, 12, 0,0).toFormat();
-                return "\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 через: "+date + "\uD83D\uDD25";
-            },
-            () -> {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: HHч mmм ssс\nДата: dd.MM.yyyy");
-                return String.format("Время: %s", formatter.format(LocalDateTime.now()));
-            }
+            () -> "java мастер",
+            () -> "Советую автору пережить переходный возраст\uD83D\uDC4D\uD83C\uDFFB"
     );
     private int index;
     private static final Map<String, String> ACTIVITIES = ImmutableMap.<String, String>builder()
             .put("idea64.exe", "\uD83D\uDCBBCoding in IntelliJ IDEA(среда разработки)")
+            .put("javaw.exe", "\uD83C\uDF0DMinecraft\uD83C\uDF0D")
             .put("Discord.exe", "✅Онлайн в Дискорде")
             .put("Telegram.exe", "✅Онлайн в Телеграме")
             .build();
 
     @Override
     public final void onLoad() {
+        Bot.getBotManager().registerCommand(new ActivityCommand(this));
         Bot.getBotManager().registerEvent(this);
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
-                String text = STATS.get(index).call();
+                @NonNls String text = getOnlineFormat() + STATS.get(index).call();
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
                         .text(text)
@@ -83,7 +82,14 @@ public class ActivityLoad implements Module, Listener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, 1900);
+        }, 0, 1800);
+        Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
+            try {
+                Bot.getVkApiClient().account().setOnline(VkUtils.USER_ACTOR).execute();
+            } catch (ApiException | ClientException e) {
+                e.printStackTrace();
+            }
+        }, 0, 6000);
     }
 
     @Override
@@ -116,84 +122,23 @@ public class ActivityLoad implements Module, Listener {
                         StringBuilder::append);
         return "Сейчас: " + builder.substring(0, builder.length()-2);
     }
-
     @EventLabel
     public static void onMsg(@NotNull NewMessageEvent e) {
-        String text = e.getMessage().getText();
-        if(text.isEmpty()) {
-            return;
-        }
-        if(text.startsWith("```") && text.endsWith("```")) {
-            text = text.substring(3);
-            text = text.substring(0, text.length()-3);
-            BufferedImage image = convertTextToGraphic(text, new Font("Consolas", Font.BOLD, 18));
-            try {
-                ImageIO.write(image, "png", new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\test.png"));
-                PhotoTool.sendPhoto(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\test.png"), e.getUser().getPeerId());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        if(e.getUser().getUserId() == 482340506) {
+            e.getUser().sendMessage(e.getMessage().getText());
         }
     }
-    public static String styleCode(String text) {
-        int c = -3;
-        StringBuilder builder = new StringBuilder();
-        for(String s1 : text.split("\n")) {
-            s1 = s1.substring(0, Math.max(0, s1.length()-1));
-            if (s1.endsWith("{")) {
-                c += 3;
-                builder.append('\n').append(" ".repeat(Math.max(0, c))).append(s1);
-            } else if (s1.endsWith("}") || s1.startsWith("}")) {
-                c -= 3;
-                builder.append('\n').append(" ".repeat(Math.max(0, c))).append(s1);
-            } else {
-                builder.append('\n').append(" ".repeat(Math.max(0, c+3))).append(s1);
-            }
-        }
-        return builder.toString();
-    }
-    public static String longLine(String s) {
-        int l = 0;
-        String end = "";
-        for(String s1 : s.split("\n")) {
-            if(s1.length() > l) {
-                l = s1.length();
-                end = s1;
-            }
-        }
-        return end;
-    }
-    public static BufferedImage convertTextToGraphic(String text, Font font) {
-        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = img.createGraphics();
 
-        g2d.setFont(font);
-        FontMetrics fm = g2d.getFontMetrics();
-        text = styleCode(text);
-        int width = fm.stringWidth(longLine(text));
-        int height = text.split("\n").length*(fm.getAscent()+15);
-        g2d.dispose();
-        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics = bufferedImage.createGraphics();
+    public final boolean isOffline() {
+        return offline;
+    }
 
-        graphics.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-        graphics.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
-        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-        graphics.setFont(font);
-        FontMetrics fontMetrics = graphics.getFontMetrics();
-        graphics.setColor(Color.DARK_GRAY);
-        int ascent = fontMetrics.getAscent()+15;
-        int space = 0;
-        for(String line : text.split("\n")) {
-            graphics.drawString(line, 0, space);
-            space += ascent;
-        }
-        graphics.dispose();
-        return bufferedImage;
+    public final void setOffline(boolean offline) {
+        this.offline = offline;
+    }
+    @NonNls
+    @Contract(pure = true)
+    public final @NotNull String getOnlineFormat() {
+        return (this.offline ? "ОФФЛАЙН" : "ОНЛАЙН") + "\uD83D\uDC41\u200D\uD83D\uDDE8";
     }
 }

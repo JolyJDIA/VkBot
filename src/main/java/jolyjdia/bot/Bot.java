@@ -55,7 +55,7 @@ public final class Bot {
 
         PermissionManager.newInstance();
         userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
-                new MySQL(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
+                MySQL.of(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
                 new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
 
         Groups groups = vkApiClient.groups();

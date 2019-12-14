@@ -19,10 +19,11 @@ public class ReloadCommand extends Command {
                 return;
             }
             if(args[0].equalsIgnoreCase("stop")) {
+                Bot.getUserBackend().saveAll();
                 Bot.getModuleLoader().disableModule();
                 System.exit(-1);
             } else {
-                Bot.getModuleLoader().reloadModule();
+                //Bot.getModuleLoader().reloadModule();
                 sender.sendMessage("Перезагрузка завершена\nМой планировщик: Привет из Thread-2");
             }
         }

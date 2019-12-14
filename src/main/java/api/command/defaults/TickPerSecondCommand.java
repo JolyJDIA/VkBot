@@ -23,7 +23,8 @@ public class TickPerSecondCommand extends Command {
                     String.format("""
                             Java version: %s
                             tps за последние:
-                            1м | 5м | 15м:""", System.getProperty("java.version")));
+                            1м | 5м | 15м:
+                            """, System.getProperty("java.version")));
             for (double tps : Bot.getScheduler().getTimingsHandler().getAverageTPS()) {
                 builder.append(TimingsHandler.format(tps)).append(", ");
             }

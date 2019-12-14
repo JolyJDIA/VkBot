@@ -18,7 +18,7 @@ public final class PermissionManager {
         STAFF_ADMIN.put(310289867, "Завр");
         STAFF_ADMIN.put(526616439, "Валера");
         STAFF_ADMIN.put(190345817, "Юджин");
-        STAFF_ADMIN.put(526212430, "Изи мама");
+        STAFF_ADMIN.put(573613570, "Изи мама");
         STAFF_ADMIN.put(323998691, "Богардо");
         STAFF_ADMIN.put(199686399, "Алекха");
         STAFF_ADMIN.put(477425490, "Артемка");
