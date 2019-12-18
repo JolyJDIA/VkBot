@@ -3,7 +3,6 @@ package api.command.defaults;
 import api.command.Command;
 import api.storage.User;
 import api.utils.StringBind;
-import api.utils.chat.MessageChannel;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,10 +21,10 @@ public class EditTitleChatCommand extends Command {
                 return;
             }
             if (args.length == 1) {
-                MessageChannel.editChat(Bot.getConfig().getProperty("defaultTitleChat"), sender.getPeerId());
+                sender.getChat().editChat(Bot.getConfig().getProperty("defaultTitleChat"));
                 return;
             }
-            MessageChannel.editChat(StringBind.toString(args), sender.getPeerId());
+            sender.getChat().editChat(StringBind.toString(args));
         }
     }
 }

@@ -103,7 +103,7 @@ public abstract class Command {
         if (permission == null || permission.isEmpty()) {
             return true;
         }
-        boolean hasPermission = user.isStaff() || user.getGroup().hasPermission(permission);
+        boolean hasPermission = user.hasPermission(permission);
         if(!hasPermission) {
             user.sendMessage(noPermissionMessage);
         }

@@ -3,7 +3,6 @@ package jolyjdia.bot.smile;
 import api.command.Command;
 import api.storage.User;
 import api.utils.KeyboardUtils;
-import api.utils.chat.MessageChannel;
 import org.jetbrains.annotations.NotNull;
 
 public class SmileCommand extends Command {
@@ -16,10 +15,10 @@ public class SmileCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            MessageChannel.sendKeyboard("open", sender.getPeerId(), load.getKeyboard());
+            sender.getChat().sendKeyboard("open", load.getKeyboard());
         } else if(args.length == 2) {
             if(args[1].equalsIgnoreCase("close")) {
-                MessageChannel.sendKeyboard("close", sender.getPeerId(), KeyboardUtils.EMPTY_KEYBOARD);
+                sender.getChat().sendKeyboard("close", KeyboardUtils.EMPTY_KEYBOARD);
             } else if(args[1].equalsIgnoreCase("load")) {
                 if(!sender.isStaff()) {
                     sender.sendMessage("У вас нет прав");

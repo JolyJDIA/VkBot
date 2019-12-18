@@ -15,4 +15,5 @@ public interface UserBackend {
     void deleteChat(int peerId);
     void saveAll();
     default void saveOrUpdateGroup(User user) {}
+    default Chat getChat(int peerId) {return null;}
 }

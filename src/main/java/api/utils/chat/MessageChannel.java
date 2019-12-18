@@ -56,6 +56,7 @@ public final class MessageChannel {
             Bot.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId-2000000000, title).execute();
         } catch (ApiException | ClientException ignored) {}
     }
+
     public static MessagesSendQuery builder(int peerId) {
         return Bot.getVkApiClient().messages()
                 .send(Bot.getGroupActor())

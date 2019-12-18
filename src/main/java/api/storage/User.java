@@ -2,7 +2,7 @@ package api.storage;
 
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
-import api.utils.chat.MessageChannel;
+import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -14,9 +14,9 @@ public class User implements Serializable {
     private static final long serialVersionUID = 4943570635312868405L;
     @NonNls private transient int peerId;
     private transient int userId;
+    private transient boolean change;
     private PermissionGroup group;
     private boolean owner;
-    private transient boolean change;
 
     @Contract(pure = true)
     public User(int peerId, int userId) {
@@ -27,14 +27,12 @@ public class User implements Serializable {
 
     @Contract(pure = true)
     public User(int peerId, int userId, String group) {
-        this.peerId = peerId;
-        this.userId = userId;
+        this(peerId, userId);
         this.group = PermissionManager.getPermGroup(group);
     }
     @Contract(pure = true)
     public User(int peerId, int userId, PermissionGroup group) {
-        this.peerId = peerId;
-        this.userId = userId;
+        this(peerId, userId);
         this.group = group;
     }
 
@@ -67,22 +65,28 @@ public class User implements Serializable {
     }
 
     public final void sendMessage(String message, String attachment) {
-        MessageChannel.sendMessage(message, peerId, attachment);
+        getChat().sendMessage(message, attachment);
     }
     public final void sendMessage(String message) {
-        MessageChannel.sendMessage(message, peerId);
+        getChat().sendMessage(message);
     }
 
     public final boolean isStaff() {
         return PermissionManager.isStaff(userId);
     }
 
+    public final boolean unchanged() {
+        return !change;
+    }
     public boolean isChange() {
         return change;
     }
 
-    public void setChange(boolean change) {
-        this.change = change;
+    public final boolean hasPermission(String name) {
+        return owner || isStaff() || group.hasPermission(name);
+    }
+    public final Chat getChat() {
+        return Bot.getUserBackend().getChat(peerId);
     }
 
     @Override
@@ -98,6 +102,7 @@ public class User implements Serializable {
         this.userId = stream.readInt();
         this.group = (PermissionGroup)stream.readObject();
         this.owner = stream.readBoolean();
+        this.change = stream.readBoolean();
         stream.close();
     }
     private void writeObject(@NotNull java.io.ObjectOutputStream out) throws IOException {

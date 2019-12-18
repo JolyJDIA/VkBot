@@ -2,9 +2,7 @@ package api.storage;
 
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
-import api.utils.VkUtils;
-import com.google.common.cache.Cache;
-import com.google.common.collect.Maps;
+import api.utils.cache.Cache;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
@@ -16,6 +14,7 @@ import java.sql.*;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +30,7 @@ public final class MySQL implements UserBackend {
     @NonNls private static final String DELETE_CHAT =
             "DELETE FROM `vkbot` WHERE `peerId` = ?";
 
-    private final Map<Integer, Chat> chats = Maps.newHashMap();
+    private final Map<Integer, ChatCacheMySQL> chats = new WeakHashMap<>();
 
     @Contract("_, _, _ -> new")
     public static @NotNull UserBackend of(String username, String password, @NonNls String url) {
@@ -59,6 +58,9 @@ public final class MySQL implements UserBackend {
         }
         LOGGER.log(Level.INFO, "MySQL Connected!");
     }
+    public Map<Integer, ChatCacheMySQL> getMap() {
+        return chats;
+    }
     @Override
     public void saveOrUpdateGroup(User user) {
         Bot.getScheduler().runTaskAsynchronously(() -> {
@@ -82,13 +84,12 @@ public final class MySQL implements UserBackend {
     }
     @Override
     public void setRank(int peerId, int userId, PermissionGroup rank) {
-        Cache<Integer, User> map = chats.computeIfAbsent(peerId, k -> new Chat(peerId)).getUsers();
-        User user = map.getIfPresent(userId);
-        if(user == null) {
-            user = new User(peerId, userId);
+        Cache<Integer, User> map = chats.computeIfAbsent(peerId, k -> new ChatCacheMySQL(peerId)).getUsers();
+        getUser(peerId, userId).orElseGet(() -> {
+            User user = new User(peerId, userId);
             map.put(userId, user);
-        }
-        user.setGroup(rank);
+            return user;
+        }).setGroup(rank);
     }
     @Override
     public void setRank(User user, PermissionGroup rank) {
@@ -97,27 +98,36 @@ public final class MySQL implements UserBackend {
         }
         user.setGroup(rank);
     }
+    public ChatCacheMySQL getChat(int peerId) {
+        return chats.get(peerId);
+    }
     @Override
     public @NotNull Optional<User> getUser(int peerId, int userId) {
         if(chats.containsKey(peerId)) {
-            return Optional.ofNullable(chats.get(peerId).getUsers().getIfPresent(userId));
+            if(chats.get(peerId).getUsers().containsKey(userId)) {
+                return Optional.ofNullable(chats.get(peerId).getUsers().get(userId));
+            }
         }
         return Optional.empty();
     }
     private @NotNull User loadUserInCache(@NotNull User user) {
-        Cache<Integer, User> users = chats.computeIfAbsent(user.getPeerId(), k -> new Chat(user.getPeerId())).getUsers();
+        Cache<Integer, User> users = chats.computeIfAbsent(user.getPeerId(), k -> new ChatCacheMySQL(user.getPeerId())).getUsers();
         users.put(user.getUserId(), user);
         return user;
     }
     @Override
     public @NotNull User addIfAbsentAndReturn(int peerId, int userId) {
         return getUser(peerId, userId).orElseGet(() -> {
-            //Чек на права
-            if(VkUtils.isOwner(peerId, userId)) {
+            /**
+             * 1)НЕТ ЧАТА -> ЧЕКАЮ БД
+             * 2)Добавил чат, проверяю доступ к участникам, проверяю на овнера возращаю, если не админ то в бд
+             */
+            if(chats.containsKey(peerId) && chats.get(peerId).isOwner(peerId)) {
                 User owner = new User(peerId, userId, PermissionManager.getAdmin());
                 owner.setOwner(true);
                 return loadUserInCache(owner);
             }
+            //ИДУ ЧЕКАТЬ БД
             try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
                 ps.setInt(1, peerId);
                 ps.setInt(2, userId);
@@ -133,7 +143,7 @@ public final class MySQL implements UserBackend {
     @Override
     public void deleteUser(int peerId, int userId) {
         if(chats.containsKey(peerId)) {
-            chats.get(peerId).getUsers().invalidate(userId);
+            chats.get(peerId).getUsers().remove(userId);
         }
         try (PreparedStatement ps = connection.prepareStatement(DELETE)) {
             ps.setInt(1, peerId);
@@ -158,9 +168,9 @@ public final class MySQL implements UserBackend {
     public void saveAll() {
         if (chats.isEmpty()) { return; }
         try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
-            for(Chat integerUserCache : chats.values()) {
-                for(User user : integerUserCache.getUsers().asMap().values()) {
-                    if(!user.isChange()) {
+            for(ChatCacheMySQL integerUserCache : chats.values()) {
+                for(User user : integerUserCache.getUsers().values()) {
+                    if(user.unchanged()) {
                         continue;
                     }
                     String group = user.getGroup().getName();

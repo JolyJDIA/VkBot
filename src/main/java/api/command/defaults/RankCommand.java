@@ -41,7 +41,7 @@ public class RankCommand extends Command {
                 if(sender.getGroup() == group) {
                     sender.sendMessage("У него уже есть данный ранг");
                 } else {
-                    Bot.getUserBackend().setRank(target, group);
+                    target.setGroup(group);
                     sender.sendMessage("Вы успешно выдали права");
                 }
             }, () -> sender.sendMessage("Данного пользователя нет в беседе"));
