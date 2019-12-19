@@ -38,7 +38,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageNew(Integer groupId, @NotNull Message msg) {
-        if(msg.getPeerId().equals(msg.getFromId())) {
+        if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
             return;
         }
         MessageAction action = msg.getAction();
@@ -84,7 +84,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     }
     @Override
     public final void messageReply(Integer groupId, @NotNull Message msg) {
-        if(msg.getPeerId().equals(msg.getFromId())) {
+        if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
             return;
         }
         User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
@@ -94,7 +94,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageEdit(Integer groupId, @NotNull Message msg) {
-        if(msg.getPeerId().equals(msg.getFromId())) {
+        if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
             return;
         }
         User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());

@@ -7,8 +7,7 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
-
-public class Chat<T> {//implements UserBackend {
+public class Chat<T> {
     private final int peerId;
     private final T container;
 
@@ -19,24 +18,6 @@ public class Chat<T> {//implements UserBackend {
 
     public final int getPeerId() {
         return peerId;
-    }
-
-    public static boolean isOwner(int peerId, int userId) {
-        try {
-            return Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), peerId).execute().getItems()
-                    .stream()
-                    .anyMatch(e -> {
-                        if(e.getMemberId() != userId) {
-                            return false;
-                        }
-                        Boolean isOwner = e.getIsOwner();
-                        Boolean isAdmin = e.getIsAdmin();
-                   ///     System.out.println(isAdmin + "  "+ isOwner);
-                        return (isOwner != null && isOwner) || (isAdmin != null && isAdmin);
-                    });
-        } catch (ApiException | ClientException e) {
-            return false;
-        }
     }
     public final void editChat(String title) {
         MessageChannel.editChat(title, peerId);
@@ -52,7 +33,7 @@ public class Chat<T> {//implements UserBackend {
     }
 
     public final void sendKeyboard(String msg, Keyboard keyboard) {
-        MessageChannel.sendKeyboard(msg, peerId ,keyboard);
+        MessageChannel.sendKeyboard(msg, peerId, keyboard);
     }
     public final int chatId() {
         return peerId-2000000000;
@@ -61,5 +42,21 @@ public class Chat<T> {//implements UserBackend {
     public final T getUsers() {
         return container;
     }
-
+    public static boolean isOwner(int peerId, int userId) {
+        try {
+            return Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), peerId)
+                    .execute().getItems()
+                    .stream()
+                    .anyMatch(e -> {
+                        if (e.getMemberId() != userId) {
+                            return false;
+                        }
+                        Boolean isOwner = e.getIsOwner();
+                        Boolean isAdmin = e.getIsAdmin();
+                        return (isOwner != null && isOwner) || (isAdmin != null && isAdmin);
+                    });
+        } catch (ApiException | ClientException e) {
+            return false;
+        }
+    }
 }

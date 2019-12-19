@@ -2,7 +2,6 @@ package api.storage;
 
 import api.file.JsonCustom;
 import api.permission.PermissionManager;
-import com.google.common.collect.Maps;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.Contract;
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 public final class ProfileList extends JsonCustom implements UserBackend,
         JsonDeserializer<Map<Integer, ChatCacheJSON>>,
         JsonSerializer<Map<Integer, ChatCacheJSON>> {
-    private Map<Integer, ChatCacheJSON> map = Maps.newHashMap();
+    private Map<Integer, ChatCacheJSON> chats = new HashMap<>();
 
     public ProfileList(File file) {
         super(file);
@@ -33,7 +33,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     public void load() {
         try (FileInputStream fileInputStream = new FileInputStream(getFile());
              InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
-            this.map = this.getGson().fromJson(inputStreamReader, new MapTypeToken().getType());
+            this.chats = this.getGson().fromJson(inputStreamReader, new MapTypeToken().getType());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,37 +42,37 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     @Contract(pure = true)
     @Override
     public @NotNull Set<Integer> getChats() {
-        return map.keySet();
+        return chats.keySet();
     }
 
     private boolean hasUser(@NotNull User user) {
-        return map.containsKey(user.getChat().getPeerId()) && map.get(user.getChat().getPeerId()).getUsers().containsKey(user.getUserId());
+        return chats.containsKey(user.getChat().getPeerId()) && chats.get(user.getChat().getPeerId()).getUsers().containsKey(user.getUserId());
     }
     private boolean hasUser(int peerId, int userId) {
-        return map.containsKey(peerId) && map.get(peerId).getUsers().containsKey(userId);
+        return chats.containsKey(peerId) && chats.get(peerId).getUsers().containsKey(userId);
     }
     public @Nullable User getUser(@NotNull User user) {
         if (hasUser(user)) {
-            return map.get(user.getChat().getPeerId()).getUsers().get(user.getUserId());
+            return chats.get(user.getChat().getPeerId()).getUsers().get(user.getUserId());
         }
         return null;
     }
     @Override
     public @NotNull Optional<User> getUser(int peerId, int userId) {
         if (hasUser(peerId, userId)) {
-            return Optional.of(map.get(peerId).getUsers().get(userId));
+            return Optional.of(chats.get(peerId).getUsers().get(userId));
         }
         return Optional.empty();
     }
 
     @Override
     public void deleteChat(int peerId) {
-        map.remove(peerId);
+        chats.remove(peerId);
     }
 
     @Override
     public User addIfAbsentAndReturn(int peerId, int userId) {
-        ChatCacheJSON users = map.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
+        ChatCacheJSON users = chats.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
         User user;
         if (users.getUsers().containsKey(userId)) {
             user = users.getUsers().get(userId);
@@ -89,7 +89,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     }
     private void addIfAbsentAndConsumer(@NotNull User entity, @NotNull Consumer<? super User> consumer) {
         int peerId = entity.getChat().getPeerId();
-        ChatCacheJSON users = map.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
+        ChatCacheJSON users = chats.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
         int userId = entity.getUserId();
         if(users.getUsers().containsKey(userId)) {
             consumer.accept(users.getUsers().get(userId));
@@ -101,10 +101,10 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     }
 
     public void remove(@NotNull User user) {
-        if (!map.containsKey(user.getChat().getPeerId())) {
+        if (!chats.containsKey(user.getChat().getPeerId())) {
             return;
         }
-        Map<Integer, User> users = map.get(user.getChat().getPeerId()).getUsers();
+        Map<Integer, User> users = chats.get(user.getChat().getPeerId()).getUsers();
         if(!users.containsKey(user.getUserId())) {
             return;
         }
@@ -113,7 +113,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     }
     @Override
     public void deleteUser(int peerId, int userId) {
-        if (!map.containsKey(peerId)) {
+        if (!chats.containsKey(peerId)) {
             return;
         }
         Map<Integer, User> users = getChat(peerId).getUsers();
@@ -126,7 +126,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     @Override
     public void saveAll() {
         try (PrintWriter pw = new PrintWriter(getFile(), StandardCharsets.UTF_8)) {
-            pw.print(getGson().toJson(map, new MapTypeToken().getType()));
+            pw.print(getGson().toJson(chats, new MapTypeToken().getType()));
             pw.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,7 +135,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
 
     @Override
     public ChatCacheJSON getChat(int peerId) {
-        return map.get(peerId);
+        return chats.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
     }
 
     @Override
@@ -152,9 +152,9 @@ public final class ProfileList extends JsonCustom implements UserBackend,
                 String group = element.get("group").getAsString();
                 users.getUsers().put(id, new User(chat, id, group));
             }
-            map.put(chat, users);
+            chats.put(chat, users);
         }
-        return map;
+        return chats;
     }
 
     @Override

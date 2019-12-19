@@ -3,7 +3,7 @@ package api.storage;
 import java.util.Optional;
 import java.util.Set;
 
-public interface UserBackend {
+public interface UserBackend {//extends Map<Integer, Chat<?>> {
     User addIfAbsentAndReturn(int peerId, int userId);
     Set<Integer> getChats();
     Optional<User> getUser(int peerId, int userId);

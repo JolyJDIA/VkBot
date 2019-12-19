@@ -1,7 +1,6 @@
 package jolyjdia.bot.calculator;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import jolyjdia.bot.calculator.lexer.Lexer;
 import jolyjdia.bot.calculator.lexer.tokens.Token;
 import jolyjdia.bot.calculator.parser.Parser;
@@ -13,13 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
 
 public final class Expression {
-    private static final ExecutorService SERVICE = Executors.newCachedThreadPool(
-            new ThreadFactoryBuilder()
-                    .setDaemon(true)
-                    .build());
     private static final Map<String, RValue> CONSTANTS = ImmutableMap.of(
             "pi", new Constant(Math.PI),
             "e", new Constant(Math.E)
@@ -41,17 +35,8 @@ public final class Expression {
         this.root = Parser.parse(tokens, this);
     }
     public String evaluate() {
-        Future<Double> result = SERVICE.submit(root::getValue);
-        try {
-            double reply = result.get(100, TimeUnit.MILLISECONDS);
-            return Double.isNaN(reply) ? "NaN" : DECIMAL_FORMAT.format(reply);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-            result.cancel(true);
-        }
-        return "";
+        double reply = root.getValue();
+        return Double.isNaN(reply) ? "NaN" : DECIMAL_FORMAT.format(reply);
     }
 
     public static RValue getVariable(String name) {

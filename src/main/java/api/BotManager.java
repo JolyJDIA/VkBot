@@ -29,6 +29,7 @@ public final class BotManager {
         registerCommand(new BroadcastMessageCommand());
         registerCommand(new UtilsCommand());
         registerCommand(new HappyCommand());
+        registerCommand(new ZavrCommand());
     }
 
     public void registerEvent(@NotNull Listener listener) {
