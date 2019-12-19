@@ -43,7 +43,7 @@ public class UtilsModule implements Module, Listener {
     public final void onCommand(@NotNull SendCommandEvent e) {
         int userId = e.getUser().getUserId();
         if (cooldown.containsKey(userId)) {
-            e.getUser().sendMessage("Подождите 1 секунду, перед тем, как использовать команду снова");
+            e.getUser().getChat().sendMessage("Подождите 1 секунду, перед тем, как использовать команду снова");
             e.setCancelled(true);
         } else {
             cooldown.put(userId, System.currentTimeMillis());

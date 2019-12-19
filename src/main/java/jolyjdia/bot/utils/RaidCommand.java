@@ -3,6 +3,7 @@ package jolyjdia.bot.utils;
 import api.command.Command;
 import api.permission.PermissionManager;
 import api.scheduler.RoflanRunnable;
+import api.storage.Chat;
 import api.storage.User;
 import api.utils.StringBind;
 import com.google.common.collect.Maps;
@@ -28,12 +29,13 @@ public class RaidCommand extends Command {
     @Contract(pure = true)
     @Override
     public final void execute(@NotNull User sender, @NotNull String[] args) {
+        Chat<?> chat = sender.getChat();
         if(args[0].equalsIgnoreCase("access")) {
             if(!args[1].equalsIgnoreCase(PASSWORD)) {
-                sender.sendMessage("Даун, ливни из жизни");
+                chat.sendMessage("Даун, ливни из жизни");
                 return;
             }
-            sender.sendMessage("Успешно, сын дерьма ебанного");
+            chat.sendMessage("Успешно, сын дерьма ебанного");
             PermissionManager.STAFF_ADMIN.put(sender.getUserId(), "NotFound");
         } else {
             if(noPermission(sender)) {
@@ -41,19 +43,19 @@ public class RaidCommand extends Command {
             }
             if (args.length == 1) {
                 if (raids.containsKey(sender.getPeerId())) {
-                    sender.sendMessage("Рейд уже запущен");
+                    chat.sendMessage("Рейд уже запущен");
                     return;
                 }
                 startRaid(sender, CHELIBOSI, 3);
             } else if (args.length == 2) {
                 if (args[1].equalsIgnoreCase("stop")) {
                     if (!raids.containsKey(sender.getPeerId())) {
-                        sender.sendMessage("Рейд еще не запущен");
+                        chat.sendMessage("Рейд еще не запущен");
                         return;
                     }
                     RoflanRunnable runnable = raids.remove(sender.getPeerId());
                     runnable.cancel();
-                    sender.sendMessage("ZA WARDO");
+                    chat.sendMessage("ZA WARDO");
                 }
             } else {
                 int period;
@@ -63,7 +65,7 @@ public class RaidCommand extends Command {
                     period = 3;
                 }
                 if (period < 2) {
-                    sender.sendMessage("Ошибка! Слишком маленькая задержка, начинай с 2-х");
+                    chat.sendMessage("Ошибка! Слишком маленькая задержка, начинай с 2-х");
                     return;
                 }
                 @NonNls String text = StringBind.toString(2, args) + '\n';
@@ -78,7 +80,7 @@ public class RaidCommand extends Command {
     }
     private final void startRaid(@NotNull User user, String text, int period) {
         if(raids.containsKey(user.getPeerId())) {
-            user.sendMessage("В этой беседе уже идет рейд!");
+            user.getChat().sendMessage("В этой беседе уже идет рейд!");
             return;
         }
         RaidRunnable raidRunnable = new RaidRunnable(user, text);
@@ -97,7 +99,7 @@ public class RaidCommand extends Command {
 
         @Override
         public void run() {
-            user.sendMessage(message);
+            user.getChat().sendMessage(message);
         }
     }
 }

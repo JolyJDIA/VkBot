@@ -59,6 +59,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         }
         @NonNls String text = msg.getText();
         User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");
             long start = System.currentTimeMillis();

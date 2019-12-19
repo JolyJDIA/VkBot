@@ -28,7 +28,7 @@ public class TickPerSecondCommand extends Command {
             for (double tps : Bot.getScheduler().getTimingsHandler().getAverageTPS()) {
                 builder.append(TimingsHandler.format(tps)).append(", ");
             }
-            sender.sendMessage(
+            sender.getChat().sendMessage(
                     builder.substring(0, builder.length()-2) +
                     "\n-------------------------------------"+
                     "\nВся память: " + humanReadableByteCount(totalMemory) +

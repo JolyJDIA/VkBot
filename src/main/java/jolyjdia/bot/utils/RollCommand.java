@@ -1,6 +1,7 @@
 package jolyjdia.bot.utils;
 
 import api.command.Command;
+import api.storage.Chat;
 import api.storage.User;
 import api.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
@@ -12,24 +13,24 @@ public class RollCommand extends Command {
 
     @Override
     public final void execute(User sender, @NotNull String[] args) {
+        Chat<?> chat = sender.getChat();
         if(args.length == 1) {
-            sender.sendMessage(String.valueOf(MathUtils.RANDOM.nextInt(100) + 1));
-        }
-        if(args.length >= 2 && args.length < 4) {
+            chat.sendMessage(String.valueOf(MathUtils.RANDOM.nextInt(100) + 1));
+        } else if(args.length >= 2 && args.length < 4) {
             try {
                 int start = Integer.parseInt(args[1]);
                 if (args.length == 2) {
-                    sender.sendMessage(String.valueOf(MathUtils.random(start)));
+                    chat.sendMessage(String.valueOf(MathUtils.random(start)));
                 } else {
                     int end = Integer.parseInt(args[2]);
                     if(end < start) {
-                        sender.sendMessage("Максимальное число должно быть больше минимального");
+                        chat.sendMessage("Максимальное число должно быть больше минимального");
                         return;
                     }
-                    sender.sendMessage(String.valueOf(MathUtils.random(start, end)));
+                    chat.sendMessage(String.valueOf(MathUtils.random(start, end)));
                 }
             } catch (NumberFormatException e) {
-                sender.sendMessage("Это не число!");
+                chat.sendMessage("Это не число!");
             }
         }
     }

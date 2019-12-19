@@ -37,7 +37,7 @@ public class UtilsCommand extends Command {
                 if(args.length != 1) {
                     return;
                 }
-                sender.sendMessage(String.valueOf(getAlias()));
+                sender.getChat().sendMessage(String.valueOf(getAlias()));
             }
             case "uptime" -> {
                 if(args.length != 1) {
@@ -49,14 +49,14 @@ public class UtilsCommand extends Command {
                 @NonNls String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(uptime),
                         TimeUnit.MILLISECONDS.toMinutes(uptime) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(uptime)),
                         TimeUnit.MILLISECONDS.toSeconds(uptime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(uptime)));
-                sender.sendMessage("Время работы " + hms);
+                sender.getChat().sendMessage("Время работы " + hms);
             }
             case "calendar" -> {
                 if(args.length != 1) {
                     return;
                 }
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: HHч mmм ssс\nДата: dd.MM.yyyy");
-                sender.sendMessage(formatter.format(LocalDateTime.now()));
+                sender.getChat().sendMessage(formatter.format(LocalDateTime.now()));
             }
             case "convert_ts" -> {
                 if(args.length != 2) {
@@ -65,16 +65,16 @@ public class UtilsCommand extends Command {
                 try {
                     long millis = Long.parseLong(args[1]);
                     LocalDateTime ofInstant = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC);
-                    sender.sendMessage(String.valueOf(ofInstant));
+                    sender.getChat().sendMessage(String.valueOf(ofInstant));
                 } catch (NumberFormatException e) {
-                    sender.sendMessage("Это не число(long)");
+                    sender.getChat().sendMessage("Это не число(long)");
                 }
             }
             case "current_ts" -> {
                 if(args.length != 1) {
                     return;
                 }
-                sender.sendMessage(String.valueOf(ZonedDateTime.now().toInstant().toEpochMilli()));
+                sender.getChat().sendMessage(String.valueOf(ZonedDateTime.now().toInstant().toEpochMilli()));
             }
             case "search" -> {
                 if(args.length < 2) {
@@ -89,7 +89,7 @@ public class UtilsCommand extends Command {
                         builder.append("video").append(video.getOwnerId()).append('_').append(video.getId()).append(',');
                     }
                     builder.substring(0, builder.length() - 1);
-                    sender.sendMessage(null, builder.toString());
+                    sender.getChat().sendMessage(null, builder.toString());
                 } catch (ApiException | ClientException e) {
                     e.printStackTrace();
                 }
@@ -99,7 +99,7 @@ public class UtilsCommand extends Command {
                     return;
                 }
                 Pattern regex = Pattern.compile(args[1]);
-                sender.sendMessage(Arrays.toString(regex.split(StringBind.toString(2, args))));
+                sender.getChat().sendMessage(Arrays.toString(regex.split(StringBind.toString(2, args))));
             }
         }
     }

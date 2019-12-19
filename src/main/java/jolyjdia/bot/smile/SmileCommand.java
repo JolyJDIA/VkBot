@@ -21,11 +21,11 @@ public class SmileCommand extends Command {
                 sender.getChat().sendKeyboard("close", KeyboardUtils.EMPTY_KEYBOARD);
             } else if(args[1].equalsIgnoreCase("load")) {
                 if(!sender.isStaff()) {
-                    sender.sendMessage("У вас нет прав");
+                    sender.getChat().sendMessage("У вас нет прав");
                     return;
                 }
                 load.loadEmoticonsAlbum();
-                sender.sendMessage("Смайлы обновлены!");
+                sender.getChat().sendMessage("Смайлы обновлены!");
             }
         }
     }

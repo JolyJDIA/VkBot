@@ -40,12 +40,12 @@ public class GeoCommand extends Command {
             if(args.length == 2) {
                 Matcher matcher = IPV4.matcher(args[1]);
                 if (!matcher.matches()) {
-                    sender.sendMessage("Это не айпи 0_o");
+                    sender.getChat().sendMessage("Это не айпи 0_o");
                     return;
                 }
-                sender.sendMessage(getInfo(args[1]));
+                sender.getChat().sendMessage(getInfo(args[1]));
             } else {
-                sender.sendMessage(getArguments());
+                sender.getChat().sendMessage(getArguments());
             }
         });
     }

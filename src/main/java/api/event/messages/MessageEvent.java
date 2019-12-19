@@ -1,6 +1,7 @@
 package api.event.messages;
 
 import api.event.Event;
+import api.storage.Chat;
 import api.storage.User;
 import com.vk.api.sdk.objects.messages.Message;
 import org.jetbrains.annotations.Contract;
@@ -23,5 +24,9 @@ public class MessageEvent implements Event {
     @Contract(pure = true)
     public final Message getMessage() {
         return msg;
+    }
+
+    public final Chat<?> getChat() {
+        return user.getChat();
     }
 }

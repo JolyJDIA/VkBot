@@ -1,8 +1,6 @@
 package api.storage;
 
-import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
-import api.utils.cache.Cache;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
@@ -66,7 +64,7 @@ public final class MySQL implements UserBackend {
         Bot.getScheduler().runTaskAsynchronously(() -> {
             try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
                 String group = user.getGroup().getName();
-                ps.setInt(1, user.getPeerId());
+                ps.setInt(1, user.getChat().getPeerId());
                 ps.setInt(2, user.getUserId());
                 ps.setString(3, group);
 
@@ -83,51 +81,30 @@ public final class MySQL implements UserBackend {
         return chats.keySet();
     }
     @Override
-    public void setRank(int peerId, int userId, PermissionGroup rank) {
-        Cache<Integer, User> map = chats.computeIfAbsent(peerId, k -> new ChatCacheMySQL(peerId)).getUsers();
-        getUser(peerId, userId).orElseGet(() -> {
-            User user = new User(peerId, userId);
-            map.put(userId, user);
-            return user;
-        }).setGroup(rank);
-    }
-    @Override
-    public void setRank(User user, PermissionGroup rank) {
-        if(user == null) {
-            return;
-        }
-        user.setGroup(rank);
-    }
     public ChatCacheMySQL getChat(int peerId) {
-        return chats.get(peerId);
+        return chats.computeIfAbsent(peerId, k -> new ChatCacheMySQL(peerId));
     }
     @Override
     public @NotNull Optional<User> getUser(int peerId, int userId) {
-        if(chats.containsKey(peerId)) {
-            if(chats.get(peerId).getUsers().containsKey(userId)) {
-                return Optional.ofNullable(chats.get(peerId).getUsers().get(userId));
-            }
+        if(chats.containsKey(peerId) && getChat(peerId).getUsers().containsKey(userId)) {
+            return Optional.of(getChat(peerId).getUsers().get(userId));
         }
         return Optional.empty();
     }
     private @NotNull User loadUserInCache(@NotNull User user) {
-        Cache<Integer, User> users = chats.computeIfAbsent(user.getPeerId(), k -> new ChatCacheMySQL(user.getPeerId())).getUsers();
-        users.put(user.getUserId(), user);
+        int peerId = user.getChat().getPeerId();
+        chats.get(peerId).getUsers().put(user.getUserId(), user);
         return user;
     }
     @Override
     public @NotNull User addIfAbsentAndReturn(int peerId, int userId) {
         return getUser(peerId, userId).orElseGet(() -> {
-            /**
-             * 1)НЕТ ЧАТА -> ЧЕКАЮ БД
-             * 2)Добавил чат, проверяю доступ к участникам, проверяю на овнера возращаю, если не админ то в бд
-             */
-            if(chats.containsKey(peerId) && chats.get(peerId).isOwner(peerId)) {
+            if(Chat.isOwner(peerId, userId)) {
                 User owner = new User(peerId, userId, PermissionManager.getAdmin());
                 owner.setOwner(true);
                 return loadUserInCache(owner);
             }
-            //ИДУ ЧЕКАТЬ БД
+            //Async
             try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
                 ps.setInt(1, peerId);
                 ps.setInt(2, userId);
@@ -143,48 +120,53 @@ public final class MySQL implements UserBackend {
     @Override
     public void deleteUser(int peerId, int userId) {
         if(chats.containsKey(peerId)) {
-            chats.get(peerId).getUsers().remove(userId);
+            getChat(peerId).getUsers().remove(userId);
         }
-        try (PreparedStatement ps = connection.prepareStatement(DELETE)) {
-            ps.setInt(1, peerId);
-            ps.setInt(2, userId);
-            ps.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Bot.getScheduler().runTaskAsynchronously(() -> {
+            try (PreparedStatement ps = connection.prepareStatement(DELETE)) {
+                ps.setInt(1, peerId);
+                ps.setInt(2, userId);
+                ps.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
     public void deleteChat(int peerId) {
         chats.remove(peerId);
-        try (PreparedStatement ps = connection.prepareStatement(DELETE_CHAT)) {
-            ps.setInt(1, peerId);
-            ps.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Bot.getScheduler().runTaskAsynchronously(() -> {
+            try (PreparedStatement ps = connection.prepareStatement(DELETE_CHAT)) {
+                ps.setInt(1, peerId);
+                ps.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
     @Override
     public void saveAll() {
         if (chats.isEmpty()) { return; }
-        try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
-            for(ChatCacheMySQL integerUserCache : chats.values()) {
-                for(User user : integerUserCache.getUsers().values()) {
-                    if(user.unchanged()) {
-                        continue;
-                    }
-                    String group = user.getGroup().getName();
-                    ps.setInt(1, user.getPeerId());
-                    ps.setInt(2, user.getUserId());
-                    ps.setString(3, group);
+        Bot.getScheduler().runTaskAsynchronously(() -> {
+            try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
+                chats.values().forEach(e -> e.getUsers().values().stream().filter(u -> !u.unchanged()).forEach(u -> {
+                    String group = u.getGroup().getName();
+                    try {
+                        ps.setInt(1, u.getChat().getPeerId());
+                        ps.setInt(2, u.getUserId());
+                        ps.setString(3, group);
 
-                    ps.setString(4, group);
-                    ps.addBatch();
-                }
+                        ps.setString(4, group);
+                        ps.addBatch();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }));
+                ps.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            ps.executeBatch();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        });
     }
 }

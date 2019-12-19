@@ -7,11 +7,12 @@ import com.vk.api.sdk.objects.messages.Keyboard;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
-public class Chat<T> {
+
+public class Chat<T> {//implements UserBackend {
     private final int peerId;
     private final T container;
 
-    public Chat(T t, int peerId) {
+    protected Chat(T t, int peerId) {
         this.container = t;
         this.peerId = peerId;
     }
@@ -20,7 +21,7 @@ public class Chat<T> {
         return peerId;
     }
 
-    public final boolean isOwner(int userId) {
+    public static boolean isOwner(int peerId, int userId) {
         try {
             return Bot.getVkApiClient().messages().getConversationMembers(Bot.getGroupActor(), peerId).execute().getItems()
                     .stream()
@@ -30,6 +31,7 @@ public class Chat<T> {
                         }
                         Boolean isOwner = e.getIsOwner();
                         Boolean isAdmin = e.getIsAdmin();
+                   ///     System.out.println(isAdmin + "  "+ isOwner);
                         return (isOwner != null && isOwner) || (isAdmin != null && isAdmin);
                     });
         } catch (ApiException | ClientException e) {
@@ -59,4 +61,5 @@ public class Chat<T> {
     public final T getUsers() {
         return container;
     }
+
 }

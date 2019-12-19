@@ -12,15 +12,15 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 4943570635312868405L;
-    @NonNls private transient int peerId;
-    private transient int userId;
+    private Chat<?> chat;
+    @NonNls private transient int userId;
     private transient boolean change;
     private PermissionGroup group;
     private boolean owner;
 
     @Contract(pure = true)
     public User(int peerId, int userId) {
-        this.peerId = peerId;
+        this.chat = Bot.getUserBackend().getChat(peerId);
         this.userId = userId;
         this.group = PermissionManager.getDefault();
     }
@@ -49,9 +49,8 @@ public class User implements Serializable {
         return userId;
     }
 
-    @Contract(pure = true)
-    public final int getPeerId() {
-        return peerId;
+    public final Chat<?> getChat() {
+        return chat;
     }
 
     @Contract(pure = true)
@@ -64,13 +63,6 @@ public class User implements Serializable {
         this.change = true;
     }
 
-    public final void sendMessage(String message, String attachment) {
-        getChat().sendMessage(message, attachment);
-    }
-    public final void sendMessage(String message) {
-        getChat().sendMessage(message);
-    }
-
     public final boolean isStaff() {
         return PermissionManager.isStaff(userId);
     }
@@ -78,6 +70,7 @@ public class User implements Serializable {
     public final boolean unchanged() {
         return !change;
     }
+
     public boolean isChange() {
         return change;
     }
@@ -85,20 +78,20 @@ public class User implements Serializable {
     public final boolean hasPermission(String name) {
         return owner || isStaff() || group.hasPermission(name);
     }
-    public final Chat getChat() {
-        return Bot.getUserBackend().getChat(peerId);
-    }
 
+    public final int getPeerId() {
+        return chat.getPeerId();
+    }
     @Override
     public final @NotNull String toString() {
-        return "Айди-беседа: " + peerId + '\n' +
+        return "Айди-беседа: " + getPeerId() + '\n' +
                 "Айди-пользователя: " + userId + '\n' +
                 "Ранг: " + group.getName() + (owner ? "(OWNER)\n" : '\n') +
                 "Префикс: " + group.getPrefix() + '\n' +
                 "Суффикс: " + (group.getSuffix() == null && isStaff() ? "ЛОДОЧНИК" : group.getSuffix());
     }
     private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        this.peerId = stream.readInt();
+        this.chat = (Chat<?>)stream.readObject();
         this.userId = stream.readInt();
         this.group = (PermissionGroup)stream.readObject();
         this.owner = stream.readBoolean();

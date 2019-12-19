@@ -105,7 +105,7 @@ public abstract class Command {
         }
         boolean hasPermission = user.hasPermission(permission);
         if(!hasPermission) {
-            user.sendMessage(noPermissionMessage);
+            user.getChat().sendMessage(noPermissionMessage);
         }
         return hasPermission;
     }

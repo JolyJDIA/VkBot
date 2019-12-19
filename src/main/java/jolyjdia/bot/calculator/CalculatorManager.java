@@ -31,7 +31,7 @@ public class CalculatorManager implements Module, Listener {
             if(reply.isEmpty()) {
                 return;
             }
-            e.getUser().sendMessage(reply);
+            e.getChat().sendMessage(reply);
         } catch (ExpressionException ex) {}
     }
 }

@@ -1,7 +1,6 @@
 package api.storage;
 
 import api.file.JsonCustom;
-import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
@@ -47,14 +46,14 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     }
 
     private boolean hasUser(@NotNull User user) {
-        return map.containsKey(user.getPeerId()) && map.get(user.getPeerId()).getUsers().containsKey(user.getUserId());
+        return map.containsKey(user.getChat().getPeerId()) && map.get(user.getChat().getPeerId()).getUsers().containsKey(user.getUserId());
     }
     private boolean hasUser(int peerId, int userId) {
         return map.containsKey(peerId) && map.get(peerId).getUsers().containsKey(userId);
     }
     public @Nullable User getUser(@NotNull User user) {
         if (hasUser(user)) {
-            return map.get(user.getPeerId()).getUsers().get(user.getUserId());
+            return map.get(user.getChat().getPeerId()).getUsers().get(user.getUserId());
         }
         return null;
     }
@@ -79,7 +78,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             user = users.getUsers().get(userId);
         } else {
             user = new User(peerId, userId);
-            if(map.containsKey(peerId) && user.getChat().isOwner(userId)) {
+            if(Chat.isOwner(peerId, userId)) {
                 user.setGroup(PermissionManager.getPermGroup(PermissionManager.ADMIN));
                 user.setOwner(true);
             }
@@ -89,7 +88,8 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         return user;
     }
     private void addIfAbsentAndConsumer(@NotNull User entity, @NotNull Consumer<? super User> consumer) {
-        ChatCacheJSON users = map.computeIfAbsent(entity.getPeerId(), k -> new ChatCacheJSON(entity.getPeerId()));
+        int peerId = entity.getChat().getPeerId();
+        ChatCacheJSON users = map.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
         int userId = entity.getUserId();
         if(users.getUsers().containsKey(userId)) {
             consumer.accept(users.getUsers().get(userId));
@@ -99,23 +99,12 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         }
         this.saveAll();
     }
-    @Override
-    public void setRank(int peerId, int userId, PermissionGroup rank) {
-        addIfAbsentAndConsumer(new User(peerId, userId), user -> user.setGroup(rank));
-    }
-    @Override
-    public void setRank(User user, PermissionGroup rank) {
-        if(user == null) {
-            return;
-        }
-        addIfAbsentAndConsumer(user, userId -> userId.setGroup(rank));
-    }
 
     public void remove(@NotNull User user) {
-        if (!map.containsKey(user.getPeerId())) {
+        if (!map.containsKey(user.getChat().getPeerId())) {
             return;
         }
-        Map<Integer, User> users = map.get(user.getPeerId()).getUsers();
+        Map<Integer, User> users = map.get(user.getChat().getPeerId()).getUsers();
         if(!users.containsKey(user.getUserId())) {
             return;
         }
@@ -127,7 +116,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         if (!map.containsKey(peerId)) {
             return;
         }
-        Map<Integer, User> users = map.get(peerId).getUsers();
+        Map<Integer, User> users = getChat(peerId).getUsers();
         if(!users.containsKey(userId)) {
             return;
         }
@@ -143,6 +132,12 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             e.printStackTrace();
         }
     }
+
+    @Override
+    public ChatCacheJSON getChat(int peerId) {
+        return map.get(peerId);
+    }
+
     @Override
     public Map<Integer, ChatCacheJSON> deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext context) {
         JsonObject obj = jsonElement.getAsJsonObject();

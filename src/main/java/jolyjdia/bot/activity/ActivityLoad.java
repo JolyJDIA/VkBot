@@ -1,9 +1,7 @@
 package jolyjdia.bot.activity;
 
 import api.command.defaults.HappyCommand;
-import api.event.EventLabel;
 import api.event.Listener;
-import api.event.messages.NewMessageEvent;
 import api.module.Module;
 import api.utils.TimingsHandler;
 import api.utils.VkUtils;
@@ -14,7 +12,6 @@ import com.google.common.collect.ImmutableMap;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,11 +61,10 @@ public class ActivityLoad implements Module, Listener {
 
     @Override
     public final void onLoad() {
-        Bot.getBotManager().registerCommand(new ActivityCommand(this));
         Bot.getBotManager().registerEvent(this);
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
-                @NonNls String text = getOnlineFormat() + STATS.get(index).call();
+                @NonNls String text = STATS.get(index).call();
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
                         .text(text)
@@ -121,24 +117,5 @@ public class ActivityLoad implements Module, Listener {
                         (set, item) -> set.append(ACTIVITIES.get(item)).append(", "),
                         StringBuilder::append);
         return "Сейчас: " + builder.substring(0, builder.length()-2);
-    }
-    @EventLabel
-    public static void onMsg(@NotNull NewMessageEvent e) {
-        if(e.getUser().getUserId() == 482340506) {
-            e.getUser().sendMessage(e.getMessage().getText());
-        }
-    }
-
-    public final boolean isOffline() {
-        return offline;
-    }
-
-    public final void setOffline(boolean offline) {
-        this.offline = offline;
-    }
-    @NonNls
-    @Contract(pure = true)
-    public final @NotNull String getOnlineFormat() {
-        return (this.offline ? "ОФФЛАЙН" : "ОНЛАЙН") + "\uD83D\uDC41\u200D\uD83D\uDDE8";
     }
 }

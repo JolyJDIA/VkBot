@@ -17,11 +17,11 @@ public class BroadcastMessageCommand extends Command {
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length > 1) {
             if(sender.isStaff()) {
-                sender.sendMessage("Объявление отправится только активным беседам!");
+                sender.getChat().sendMessage("Объявление отправится только активным беседам!");
                 String text = StringBind.toString(args);
                 Bot.getUserBackend().getChats().forEach(id -> MessageChannel.sendMessage(text, id));
             } else {
-                sender.sendMessage("У вас нет прав");
+                sender.getChat().sendMessage("У вас нет прав");
             }
         }
     }

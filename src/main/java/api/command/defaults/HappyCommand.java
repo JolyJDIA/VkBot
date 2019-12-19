@@ -16,10 +16,10 @@ public class HappyCommand extends Command {
     public final void execute(@NonNls User sender, @NotNull String[] args) {
         if (args.length == 1) {
             if(args[0].equalsIgnoreCase("др")) {
-                String date = TemporalDuration.of(10, 12, 0,0).toString();
-                sender.sendMessage("\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 через: "+date + "\uD83D\uDD25");
+                @NonNls String date = TemporalDuration.of(10, 12, 0,0).toString();
+                sender.getChat().sendMessage("\uD83D\uDD25ДР-ROFLANBOAT\uD83D\uDD25 через: "+date + "\uD83D\uDD25");
             } else if(args[0].equalsIgnoreCase("нг")) {
-                sender.sendMessage(String.format(NEW_YEAR, TemporalDuration.of(1, 1, 0,0)));
+                sender.getChat().sendMessage(String.format(NEW_YEAR, TemporalDuration.of(1, 1, 0,0)));
             }
         }
     }

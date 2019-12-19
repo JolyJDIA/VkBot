@@ -16,20 +16,20 @@ public class PasswordCommand extends Command {
     @Override
     public final void execute(User sender, @NotNull String[] args) {
         if(args.length == 1) {
-            sender.sendMessage(generatePassword(20));
+            sender.getChat().sendMessage(generatePassword(20));
         } else if(args.length == 2) {
             int size;
             try {
                 size = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
-                sender.sendMessage("Это не число");
+                sender.getChat().sendMessage("Это не число");
                 return;
             }
             if(size > 50) {
-                sender.sendMessage("Длина пароля ограничена 50 символами");
+                sender.getChat().sendMessage("Длина пароля ограничена 50 символами");
                 return;
             }
-            sender.sendMessage(generatePassword(size));
+            sender.getChat().sendMessage(generatePassword(size));
         }
     }
     private static @NotNull String generatePassword(int lenght) {
