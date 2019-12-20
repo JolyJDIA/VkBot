@@ -15,14 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 
-public final class ProfileList extends JsonCustom implements UserBackend,
-        JsonDeserializer<Map<Integer, ChatCacheJSON>>,
-        JsonSerializer<Map<Integer, ChatCacheJSON>> {
-    private Map<Integer, ChatCacheJSON> chats = new HashMap<>();
+public final class JsonBackend extends JsonCustom implements UserBackend,
+        JsonDeserializer<Map<Integer, JsonBackend.EternalCache>>,
+        JsonSerializer<Map<Integer, JsonBackend.EternalCache>> {
+    private Map<Integer, EternalCache> chats = new HashMap<>();
 
-    public ProfileList(File file) {
+    public JsonBackend(File file) {
         super(file);
         this.setGson(new GsonBuilder()
                 .registerTypeAdapter(Map.class, this)
@@ -71,8 +70,8 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     }
 
     @Override
-    public User addIfAbsentAndReturn(int peerId, int userId) {
-        ChatCacheJSON users = chats.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
+    public User addIfAbsentAndReturnUser(int peerId, int userId) {
+        Chat<Map<Integer, User>> users = getChatAndPutIfAbsent(peerId);
         User user;
         if (users.getUsers().containsKey(userId)) {
             user = users.getUsers().get(userId);
@@ -86,18 +85,6 @@ public final class ProfileList extends JsonCustom implements UserBackend,
             this.saveAll();
         }
         return user;
-    }
-    private void addIfAbsentAndConsumer(@NotNull User entity, @NotNull Consumer<? super User> consumer) {
-        int peerId = entity.getChat().getPeerId();
-        ChatCacheJSON users = chats.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
-        int userId = entity.getUserId();
-        if(users.getUsers().containsKey(userId)) {
-            consumer.accept(users.getUsers().get(userId));
-        } else {
-            consumer.accept(entity);
-            users.getUsers().put(userId, entity);
-        }
-        this.saveAll();
     }
 
     public void remove(@NotNull User user) {
@@ -116,7 +103,7 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         if (!chats.containsKey(peerId)) {
             return;
         }
-        Map<Integer, User> users = getChat(peerId).getUsers();
+        Map<Integer, User> users = getChatAndPutIfAbsent(peerId).getUsers();
         if(!users.containsKey(userId)) {
             return;
         }
@@ -134,33 +121,33 @@ public final class ProfileList extends JsonCustom implements UserBackend,
     }
 
     @Override
-    public ChatCacheJSON getChat(int peerId) {
-        return chats.computeIfAbsent(peerId, k -> new ChatCacheJSON(peerId));
+    public EternalCache getChatAndPutIfAbsent(int peerId) {
+        return chats.computeIfAbsent(peerId, k -> new EternalCache(peerId));
     }
 
     @Override
-    public Map<Integer, ChatCacheJSON> deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext context) {
+    public Map<Integer, EternalCache> deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext context) {
         JsonObject obj = jsonElement.getAsJsonObject();
         for (Map.Entry<String, JsonElement> keyEntry : obj.entrySet()) {
-            int chat = Integer.parseInt(keyEntry.getKey());
-            ChatCacheJSON users = new ChatCacheJSON(chat);
+            int peerId = Integer.parseInt(keyEntry.getKey());
+            EternalCache users = getChatAndPutIfAbsent(peerId);
             JsonObject object = keyEntry.getValue().getAsJsonObject();
 
             for (Map.Entry<String, JsonElement> valueEntry : object.entrySet()) {
                 JsonObject element = valueEntry.getValue().getAsJsonObject();
                 int id = Integer.parseInt(valueEntry.getKey());
                 String group = element.get("group").getAsString();
-                users.getUsers().put(id, new User(chat, id, group));
+                users.getUsers().put(id, new User(peerId, id, group));
             }
-            chats.put(chat, users);
+            chats.put(peerId, users);
         }
         return chats;
     }
 
     @Override
-    public @NotNull JsonElement serialize(@NotNull Map<Integer, ChatCacheJSON> data, Type type, JsonSerializationContext context) {
+    public @NotNull JsonElement serialize(@NotNull Map<Integer, EternalCache> data, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        for(Map.Entry<Integer, ChatCacheJSON> chat : data.entrySet()) {
+        for(Map.Entry<Integer, EternalCache> chat : data.entrySet()) {
             JsonObject peer = new JsonObject();
             for(Map.Entry<Integer, User> users : chat.getValue().getUsers().entrySet()) {
                 JsonObject user = new JsonObject();
@@ -172,6 +159,13 @@ public final class ProfileList extends JsonCustom implements UserBackend,
         }
         return object;
     }
+    public static class EternalCache extends Chat<Map<Integer, User>> {
 
-    private static class MapTypeToken extends TypeToken<Map<Integer, ChatCacheJSON>> {}
+        protected EternalCache(int peerId) {
+            super(new HashMap<>(), peerId);
+        }
+    }
+
+    private static class MapTypeToken extends TypeToken<Map<Integer, Chat<Map<Integer, User>>>> {}
+
 }

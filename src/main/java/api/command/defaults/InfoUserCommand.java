@@ -20,7 +20,7 @@ public class InfoUserCommand extends Command {
             chat.sendMessage(sender.toString());
         } else if(args.length == 2) {
             VkUtils.getUserId(args[1]).ifPresentOrElse(id -> {
-                User target = Bot.getUserBackend().addIfAbsentAndReturn(chat.getPeerId(), id);
+                User target = Bot.getUserBackend().addIfAbsentAndReturnUser(chat.getPeerId(), id);
                 chat.sendMessage(target.toString());
             }, () -> chat.sendMessage("Не удалось найти этого пользователя в базе"));
         }

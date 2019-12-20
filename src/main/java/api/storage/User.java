@@ -20,7 +20,7 @@ public class User implements Serializable {
 
     @Contract(pure = true)
     public User(int peerId, int userId) {
-        this.chat = Bot.getUserBackend().getChat(peerId);
+        this.chat = Bot.getUserBackend().getChatAndPutIfAbsent(peerId);
         this.userId = userId;
         this.group = PermissionManager.getDefault();
     }

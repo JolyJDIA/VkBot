@@ -1,6 +1,9 @@
 package api.storage;
 
 import api.permission.PermissionManager;
+import api.utils.cache.Cache;
+import api.utils.cache.CacheBuilder;
+import api.utils.cache.RemovalListener;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.Contract;
@@ -13,11 +16,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class MySQL implements UserBackend {
-    @NonNls private static final Logger LOGGER = Logger.getLogger(MySQL.class.getName());
+public final class MySqlBackend implements UserBackend {
+    @NonNls private static final Logger LOGGER = Logger.getLogger(MySqlBackend.class.getName());
     private final Connection connection;
     @NonNls private static final String INSERT_OR_UPDATE_GROUP =
             "INSERT INTO `vkbot` (`peerId`, `userId`, `group`) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE `group` = ?";
@@ -28,17 +32,17 @@ public final class MySQL implements UserBackend {
     @NonNls private static final String DELETE_CHAT =
             "DELETE FROM `vkbot` WHERE `peerId` = ?";
 
-    private final Map<Integer, ChatCacheMySQL> chats = new WeakHashMap<>();
+    private final Map<Integer, TemporaryCache> chats = new WeakHashMap<>();
 
     @Contract("_, _, _ -> new")
     public static @NotNull UserBackend of(String username, String password, @NonNls String url) {
         try {
-            return new MySQL(username, password, url);
+            return new MySqlBackend(username, password, url);
         } catch (SQLException e) {
-            return new ProfileList(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
+            return new JsonBackend(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
         }
     }
-    private MySQL(String username, String password, @NonNls String url) throws SQLException {
+    private MySqlBackend(String username, String password, @NonNls String url) throws SQLException {
         MysqlDataSource data = new MysqlDataSource();
         data.setUser(username);
         data.setPassword(password);
@@ -55,9 +59,6 @@ public final class MySQL implements UserBackend {
                     """);
         }
         LOGGER.log(Level.INFO, "MySQL Connected!");
-    }
-    public Map<Integer, ChatCacheMySQL> getMap() {
-        return chats;
     }
     @Override
     public void saveOrUpdateGroup(User user) {
@@ -81,13 +82,14 @@ public final class MySQL implements UserBackend {
         return chats.keySet();
     }
     @Override
-    public ChatCacheMySQL getChat(int peerId) {
-        return chats.computeIfAbsent(peerId, k -> new ChatCacheMySQL(peerId));
+    public TemporaryCache getChatAndPutIfAbsent(int peerId) {
+        return chats.computeIfAbsent(peerId, k -> new TemporaryCache(peerId));
     }
     @Override
     public @NotNull Optional<User> getUser(int peerId, int userId) {
-        if(chats.containsKey(peerId) && getChat(peerId).getUsers().containsKey(userId)) {
-            return Optional.of(getChat(peerId).getUsers().get(userId));
+        TemporaryCache chat = getChatAndPutIfAbsent(peerId);
+        if(chats.containsKey(peerId) && chat.getUsers().containsKey(userId)) {
+            return Optional.of(chat.getUsers().get(userId));
         }
         return Optional.empty();
     }
@@ -97,7 +99,7 @@ public final class MySQL implements UserBackend {
         return user;
     }
     @Override
-    public @NotNull User addIfAbsentAndReturn(int peerId, int userId) {
+    public @NotNull User addIfAbsentAndReturnUser(int peerId, int userId) {
         return getUser(peerId, userId).orElseGet(() -> {
             if(Chat.isOwner(peerId, userId)) {
                 User owner = new User(peerId, userId, PermissionManager.getAdmin());
@@ -120,7 +122,7 @@ public final class MySQL implements UserBackend {
     @Override
     public void deleteUser(int peerId, int userId) {
         if(chats.containsKey(peerId)) {
-            getChat(peerId).getUsers().remove(userId);
+            getChatAndPutIfAbsent(peerId).getUsers().remove(userId);
         }
         Bot.getScheduler().runTaskAsynchronously(() -> {
             try (PreparedStatement ps = connection.prepareStatement(DELETE)) {
@@ -168,5 +170,20 @@ public final class MySQL implements UserBackend {
                 e.printStackTrace();
             }
         });
+    }
+    private static class TemporaryCache extends Chat<Cache<Integer, User>> {
+
+        protected TemporaryCache(int peerId) {
+            super(CacheBuilder.newBuilder()
+                    .expireAfterWrite(25, TimeUnit.MINUTES)
+                    .ticker(3)
+                    .removeListener((RemovalListener<Integer, User>) entry -> {
+                        User user = entry.getValue();
+                        if (user.unchanged()) {
+                            return;
+                        }
+                        Bot.getUserBackend().saveOrUpdateGroup(user);
+                    }).build(), peerId);
+        }
     }
 }

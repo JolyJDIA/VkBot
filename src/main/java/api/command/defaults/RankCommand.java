@@ -36,7 +36,7 @@ public class RankCommand extends Command {
                 return;
             }
             VkUtils.getUserId(args[1]).ifPresentOrElse(id -> {
-                User target = Bot.getUserBackend().addIfAbsentAndReturn(sender.getPeerId(), id);
+                User target = Bot.getUserBackend().addIfAbsentAndReturnUser(sender.getPeerId(), id);
                 PermissionGroup group = PermissionManager.getPermGroup(args[2]);
                 if(sender.getGroup() == group) {
                     sender.getChat().sendMessage("У него уже есть данный ранг");

@@ -35,9 +35,6 @@ public class Chat<T> {
     public final void sendKeyboard(String msg, Keyboard keyboard) {
         MessageChannel.sendKeyboard(msg, peerId, keyboard);
     }
-    public final int chatId() {
-        return peerId-2000000000;
-    }
 
     public final T getUsers() {
         return container;

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public final class MessageChannel {
+    public static final int CHAT_ID = 2000000000;
     @Contract(pure = true)
     private MessageChannel() {}
 
@@ -53,7 +54,7 @@ public final class MessageChannel {
 
     public static void editChat(String title, int peerId) {
         try {
-            Bot.getVkApiClient().messages().editChat(Bot.getGroupActor(), peerId-2000000000, title).execute();
+            Bot.getVkApiClient().messages().editChat(Bot.getGroupActor(), chatId(peerId), title).execute();
         } catch (ApiException | ClientException ignored) {}
     }
 
@@ -63,5 +64,8 @@ public final class MessageChannel {
                 .randomId(MathUtils.RANDOM.nextInt(10000))
                 .groupId(Bot.getGroupId())
                 .peerId(peerId);
+    }
+    public static int chatId(int peerId) {
+        return peerId-CHAT_ID;
     }
 }

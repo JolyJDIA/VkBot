@@ -58,7 +58,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             }
         }
         @NonNls String text = msg.getText();
-        User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getUserBackend().addIfAbsentAndReturnUser(msg.getPeerId(), msg.getFromId());
 
         if(text.length() > 1 && (text.charAt(0) == '/' || text.charAt(0) == '!')) {
             String[] args = text.substring(1).split(" ");
@@ -87,7 +87,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
             return;
         }
-        User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getUserBackend().addIfAbsentAndReturnUser(msg.getPeerId(), msg.getFromId());
         ReplyMessageEvent event = new ReplyMessageEvent(user, msg);
         submitEvent(event);
     }
@@ -97,7 +97,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
             return;
         }
-        User user = Bot.getUserBackend().addIfAbsentAndReturn(msg.getPeerId(), msg.getFromId());
+        User user = Bot.getUserBackend().addIfAbsentAndReturnUser(msg.getPeerId(), msg.getFromId());
         EditMessageEvent event = new EditMessageEvent(user, msg);
         submitEvent(event);
     }
