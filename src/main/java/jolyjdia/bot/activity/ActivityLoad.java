@@ -46,7 +46,7 @@ public class ActivityLoad implements Module, Listener {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: HHч mmм ssс Дата: dd.MM.yyyy");
                 return formatter.format(LocalDateTime.now());
             },
-            () -> "java мастер",
+            () -> "java-мастер",
             () -> "Советую автору пережить переходный возраст\uD83D\uDC4D\uD83C\uDFFB"
     );
     private int index;
