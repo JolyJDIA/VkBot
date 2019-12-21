@@ -35,10 +35,7 @@ public final class VkUtils {
     }
     @NonNls
     @Contract(pure = true)
-    public static @NotNull String attachment(@NotNull Object body) {
-        if(!Validable.class.isAssignableFrom(body.getClass())) {
-            return "";
-        }
+    public static @NotNull String attachment(@NotNull Validable body) {
         if(Wallpost.class.isAssignableFrom(body.getClass())) {
             Wallpost wallpost = (Wallpost)body;
             return "wall"+wallpost.getOwnerId()+ '_' +wallpost.getId();

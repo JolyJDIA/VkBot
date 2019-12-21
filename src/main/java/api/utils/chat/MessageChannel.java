@@ -1,8 +1,10 @@
 package api.utils.chat;
 
 import api.utils.MathUtils;
+import api.utils.VkUtils;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import com.vk.api.sdk.objects.Validable;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.Bot;
@@ -16,33 +18,36 @@ public final class MessageChannel {
 
     public static void sendMessage(@NotNull String msg, int peerId) {
         try {
-            MessagesSendQuery query = builder(peerId);
-            if (!msg.isEmpty()) {
-                query.message(msg);
+            if (msg.isEmpty()) {
+                return;
             }
-            query.execute();
+            MessagesSendQuery query = builder(peerId);
+            query.message(msg).execute();
         } catch (ApiException | ClientException ignored) {}
     }
     public static void sendAttachments(@NotNull String attachments, int peerId) {
         try {
-            MessagesSendQuery query = builder(peerId);
-            if (!attachments.isEmpty()) {
-                query.attachment(attachments);
+            if (attachments.isEmpty()) {
+                return;
             }
-            query.execute();
+            MessagesSendQuery query = builder(peerId);
+            query.attachment(attachments).execute();
+        } catch (ApiException | ClientException ignored) {}
+    }
+    public static void sendAttachments(Validable body, int peerId) {
+        try {
+            String attachments = VkUtils.attachment(body);
+            if (attachments.isEmpty()) {
+                return;
+            }
+            MessagesSendQuery query = builder(peerId);
+            query.attachment(attachments).execute();
         } catch (ApiException | ClientException ignored) {}
     }
 
-    public static void sendMessage(String msg, int peerId, @NotNull String attachments) {
+    public static void sendMessage(@NotNull String msg, int peerId, @NotNull String attachments) {
         try {
-            MessagesSendQuery query = builder(peerId);
-            if (msg != null && !msg.isEmpty()) {
-                query.message(msg);
-            }
-            if (!attachments.isEmpty()) {
-                query.attachment(attachments);
-            }
-            query.execute();
+            builder(peerId).message(msg).attachment(attachments).execute();
         } catch (ApiException | ClientException ignored) {}
     }
 

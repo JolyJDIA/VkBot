@@ -15,14 +15,16 @@ public class ZavrCommand extends Command {
 
     @Override
     public final void execute(User sender, String[] args) {
-        try {
-            Bot.getVkApiClient().wall()
-                    .post(VkUtils.USER_ACTOR)
-                    .message(StringBind.toString(args))
-                    .ownerId(VkUtils.USER_ACTOR.getId())
-                    .execute();
-        } catch (ApiException | ClientException e) {
-            e.printStackTrace();
+        if(args.length >= 2) {
+            try {
+                Bot.getVkApiClient().wall()
+                        .post(VkUtils.USER_ACTOR)
+                        .message(StringBind.toString(args))
+                        .ownerId(VkUtils.USER_ACTOR.getId())
+                        .execute();
+            } catch (ApiException | ClientException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

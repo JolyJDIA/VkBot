@@ -54,7 +54,7 @@ public final class MySqlBackend implements UserBackend {
                     `peerId` INT(36) UNSIGNED NOT NULL,
                     `userId` INT(36) UNSIGNED NOT NULL,
                     `group` VARCHAR(16) NOT NULL,
-                    PRIMARY KEY (`userId`, `peerId`))
+                    PRIMARY KEY (`peerId`, `userId`))
                     CHARACTER SET utf8 COLLATE utf8_general_ci
                     """);
         }
@@ -176,7 +176,7 @@ public final class MySqlBackend implements UserBackend {
 
         protected TemporaryCache(int peerId) {
             super(CacheBuilder.newBuilder()
-                    .expireAfterWrite(25, TimeUnit.MINUTES)
+                    .expireAfterWrite(45, TimeUnit.MINUTES)
                     .ticker(3)
                     .removeListener((RemovalListener<Integer, User>) entry -> {
                         User user = entry.getValue();
