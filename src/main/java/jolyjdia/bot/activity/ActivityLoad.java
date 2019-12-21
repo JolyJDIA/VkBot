@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 
 public class ActivityLoad implements Module, Listener {
-    private boolean offline;
     public static final List<Callable<String>> STATS = ImmutableList.of(
             () -> """
                     Сейчас напиши статус типа дипрессия хачу умиреть
@@ -42,7 +41,6 @@ public class ActivityLoad implements Module, Listener {
                     TimeFormatter.HOURS,
                     TimeFormatter.MINUTES)
             ),
-            () -> "Осторожно!!! Злой динозаврик!",
             () -> "Быстродействие бота " + TimingsHandler.format(Bot.getScheduler().getTimingsHandler().getAverageTPS()[0])+"/20.0",
             () -> {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("Время: HHч mmм ssс Дата: dd.MM.yyyy");
@@ -88,7 +86,7 @@ public class ActivityLoad implements Module, Listener {
         try {
             Bot.getVkApiClient().status()
                     .set(VkUtils.USER_ACTOR)
-                    .text("Осторожно! Злой динозаврик!")
+                    .text("Лодочное уебище")
                     .execute();
         } catch (ApiException | ClientException e) {
             e.printStackTrace();
