@@ -5,7 +5,6 @@ import api.event.Listener;
 import api.event.messages.NewMessageEvent;
 import api.module.Module;
 import api.utils.KeyboardUtils;
-import api.utils.StringBind;
 import api.utils.VkUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -23,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class SmileLoad implements Module, Listener {
     private ImmutableMap<String, String> smilies;
@@ -35,19 +35,20 @@ public class SmileLoad implements Module, Listener {
         Bot.getBotManager().registerEvent(this);
         Bot.getBotManager().registerCommand(new SmileCommand(this));
     }
+    private static final Pattern COMPILE = Pattern.compile(":[A-Za-z_0-9]+:");
     @EventLabel
     public final void onMsg(@NotNull NewMessageEvent e) {
         String text = e.getMessage().getText().toLowerCase(Locale.ENGLISH);
-        if(text.isEmpty()) {
+        if(text.isEmpty() || !text.contains(":")) {
             return;
         }
-        List<String> smiles = StringBind.substringsBetween(text, ":", ":");
-        if(smiles == null || smiles.isEmpty()) {
-            return;
-        }
-        smiles.forEach(smile -> {
-            if(smilies.containsKey(smile)) {
-                e.getChat().sendAttachments(smilies.get(smile));
+        COMPILE.matcher(text).results().limit(5).map(g -> {
+            String smile = g.group();
+            smile = smile.substring(1);
+            return smile.substring(0, smile.length()-1);
+        }).forEach(s -> {
+            if(smilies.containsKey(s)) {
+                e.getChat().sendAttachments(smilies.get(s));
             }
         });
     }
