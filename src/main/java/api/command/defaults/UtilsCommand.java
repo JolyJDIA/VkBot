@@ -89,7 +89,7 @@ public class UtilsCommand extends Command {
                         builder.append("video").append(video.getOwnerId()).append('_').append(video.getId()).append(',');
                     }
                     builder.substring(0, builder.length() - 1);
-                    sender.getChat().sendMessage(null, builder.toString());
+                    sender.getChat().sendAttachments(builder.toString());
                 } catch (ApiException | ClientException e) {
                     e.printStackTrace();
                 }

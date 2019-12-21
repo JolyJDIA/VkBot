@@ -21,8 +21,7 @@ public final class MessageChannel {
             if (msg.isEmpty()) {
                 return;
             }
-            MessagesSendQuery query = builder(peerId);
-            query.message(msg).execute();
+            builder(peerId).message(msg).execute();
         } catch (ApiException | ClientException ignored) {}
     }
     public static void sendAttachments(@NotNull String attachments, int peerId) {
@@ -30,8 +29,7 @@ public final class MessageChannel {
             if (attachments.isEmpty()) {
                 return;
             }
-            MessagesSendQuery query = builder(peerId);
-            query.attachment(attachments).execute();
+            builder(peerId).attachment(attachments).execute();
         } catch (ApiException | ClientException ignored) {}
     }
     public static void sendAttachments(Validable body, int peerId) {
@@ -40,8 +38,7 @@ public final class MessageChannel {
             if (attachments.isEmpty()) {
                 return;
             }
-            MessagesSendQuery query = builder(peerId);
-            query.attachment(attachments).execute();
+            builder(peerId).attachment(attachments).execute();
         } catch (ApiException | ClientException ignored) {}
     }
 

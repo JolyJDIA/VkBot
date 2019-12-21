@@ -47,7 +47,7 @@ public class SmileLoad implements Module, Listener {
         }
         smiles.forEach(smile -> {
             if(smilies.containsKey(smile)) {
-                e.getChat().sendMessage(null, smilies.get(smile));
+                e.getChat().sendAttachments(smilies.get(smile));
             }
         });
     }
