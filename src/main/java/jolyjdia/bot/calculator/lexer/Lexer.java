@@ -29,9 +29,11 @@ public final class Lexer {
     private @NotNull List<Token> tokenize() {
         List<Token> tokens = new ArrayList<>();
         do {
-       //     skipWhitespace();
             char peek = peek();
-            if(containsOper(peek)) {
+            if(Character.isWhitespace(peek)) {
+                ++position;
+                continue;
+            } else if(containsOper(peek)) {
                 tokens.add(new OperatorToken(position++, String.valueOf(peek)));
                 continue;
             } else if (containsChar(peek)) {
@@ -61,12 +63,6 @@ public final class Lexer {
     @Contract(pure = true)
     private char peek() {
         return expression.charAt(position);
-    }
-
-    private void skipWhitespace() {
-        while (position < expression.length() && Character.isWhitespace(peek())) {
-            ++position;
-        }
     }
 
     @Contract(pure = true)
