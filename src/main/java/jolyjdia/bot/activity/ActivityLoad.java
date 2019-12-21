@@ -64,15 +64,10 @@ public class ActivityLoad implements Module, Listener {
         Bot.getBotManager().registerEvent(this);
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
-                @NonNls String text = STATS.get(index).call();
-                Bot.getVkApiClient().status()
-                        .set(VkUtils.USER_ACTOR)
-                        .text(text)
-                        .execute();
                 Bot.getVkApiClient().status()
                         .set(VkUtils.USER_ACTOR)
                         .groupId(Bot.getGroupId())
-                        .text(text)
+                        .text(STATS.get(index).call())
                         .execute();
                 this.index = index == STATS.size()-1 ? 0 : ++index;
             } catch (Exception e) {

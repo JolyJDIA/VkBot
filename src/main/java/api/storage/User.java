@@ -20,8 +20,8 @@ public class User implements Serializable {
 
     @Contract(pure = true)
     public User(int peerId, int userId) {
-        this.chat = Bot.getUserBackend().getChatAndPutIfAbsent(peerId);
         this.userId = userId;
+        this.chat = Bot.getUserBackend().getChatAndPutIfAbsent(peerId);
         this.group = PermissionManager.getDefault();
     }
 
@@ -71,7 +71,7 @@ public class User implements Serializable {
         return !change;
     }
 
-    public boolean isChange() {
+    public final boolean isChange() {
         return change;
     }
 

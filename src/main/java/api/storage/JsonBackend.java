@@ -6,7 +6,6 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -44,17 +43,8 @@ public final class JsonBackend extends JsonCustom implements UserBackend,
         return chats.keySet();
     }
 
-    private boolean hasUser(@NotNull User user) {
-        return chats.containsKey(user.getChat().getPeerId()) && chats.get(user.getChat().getPeerId()).getUsers().containsKey(user.getUserId());
-    }
-    private boolean hasUser(int peerId, int userId) {
+    public boolean hasUser(int peerId, int userId) {
         return chats.containsKey(peerId) && chats.get(peerId).getUsers().containsKey(userId);
-    }
-    public @Nullable User getUser(@NotNull User user) {
-        if (hasUser(user)) {
-            return chats.get(user.getChat().getPeerId()).getUsers().get(user.getUserId());
-        }
-        return null;
     }
     @Override
     public @NotNull Optional<User> getUser(int peerId, int userId) {

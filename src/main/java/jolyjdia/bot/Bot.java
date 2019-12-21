@@ -15,6 +15,7 @@ import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
+import jolyjdia.bot.activity.ActivityLoad;
 import jolyjdia.bot.calculator.CalculatorManager;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.puzzle.Puzzle;
@@ -79,7 +80,7 @@ public final class Bot {
         moduleLoader.registerModule(new UtilsModule());
         moduleLoader.registerModule(new SmileLoad());
         moduleLoader.registerModule(new CalculatorManager());
-       // moduleLoader.registerModule(new ActivityLoad());
+        moduleLoader.registerModule(new ActivityLoad());
     }
     private static void loadModule() {
         moduleLoader.getModules().forEach(Module::onLoad);

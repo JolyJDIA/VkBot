@@ -107,6 +107,7 @@ public final class MySqlBackend implements UserBackend {
                 return loadUserInCache(owner);
             }
             //Async
+            System.out.println("Лезу в Базу");
             try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
                 ps.setInt(1, peerId);
                 ps.setInt(2, userId);
@@ -152,7 +153,7 @@ public final class MySqlBackend implements UserBackend {
         if (chats.isEmpty()) { return; }
         Bot.getScheduler().runTaskAsynchronously(() -> {
             try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
-                chats.values().forEach(e -> e.getUsers().values().stream().filter(u -> !u.unchanged()).forEach(u -> {
+                chats.values().forEach(e -> e.getUsers().values().stream().filter(User::isChange).forEach(u -> {
                     String group = u.getGroup().getName();
                     try {
                         ps.setInt(1, u.getChat().getPeerId());
@@ -179,10 +180,12 @@ public final class MySqlBackend implements UserBackend {
                     .ticker(3)
                     .removeListener((RemovalListener<Integer, User>) entry -> {
                         User user = entry.getValue();
-                        if (user.unchanged()) {
-                            return;
+                        StringBuilder builder = new StringBuilder("Удаляю: " + user.getUserId() + '/' +user.getGroup().getName());
+                        if (user.isChange()) {
+                            Bot.getUserBackend().saveOrUpdateGroup(user);
+                            builder.append("\nСохранил в бд");
                         }
-                        Bot.getUserBackend().saveOrUpdateGroup(user);
+                        System.out.println(builder);
                     }).build(), peerId);
         }
     }
