@@ -46,7 +46,7 @@ public class RaidCommand extends Command {
                     chat.sendMessage("Рейд уже запущен");
                     return;
                 }
-                startRaid(sender, CHELIBOSI, 3);
+                startRaid(chat, CHELIBOSI, 3);
             } else if (args.length == 2) {
                 if (args[1].equalsIgnoreCase("stop")) {
                     if (!raids.containsKey(sender.getPeerId())) {
@@ -65,12 +65,12 @@ public class RaidCommand extends Command {
                     period = 3;
                 }
                 if (period < 2) {
-                    chat.sendMessage("Ошибка! Слишком маленькая задержка, начинай с 2-х");
-                    return;
+                    chat.sendMessage("Слишком маленькая задержка, начинай с 2-х");
+                    period = 2;
                 }
                 @NonNls String text = StringBind.toString(2, args) + '\n';
                 text = text.repeat(lenghtNotify(text.length()));
-                startRaid(sender, text, period);
+                startRaid(chat, text, period);
             }
         }
     }
@@ -78,28 +78,28 @@ public class RaidCommand extends Command {
     private static int lenghtNotify(int lenghtSource) {
         return 2500/lenghtSource;
     }
-    private final void startRaid(@NotNull User user, String text, int period) {
-        if(raids.containsKey(user.getPeerId())) {
-            user.getChat().sendMessage("В этой беседе уже идет рейд!");
+    private final void startRaid(@NotNull Chat<?> chat, String text, int period) {
+        if(raids.containsKey(chat.getPeerId())) {
+            chat.sendMessage("В этой беседе уже идет рейд!");
             return;
         }
-        RaidRunnable raidRunnable = new RaidRunnable(user, text);
+        RaidRunnable raidRunnable = new RaidRunnable(chat, text);
         raidRunnable.runTaskTimer(0, period);
-        raids.put(user.getPeerId(), raidRunnable);
+        raids.put(chat.getPeerId(), raidRunnable);
     }
 
     private static final class RaidRunnable extends RoflanRunnable {
-        private final User user;
+        private final Chat<?> chat;
         private final String message;
 
-        private RaidRunnable(User user, String message) {
-            this.user = user;
+        private RaidRunnable(Chat<?> chat, String message) {
+            this.chat = chat;
             this.message = message;
         }
 
         @Override
         public void run() {
-            user.getChat().sendMessage(message);
+            chat.sendMessage(message);
         }
     }
 }

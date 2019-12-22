@@ -105,10 +105,7 @@ public class SmileLoad implements Module, Listener {
                             .forEach(p -> map.put(p.getText(), VkUtils.attachment(p)));
                     this.smilies = map.build();
                     return true;
-                } catch (ApiException | ClientException ex) {
-                    ex.printStackTrace();
-                }
-                return false;
+                } catch (ApiException | ClientException ex) { return false; }
             })) {
                 calculateKeyboard();
             }
