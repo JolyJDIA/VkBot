@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Loader {
-    public static final Executor EXECUTOR_SERVICE = Executors.newWorkStealingPool(1);
+    public static final Executor WORK_STEALING_POOL = Executors.newWorkStealingPool(1);
 
     public static void main(String[] args) throws ClientException, ApiException {
         final CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
@@ -33,7 +33,7 @@ public class Loader {
             }
         };
         while (!Thread.currentThread().isInterrupted()) {
-            EXECUTOR_SERVICE.execute(runnable);
+            WORK_STEALING_POOL.execute(runnable);
             Bot.getScheduler().mainThreadHeartbeat();
             try {
                 Thread.sleep(50);
