@@ -2,26 +2,44 @@ package jolyjdia.bot;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import com.vk.api.sdk.objects.callback.longpoll.responses.GetLongPollEventsResponse;
+import com.vk.api.sdk.objects.groups.LongPollServer;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Loader {
+    public static final Executor EXECUTOR_SERVICE = Executors.newWorkStealingPool(1);
 
     public static void main(String[] args) throws ClientException, ApiException {
-        new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                Bot.getScheduler().mainThreadHeartbeat();
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        final CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
+        final LongPollServer longPollServer = Bot.getVkApiClient()
+                .groupsLongPoll()
+                .getLongPollServer(Bot.getGroupActor(), Bot.getGroupId())
+                .execute();
+        AtomicInteger lastTimeStamp = new AtomicInteger(Integer.parseInt(longPollServer.getTs()));
+        Runnable runnable = () -> {
+            try {
+                GetLongPollEventsResponse f = Bot.getVkApiClient()
+                        .longPoll()
+                        .getEvents(longPollServer.getServer(), longPollServer.getKey(), lastTimeStamp.get())
+                        .waitTime(25)
+                        .execute();
+                f.getUpdates().forEach(handler::parse);
+                lastTimeStamp.set(f.getTs());
+            } catch (ApiException | ClientException  e) {
+                e.printStackTrace();
             }
-        }).start();
-        CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
-        try {
-            handler.run();
-        } catch (ApiException | ClientException | RuntimeException e) {
-            System.out.println("ТЕХНИЧЕСКИЕ ШОКОЛАДКИ");
-            handler.run();
+        };
+        while (!Thread.currentThread().isInterrupted()) {
+            EXECUTOR_SERVICE.execute(runnable);
+            Bot.getScheduler().mainThreadHeartbeat();
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
