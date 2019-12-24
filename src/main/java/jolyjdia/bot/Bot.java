@@ -19,6 +19,7 @@ import jolyjdia.bot.activity.ActivityLoad;
 import jolyjdia.bot.calculator.CalculatorManager;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.puzzle.Puzzle;
+import jolyjdia.bot.shoutbox.ShoutboxMain;
 import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
 import jolyjdia.bot.utils.UtilsModule;
@@ -81,6 +82,7 @@ public final class Bot {
         moduleLoader.registerModule(new SmileLoad());
         moduleLoader.registerModule(new CalculatorManager());
         moduleLoader.registerModule(new ActivityLoad());
+        moduleLoader.registerModule(new ShoutboxMain());
     }
     private static void loadModule() {
         moduleLoader.getModules().forEach(Module::onLoad);
