@@ -78,7 +78,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             LOGGER.log(Level.INFO, "КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
             return;
         }
-        System.out.println("СООБЩЕНИЕ: ("+ msg.getText() + ") ЧАТ: " +msg.getPeerId());
+        System.out.println("СООБЩЕНИЕ: ("+ msg.getText() + ") ЧАТ: " +msg.getPeerId() + '(' +msg.getFromId()+ ')');
         NewMessageEvent event = new NewMessageEvent(user, msg);
         submitEvent(event);
     }
