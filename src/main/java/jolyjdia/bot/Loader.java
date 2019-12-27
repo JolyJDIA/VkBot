@@ -19,7 +19,7 @@ public class Loader {
                 .getLongPollServer(Bot.getGroupActor(), Bot.getGroupId())
                 .execute();
         AtomicInteger lastTimeStamp = new AtomicInteger(Integer.parseInt(longPollServer.getTs()));
-        Runnable runnable = () -> {
+        final Runnable runnable = () -> {
             try {
                 GetLongPollEventsResponse f = Bot.getVkApiClient()
                         .longPoll()
