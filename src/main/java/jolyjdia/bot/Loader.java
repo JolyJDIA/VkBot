@@ -7,8 +7,11 @@ import com.vk.api.sdk.objects.callback.longpoll.responses.GetLongPollEventsRespo
 import com.vk.api.sdk.objects.groups.LongPollServer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 public final class Loader {
-   // public static final Executor WORK_STEALING_POOL = Executors.newWorkStealingPool(1);
+    public static final Executor WORK_STEALING_POOL = Executors.newWorkStealingPool(1);
 
     private Loader() {}
 
@@ -20,7 +23,7 @@ public final class Loader {
                 .execute();
         final CallbackHandler handler = new CallbackHandler(longPoll, pollServer);
         while (!Thread.currentThread().isInterrupted()) {
-            handler.run();
+            WORK_STEALING_POOL.execute(handler);
             Bot.getScheduler().mainThreadHeartbeat();
             try {
                 Thread.sleep(50);
@@ -46,6 +49,7 @@ public final class Loader {
                 GetLongPollEventsResponse response = Bot.getVkApiClient()
                         .longPoll()
                         .getEvents(longPollServer.getServer(), longPollServer.getKey(), lastTimeStamp)
+                        .waitTime(20)
                         .execute();
                 response.getUpdates().forEach(handler::parse);
                 this.lastTimeStamp = response.getTs();
