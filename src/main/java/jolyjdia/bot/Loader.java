@@ -8,7 +8,7 @@ import com.vk.api.sdk.objects.groups.LongPollServer;
 import org.jetbrains.annotations.NotNull;
 
 public final class Loader {
-    //public static final Executor WORK_STEALING_POOL = Executors.newWorkStealingPool(1);
+   // public static final Executor WORK_STEALING_POOL = Executors.newWorkStealingPool(1);
 
     private Loader() {}
 
