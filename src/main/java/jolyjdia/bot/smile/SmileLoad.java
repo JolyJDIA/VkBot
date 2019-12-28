@@ -42,7 +42,7 @@ public class SmileLoad implements Module, Listener {
         if(text.isEmpty() || !text.contains(":")) {
             return;
         }
-        COMPILE.matcher(text).results().limit(5).map(g -> {
+        COMPILE.matcher(text).results().limit(3).map(g -> {
             String smile = g.group();
             smile = smile.substring(1);
             return smile.substring(0, smile.length()-1);
