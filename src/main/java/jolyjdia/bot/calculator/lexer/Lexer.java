@@ -1,7 +1,6 @@
 package jolyjdia.bot.calculator.lexer;
 
 import jolyjdia.bot.calculator.lexer.tokens.*;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ public final class Lexer {
     private final String expression;
     private int position;
 
-    @Contract(pure = true)
     private Lexer(String expression) {
         this.expression = expression;
     }
@@ -60,12 +58,10 @@ public final class Lexer {
         } while (position < expression.length());
         return tokens;
     }
-    @Contract(pure = true)
     private char peek() {
         return expression.charAt(position);
     }
 
-    @Contract(pure = true)
     private static boolean containsChar(char point) {
         for (char c : CHARS) {
             if (c == point) {
@@ -74,7 +70,6 @@ public final class Lexer {
         }
         return false;
     }
-    @Contract(pure = true)
     private static boolean containsOper(char codePoint) {
         for (char c : OPERATORS) {
             if (c == codePoint) {

@@ -1,7 +1,5 @@
 package jolyjdia.bot.calculator;
 
-import org.jetbrains.annotations.Contract;
-
 public class ExpressionException extends Exception {
 
     private static final long serialVersionUID = -6656866842440051717L;
@@ -17,7 +15,6 @@ public class ExpressionException extends Exception {
         this.position = position;
     }
 
-    @Contract(pure = true)
     public final int getPosition() {
         return position;
     }

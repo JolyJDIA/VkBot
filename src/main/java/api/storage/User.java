@@ -3,7 +3,6 @@ package api.storage;
 import api.permission.PermissionGroup;
 import api.permission.PermissionManager;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,19 +17,16 @@ public class User implements Serializable {
     private PermissionGroup group;
     private boolean owner;
 
-    @Contract(pure = true)
     public User(int peerId, int userId) {
         this.userId = userId;
         this.chat = Bot.getUserBackend().getChatAndPutIfAbsent(peerId);
         this.group = PermissionManager.getDefault();
     }
 
-    @Contract(pure = true)
     public User(int peerId, int userId, String group) {
         this(peerId, userId);
         this.group = PermissionManager.getPermGroup(group);
     }
-    @Contract(pure = true)
     public User(int peerId, int userId, PermissionGroup group) {
         this(peerId, userId);
         this.group = group;
@@ -39,12 +35,11 @@ public class User implements Serializable {
     public final void setOwner(boolean owner) {
         this.owner = owner;
     }
-    @Contract(pure = true)
+
     public final boolean isOwner() {
         return owner;
     }
 
-    @Contract(pure = true)
     public final int getUserId() {
         return userId;
     }
@@ -53,7 +48,6 @@ public class User implements Serializable {
         return chat;
     }
 
-    @Contract(pure = true)
     public final PermissionGroup getGroup() {
         return group;
     }
@@ -82,6 +76,7 @@ public class User implements Serializable {
     public final int getPeerId() {
         return chat.getPeerId();
     }
+
     @Override
     public final @NotNull String toString() {
         return "Айди-беседа: " + getPeerId() + '\n' +

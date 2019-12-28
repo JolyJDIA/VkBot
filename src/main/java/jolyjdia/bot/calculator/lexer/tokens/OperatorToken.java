@@ -1,6 +1,5 @@
 package jolyjdia.bot.calculator.lexer.tokens;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,14 +11,12 @@ public class OperatorToken extends Token {
         this.operator = operator;
     }
 
-    @Contract(pure = true)
     @Override
     public final char id() {
         return 'o';
     }
 
     @Override
-    @Contract(pure = true)
     public final @NotNull String toString() {
         return "OperatorToken(" + operator + ')';
     }

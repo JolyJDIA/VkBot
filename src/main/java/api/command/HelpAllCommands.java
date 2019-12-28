@@ -1,7 +1,6 @@
 package api.command;
 
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 
 public class HelpAllCommands {
     private String helpCommand;
@@ -26,12 +25,10 @@ public class HelpAllCommands {
         this.helpMath = builder.toString();
     }
 
-    @Contract(pure = true)
     public final String getHelpCommand() {
         return helpCommand;
     }
 
-    @Contract(pure = true)
     public final String getHelpMath() {
         return helpMath;
     }

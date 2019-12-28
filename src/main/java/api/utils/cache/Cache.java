@@ -12,6 +12,7 @@ public class Cache<K, V> {
     private final ConcurrentHashMap<K, Container<V>> cache = new ConcurrentHashMap<>();
     private final RemovalListener<? super K, ? super V> removeListener;
     private final long delay;
+
     public Cache(@NotNull CacheBuilder<K, V> builder) {
         this.removeListener = builder.getRemovalListener();
         this.delay = builder.getDelay();
@@ -25,7 +26,7 @@ public class Cache<K, V> {
         }), builder.getTicker(), builder.getTicker());
     }
 
-    public final V put(@NotNull K key, @NotNull V value) {
+    public final V put(K key, V value) {
         cache.put(key, new Container<>(value, System.currentTimeMillis() + delay));
         return value;
     }

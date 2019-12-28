@@ -7,7 +7,6 @@ import api.storage.Chat;
 import api.storage.User;
 import api.utils.StringBind;
 import com.google.common.collect.Maps;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +25,7 @@ public class RaidCommand extends Command {
     }
 
     private static final String PASSWORD = "boat";
-    @Contract(pure = true)
+
     @Override
     public final void execute(@NotNull User sender, @NotNull String[] args) {
         Chat<?> chat = sender.getChat();
@@ -74,11 +73,10 @@ public class RaidCommand extends Command {
             }
         }
     }
-    @Contract(pure = true)
     private static int lenghtNotify(int lenghtSource) {
         return 2500/lenghtSource;
     }
-    private final void startRaid(@NotNull Chat<?> chat, String text, int period) {
+    private void startRaid(@NotNull Chat<?> chat, String text, int period) {
         if(raids.containsKey(chat.getPeerId())) {
             chat.sendMessage("В этой беседе уже идет рейд!");
             return;

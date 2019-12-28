@@ -1,7 +1,6 @@
 package api.scheduler;
 
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -36,7 +35,6 @@ public class Task implements TypeTask, Runnable {
             this.consumer.accept(this);
         }
     }
-    @Contract(pure = true)
     public final int getPeriod() {
         return period;
     }
@@ -49,10 +47,10 @@ public class Task implements TypeTask, Runnable {
         this.currentTick = currentTick;
     }
 
-    @Contract(pure = true)
     public final int getCurrentTick() {
         return currentTick;
     }
+
     public final void addCurrentTick() {
         this.currentTick += 1;
     }

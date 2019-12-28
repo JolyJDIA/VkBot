@@ -2,7 +2,6 @@ package api.command;
 
 import api.storage.User;
 import com.google.common.collect.Sets;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,18 +15,15 @@ public abstract class Command {
     private String permission;
     private String noPermissionMessage;
 
-    @Contract(pure = true)
     protected Command(String name) {
         this.name = name;
     }
 
-    @Contract(pure = true)
     protected Command(String name, String description) {
         this(name);
         this.description = description;
     }
 
-    @Contract(pure = true)
     protected Command(String name, String arguments, String description) {
         this(name, description);
         this.arguments = arguments;
@@ -36,7 +32,6 @@ public abstract class Command {
     /**
      * @return Название команды
      */
-    @Contract(pure = true)
     public final String getName() {
         return name;
     }
@@ -61,15 +56,12 @@ public abstract class Command {
     /**
      * @return Использование команды
      */
-
-    @Contract(pure = true)
     public final String getArguments() {
         return arguments;
     }
     /**
      * @return Описание команды
      */
-    @Contract(pure = true)
     public final String getDescription() {
         return description;
     }
@@ -77,7 +69,6 @@ public abstract class Command {
     /**
      * @return Множество активных псевдонимов этой команды
      */
-    @Contract(pure = true)
     public final Set<String> getAlias() {
         return alias;
     }
@@ -90,7 +81,6 @@ public abstract class Command {
         this.alias = Sets.newHashSet(alias);
     }
 
-    @Contract(pure = true)
     public final String getPermission() {
         return permission;
     }
@@ -119,11 +109,10 @@ public abstract class Command {
         return !hasPermission(user);
     }
 
-    @Contract(pure = true)
     protected final @NotNull String getUseCommand() {
         return '/' + name + (arguments != null && !arguments.isEmpty() ? ' ' + arguments : "");
     }
-    public boolean equalsCommand(String s2) {
+    public final boolean equalsCommand(String s2) {
         return name.equalsIgnoreCase(s2) || (alias != null && !alias.isEmpty()) && alias.stream().anyMatch(e -> e.equalsIgnoreCase(s2));
     }
 }

@@ -5,7 +5,6 @@ import api.command.defaults.*;
 import api.event.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -55,7 +54,6 @@ public final class BotManager {
         listeners.sort((o1, o2) -> o2.compareTo(o1.priority));
     }
 
-    @Contract(pure = true)
     public List<Handler> getListeners() {
         return listeners;
     }
@@ -71,7 +69,6 @@ public final class BotManager {
         commands.add(command);
     }
 
-    @Contract(pure = true)
     public Set<Command> getRegisteredCommands() {
         return commands;
     }
@@ -89,7 +86,6 @@ public final class BotManager {
         final EventPriority priority;
         final boolean ignoreCancelled;
 
-        @Contract(pure = true)
         Handler(Consumer<? super Event> consumer, EventPriority priority, boolean ignoreCancelled) {
             this.consumer = consumer;
             this.priority = priority;
@@ -109,14 +105,11 @@ public final class BotManager {
         public final int compareTo(@NotNull EventPriority handler) {
             return Integer.compare(priority.getSlot(), handler.getSlot());
         }
-
-        @Contract(pure = true)
         @Override
         public final int hashCode() {
             return priority.getSlot();
         }
 
-        @Contract(value = "null -> false", pure = true)
         @Override
         public final boolean equals(Object o) {
             if (this == o) {

@@ -1,6 +1,5 @@
 package api.utils;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +9,6 @@ import java.util.List;
 
 public final class StringBind {
 
-    @Contract(pure = true)
     private StringBind() {}
 
     public static @NotNull String toString(int start, @NotNull String[] a) {
@@ -27,12 +25,10 @@ public final class StringBind {
             builder.append(' ');
         }
     }
-    @Contract("null -> true")
     public static boolean isEmpty(CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
 
-    @Contract("null, _, _ -> null")
     public static @Nullable List<String> substringsBetween(String str, String open, String close) {
         if (str == null || isEmpty(open) || isEmpty(close)) {
             return null;

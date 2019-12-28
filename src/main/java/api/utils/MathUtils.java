@@ -14,7 +14,6 @@ import java.util.function.Function;
 public final class MathUtils {
 	public static final Random RANDOM = new Random();
 
-	@Contract(pure = true)
 	private MathUtils() {}
 
 	public static int random(int min, int max) {
@@ -24,19 +23,18 @@ public final class MathUtils {
 		return random(1, max);
 	}
 
-	@Contract(pure = true)
 	public static double swap(int a, int b) {
 		a ^= b;
 		b = a ^ b;
 		return a ^ b;
 	}
-	@Contract(pure = true)
 	public static double sigmoid(double x) {
 		return 1 / (1 + Math.exp(-x));
 	}
 
+	@NotNull
 	@Contract(pure = true)
-	public static @NotNull double[] calculateDelta(@NotNull double[] doubleList) {
+	public static  double[] calculateDelta(@NotNull double[] doubleList) {
 		if (doubleList.length <= 1) {
 			throw new IllegalArgumentException("The list must contain 2 or more items to calculate the Delta");
 		}
@@ -49,7 +47,6 @@ public final class MathUtils {
 		return d;
 	}
 
-	@Contract(pure = true)
 	public static double mean(@NotNull double[] angles) {
 		double sum = 0;
 		for (double angle : angles) {

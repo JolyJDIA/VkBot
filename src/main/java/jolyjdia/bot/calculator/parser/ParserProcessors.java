@@ -7,7 +7,6 @@ import jolyjdia.bot.calculator.lexer.tokens.OperatorToken;
 import jolyjdia.bot.calculator.lexer.tokens.Token;
 import jolyjdia.bot.calculator.runtime.Operators;
 import jolyjdia.bot.calculator.runtime.RValue;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +37,6 @@ final class ParserProcessors {
         );
     }
 
-    @Contract(pure = true)
     private ParserProcessors() {}
 
     static @NotNull RValue processExpression(LinkedList<Identifiable> input) throws ExpressionException {

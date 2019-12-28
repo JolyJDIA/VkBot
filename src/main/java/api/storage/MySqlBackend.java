@@ -34,7 +34,6 @@ public final class MySqlBackend implements UserBackend {
 
     private final Map<Integer, TemporaryCache> chats = new WeakHashMap<>();
 
-    @Contract("_, _, _ -> new")
     public static @NotNull UserBackend of(String username, String password, @NonNls String url) {
         try {
             return new MySqlBackend(username, password, url);
@@ -76,11 +75,11 @@ public final class MySqlBackend implements UserBackend {
             }
         });
     }
-    @Contract(pure = true)
     @Override
     public @NotNull Set<Integer> getChats() {
         return chats.keySet();
     }
+
     @Override
     public TemporaryCache getChatAndPutIfAbsent(int peerId) {
         return chats.computeIfAbsent(peerId, k -> new TemporaryCache(peerId));
@@ -93,13 +92,15 @@ public final class MySqlBackend implements UserBackend {
         }
         return Optional.empty();
     }
-    private @NotNull User loadUserInCache(@NotNull User user) {
+    @NotNull
+    @Contract("_ -> param1")
+    private User loadUserInCache(@NotNull User user) {
         int peerId = user.getChat().getPeerId();
         chats.get(peerId).getUsers().put(user.getUserId(), user);
         return user;
     }
     @Override
-    public @NotNull User addIfAbsentAndReturnUser(int peerId, int userId) {
+    public User addIfAbsentAndReturnUser(int peerId, int userId) {
         return getUser(peerId, userId).orElseGet(() -> {
             if(Chat.isOwner(peerId, userId)) {
                 User owner = new User(peerId, userId, PermissionManager.getAdmin());

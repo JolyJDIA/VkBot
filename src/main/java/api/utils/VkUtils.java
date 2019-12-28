@@ -20,7 +20,6 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,11 +31,9 @@ import java.util.Optional;
 public final class VkUtils {
     public static final UserActor USER_ACTOR = new UserActor(310289867, Bot.getConfig().getProperty("UserAccessToken"));
 
-    @Contract(pure = true)
     private VkUtils() {}
 
     @NonNls
-    @Contract(pure = true)
     public static @NotNull String attachment(String body, int ownerId, int id) {
         return body + ownerId + '_' + id;
     }
@@ -50,7 +47,6 @@ public final class VkUtils {
         }
     }
     @NonNls
-    @Contract(pure = true)
     public static @NotNull String attachment(@NotNull Validable body) {
         if(Wallpost.class.isAssignableFrom(body.getClass())) {
             Wallpost wallpost = (Wallpost)body;

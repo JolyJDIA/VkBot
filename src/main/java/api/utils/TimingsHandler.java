@@ -1,11 +1,11 @@
 package api.utils;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public class TimingsHandler {
     private static final int SAMPLE_INTERVAL = 100;
+    public static final double ASPIRATION = 20.0;
     private final double[] recentTps = {20,20,20};
     private long tickSection = System.currentTimeMillis();
     private long tickCount = 1;
@@ -22,16 +22,15 @@ public class TimingsHandler {
         }
         ++tickCount;
     }
-    @Contract(pure = true)
     private static double calcTps(double avg, double exp, double tps) {
         return (avg * exp) + (tps * (1 - exp));
     }
-    @Contract(pure = true)
+
     public final double[] getAverageTPS() {
         return recentTps;
     }
     @NonNls
     public static @NotNull String format(double tps) {
-        return ((tps > 20.0) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
+        return ((tps > ASPIRATION) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
     }
 }

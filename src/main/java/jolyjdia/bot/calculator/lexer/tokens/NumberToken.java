@@ -1,6 +1,5 @@
 package jolyjdia.bot.calculator.lexer.tokens;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,14 +11,12 @@ public class NumberToken extends Token {
         this.value = value;
     }
 
-    @Contract(pure = true)
     @Override
     public final char id() {
         return '0';
     }
 
     @Override
-    @Contract(pure = true)
     public final @NotNull String toString() {
         return "NumberToken(" + value + ')';
     }

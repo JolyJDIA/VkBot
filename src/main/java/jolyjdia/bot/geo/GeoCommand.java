@@ -49,7 +49,7 @@ public class GeoCommand extends Command {
             }
         });
     }
-    private final @NotNull String getInfo(String host) {
+    private @NotNull String getInfo(String host) {
         try {
             InetAddress address = InetAddress.getByName(host);
             CityResponse response = reader.city(address);

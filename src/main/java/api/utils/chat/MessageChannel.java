@@ -8,12 +8,12 @@ import com.vk.api.sdk.objects.Validable;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public final class MessageChannel {
     public static final int CHAT_ID = 2000000000;
-    @Contract(pure = true)
+    public static final int BOUND = 10000;
+
     private MessageChannel() {}
 
     public static void sendMessage(@NotNull String msg, int peerId) {
@@ -42,7 +42,7 @@ public final class MessageChannel {
         } catch (ApiException | ClientException ignored) {}
     }
 
-    public static void sendMessage(@NotNull String msg, int peerId, @NotNull String attachments) {
+    public static void sendMessage(String msg, int peerId, String attachments) {
         try {
             builder(peerId).message(msg).attachment(attachments).execute();
         } catch (ApiException | ClientException ignored) {}
@@ -63,7 +63,7 @@ public final class MessageChannel {
     public static MessagesSendQuery builder(int peerId) {
         return Bot.getVkApiClient().messages()
                 .send(Bot.getGroupActor())
-                .randomId(MathUtils.RANDOM.nextInt(10000))
+                .randomId(MathUtils.RANDOM.nextInt(BOUND))
                 .groupId(Bot.getGroupId())
                 .peerId(peerId);
     }

@@ -9,7 +9,6 @@ import api.storage.User;
 import api.utils.MathUtils;
 import com.vk.api.sdk.objects.messages.Message;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,10 +37,6 @@ public class Puzzle implements Module, Listener {
         this.format = first + (token ? " + " : " - ") + second;
         this.next = false;
     }
-    @Contract(pure = true)
-    private final @NotNull String getStringFormatAnswer() {
-        return "Решите пример: "+format;
-    }
     @EventLabel
     public final void onSend(@NotNull NewMessageEvent e) {
         if(this.next) {
@@ -67,8 +62,11 @@ public class Puzzle implements Module, Listener {
                 if (puzzle.next) {
                     puzzle.generate();
                 }
-                sender.getChat().sendMessage(puzzle.getStringFormatAnswer());
+                sender.getChat().sendMessage(getStringFormatAnswer());
             }
+        }
+        private @NotNull String getStringFormatAnswer() {
+            return "Решите пример: "+puzzle.format;
         }
     }
 }

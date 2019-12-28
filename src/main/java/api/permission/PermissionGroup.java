@@ -1,7 +1,6 @@
 package api.permission;
 
 import com.google.gson.annotations.Expose;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -14,19 +13,16 @@ public class PermissionGroup {
     private String suffix;
     private final HashSet<String> permissions;
 
-    @Contract(pure = true)
     public PermissionGroup(String name, HashSet<String> permissions) {
         this.name = name;
         this.permissions = permissions;
     }
-    @Contract(pure = true)
     public PermissionGroup(String name, HashSet<String> permissions, String prefix, String suffix) {
         this(name, permissions);
         this.prefix = prefix;
         this.suffix = suffix;
     }
 
-    @Contract(pure = true)
     public final String getName() {
         return name;
     }
@@ -64,17 +60,14 @@ public class PermissionGroup {
     /**
      * @return Множество разрешений
      */
-    @Contract(pure = true)
     public final HashSet<String> getPermissions() {
         return permissions;
     }
 
-    @Contract(pure = true)
     public final String getPrefix() {
         return prefix;
     }
 
-    @Contract(pure = true)
     public final String getSuffix() {
         return suffix;
     }

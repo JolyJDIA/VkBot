@@ -2,7 +2,6 @@ package api.scheduler;
 
 import api.utils.TimingsHandler;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -39,7 +38,6 @@ public class BotScheduler {
             task.addCurrentTick();
         }
     }
-    @Contract(pure = true)
     public final TimingsHandler getTimingsHandler() {
         return timingsHandler;
     }

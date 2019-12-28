@@ -6,7 +6,6 @@ import jolyjdia.bot.calculator.lexer.tokens.Token;
 import jolyjdia.bot.calculator.parser.Parser;
 import jolyjdia.bot.calculator.runtime.Constant;
 import jolyjdia.bot.calculator.runtime.RValue;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -18,11 +17,10 @@ public final class Expression {
             "pi", new Constant(Math.PI),
             "e", new Constant(Math.E)
     );
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,##0.#####");
+    private final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,##0.#####");//static
 
     private final RValue root;
 
-    @Contract("_ -> new")
     public static @NotNull Expression compile(String expression) throws ExpressionException {
         return new Expression(expression);
     }

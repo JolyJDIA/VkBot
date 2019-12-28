@@ -1,7 +1,5 @@
 package api.event;
 
-import org.jetbrains.annotations.Contract;
-
 public enum EventPriority {
     LOWEST(-2),
     LOW(-1),
@@ -11,12 +9,10 @@ public enum EventPriority {
 
     private final int slot;
 
-    @Contract(pure = true)
     EventPriority(int slot) {
         this.slot = slot;
     }
 
-    @Contract(pure = true)
     public int getSlot() {
         return slot;
     }

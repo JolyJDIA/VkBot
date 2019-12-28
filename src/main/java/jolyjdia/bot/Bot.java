@@ -22,7 +22,6 @@ import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
 import jolyjdia.bot.utils.UtilsModule;
-import org.jetbrains.annotations.Contract;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +72,9 @@ public final class Bot {
         registerModules();
         loadModule();
     }
+
+    private Bot() {}
+
     private static void registerModules() {
         moduleLoader.registerModule(new YandexTraslate());
         moduleLoader.registerModule(new GeoLoad());
@@ -87,52 +89,42 @@ public final class Bot {
         helpCommand.initializeHelp();
     }
 
-    @Contract(pure = true)
     public static HelpAllCommands getHelpCommand() {
         return helpCommand;
     }
 
-    @Contract(pure = true)
     public static ModuleLoader getModuleLoader() {
         return moduleLoader;
     }
 
-    @Contract(pure = true)
     public static GroupActor getGroupActor() {
         return groupActor;
     }
 
-    @Contract(pure = true)
     public static int getGroupId() {
         return groupId;
     }
 
-    @Contract(pure = true)
     public static String getAccessToken() {
         return accessToken;
     }
 
-    @Contract(pure = true)
     public static Properties getConfig() {
         return properties;
     }
 
-    @Contract(pure = true)
     public static UserBackend getUserBackend() {
         return userBackend;
     }
 
-    @Contract(pure = true)
     public static BotManager getBotManager() {
         return manager;
     }
 
-    @Contract(pure = true)
     public static BotScheduler getScheduler() {
         return scheduler;
     }
 
-    @Contract(pure = true)
     public static VkApiClient getVkApiClient() {
         return vkApiClient;
     }

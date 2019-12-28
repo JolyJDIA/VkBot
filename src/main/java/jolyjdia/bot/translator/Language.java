@@ -1,7 +1,5 @@
 package jolyjdia.bot.translator;
 
-import org.jetbrains.annotations.Contract;
-
 public enum Language {
     ALBANIAN("sq"),
     ARMENIAN("hy"),
@@ -40,12 +38,10 @@ public enum Language {
 
     private final String language;
 
-    @Contract(pure = true)
     Language(String language) {
         this.language = language;
     }
 
-    @Contract(pure = true)
     @Override
     public String toString() {
         return language;

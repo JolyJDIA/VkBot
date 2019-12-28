@@ -1,21 +1,17 @@
 package jolyjdia.bot.calculator.runtime;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public final class Operators {
 
-    @Contract(pure = true)
     private Operators() {}
 
-    @Contract("_, _, _, _ -> new")
     public static @NotNull Function getOperator(int position, String name, @NotNull RValue lhs, RValue rhs) throws NoSuchMethodException {
         if (LValue.class.isAssignableFrom(lhs.getClass())) {
             return new Function(position, Operators.class.getMethod(name, LValue.class, RValue.class), lhs, rhs);
         }
         return new Function(position, Operators.class.getMethod(name, RValue.class, RValue.class), lhs, rhs);
     }
-    @Contract("_, _, _ -> new")
     public static @NotNull Function getOperator(int position, String name, @NotNull RValue argument) throws NoSuchMethodException {
         if (LValue.class.isAssignableFrom(argument.getClass())) {
             return new Function(position, Operators.class.getMethod(name, LValue.class), argument);

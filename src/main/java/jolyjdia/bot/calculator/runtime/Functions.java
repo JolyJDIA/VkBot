@@ -1,6 +1,5 @@
 package jolyjdia.bot.calculator.runtime;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +46,6 @@ public final class Functions {
             this.isSetter = issetter;
         }
 
-        @Contract(pure = true)
         boolean matches(RValue... args) {
             if (this.isSetter) {
                 return false;

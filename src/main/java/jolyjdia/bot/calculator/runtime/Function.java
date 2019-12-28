@@ -2,7 +2,6 @@ package jolyjdia.bot.calculator.runtime;
 
 import jolyjdia.bot.calculator.Expression;
 import jolyjdia.bot.calculator.ExpressionException;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,7 +31,6 @@ public class Function extends Node {
         return 0;
     }
 
-    @Contract(pure = true)
     @Override
     public final char id() {
         return 'f';
@@ -60,7 +58,6 @@ public class Function extends Node {
                 new Function(position, method, optimizedArgs);
     }
 
-    @Contract("_ -> this")
     @Override
     public final RValue bindVariables(Expression expression) throws ExpressionException {
         for (int i = 0; i < args.length; ++i) {

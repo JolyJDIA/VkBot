@@ -9,8 +9,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Loader {
+public final class Loader {
     public static final Executor WORK_STEALING_POOL = Executors.newWorkStealingPool(1);
+
+    private Loader() {}
 
     public static void main(String[] args) throws ClientException, ApiException {
         final CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());

@@ -1,7 +1,6 @@
 package api.permission;
 
 import com.google.common.collect.Maps;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +28,6 @@ public final class PermissionManager {
         }
         manager = new PermissionCalculate(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\permissions.json"));
     }
-    @Contract(pure = true)
     public static PermissionCalculate getInstance() {
         if(manager == null) {
             throw new NullPointerException("not initialized yet");
@@ -39,7 +37,7 @@ public final class PermissionManager {
     public static PermissionGroup getPermGroup(String name) {
         return getInstance().getGroup(name);
     }
-    @Contract(pure = true)
+
     public static boolean isStaff(int userId) {
         return STAFF_ADMIN.containsKey(userId);
     }
@@ -49,11 +47,10 @@ public final class PermissionManager {
     private static void addGroup(PermissionGroup group) {
         getInstance().addGroup(group);
     }
-    @Contract(pure = true)
+
     public static PermissionGroup getDefault() {
         return getInstance().getGroup(DEFAULT);
     }
-    @Contract(pure = true)
     public static PermissionGroup getAdmin() {
         return getInstance().getGroup(ADMIN);
     }

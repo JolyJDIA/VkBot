@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -25,7 +24,6 @@ public class PermissionCalculate extends JsonCustom implements JsonDeserializer<
                 .create());
         this.load(new PermissionCalculate.MapTypeToken().getType());
     }
-    @Contract(pure = true)
     public final Map<String, PermissionGroup> getGroups() {
         return groups;
     }
@@ -39,7 +37,7 @@ public class PermissionCalculate extends JsonCustom implements JsonDeserializer<
         groups.put(group.getName(), group);
         save(groups);
     }
-    @Contract(pure = true)
+
     public final @NotNull Set<String> ranks() {
         return groups.keySet();
     }

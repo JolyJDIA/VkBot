@@ -37,9 +37,10 @@ public final class JsonBackend extends JsonCustom implements UserBackend,
         }
     }
 
+    @NotNull
     @Contract(pure = true)
     @Override
-    public @NotNull Set<Integer> getChats() {
+    public Set<Integer> getChats() {
         return chats.keySet();
     }
 
@@ -150,7 +151,6 @@ public final class JsonBackend extends JsonCustom implements UserBackend,
         return object;
     }
     public static class EternalCache extends Chat<Map<Integer, User>> {
-
         protected EternalCache(int peerId) {
             super(new HashMap<>(), peerId);
         }

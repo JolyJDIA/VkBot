@@ -1,7 +1,6 @@
 package api.file;
 
 import com.google.gson.Gson;
-import org.jetbrains.annotations.Contract;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -23,7 +22,6 @@ public class JsonCustom extends FileCustom {
         this.gson = gson;
     }
 
-    @Contract(pure = true)
     public final Gson getGson() {
         return gson;
     }

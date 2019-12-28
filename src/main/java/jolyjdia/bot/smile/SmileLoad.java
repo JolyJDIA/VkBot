@@ -15,7 +15,6 @@ import com.vk.api.sdk.objects.messages.KeyboardButton;
 import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
 import com.vk.api.sdk.objects.photos.PhotoAlbumFull;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +35,7 @@ public class SmileLoad implements Module, Listener {
         Bot.getBotManager().registerCommand(new SmileCommand(this));
     }
     private static final Pattern COMPILE = Pattern.compile(":[A-Za-z_0-9]+:");
+
     @EventLabel
     public final void onMsg(@NotNull NewMessageEvent e) {
         String text = e.getMessage().getText().toLowerCase(Locale.ENGLISH);
@@ -53,21 +53,18 @@ public class SmileLoad implements Module, Listener {
         });
     }
 
-    @Contract(pure = true)
     public final ImmutableList.Builder<List<KeyboardButton>> getBoard() {
         return board;
     }
 
-    @Contract(pure = true)
     public final ImmutableMap<String, String> getSmilies() {
         return smilies;
     }
 
-    @Contract(pure = true)
     public final Keyboard getKeyboard() {
         return keyboard;
     }
-    private final void calculateKeyboard() {
+    private void calculateKeyboard() {
         List<KeyboardButton> list = null;
         int i = 0;
         for (String label : smilies.keySet()) {

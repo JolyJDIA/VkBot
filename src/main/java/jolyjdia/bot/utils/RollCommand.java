@@ -12,7 +12,7 @@ public class RollCommand extends Command {
     }
 
     @Override
-    public final void execute(User sender, @NotNull String[] args) {
+    public final void execute(@NotNull User sender, @NotNull String[] args) {
         Chat<?> chat = sender.getChat();
         if(args.length == 1) {
             chat.sendMessage(String.valueOf(MathUtils.RANDOM.nextInt(100) + 1));

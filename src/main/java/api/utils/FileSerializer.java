@@ -1,6 +1,5 @@
 package api.utils;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class FileSerializer {
-    @Contract(pure = true)
+
     private FileSerializer() {}
 
     public static void writeFile(String path, @NonNls String text) {

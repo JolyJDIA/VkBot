@@ -1,7 +1,6 @@
 package api.scheduler;
 
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class RoflanRunnable implements Runnable {
@@ -29,7 +28,7 @@ public abstract class RoflanRunnable implements Runnable {
     public final Task runTaskTimerAsynchronously(int delay, int period) {
         return setupTask(Bot.getScheduler().scheduleAsyncRepeatingTask(this, delay, period));
     }
-    @Contract("_ -> param1")
+
     private Task setupTask(@NotNull Task task) {
         this.task = task;
         return task;

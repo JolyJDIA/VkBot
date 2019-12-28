@@ -5,7 +5,6 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import jolyjdia.bot.Bot;
-import org.jetbrains.annotations.NotNull;
 
 public class Chat<T> {
     private final int peerId;
@@ -22,13 +21,13 @@ public class Chat<T> {
     public final void editChat(String title) {
         MessageChannel.editChat(title, peerId);
     }
-    public final void sendMessage(@NotNull String msg) {
+    public final void sendMessage(String msg) {
         MessageChannel.sendMessage(msg, peerId);
     }
-    public final void sendAttachments(@NotNull String attachments) {
+    public final void sendAttachments(String attachments) {
         MessageChannel.sendAttachments(attachments, peerId);
     }
-    public final void sendMessage(String msg, @NotNull String attachments) {
+    public final void sendMessage(String msg, String attachments) {
         MessageChannel.sendMessage(msg, peerId, attachments);
     }
 

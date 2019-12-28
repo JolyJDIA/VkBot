@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
     public final void onLoad() {
         Bot.getBotManager().registerCommand(new TranslateCommand());
     }
+
     private static @Nullable URL url;
     static {
         try {

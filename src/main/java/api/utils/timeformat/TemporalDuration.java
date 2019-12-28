@@ -1,6 +1,5 @@
 package api.utils.timeformat;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -17,14 +16,12 @@ public final class TemporalDuration {
 
     private Duration duration;
 
-    @Contract(pure = true)
     private TemporalDuration(Duration duration) {
         if(duration == null) {
             return;
         }
         this.duration = duration;
     }
-    @Contract("_, _, _, _ -> new")
     public static @NotNull TemporalDuration of(int month, int day, int hour, int minute) {
         LocalDateTime startInclusive = LocalDateTime.now();
         LocalDateTime endExclusive = LocalDateTime.of(startInclusive.getYear(), month, day, hour, minute);

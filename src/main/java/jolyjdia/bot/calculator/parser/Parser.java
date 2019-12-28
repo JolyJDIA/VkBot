@@ -11,7 +11,6 @@ import jolyjdia.bot.calculator.runtime.Constant;
 import jolyjdia.bot.calculator.runtime.Function;
 import jolyjdia.bot.calculator.runtime.Functions;
 import jolyjdia.bot.calculator.runtime.RValue;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,8 +25,6 @@ public final class Parser {
         private NullToken(int position) {
             super(position);
         }
-
-        @Contract(pure = true)
         @Override
         public char id() {
             return '\0';
@@ -38,7 +35,6 @@ public final class Parser {
     private int position;
     private final Expression expression;
 
-    @Contract(pure = true)
     private Parser(List<? extends Token> tokens, Expression expression) {
         this.tokens = tokens;
         this.expression = expression;
