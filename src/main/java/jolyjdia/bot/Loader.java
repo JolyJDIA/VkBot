@@ -1,45 +1,55 @@
 package jolyjdia.bot;
 
+import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.callback.longpoll.responses.GetLongPollEventsResponse;
 import com.vk.api.sdk.objects.groups.LongPollServer;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.jetbrains.annotations.NotNull;
 
 public final class Loader {
-    public static final Executor WORK_STEALING_POOL = Executors.newWorkStealingPool(1);
+    //public static final Executor WORK_STEALING_POOL = Executors.newWorkStealingPool(1);
 
     private Loader() {}
 
     public static void main(String[] args) throws ClientException, ApiException {
-        final CallbackApiLongPollHandler handler = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
-        final LongPollServer longPollServer = Bot.getVkApiClient()
+        CallbackApiLongPoll longPoll = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
+        LongPollServer pollServer = Bot.getVkApiClient()
                 .groupsLongPoll()
                 .getLongPollServer(Bot.getGroupActor(), Bot.getGroupId())
                 .execute();
-        AtomicInteger lastTimeStamp = new AtomicInteger(Integer.parseInt(longPollServer.getTs()));
-        final Runnable runnable = () -> {
-            try {
-                GetLongPollEventsResponse response = Bot.getVkApiClient()
-                        .longPoll()
-                        .getEvents(longPollServer.getServer(), longPollServer.getKey(), lastTimeStamp.get())
-                        .waitTime(25)
-                        .execute();
-                response.getUpdates().forEach(handler::parse);
-                lastTimeStamp.set(response.getTs());
-            } catch (ApiException | ClientException  e) {
-                e.printStackTrace();
-            }
-        };
+        final CallbackHandler handler = new CallbackHandler(longPoll, pollServer);
         while (!Thread.currentThread().isInterrupted()) {
-            WORK_STEALING_POOL.execute(runnable);
+            handler.run();
             Bot.getScheduler().mainThreadHeartbeat();
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static class CallbackHandler implements Runnable {
+        private final LongPollServer longPollServer;
+        private final CallbackApiLongPoll handler;
+        private int lastTimeStamp;
+
+        public CallbackHandler(CallbackApiLongPoll handler, @NotNull LongPollServer longPollServer) {
+            this.handler = handler;
+            this.longPollServer = longPollServer;
+            this.lastTimeStamp = Integer.parseInt(longPollServer.getTs());
+        }
+
+        @Override
+        public final void run() {
+            try {
+                GetLongPollEventsResponse response = Bot.getVkApiClient()
+                        .longPoll()
+                        .getEvents(longPollServer.getServer(), longPollServer.getKey(), lastTimeStamp)
+                        .execute();
+                response.getUpdates().forEach(handler::parse);
+                this.lastTimeStamp = response.getTs();
+            } catch (ApiException | ClientException e) {
                 e.printStackTrace();
             }
         }
