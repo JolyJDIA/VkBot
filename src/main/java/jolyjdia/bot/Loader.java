@@ -23,13 +23,13 @@ public final class Loader {
         AtomicInteger lastTimeStamp = new AtomicInteger(Integer.parseInt(longPollServer.getTs()));
         final Runnable runnable = () -> {
             try {
-                GetLongPollEventsResponse f = Bot.getVkApiClient()
+                GetLongPollEventsResponse response = Bot.getVkApiClient()
                         .longPoll()
                         .getEvents(longPollServer.getServer(), longPollServer.getKey(), lastTimeStamp.get())
                         .waitTime(25)
                         .execute();
-                f.getUpdates().forEach(handler::parse);
-                lastTimeStamp.set(f.getTs());
+                response.getUpdates().forEach(handler::parse);
+                lastTimeStamp.set(response.getTs());
             } catch (ApiException | ClientException  e) {
                 e.printStackTrace();
             }

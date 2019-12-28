@@ -20,7 +20,9 @@ import com.vk.api.sdk.objects.board.TopicComment;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.messages.MessageAction;
 import com.vk.api.sdk.objects.messages.MessageActionStatus;
+import com.vk.api.sdk.objects.photos.Photo;
 import com.vk.api.sdk.objects.wall.Wallpost;
+import jolyjdia.bot.smile.SmileLoad;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -100,6 +102,13 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         User user = Bot.getUserBackend().addIfAbsentAndReturnUser(msg.getPeerId(), msg.getFromId());
         EditMessageEvent event = new EditMessageEvent(user, msg);
         submitEvent(event);
+    }
+    @Override
+    public final void photoNew(Integer groupId, Photo photo) {
+        if(SmileLoad.getInstance().getAlbumId() != photo.getAlbumId()) {
+            return;
+        }
+        SmileLoad.getInstance().addSmile(photo);
     }
     @Override
     public final void wallPostNew(Integer groupId, Wallpost wallpost) {
