@@ -79,6 +79,9 @@ public class ActivityLoad implements Module, Listener {
                 e.printStackTrace();
             }
         }, 0, 6000);
+        //1 тик - 50 миллисекунд
+        //20 тиков в 1 секунде
+        //20 * 3600
     }
 
     @Override

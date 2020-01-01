@@ -12,7 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 public class BotScheduler {
-    private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());
+    private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());//setName
 
     private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
     private final TimingsHandler timingsHandler = new TimingsHandler();

@@ -8,8 +8,10 @@ import com.vk.api.sdk.objects.Validable;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import jolyjdia.bot.Bot;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+@NonNls
 public final class MessageChannel {
     public static final int CHAT_ID = 2000000000;
     public static final int BOUND = 10000;
