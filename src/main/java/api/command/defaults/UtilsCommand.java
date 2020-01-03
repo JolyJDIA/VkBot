@@ -96,7 +96,9 @@ public class UtilsCommand extends Command {
                 if(args.length != 1) {
                     return;
                 }
-                sender.getChat().sendMessage( "Всего задач: "+Bot.getScheduler().taskCount());
+                sender.getChat().sendMessage(
+                        "Всего задач: "+Bot.getScheduler().taskCount()+
+                             "\nПотоков: "+Runtime.getRuntime().availableProcessors());
             }
         }
     }

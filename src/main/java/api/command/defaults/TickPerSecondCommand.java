@@ -24,7 +24,7 @@ public class TickPerSecondCommand extends Command {
                             Java version: %s
                             tps за последние:
                             1м | 5м | 15м:
-                            """, System.getProperty("java.version")));
+                            """, Runtime.version()));
             for (double tps : Bot.getScheduler().getTimingsHandler().getAverageTPS()) {
                 builder.append(TimingsHandler.format(tps)).append(", ");
             }
