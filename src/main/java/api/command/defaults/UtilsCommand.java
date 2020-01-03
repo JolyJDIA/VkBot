@@ -18,16 +18,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 public class UtilsCommand extends Command {
 
     public UtilsCommand() {
         super("utils", "команды-утилиты");
-        setAlias("uptime", "calendar", "convert_ts", "current_ts", "search", "pattern");
+        setAlias("uptime", "calendar", "convert_ts", "current_ts", "search", "tasks");
     }
 
     @Override
@@ -94,12 +92,11 @@ public class UtilsCommand extends Command {
                     e.printStackTrace();
                 }
             }
-            case "pattern" -> {
-                if(args.length < 3) {
+            case "tasks" -> {
+                if(args.length != 1) {
                     return;
                 }
-                Pattern regex = Pattern.compile(args[1]);
-                sender.getChat().sendMessage(Arrays.toString(regex.split(StringBind.toString(2, args))));
+                sender.getChat().sendMessage( "Всего задач: "+Bot.getScheduler().taskCount());
             }
         }
     }

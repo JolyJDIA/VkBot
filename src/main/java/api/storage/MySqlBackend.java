@@ -108,7 +108,6 @@ public final class MySqlBackend implements UserBackend {
                 return loadUserInCache(owner);
             }
             //Async
-            System.out.println("Лезу в Базу");
             try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
                 ps.setInt(1, peerId);
                 ps.setInt(2, userId);
@@ -181,12 +180,9 @@ public final class MySqlBackend implements UserBackend {
                     .ticker(3)
                     .removeListener((RemovalListener<Integer, User>) entry -> {
                         User user = entry.getValue();
-                        StringBuilder builder = new StringBuilder("Удаляю: " + user.getUserId() + '/' +user.getGroup().getName());
                         if (user.isChange()) {
                             Bot.getUserBackend().saveOrUpdateGroup(user);
-                            builder.append("\nСохранил в бд");
                         }
-                        System.out.println(builder);
                     }).build(), peerId);
         }
     }

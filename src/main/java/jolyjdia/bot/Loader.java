@@ -1,5 +1,6 @@
 package jolyjdia.bot;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -14,6 +15,10 @@ public final class Loader {
 
     private Loader() {}
 
+    static {
+        Thread.currentThread().setName("Main Thread");
+    }
+
     public static void main(String[] args) throws ClientException, ApiException {
         final CallbackApiLongPoll longPoll = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
         final LongPollServer longPollServer = Bot.getVkApiClient()
@@ -26,10 +31,7 @@ public final class Loader {
         while (!Thread.currentThread().isInterrupted()) {
             if(future.isDone()) {
                 try {
-                    GetLongPollEventsResponse response = future.get();
-                    if(response != null) {
-                        future.get().getUpdates().forEach(longPoll::parse);
-                    }
+                    future.get().getUpdates().forEach(longPoll::parse);
                     future = asyncResponse.get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
@@ -43,14 +45,19 @@ public final class Loader {
             }
         }
     }
-    public static final class AsyncResponse<T> {
-        private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    public static class AsyncResponse<T> {
+        private final ExecutorService executor = Executors.newSingleThreadExecutor(
+                new ThreadFactoryBuilder()
+                .setNameFormat("EventThread")
+                .build()
+        );
         private final Callable<T> callable;
         public AsyncResponse(Callable<T> callable) {
             this.callable = callable;
         }
+
         @NotNull
-        public Future<T> get() {
+        public final Future<T> get() {
             return executor.submit(callable);
         }
     }
@@ -71,7 +78,7 @@ public final class Loader {
                 response = Bot.getVkApiClient()
                         .longPoll()
                         .getEvents(longPollServer.getServer(), longPollServer.getKey(), lastTimeStamp)
-                        .waitTime(25)
+                        .waitTime(20)
                         .execute();
             } catch (ApiException | ClientException e) {
                 longPollServer = getLongPollServer();

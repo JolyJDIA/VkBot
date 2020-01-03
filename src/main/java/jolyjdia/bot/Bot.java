@@ -14,13 +14,13 @@ import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.httpclient.HttpTransportClient;
 import jolyjdia.bot.activity.ActivityLoad;
 import jolyjdia.bot.calculator.CalculatorManager;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
+import jolyjdia.bot.utils.MyHttpTransportClient;
 import jolyjdia.bot.utils.UtilsModule;
 
 import java.io.File;
@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public final class Bot {
-    private static final VkApiClient vkApiClient = new VkApiClient(new HttpTransportClient());
+    private static final VkApiClient vkApiClient = new VkApiClient(new MyHttpTransportClient());
     private static final BotScheduler scheduler = new BotScheduler();
     private static final BotManager manager = new BotManager();
     private static final Properties properties = new Properties();

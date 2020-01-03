@@ -1,5 +1,6 @@
 package api.scheduler;
 
+import api.utils.StringBind;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +26,7 @@ public class Task implements TypeTask, Runnable {
     Task(Object o, int delay, int period) {
         this(o);
         this.period = period;
-        this.currentTick = (period-delay);
+        this.currentTick = period - delay;
     }
     @Override
     public final void run() {
@@ -33,6 +34,9 @@ public class Task implements TypeTask, Runnable {
             this.runnable.run();
         } else {
             this.consumer.accept(this);
+        }
+        if(isAsync()) {
+            StringBind.log("Задача выполнена асинхронно");
         }
     }
     public final int getPeriod() {

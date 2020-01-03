@@ -12,7 +12,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 public class BotScheduler {
-    private final Executor executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().build());//setName
+    private final Executor executor = Executors.newCachedThreadPool(
+            new ThreadFactoryBuilder()
+            .setNameFormat("BotScheduler Thread %d")
+            .build()
+    );
 
     private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
     private final TimingsHandler timingsHandler = new TimingsHandler();
@@ -30,7 +34,6 @@ public class BotScheduler {
                 }
                 if (task.getPeriod() <= Task.NO_REPEATING) {
                     iterator.remove();
-                    System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted ("+taskQueue.size()+')');
                     return;
                 }
                 task.setCurrentTickZero();
@@ -103,5 +106,9 @@ public class BotScheduler {
         TaskAsync task = new TaskAsync(o, delay, period);
         taskQueue.add(task);
         return task;
+    }
+
+    public int taskCount() {
+        return taskQueue.size();
     }
 }

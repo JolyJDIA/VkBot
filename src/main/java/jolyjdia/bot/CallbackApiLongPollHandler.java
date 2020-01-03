@@ -13,6 +13,7 @@ import api.event.post.RepostWallEvent;
 import api.event.user.UserJoinEvent;
 import api.event.user.UserLeaveEvent;
 import api.storage.User;
+import api.utils.StringBind;
 import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -27,11 +28,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
-    @NonNls private static final Logger LOGGER = Logger.getLogger(CallbackApiLongPollHandler.class.getName());
   //  private final CommandExecutor executor = new CommandExecutor(Runtime.getRuntime().availableProcessors());
 
     CallbackApiLongPollHandler(VkApiClient client, GroupActor actor) {
@@ -77,10 +75,10 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                 return false;
             })) { return; }
             @NonNls long end = System.currentTimeMillis() - start;
-            LOGGER.log(Level.INFO, "КОМАНДА: "+ Arrays.toString(args) +" ВЫПОЛНИЛАСЬ ЗА: "+end+" миллисекунд");
+            StringBind.log("Команда: "+ Arrays.toString(args) +" ("+end+"ms) Чат: " +msg.getPeerId() + '(' +msg.getFromId()+ ')');
             return;
         }
-        System.out.println("СООБЩЕНИЕ: ("+ msg.getText() + ") ЧАТ: " +msg.getPeerId() + '(' +msg.getFromId()+ ')');
+        StringBind.log("Сообщение: \""+ msg.getText()+ "\" Чат: " +msg.getPeerId() + '(' +msg.getFromId()+ ')');
         NewMessageEvent event = new NewMessageEvent(user, msg);
         submitEvent(event);
     }
@@ -104,7 +102,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         submitEvent(event);
     }
     @Override
-    public final void photoNew(Integer groupId, Photo photo) {
+    public final void photoNew(Integer groupId, @NotNull Photo photo) {
         if(SmileLoad.getInstance().getAlbumId() != photo.getAlbumId()) {
             return;
         }

@@ -1,5 +1,6 @@
 package api.utils;
 
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,6 +59,13 @@ public final class StringBind {
             return null;
         }
         return list;
+    }
+    public static void log(@NonNls String msg) {
+        try {
+            System.out.println('[' +Thread.currentThread().getName()+"]: "+msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static @NotNull String toString(@NotNull String[] a) {
