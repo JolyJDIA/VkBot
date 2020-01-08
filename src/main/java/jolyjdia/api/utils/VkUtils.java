@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Optional;
 
 public final class VkUtils {
-    public static final UserActor ZAVR = new UserActor(310289867, Bot.getConfig().getProperty("UserAccessToken"));
+    public static final UserActor ZAVR = new UserActor(310289867, Bot.getConfig().getProperty("ZavrAccessToken"));
 
-    public static final UserActor VALERA = new UserActor(526616439, "bd72e58ed3e4e1babe8c290636a85d54d6456f88ae0203311873683291b9f2a98330310ec199466f86873");
+    public static final UserActor VALERA = new UserActor(526616439, Bot.getConfig().getProperty("ValeraAccessToken"));
     private VkUtils() {}
 
     @NonNls
