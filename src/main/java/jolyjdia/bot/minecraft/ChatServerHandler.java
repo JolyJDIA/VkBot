@@ -1,8 +1,8 @@
 package jolyjdia.bot.minecraft;
 
-import api.utils.chat.MessageChannel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import jolyjdia.api.utils.chat.MessageChannel;
 import org.jetbrains.annotations.NotNull;
 
 public class ChatServerHandler extends SimpleChannelInboundHandler<Object> {

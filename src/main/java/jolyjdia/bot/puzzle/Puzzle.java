@@ -1,16 +1,16 @@
 package jolyjdia.bot.puzzle;
 
-import api.command.Command;
-import api.event.EventLabel;
-import api.event.Listener;
-import api.event.messages.NewMessageEvent;
-import api.module.Module;
-import api.storage.User;
-import api.utils.MathUtils;
-import com.vk.api.sdk.objects.messages.Message;
+import jolyjdia.api.command.Command;
+import jolyjdia.api.event.EventLabel;
+import jolyjdia.api.event.Listener;
+import jolyjdia.api.event.messages.NewMessageEvent;
+import jolyjdia.api.module.Module;
+import jolyjdia.api.storage.User;
+import jolyjdia.api.utils.MathUtils;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import vk.objects.messages.Message;
 
 public class Puzzle implements Module, Listener {
     private int answer;

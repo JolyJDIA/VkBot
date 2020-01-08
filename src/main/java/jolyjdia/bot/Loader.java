@@ -1,13 +1,13 @@
 package jolyjdia.bot;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.callback.longpoll.responses.GetLongPollEventsResponse;
-import com.vk.api.sdk.objects.groups.LongPollServer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import vk.callback.longpoll.CallbackApiLongPoll;
+import vk.exceptions.ApiException;
+import vk.exceptions.ClientException;
+import vk.objects.callback.longpoll.responses.GetLongPollEventsResponse;
+import vk.objects.groups.LongPollServer;
 
 import java.util.concurrent.*;
 
@@ -31,7 +31,10 @@ public final class Loader {
         while (!Thread.currentThread().isInterrupted()) {
             if(future.isDone()) {
                 try {
-                    future.get().getUpdates().forEach(longPoll::parse);
+                    GetLongPollEventsResponse response = future.get();
+                    if(response != null) {
+                        response.getUpdates().forEach(longPoll::parse);
+                    }
                     future = asyncResponse.get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();

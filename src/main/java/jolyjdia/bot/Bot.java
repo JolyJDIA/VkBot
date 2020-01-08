@@ -1,27 +1,27 @@
 package jolyjdia.bot;
 
-import api.BotManager;
-import api.command.HelpAllCommands;
-import api.module.Module;
-import api.module.ModuleLoader;
-import api.permission.PermissionManager;
-import api.scheduler.BotScheduler;
-import api.storage.JsonBackend;
-import api.storage.MySqlBackend;
-import api.storage.UserBackend;
-import com.vk.api.sdk.actions.Groups;
-import com.vk.api.sdk.client.VkApiClient;
-import com.vk.api.sdk.client.actors.GroupActor;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
+import jolyjdia.api.BotManager;
+import jolyjdia.api.command.HelpAllCommands;
+import jolyjdia.api.module.Module;
+import jolyjdia.api.module.ModuleLoader;
+import jolyjdia.api.permission.PermissionManager;
+import jolyjdia.api.scheduler.BotScheduler;
+import jolyjdia.api.storage.JsonBackend;
+import jolyjdia.api.storage.MySqlBackend;
+import jolyjdia.api.storage.UserBackend;
 import jolyjdia.bot.activity.ActivityLoad;
 import jolyjdia.bot.calculator.CalculatorManager;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
-import jolyjdia.bot.utils.MyHttpTransportClient;
 import jolyjdia.bot.utils.UtilsModule;
+import vk.actions.Groups;
+import vk.client.VkApiClient;
+import vk.client.actors.GroupActor;
+import vk.exceptions.ApiException;
+import vk.exceptions.ClientException;
+import vk.httpclient.AsyncHttpTransportClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public final class Bot {
-    private static final VkApiClient vkApiClient = new VkApiClient(new MyHttpTransportClient());
+    private static final VkApiClient vkApiClient = new VkApiClient(new AsyncHttpTransportClient());
     private static final BotScheduler scheduler = new BotScheduler();
     private static final BotManager manager = new BotManager();
     private static final Properties properties = new Properties();
@@ -61,7 +61,7 @@ public final class Bot {
         try {
             if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
                 groups.setLongPollSettings(groupActor, groupActor.getGroupId())
-                        .enabled(true).apiVersion("5.101").wallPostNew(true).messageNew(true)
+                        .enabled(true).apiVersion("5.103").wallPostNew(true).messageNew(true)
                         .audioNew(true).groupJoin(true).groupLeave(true).messageReply(true)
                         .messageEdit(true).messageAllow(true).messageDeny(true).messageTypingState(true)
                         .execute();

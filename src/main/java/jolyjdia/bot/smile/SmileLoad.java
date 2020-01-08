@@ -1,22 +1,22 @@
 package jolyjdia.bot.smile;
 
-import api.event.EventLabel;
-import api.event.Listener;
-import api.event.messages.NewMessageEvent;
-import api.module.Module;
-import api.utils.KeyboardUtils;
-import api.utils.VkUtils;
 import com.google.common.collect.Lists;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.messages.Keyboard;
-import com.vk.api.sdk.objects.messages.KeyboardButton;
-import com.vk.api.sdk.objects.messages.KeyboardButtonColor;
-import com.vk.api.sdk.objects.photos.Photo;
-import com.vk.api.sdk.objects.photos.PhotoAlbumFull;
+import jolyjdia.api.event.EventLabel;
+import jolyjdia.api.event.Listener;
+import jolyjdia.api.event.messages.NewMessageEvent;
+import jolyjdia.api.module.Module;
+import jolyjdia.api.utils.KeyboardUtils;
+import jolyjdia.api.utils.VkUtils;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import vk.exceptions.ApiException;
+import vk.exceptions.ClientException;
+import vk.objects.messages.Keyboard;
+import vk.objects.messages.KeyboardButton;
+import vk.objects.messages.KeyboardButtonColor;
+import vk.objects.photos.Photo;
+import vk.objects.photos.PhotoAlbumFull;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -87,9 +87,9 @@ public class SmileLoad implements Module, Listener {
     private int albumId;
     public final void loadEmoticonsAlbum() {
         try {
-            List<PhotoAlbumFull> albumFulls = Bot.getVkApiClient().photos().getAlbums(VkUtils.USER_ACTOR)
+            List<PhotoAlbumFull> albumFulls = Objects.requireNonNull(Bot.getVkApiClient().photos().getAlbums(VkUtils.ZAVR)
                     .ownerId(-Bot.getGroupId())
-                    .execute()
+                    .execute())
                     .getItems();
             if(albumFulls.stream().anyMatch(e -> {
                 if(!e.getTitle().equalsIgnoreCase("emotion")) {
@@ -97,9 +97,9 @@ public class SmileLoad implements Module, Listener {
                 }
                 this.albumId = e.getId();
                 try {
-                    Bot.getVkApiClient().photos().get(VkUtils.USER_ACTOR)
+                    Objects.requireNonNull(Bot.getVkApiClient().photos().get(VkUtils.ZAVR)
                             .ownerId(-Bot.getGroupId())
-                            .albumId(String.valueOf(e.getId())).execute()
+                            .albumId(String.valueOf(e.getId())).execute())
                             .getItems()
                             .forEach(p -> {
                                 @NonNls String label = p.getText();

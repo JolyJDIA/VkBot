@@ -1,9 +1,9 @@
 package jolyjdia.bot.calculator;
 
-import api.event.EventLabel;
-import api.event.Listener;
-import api.event.messages.NewMessageEvent;
-import api.module.Module;
+import jolyjdia.api.event.EventLabel;
+import jolyjdia.api.event.Listener;
+import jolyjdia.api.event.messages.NewMessageEvent;
+import jolyjdia.api.module.Module;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 

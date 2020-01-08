@@ -1,9 +1,9 @@
 package jolyjdia.bot.utils;
 
-import api.command.Command;
-import api.storage.Chat;
-import api.storage.User;
-import api.utils.MathUtils;
+import jolyjdia.api.command.Command;
+import jolyjdia.api.storage.Chat;
+import jolyjdia.api.storage.User;
+import jolyjdia.api.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class RollCommand extends Command {

@@ -1,12 +1,12 @@
 package jolyjdia.bot.utils;
 
-import api.command.Command;
-import api.permission.PermissionManager;
-import api.scheduler.RoflanRunnable;
-import api.storage.Chat;
-import api.storage.User;
-import api.utils.StringBind;
 import com.google.common.collect.Maps;
+import jolyjdia.api.command.Command;
+import jolyjdia.api.permission.PermissionManager;
+import jolyjdia.api.scheduler.RoflanRunnable;
+import jolyjdia.api.storage.Chat;
+import jolyjdia.api.storage.User;
+import jolyjdia.api.utils.StringBind;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

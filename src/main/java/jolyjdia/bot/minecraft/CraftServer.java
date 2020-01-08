@@ -1,7 +1,7 @@
 package jolyjdia.bot.minecraft;
 
-import api.module.Module;
 import io.netty.channel.Channel;
+import jolyjdia.api.module.Module;
 
 public class CraftServer implements Module {
     private Channel channel;

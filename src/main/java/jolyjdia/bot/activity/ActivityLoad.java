@@ -1,19 +1,19 @@
 package jolyjdia.bot.activity;
 
-import api.command.defaults.HappyCommand;
-import api.event.Listener;
-import api.module.Module;
-import api.utils.TimingsHandler;
-import api.utils.VkUtils;
-import api.utils.timeformat.TemporalDuration;
-import api.utils.timeformat.TimeFormatter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
+import jolyjdia.api.command.defaults.HappyCommand;
+import jolyjdia.api.event.Listener;
+import jolyjdia.api.module.Module;
+import jolyjdia.api.utils.TimingsHandler;
+import jolyjdia.api.utils.VkUtils;
+import jolyjdia.api.utils.timeformat.TemporalDuration;
+import jolyjdia.api.utils.timeformat.TimeFormatter;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import vk.exceptions.ApiException;
+import vk.exceptions.ClientException;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -60,10 +60,11 @@ public class ActivityLoad implements Module, Listener {
     @Override
     public final void onLoad() {
         Bot.getBotManager().registerEvent(this);
+        Bot.getBotManager().registerCommand(new LikesCommand());
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
                 Bot.getVkApiClient().status()
-                        .set(VkUtils.USER_ACTOR)
+                        .set(VkUtils.ZAVR)
                         .groupId(Bot.getGroupId())
                         .text(STATS.get(index).call())
                         .execute();
@@ -71,10 +72,11 @@ public class ActivityLoad implements Module, Listener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }, 0, 1800);
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
-                Bot.getVkApiClient().account().setOnline(VkUtils.USER_ACTOR).execute();
+                Bot.getVkApiClient().account().setOnline(VkUtils.ZAVR).execute();
             } catch (ApiException | ClientException e) {
                 e.printStackTrace();
             }
@@ -88,7 +90,7 @@ public class ActivityLoad implements Module, Listener {
     public final void onDisable() {
         try {
             Bot.getVkApiClient().status()
-                    .set(VkUtils.USER_ACTOR)
+                    .set(VkUtils.ZAVR)
                     .text("Лодочное уебище")
                     .execute();
         } catch (ApiException | ClientException e) {

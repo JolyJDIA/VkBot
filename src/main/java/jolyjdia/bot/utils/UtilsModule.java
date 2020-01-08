@@ -1,15 +1,15 @@
 package jolyjdia.bot.utils;
 
-import api.event.EventLabel;
-import api.event.Listener;
-import api.event.messages.SendCommandEvent;
-import api.event.post.NewPostWallEvent;
-import api.module.Module;
-import api.utils.chat.MessageChannel;
 import com.google.common.collect.Maps;
-import com.vk.api.sdk.objects.wall.Wallpost;
+import jolyjdia.api.event.EventLabel;
+import jolyjdia.api.event.Listener;
+import jolyjdia.api.event.messages.SendCommandEvent;
+import jolyjdia.api.event.post.NewPostWallEvent;
+import jolyjdia.api.module.Module;
+import jolyjdia.api.utils.chat.MessageChannel;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
+import vk.objects.wall.Wallpost;
 
 import java.util.Map;
 
@@ -42,6 +42,8 @@ public class UtilsModule implements Module, Listener {
     @EventLabel
     public static void onPost(@NotNull NewPostWallEvent e) {
         Wallpost wallpost = e.getWallpost();
-        Bot.getUserBackend().getChats().forEach(id -> MessageChannel.sendAttachments(wallpost, id));
+        if(wallpost.getText().startsWith("<broadcast>")) {
+            Bot.getUserBackend().getChats().forEach(id -> MessageChannel.sendAttachments(wallpost, id));
+        }
     }
 }

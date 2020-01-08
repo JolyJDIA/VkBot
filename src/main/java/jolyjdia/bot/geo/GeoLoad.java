@@ -1,7 +1,7 @@
 package jolyjdia.bot.geo;
 
-import api.module.Module;
 import com.maxmind.geoip2.DatabaseReader;
+import jolyjdia.api.module.Module;
 import jolyjdia.bot.Bot;
 import jolyjdia.bot.Loader;
 

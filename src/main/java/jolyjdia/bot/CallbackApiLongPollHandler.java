@@ -1,31 +1,31 @@
 package jolyjdia.bot;
 
-import api.event.Event;
-import api.event.board.BoardPostEditEvent;
-import api.event.board.BoardPostNewEvent;
-import api.event.board.BoardPostRestoreEvent;
-import api.event.messages.EditMessageEvent;
-import api.event.messages.NewMessageEvent;
-import api.event.messages.ReplyMessageEvent;
-import api.event.messages.SendCommandEvent;
-import api.event.post.NewPostWallEvent;
-import api.event.post.RepostWallEvent;
-import api.event.user.UserJoinEvent;
-import api.event.user.UserLeaveEvent;
-import api.storage.User;
-import api.utils.StringBind;
-import com.vk.api.sdk.callback.longpoll.CallbackApiLongPoll;
-import com.vk.api.sdk.client.VkApiClient;
-import com.vk.api.sdk.client.actors.GroupActor;
-import com.vk.api.sdk.objects.board.TopicComment;
-import com.vk.api.sdk.objects.messages.Message;
-import com.vk.api.sdk.objects.messages.MessageAction;
-import com.vk.api.sdk.objects.messages.MessageActionStatus;
-import com.vk.api.sdk.objects.photos.Photo;
-import com.vk.api.sdk.objects.wall.Wallpost;
+import jolyjdia.api.event.Event;
+import jolyjdia.api.event.board.BoardPostEditEvent;
+import jolyjdia.api.event.board.BoardPostNewEvent;
+import jolyjdia.api.event.board.BoardPostRestoreEvent;
+import jolyjdia.api.event.messages.EditMessageEvent;
+import jolyjdia.api.event.messages.NewMessageEvent;
+import jolyjdia.api.event.messages.ReplyMessageEvent;
+import jolyjdia.api.event.messages.SendCommandEvent;
+import jolyjdia.api.event.post.NewPostWallEvent;
+import jolyjdia.api.event.post.RepostWallEvent;
+import jolyjdia.api.event.user.UserJoinEvent;
+import jolyjdia.api.event.user.UserLeaveEvent;
+import jolyjdia.api.storage.User;
+import jolyjdia.api.utils.StringBind;
 import jolyjdia.bot.smile.SmileLoad;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import vk.callback.longpoll.CallbackApiLongPoll;
+import vk.client.VkApiClient;
+import vk.client.actors.GroupActor;
+import vk.objects.board.TopicComment;
+import vk.objects.messages.Message;
+import vk.objects.messages.MessageAction;
+import vk.objects.messages.MessageActionStatus;
+import vk.objects.photos.Photo;
+import vk.objects.wall.Wallpost;
 
 import java.util.Arrays;
 
@@ -37,7 +37,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     }
 
     @Override
-    public final void messageNew(Integer groupId, @NotNull Message msg) {
+    public final void messageNew(int groupId, @NotNull Message msg) {
         if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
             return;
         }
@@ -83,7 +83,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         submitEvent(event);
     }
     @Override
-    public final void messageReply(Integer groupId, @NotNull Message msg) {
+    public final void messageReply(int groupId, @NotNull Message msg) {
         if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
             return;
         }
@@ -93,7 +93,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     }
 
     @Override
-    public final void messageEdit(Integer groupId, @NotNull Message msg) {
+    public final void messageEdit(int groupId, @NotNull Message msg) {
         if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
             return;
         }
@@ -102,34 +102,34 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
         submitEvent(event);
     }
     @Override
-    public final void photoNew(Integer groupId, @NotNull Photo photo) {
+    public final void photoNew(int groupId, @NotNull Photo photo) {
         if(SmileLoad.getInstance().getAlbumId() != photo.getAlbumId()) {
             return;
         }
         SmileLoad.getInstance().addSmile(photo);
     }
     @Override
-    public final void wallPostNew(Integer groupId, Wallpost wallpost) {
+    public final void wallPostNew(int groupId, Wallpost wallpost) {
         NewPostWallEvent event = new NewPostWallEvent(wallpost);
         submitEvent(event);
     }
     @Override
-    public final void wallRepost(Integer groupId, Wallpost wallpost) {
+    public final void wallRepost(int groupId, Wallpost wallpost) {
         RepostWallEvent event = new RepostWallEvent(wallpost);
         submitEvent(event);
     }
     @Override
-    public final void boardPostNew(Integer groupId, TopicComment comment) {
+    public final void boardPostNew(int groupId, TopicComment comment) {
         BoardPostNewEvent event = new BoardPostNewEvent(comment);
         submitEvent(event);
     }
     @Override
-    public final void boardPostEdit(Integer groupId, TopicComment comment) {
+    public final void boardPostEdit(int groupId, TopicComment comment) {
         BoardPostEditEvent event = new BoardPostEditEvent(comment);
         submitEvent(event);
     }
     @Override
-    public final void boardPostRestore(Integer groupId, TopicComment comment) {
+    public final void boardPostRestore(int groupId, TopicComment comment) {
         BoardPostRestoreEvent event = new BoardPostRestoreEvent(comment);
         submitEvent(event);
     }

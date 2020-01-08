@@ -1,7 +1,7 @@
 package jolyjdia.bot.utils;
 
-import api.command.Command;
-import api.storage.User;
+import jolyjdia.api.command.Command;
+import jolyjdia.api.storage.User;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
