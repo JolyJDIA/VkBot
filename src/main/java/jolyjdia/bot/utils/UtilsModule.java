@@ -39,10 +39,11 @@ public class UtilsModule implements Module, Listener {
             cooldown.put(userId, System.currentTimeMillis());
         }
     }
+    public static final String BROADCAST = "<broadcast>";
     @EventLabel
     public static void onPost(@NotNull NewPostWallEvent e) {
         Wallpost wallpost = e.getWallpost();
-        if(wallpost.getText().startsWith("<broadcast>")) {
+        if(wallpost.getText().startsWith(BROADCAST)) {
             Bot.getUserBackend().getChats().forEach(id -> MessageChannel.sendAttachments(wallpost, id));
         }
     }

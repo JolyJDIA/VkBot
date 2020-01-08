@@ -8,17 +8,17 @@ public enum TimeFormatter {
     MINUTES(duration -> duration.toMinutes() % 60, " минут ", " минута ", " минуты "),
     SECONDS(duration -> duration.toSeconds() % 60, " секунд ", " секунда ", " секунды ");
 
-    private final CallebleDuration callable;
+    private final CallableDuration callable;
     private final String plural, singular, other;
 
-    TimeFormatter(CallebleDuration callable, String plural, String singular, String other) {
+    TimeFormatter(CallableDuration callable, String plural, String singular, String other) {
         this.callable = callable;
         this.plural = plural;
         this.singular = singular;
         this.other = other;
     }
 
-    public CallebleDuration getCallable() {
+    public CallableDuration getCallable() {
         return callable;
     }
 

@@ -61,6 +61,7 @@ public class ActivityLoad implements Module, Listener {
     public final void onLoad() {
         Bot.getBotManager().registerEvent(this);
         Bot.getBotManager().registerCommand(new LikesCommand());
+        Bot.getBotManager().registerCommand(new CommentCommand());
         Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
             try {
                 Bot.getVkApiClient().status()
@@ -69,6 +70,14 @@ public class ActivityLoad implements Module, Listener {
                         .text(STATS.get(index).call())
                         .execute();
                 this.index = index == STATS.size()-1 ? 0 : ++index;
+                Bot.getVkApiClient().status()
+                        .set(VkUtils.ZAVR)
+                        .text(
+                                "Runnable tasks: "+Bot.getScheduler().taskCount()+
+                                " Thread: "+Runtime.getRuntime().availableProcessors()+
+                                " TickPerSec: "+Bot.getScheduler().getTimingsHandler().getAverageTPS()[0] +
+                                ' ' +Bot.getScheduler().getTimingsHandler().memoryUsed())
+                        .execute();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -91,7 +100,7 @@ public class ActivityLoad implements Module, Listener {
         try {
             Bot.getVkApiClient().status()
                     .set(VkUtils.ZAVR)
-                    .text("Лодочное уебище")
+                    .text("Осторожно!!! Злой динозаврик!!!")
                     .execute();
         } catch (ApiException | ClientException e) {
             e.printStackTrace();

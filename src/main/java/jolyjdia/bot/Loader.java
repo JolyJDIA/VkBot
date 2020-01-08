@@ -25,9 +25,12 @@ public final class Loader {
                 .groupsLongPoll()
                 .getLongPollServer(Bot.getGroupActor(), Bot.getGroupId())
                 .execute();
+        if(longPollServer == null) {
+            return;
+        }
         final CallbackHandler callabel = new CallbackHandler(longPollServer);
         AsyncResponse<GetLongPollEventsResponse> asyncResponse = new AsyncResponse<>(callabel);
-        Future<GetLongPollEventsResponse> future = asyncResponse.get();
+        Future<GetLongPollEventsResponse> future = asyncResponse.submitAsync();
         while (!Thread.currentThread().isInterrupted()) {
             if(future.isDone()) {
                 try {
@@ -35,7 +38,7 @@ public final class Loader {
                     if(response != null) {
                         response.getUpdates().forEach(longPoll::parse);
                     }
-                    future = asyncResponse.get();
+                    future = asyncResponse.submitAsync();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -60,7 +63,7 @@ public final class Loader {
         }
 
         @NotNull
-        public final Future<T> get() {
+        public final Future<T> submitAsync() {
             return executor.submit(callable);
         }
     }

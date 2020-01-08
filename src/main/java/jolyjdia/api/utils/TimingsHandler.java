@@ -33,4 +33,20 @@ public class TimingsHandler {
     public static @NotNull String format(double tps) {
         return ((tps > ASPIRATION) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
     }
+    @NonNls
+    public String memoryUsed() {
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        long freeMemory = Runtime.getRuntime().freeMemory();
+        return "\nВся память: " + humanReadableByteCount(totalMemory) +
+               "\nСъедено памяти: " + humanReadableByteCount((totalMemory - freeMemory)) +
+               "\nСвободно памяти: " + humanReadableByteCount(freeMemory);
+    }
+    private static String humanReadableByteCount(long bytes) {
+        if (bytes < 1000) {
+            return bytes + " B";
+        }
+        int exp = (int) (Math.log(bytes) / Math.log(1000));
+        String pre = String.valueOf("kMGTPE".charAt(exp - 1));
+        return String.format("%.1f %sB", bytes / Math.pow(1000, exp), pre);
+    }
 }
