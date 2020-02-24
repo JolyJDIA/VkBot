@@ -8,11 +8,11 @@ public abstract class Task implements Runnable, Comparable<Task> {
     private long period = NO_REPEATING;
     private long nextRun;
     private final Runnable runnable;
-    private final int id;
+    private final int uid;
 
     private Task(Runnable runnable, int id) {
         this.runnable = runnable;
-        this.id = id;
+        this.uid = id;
     }
 
     public Task(Runnable runnable, long period, int id) {
@@ -28,7 +28,7 @@ public abstract class Task implements Runnable, Comparable<Task> {
     }
     public abstract boolean isAsync();
 
-    public Runnable getRunnable() {
+    public final Runnable getRunnable() {
         return runnable;
     }
 
@@ -36,11 +36,11 @@ public abstract class Task implements Runnable, Comparable<Task> {
         return period;
     }
 
-    public void setNextRun(long nextRun) {
+    public final void setNextRun(long nextRun) {
         this.nextRun = nextRun;
     }
 
-    public long getNextRun() {
+    public final long getNextRun() {
         return nextRun;
     }
 
@@ -52,29 +52,32 @@ public abstract class Task implements Runnable, Comparable<Task> {
         return period <= NO_REPEATING;
     }
 
-    public final int getId() {
-        return id;
+    public final int getUid() {
+        return uid;
     }
 
-    public long getDelay() {
+    public final long getDelay() {
         return nextRun - Bot.getScheduler().getCounter();
     }
 
     @Override
     public final int hashCode() {
-        return id;
+        return uid;
     }
     @Override
-    public boolean equals(Object o) {
-        return o instanceof Task && compareTo((Task) o) == 0;
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        //не юзал компаратор, ибо он вернет 0, когда o == this
+        return nextRun == task.nextRun && uid == task.uid;
     }
     @Override
     public final int compareTo(@NotNull Task o) {
         if (o == this) {
             return 0;
         }
-        return (nextRun < o.nextRun) ?
-                -1 : ((nextRun == o.nextRun) ?
-                (id < o.id ? -1 : 1) : 1);
+        //не может быть у объедков одинаковый айди, поэтому без 0
+        return (nextRun < o.nextRun) ? -1 : ((nextRun == o.nextRun) ? (uid < o.uid ? -1 : 1) : 1);
     }
 }
