@@ -3,13 +3,13 @@ package jolyjdia.api.utils.chat;
 import jolyjdia.api.utils.MathUtils;
 import jolyjdia.api.utils.VkUtils;
 import jolyjdia.bot.Bot;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
+import jolyjdia.vk.api.objects.Validable;
+import jolyjdia.vk.api.objects.messages.Keyboard;
+import jolyjdia.vk.api.queries.messages.MessagesSendQuery;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
-import vk.objects.Validable;
-import vk.objects.messages.Keyboard;
-import vk.queries.messages.MessagesSendQuery;
 
 @NonNls
 public final class MessageChannel {

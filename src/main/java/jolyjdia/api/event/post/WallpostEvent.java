@@ -1,7 +1,7 @@
 package jolyjdia.api.event.post;
 
 import jolyjdia.api.event.Event;
-import vk.objects.wall.Wallpost;
+import jolyjdia.vk.api.objects.wall.Wallpost;
 
 public class WallpostEvent implements Event {
     private final Wallpost wallpost;

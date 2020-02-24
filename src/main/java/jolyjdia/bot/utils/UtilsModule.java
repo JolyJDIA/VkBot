@@ -8,8 +8,8 @@ import jolyjdia.api.event.post.NewPostWallEvent;
 import jolyjdia.api.module.Module;
 import jolyjdia.api.utils.chat.MessageChannel;
 import jolyjdia.bot.Bot;
+import jolyjdia.vk.api.objects.wall.Wallpost;
 import org.jetbrains.annotations.NotNull;
-import vk.objects.wall.Wallpost;
 
 import java.util.Map;
 
@@ -24,9 +24,10 @@ public class UtilsModule implements Module, Listener {
         Bot.getBotManager().registerCommand(new FlipCommand());
         Bot.getBotManager().registerEvent(this);
 
-        Bot.getScheduler().scheduleSyncRepeatingTask(() ->
+        Bot.getScheduler().runRepeatingSyncTaskAfter(() ->
                         cooldown.entrySet().removeIf(e -> (e.getValue() - System.currentTimeMillis()) < 1L),
                 0, 50);
+
     }
 
     @EventLabel(ignoreCancelled = true)

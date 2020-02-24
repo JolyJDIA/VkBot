@@ -1,65 +1,85 @@
 package jolyjdia.api.scheduler;
 
-import jolyjdia.api.utils.StringBind;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
+/**
+ * Note: this class has a natural ordering that is inconsistent with equals.
+ */
+public abstract class Task implements Runnable, Comparable<Task> {
+    static final int NO_REPEATING = 0;
+    private long period = NO_REPEATING;
+    private long nextRun;
+    private final Runnable runnable;
+    private final int id;
 
-public class Task implements TypeTask, Runnable {
-    static final int NO_REPEATING = -1;
-    private int period = NO_REPEATING;
-    private int currentTick;
-    private Runnable runnable;
-    private Consumer<TypeTask> consumer;
-
-    private Task(@NotNull Object o) {
-        if (Runnable.class.isAssignableFrom(o.getClass())) {
-            this.runnable = (Runnable) o;
-        } else if (Consumer.class.isAssignableFrom(o.getClass())) {
-            this.consumer = (Consumer<TypeTask>) o;
-        } else {
-            throw new AssertionError("Illegal task class");
-        }
+    private Task(Runnable runnable, int id) {
+        this.runnable = runnable;
+        this.id = id;
     }
 
-    Task(Object o, int delay, int period) {
-        this(o);
+    public Task(Runnable runnable, long period, int id) {
+        this(runnable, id);
         this.period = period;
-        this.currentTick = period - delay;
     }
+
     @Override
     public final void run() {
         if (this.runnable != null) {
             this.runnable.run();
-        } else {
-            this.consumer.accept(this);
-        }
-        if(isAsync()) {
-            StringBind.log("Задача выполнена асинхронно");
         }
     }
-    public final int getPeriod() {
+    public abstract boolean isAsync();
+
+    public Runnable getRunnable() {
+        return runnable;
+    }
+
+    public final long getPeriod() {
         return period;
     }
 
-    public final void setCurrentTickZero() {
-        this.currentTick = NO_REPEATING;
+    public void setNextRun(long nextRun) {
+        this.nextRun = nextRun;
     }
 
-    public void setCurrentTick(int currentTick) {
-        this.currentTick = currentTick;
-    }
-
-    public final int getCurrentTick() {
-        return currentTick;
-    }
-
-    public final void addCurrentTick() {
-        this.currentTick += 1;
+    public long getNextRun() {
+        return nextRun;
     }
 
     public final void cancel() {
-        Bot.getScheduler().cancel(this);
+        this.period = NO_REPEATING;
+    }
+
+    public final boolean isCancelled() {
+        return period <= NO_REPEATING;
+    }
+
+    public final int getId() {
+        return id;
+    }
+
+    public long getDelay() {
+        return nextRun - Bot.getScheduler().getCounter();
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        return this == o || o != null && getClass() == o.getClass() && id == ((Task) o).id;
+    }
+
+    @Override
+    public final int hashCode() {
+        return id;
+    }
+
+    @Override
+    public final int compareTo(@NotNull Task o) {
+        if (o == this) {
+            return 0;
+        }
+        return (nextRun < o.nextRun) ?
+                -1 : ((nextRun == o.nextRun) ?
+                (id < o.id ? -1 : 1) : 1);
     }
 }

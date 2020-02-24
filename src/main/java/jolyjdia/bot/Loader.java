@@ -1,13 +1,13 @@
 package jolyjdia.bot;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import jolyjdia.vk.api.callback.longpoll.CallbackApiLongPoll;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
+import jolyjdia.vk.api.objects.callback.longpoll.responses.GetLongPollEventsResponse;
+import jolyjdia.vk.api.objects.groups.LongPollServer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import vk.callback.longpoll.CallbackApiLongPoll;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
-import vk.objects.callback.longpoll.responses.GetLongPollEventsResponse;
-import vk.objects.groups.LongPollServer;
 
 import java.util.concurrent.*;
 
@@ -19,7 +19,13 @@ public final class Loader {
         Thread.currentThread().setName("Main Thread");
     }
 
-    public static void main(String[] args) throws ClientException, ApiException {
+    /**
+     * @param args
+     * @throws ClientException
+     * @throws ApiException
+     * @throws ClientException
+     */
+    public static void main(String[] args) {
         final CallbackApiLongPoll longPoll = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
         final LongPollServer longPollServer = Bot.getVkApiClient()
                 .groupsLongPoll()

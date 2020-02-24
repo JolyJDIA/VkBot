@@ -9,12 +9,12 @@ import jolyjdia.api.utils.MathUtils;
 import jolyjdia.api.utils.StringBind;
 import jolyjdia.api.utils.VkUtils;
 import jolyjdia.bot.Bot;
+import jolyjdia.vk.api.client.actors.UserActor;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
+import jolyjdia.vk.api.objects.photos.Photo;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import vk.client.actors.UserActor;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
-import vk.objects.photos.Photo;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,7 +37,8 @@ public class CommentCommand extends Command {
             "С головой пиздец",
             "вот дурашка забыл таблетки от шизы принять",
             "Аллах так сказал",
-            "тупые насти как же я вас блин ненавижу"
+            "тупые насти как же я вас блин ненавижу",
+            "Қызғанба енді біреумен билесем'де, Шақыра ғой, біреуді биге сен'де. \uD83E\uDD40⛓"
     };
 
     protected CommentCommand() {
@@ -71,7 +72,7 @@ public class CommentCommand extends Command {
                 runnable.setAdd(true);
             }
             sender.getChat().sendMessage("Комменты: Start CommentRunnable: "+runnable);
-            runnable.runTaskTimerAsynchronously(0, 120);
+            runnable.runRepeatingAsyncTaskAfter(0, 120);
         }
     }
 
@@ -104,7 +105,12 @@ public class CommentCommand extends Command {
                 cancel();
             }
         }
-        public void push(int itemId) throws ClientException, ApiException {
+        /**
+         * @param itemId
+         * @throws ClientException
+         * @throws ApiException
+         */
+        public void push(int itemId) {
             if(add) {
                 Bot.getVkApiClient().photos()
                         .createComment(VkUtils.ZAVR, itemId)

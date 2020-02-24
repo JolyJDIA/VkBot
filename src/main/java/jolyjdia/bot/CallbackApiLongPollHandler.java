@@ -15,17 +15,17 @@ import jolyjdia.api.event.user.UserLeaveEvent;
 import jolyjdia.api.storage.User;
 import jolyjdia.api.utils.StringBind;
 import jolyjdia.bot.smile.SmileLoad;
+import jolyjdia.vk.api.callback.longpoll.CallbackApiLongPoll;
+import jolyjdia.vk.api.client.VkApiClient;
+import jolyjdia.vk.api.client.actors.GroupActor;
+import jolyjdia.vk.api.objects.board.TopicComment;
+import jolyjdia.vk.api.objects.messages.Message;
+import jolyjdia.vk.api.objects.messages.MessageAction;
+import jolyjdia.vk.api.objects.messages.MessageActionStatus;
+import jolyjdia.vk.api.objects.photos.Photo;
+import jolyjdia.vk.api.objects.wall.Wallpost;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import vk.callback.longpoll.CallbackApiLongPoll;
-import vk.client.VkApiClient;
-import vk.client.actors.GroupActor;
-import vk.objects.board.TopicComment;
-import vk.objects.messages.Message;
-import vk.objects.messages.MessageAction;
-import vk.objects.messages.MessageActionStatus;
-import vk.objects.photos.Photo;
-import vk.objects.wall.Wallpost;
 
 import java.util.Arrays;
 
@@ -38,7 +38,7 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageNew(int groupId, @NotNull Message msg) {
-        if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
+        if(msg.getPeerId() == msg.getFromId() || msg.getFromId() < 0) {
             return;
         }
         MessageAction action = msg.getAction();
@@ -48,12 +48,10 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
                 Bot.getUserBackend().deleteUser(msg.getPeerId(), msg.getFromId());
                 //Удаляю из бд беседу
 
-                UserLeaveEvent event = new UserLeaveEvent(msg.getPeerId(), msg.getFromId());
-                submitEvent(event);
+                submitEvent(new UserLeaveEvent(msg.getPeerId(), msg.getFromId()));
                 return;
             } else if(type == MessageActionStatus.CHAT_INVITE_USER || type == MessageActionStatus.CHAT_INVITE_USER_BY_LINK) {
-                UserJoinEvent event = new UserJoinEvent(msg.getPeerId(), msg.getFromId());
-                submitEvent(event);
+                submitEvent(new UserJoinEvent(msg.getPeerId(), msg.getFromId()));
                 return;
             }
         }
@@ -79,27 +77,22 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
             return;
         }
         StringBind.log("Сообщение: \""+ msg.getText()+ "\" Чат: " +msg.getPeerId() + '(' +msg.getFromId()+ ')');
-        NewMessageEvent event = new NewMessageEvent(user, msg);
-        submitEvent(event);
+        submitEvent(new NewMessageEvent(user, msg));
     }
     @Override
     public final void messageReply(int groupId, @NotNull Message msg) {
-        if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
+        if(msg.getPeerId() == msg.getFromId() || msg.getFromId() < 0) {
             return;
         }
-        User user = Bot.getUserBackend().addIfAbsentAndReturnUser(msg.getPeerId(), msg.getFromId());
-        ReplyMessageEvent event = new ReplyMessageEvent(user, msg);
-        submitEvent(event);
+        submitEvent(new ReplyMessageEvent(Bot.getUserBackend().addIfAbsentAndReturnUser(msg.getPeerId(), msg.getFromId()), msg));
     }
 
     @Override
     public final void messageEdit(int groupId, @NotNull Message msg) {
-        if(msg.getPeerId().equals(msg.getFromId()) || msg.getFromId() < 0) {
+        if(msg.getPeerId() == msg.getFromId() || msg.getFromId() < 0) {
             return;
         }
-        User user = Bot.getUserBackend().addIfAbsentAndReturnUser(msg.getPeerId(), msg.getFromId());
-        EditMessageEvent event = new EditMessageEvent(user, msg);
-        submitEvent(event);
+        submitEvent(new EditMessageEvent(Bot.getUserBackend().addIfAbsentAndReturnUser(msg.getPeerId(), msg.getFromId()), msg));
     }
     @Override
     public final void photoNew(int groupId, @NotNull Photo photo) {
@@ -110,28 +103,23 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
     }
     @Override
     public final void wallPostNew(int groupId, Wallpost wallpost) {
-        NewPostWallEvent event = new NewPostWallEvent(wallpost);
-        submitEvent(event);
+        submitEvent(new NewPostWallEvent(wallpost));
     }
     @Override
     public final void wallRepost(int groupId, Wallpost wallpost) {
-        RepostWallEvent event = new RepostWallEvent(wallpost);
-        submitEvent(event);
+        submitEvent(new RepostWallEvent(wallpost));
     }
     @Override
     public final void boardPostNew(int groupId, TopicComment comment) {
-        BoardPostNewEvent event = new BoardPostNewEvent(comment);
-        submitEvent(event);
+        submitEvent(new BoardPostNewEvent(comment));
     }
     @Override
     public final void boardPostEdit(int groupId, TopicComment comment) {
-        BoardPostEditEvent event = new BoardPostEditEvent(comment);
-        submitEvent(event);
+        submitEvent(new BoardPostEditEvent(comment));
     }
     @Override
     public final void boardPostRestore(int groupId, TopicComment comment) {
-        BoardPostRestoreEvent event = new BoardPostRestoreEvent(comment);
-        submitEvent(event);
+        submitEvent(new BoardPostRestoreEvent(comment));
     }
     private static void submitEvent(@NotNull Event event) {
         Bot.getBotManager().getListeners().forEach(handler -> handler.accept(event));

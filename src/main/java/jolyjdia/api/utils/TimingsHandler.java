@@ -37,9 +37,9 @@ public class TimingsHandler {
     public String memoryUsed() {
         long totalMemory = Runtime.getRuntime().totalMemory();
         long freeMemory = Runtime.getRuntime().freeMemory();
-        return "\nВся память: " + humanReadableByteCount(totalMemory) +
-               "\nСъедено памяти: " + humanReadableByteCount((totalMemory - freeMemory)) +
-               "\nСвободно памяти: " + humanReadableByteCount(freeMemory);
+        return "\nTotal memory: " + humanReadableByteCount(totalMemory) +
+               "\nUsed memory: " + humanReadableByteCount((totalMemory - freeMemory)) +
+               "\nFree memory: " + humanReadableByteCount(freeMemory);
     }
     private static String humanReadableByteCount(long bytes) {
         if (bytes < 1000) {

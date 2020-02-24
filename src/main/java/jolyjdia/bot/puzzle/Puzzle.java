@@ -8,9 +8,9 @@ import jolyjdia.api.module.Module;
 import jolyjdia.api.storage.User;
 import jolyjdia.api.utils.MathUtils;
 import jolyjdia.bot.Bot;
+import jolyjdia.vk.api.objects.messages.Message;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import vk.objects.messages.Message;
 
 public class Puzzle implements Module, Listener {
     private int answer;

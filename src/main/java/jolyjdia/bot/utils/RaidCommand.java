@@ -82,7 +82,7 @@ public class RaidCommand extends Command {
             return;
         }
         RaidRunnable raidRunnable = new RaidRunnable(chat, text);
-        raidRunnable.runTaskTimer(0, period);
+        raidRunnable.runRepeatingSyncTaskAfter(0, period);
         raids.put(chat.getPeerId(), raidRunnable);
     }
 

@@ -1,6 +1,6 @@
 package jolyjdia.api.event.board;
 
-import vk.objects.board.TopicComment;
+import jolyjdia.vk.api.objects.board.TopicComment;
 
 public class BoardPostNewEvent extends BoardEvent {
     public BoardPostNewEvent(TopicComment topicComment) {

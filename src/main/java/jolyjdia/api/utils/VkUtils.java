@@ -4,6 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import jolyjdia.api.utils.chat.MessageChannel;
 import jolyjdia.bot.Bot;
+import jolyjdia.vk.api.client.actors.UserActor;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
+import jolyjdia.vk.api.objects.Validable;
+import jolyjdia.vk.api.objects.audio.Audio;
+import jolyjdia.vk.api.objects.photos.Photo;
+import jolyjdia.vk.api.objects.video.Video;
+import jolyjdia.vk.api.objects.wall.Wallpost;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -14,14 +22,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import vk.client.actors.UserActor;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
-import vk.objects.Validable;
-import vk.objects.audio.Audio;
-import vk.objects.photos.Photo;
-import vk.objects.video.Video;
-import vk.objects.wall.Wallpost;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +31,7 @@ import java.util.Optional;
 public final class VkUtils {
     public static final UserActor ZAVR = new UserActor(310289867, Bot.getConfig().getProperty("ZavrAccessToken"));
 
+    //СМЕНИТЬ
     public static final UserActor VALERA = new UserActor(526616439, Bot.getConfig().getProperty("ValeraAccessToken"));
     private VkUtils() {}
 

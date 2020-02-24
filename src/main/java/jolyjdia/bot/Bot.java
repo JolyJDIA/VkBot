@@ -2,7 +2,6 @@ package jolyjdia.bot;
 
 import jolyjdia.api.BotManager;
 import jolyjdia.api.command.HelpAllCommands;
-import jolyjdia.api.module.Module;
 import jolyjdia.api.module.ModuleLoader;
 import jolyjdia.api.permission.PermissionManager;
 import jolyjdia.api.scheduler.BotScheduler;
@@ -16,16 +15,17 @@ import jolyjdia.bot.puzzle.Puzzle;
 import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
 import jolyjdia.bot.utils.UtilsModule;
-import vk.actions.Groups;
-import vk.client.VkApiClient;
-import vk.client.actors.GroupActor;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
-import vk.httpclient.AsyncHttpTransportClient;
+import jolyjdia.vk.api.actions.Groups;
+import jolyjdia.vk.api.client.VkApiClient;
+import jolyjdia.vk.api.client.actors.GroupActor;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
+import jolyjdia.vk.api.httpclient.AsyncHttpTransportClient;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Properties;
 
 public final class Bot {
@@ -39,6 +39,7 @@ public final class Bot {
     private static final int groupId;
     private static final String accessToken;
     private static final GroupActor groupActor;
+    //static UserActor bolvan = new UserActor(150250636, "3ddf24d5927e346124c52ae9e80e41c94a6d0949184b1d343ab1d2f0662a3878041fa4190efe9368606b8");
 
     static {
         try (InputStream inputStream = Loader.class.getClassLoader().getResourceAsStream("config.properties")) {
@@ -59,7 +60,7 @@ public final class Bot {
 
         Groups groups = vkApiClient.groups();
         try {
-            if (!groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute().getIsEnabled()) {
+            if (!Objects.requireNonNull(groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute()).getIsEnabled()) {
                 groups.setLongPollSettings(groupActor, groupActor.getGroupId())
                         .enabled(true).apiVersion("5.103").wallPostNew(true).messageNew(true)
                         .audioNew(true).groupJoin(true).groupLeave(true).messageReply(true)
@@ -72,7 +73,6 @@ public final class Bot {
         registerModules();
         loadModule();
     }
-
     private Bot() {}
 
     private static void registerModules() {
@@ -85,7 +85,7 @@ public final class Bot {
         moduleLoader.registerModule(new ActivityLoad());
     }
     private static void loadModule() {
-        moduleLoader.getModules().forEach(Module::onLoad);
+        moduleLoader.enableModule();
         helpCommand.initializeHelp();
     }
 

@@ -2,9 +2,9 @@ package jolyjdia.api.storage;
 
 import jolyjdia.api.utils.chat.MessageChannel;
 import jolyjdia.bot.Bot;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
-import vk.objects.messages.Keyboard;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
+import jolyjdia.vk.api.objects.messages.Keyboard;
 
 public class Chat<T> {
     private final int peerId;

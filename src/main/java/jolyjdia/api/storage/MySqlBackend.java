@@ -12,10 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.*;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +29,8 @@ public final class MySqlBackend implements UserBackend {
     @NonNls private static final String DELETE_CHAT =
             "DELETE FROM `vkbot` WHERE `peerId` = ?";
 
-    private final Map<Integer, TemporaryCache> chats = new WeakHashMap<>();
+    private final Map<Integer, TemporaryCache> chats = new HashMap<>();
+    public static Set<Integer> CHATS = new HashSet<>();
 
     public static @NotNull UserBackend of(String username, String password, @NonNls String url) {
         try {
@@ -61,7 +59,7 @@ public final class MySqlBackend implements UserBackend {
     }
     @Override
     public void saveOrUpdateGroup(User user) {
-        Bot.getScheduler().runTaskAsynchronously(() -> {
+        Bot.getScheduler().runAsyncTask(() -> {
             try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
                 String group = user.getGroup().getName();
                 ps.setInt(1, user.getChat().getPeerId());
@@ -82,6 +80,7 @@ public final class MySqlBackend implements UserBackend {
 
     @Override
     public TemporaryCache getChatAndPutIfAbsent(int peerId) {
+        CHATS.add(peerId);
         return chats.computeIfAbsent(peerId, k -> new TemporaryCache(peerId));
     }
     @Override
@@ -125,7 +124,7 @@ public final class MySqlBackend implements UserBackend {
         if(chats.containsKey(peerId)) {
             getChatAndPutIfAbsent(peerId).getUsers().remove(userId);
         }
-        Bot.getScheduler().runTaskAsynchronously(() -> {
+        Bot.getScheduler().runAsyncTask(() -> {
             try (PreparedStatement ps = connection.prepareStatement(DELETE)) {
                 ps.setInt(1, peerId);
                 ps.setInt(2, userId);
@@ -138,8 +137,9 @@ public final class MySqlBackend implements UserBackend {
 
     @Override
     public void deleteChat(int peerId) {
+        chats.get(peerId).getUsers().stop();
         chats.remove(peerId);
-        Bot.getScheduler().runTaskAsynchronously(() -> {
+        Bot.getScheduler().runAsyncTask(() -> {
             try (PreparedStatement ps = connection.prepareStatement(DELETE_CHAT)) {
                 ps.setInt(1, peerId);
                 ps.execute();
@@ -151,7 +151,7 @@ public final class MySqlBackend implements UserBackend {
     @Override
     public void saveAll() {
         if (chats.isEmpty()) { return; }
-        Bot.getScheduler().runTaskAsynchronously(() -> {
+        Bot.getScheduler().runAsyncTask(() -> {
             try (PreparedStatement ps = connection.prepareStatement(INSERT_OR_UPDATE_GROUP)) {
                 chats.values().forEach(e -> e.getUsers().values().stream().filter(User::isChange).forEach(u -> {
                     String group = u.getGroup().getName();
@@ -176,7 +176,7 @@ public final class MySqlBackend implements UserBackend {
 
         protected TemporaryCache(int peerId) {
             super(CacheBuilder.newBuilder()
-                    .expireAfterWrite(45, TimeUnit.MINUTES)
+                    .expireAfterWrite(45, TimeUnit.MINUTES)//45
                     .ticker(3)
                     .removeListener((RemovalListener<Integer, User>) entry -> {
                         User user = entry.getValue();
@@ -184,6 +184,13 @@ public final class MySqlBackend implements UserBackend {
                             Bot.getUserBackend().saveOrUpdateGroup(user);
                         }
                     }).build(), peerId);
+        }
+    }
+    public static class CacheMap extends WeakHashMap<Integer, TemporaryCache> {
+        @Override
+        public final boolean remove(Object key, Object value) {
+            get(key).getUsers().stop();
+            return super.remove(key, value);
         }
     }
 }

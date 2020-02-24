@@ -23,7 +23,8 @@ public class ReloadCommand extends Command {
                 Bot.getModuleLoader().disableModule();
                 System.exit(-1);
             } else {
-                //Bot.getModuleLoader().reloadModule();
+                Bot.getUserBackend().saveAll();
+                Bot.getModuleLoader().reloadModule();
                 sender.getChat().sendMessage("Перезагрузка завершена\nМой планировщик: Привет из Thread-2");
             }
         }

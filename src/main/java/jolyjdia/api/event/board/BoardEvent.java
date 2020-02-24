@@ -1,7 +1,7 @@
 package jolyjdia.api.event.board;
 
 import jolyjdia.api.event.Event;
-import vk.objects.board.TopicComment;
+import jolyjdia.vk.api.objects.board.TopicComment;
 
 public class BoardEvent implements Event {
     private final TopicComment topicComment;

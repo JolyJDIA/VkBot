@@ -8,13 +8,13 @@ import jolyjdia.api.storage.User;
 import jolyjdia.api.utils.StringBind;
 import jolyjdia.api.utils.VkUtils;
 import jolyjdia.bot.Bot;
+import jolyjdia.vk.api.client.actors.UserActor;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
+import jolyjdia.vk.api.objects.likes.Type;
+import jolyjdia.vk.api.objects.photos.Photo;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import vk.client.actors.UserActor;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
-import vk.objects.likes.Type;
-import vk.objects.photos.Photo;
 
 import java.util.Iterator;
 import java.util.List;
@@ -55,7 +55,7 @@ public class LikesCommand extends Command {
                 runnable.setAdd(true);
             }
             sender.getChat().sendMessage("Лайки: Start LikesRunnable: "+runnable);
-            runnable.runTaskTimerAsynchronously(0, 60);
+            runnable.runRepeatingAsyncTaskAfter(0, 60);
         }
     }
 
@@ -88,7 +88,12 @@ public class LikesCommand extends Command {
                 cancel();
             }
         }
-        public void push(int itemId) throws ClientException, ApiException {
+        /**
+         * @param itemId
+         * @throws ClientException
+         * @throws ApiException
+         */
+        public void push(int itemId) {
             for(UserActor user : USER_ACTORS) {
                 if(add) {
                     Bot.getVkApiClient().likes().add(user, Type.PHOTO, itemId)

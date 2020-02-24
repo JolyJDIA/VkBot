@@ -10,10 +10,10 @@ import jolyjdia.api.utils.VkUtils;
 import jolyjdia.api.utils.timeformat.TemporalDuration;
 import jolyjdia.api.utils.timeformat.TimeFormatter;
 import jolyjdia.bot.Bot;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,10 +51,10 @@ public class ActivityLoad implements Module, Listener {
     );
     private int index;
     private static final Map<String, String> ACTIVITIES = ImmutableMap.<String, String>builder()
-            .put("idea64.exe", "\uD83D\uDCBBCoding in IntelliJ IDEA(среда разработки)")
-            .put("javaw.exe", "\uD83C\uDF0DMinecraft\uD83C\uDF0D")
-            .put("Discord.exe", "✅Онлайн в Дискорде")
-            .put("Telegram.exe", "✅Онлайн в Телеграме")
+          //  .put("idea64.exe", "\uD83D\uDCBBCoding in IntelliJ IDEA(среда разработки)")
+            .put("javaw.exe", "Играет в \uD83C\uDF0DMinecraft▦")
+            .put("Discord.exe", "\uD83D\uDE08Онлайн в Дискорде")
+            .put("Telegram.exe", "✈Онлайн в Телеграме")
             .build();
 
     @Override
@@ -62,7 +62,7 @@ public class ActivityLoad implements Module, Listener {
         Bot.getBotManager().registerEvent(this);
         Bot.getBotManager().registerCommand(new LikesCommand());
         Bot.getBotManager().registerCommand(new CommentCommand());
-        Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
+        Bot.getScheduler().runRepeatingSyncTaskAfter(() -> {
             try {
                 Bot.getVkApiClient().status()
                         .set(VkUtils.ZAVR)
@@ -72,18 +72,19 @@ public class ActivityLoad implements Module, Listener {
                 this.index = index == STATS.size()-1 ? 0 : ++index;
                 Bot.getVkApiClient().status()
                         .set(VkUtils.ZAVR)
-                        .text(
+                       /* .text(
                                 "Runnable tasks: "+Bot.getScheduler().taskCount()+
-                                " Thread: "+Runtime.getRuntime().availableProcessors()+
-                                " TickPerSec: "+Bot.getScheduler().getTimingsHandler().getAverageTPS()[0] +
-                                ' ' +Bot.getScheduler().getTimingsHandler().memoryUsed())
+                                " Threads: "+Runtime.getRuntime().availableProcessors()+
+                                " Timings: "+Bot.getScheduler().getTimingsHandler().getAverageTPS()[0] +
+                                ' ' +Bot.getScheduler().getTimingsHandler().memoryUsed())*/
+                        .text(getActivityProcesses())
                         .execute();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }, 0, 1800);
-        Bot.getScheduler().scheduleSyncRepeatingTask(() -> {
+        Bot.getScheduler().runRepeatingSyncTaskAfter(() -> {
             try {
                 Bot.getVkApiClient().account().setOnline(VkUtils.ZAVR).execute();
             } catch (ApiException | ClientException e) {
@@ -100,7 +101,7 @@ public class ActivityLoad implements Module, Listener {
         try {
             Bot.getVkApiClient().status()
                     .set(VkUtils.ZAVR)
-                    .text("Осторожно!!! Злой динозаврик!!!")
+                    .text("Осторожно!!! Злой динозаврик!!!")//Наш Мир - костыль
                     .execute();
         } catch (ApiException | ClientException e) {
             e.printStackTrace();

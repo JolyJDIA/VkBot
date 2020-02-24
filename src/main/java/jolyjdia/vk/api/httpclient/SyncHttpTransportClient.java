@@ -1,5 +1,7 @@
-package vk.httpclient;
+package jolyjdia.vk.api.httpclient;
 
+import jolyjdia.vk.api.client.ClientResponse;
+import jolyjdia.vk.api.client.TransportClient;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -16,8 +18,6 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.jetbrains.annotations.NotNull;
-import vk.client.ClientResponse;
-import vk.client.TransportClient;
 
 import java.io.File;
 import java.io.IOException;

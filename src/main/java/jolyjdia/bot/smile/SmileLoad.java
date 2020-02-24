@@ -8,15 +8,15 @@ import jolyjdia.api.module.Module;
 import jolyjdia.api.utils.KeyboardUtils;
 import jolyjdia.api.utils.VkUtils;
 import jolyjdia.bot.Bot;
+import jolyjdia.vk.api.exceptions.ApiException;
+import jolyjdia.vk.api.exceptions.ClientException;
+import jolyjdia.vk.api.objects.messages.Keyboard;
+import jolyjdia.vk.api.objects.messages.KeyboardButton;
+import jolyjdia.vk.api.objects.messages.KeyboardButtonColor;
+import jolyjdia.vk.api.objects.photos.Photo;
+import jolyjdia.vk.api.objects.photos.PhotoAlbumFull;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import vk.exceptions.ApiException;
-import vk.exceptions.ClientException;
-import vk.objects.messages.Keyboard;
-import vk.objects.messages.KeyboardButton;
-import vk.objects.messages.KeyboardButtonColor;
-import vk.objects.photos.Photo;
-import vk.objects.photos.PhotoAlbumFull;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -117,7 +117,7 @@ public class SmileLoad implements Module, Listener {
             e.printStackTrace();
         }
     }
-    public void addSmile(@NotNull Photo photo) {
+    public final void addSmile(@NotNull Photo photo) {
         List<KeyboardButton> list = board.get(board.size()-1);
         String label = photo.getText().isEmpty() ? "not_found"+list.size() : photo.getText();
 

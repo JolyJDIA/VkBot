@@ -3,7 +3,7 @@ package jolyjdia.api.event.messages;
 import jolyjdia.api.event.Event;
 import jolyjdia.api.storage.Chat;
 import jolyjdia.api.storage.User;
-import vk.objects.messages.Message;
+import jolyjdia.vk.api.objects.messages.Message;
 
 public class MessageEvent implements Event {
     private final Message msg;

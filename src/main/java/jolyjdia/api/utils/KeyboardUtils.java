@@ -1,7 +1,7 @@
 package jolyjdia.api.utils;
 
+import jolyjdia.vk.api.objects.messages.*;
 import org.jetbrains.annotations.NonNls;
-import vk.objects.messages.*;
 
 import java.util.Collections;
 
