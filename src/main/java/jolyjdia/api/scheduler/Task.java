@@ -3,9 +3,6 @@ package jolyjdia.api.scheduler;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Note: this class has a natural ordering that is inconsistent with equals.
- */
 public abstract class Task implements Runnable, Comparable<Task> {
     static final int NO_REPEATING = 0;
     private long period = NO_REPEATING;
@@ -64,15 +61,13 @@ public abstract class Task implements Runnable, Comparable<Task> {
     }
 
     @Override
-    public final boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() && id == ((Task) o).id;
-    }
-
-    @Override
     public final int hashCode() {
         return id;
     }
-
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Task && compareTo((Task) o) == 0;
+    }
     @Override
     public final int compareTo(@NotNull Task o) {
         if (o == this) {
