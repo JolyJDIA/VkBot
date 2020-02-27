@@ -1,7 +1,6 @@
 package jolyjdia.api.command.defaults;
 
 import jolyjdia.api.command.Command;
-import jolyjdia.api.storage.MySqlBackend;
 import jolyjdia.api.storage.User;
 import jolyjdia.api.utils.StringBind;
 import jolyjdia.api.utils.VkUtils;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -89,17 +87,6 @@ public class UtilsCommand extends Command {
                 } catch (ApiException | ClientException e) {
                     e.printStackTrace();
                 }
-            }
-            case "tasks" -> {
-                if(args.length != 1) {
-                    return;
-                }
-                sender.getChat().sendMessage(
-                        "Потоков: "+Runtime.getRuntime().availableProcessors()+
-                             "\nВсего задач: "+Bot.getScheduler().taskCount()+
-                             '\n' +Arrays.toString(Bot.getScheduler().getTaskQueue().stream().map(e -> e.getRunnable() + "\n").toArray()) +
-                             "\nДолжно быть задач~: "+ (MySqlBackend.CHATS.size()+3)
-                );
             }
         }
     }

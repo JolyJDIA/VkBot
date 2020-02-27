@@ -2,49 +2,53 @@ package jolyjdia.api.scheduler;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import jolyjdia.api.utils.TimingsHandler;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
-import java.util.concurrent.Executor;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BotScheduler {
     private final AtomicInteger ids = new AtomicInteger(1);
     private final RoflanBlockingQueue taskQueue = new RoflanBlockingQueue();
-    private final Executor executor = Executors.newCachedThreadPool(
+    private final ExecutorService executor = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
-                    .setNameFormat("BotScheduler Thread %d")
+                    .setNameFormat("VkScheduler Thread %d")
                     .build()
     );
     private int counter;
-    private final TimingsHandler timingsHandler = new TimingsHandler();
+    private final TimingsHandler handler = new TimingsHandler();
 
-    public final void mainThreadHeartbeat() {
-        Iterator<Task> iterator = taskQueue.iterator();
-        if (!iterator.hasNext()) {
+    public final void mainLoop() {
+        handler.tick();
+        if(taskQueue.isEmpty()) {
             return;
         }
-        while (iterator.hasNext()) {
-            Task task = iterator.next();
-            if (counter >= task.getNextRun()) {
-                if(task.isAsync()) {
-                    executor.execute(task);
-                } else {
-                    task.run();
-                }
-                if (task.isCancelled()) {
-                    iterator.remove();
-                    return;
-                }
-                task.setNextRun(counter+task.getPeriod());
+        Task task = taskQueue.peek();
+        long now = System.currentTimeMillis();
+        if (now >= task.getNextRun()) {
+            if (task.isAsync()) {
+                executor.execute(task);
+            } else {
+                task.run();
             }
+            if(task.isCancelled()) {
+                taskQueue.remove();
+                return;
+            }
+            taskQueue.setNexRun(now+task.getPeriod());
         }
         ++counter;
     }
 
-    @NotNull
-    public final Task runTask(Runnable runnable) {
+    public <T> Future<T> submitAsync(Callable<T> callable) {
+        return executor.submit(callable);
+    }
+
+    public Task runSyncTask(Runnable runnable) {
         return this.sync(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
     }
 
@@ -72,45 +76,32 @@ public class BotScheduler {
         return this.async(runnable, delay, period);
     }
 
-    //тут можно обосраться
-    public final void removeTask(Task task) {
-        taskQueue.remove(task);
+    public final void cancelTask(@NotNull Task task) {
         task.cancel();
     }
 
     public final void cancelTasks() {
         taskQueue.clear();
     }
-    public final TimingsHandler getTimingsHandler() {
-        return timingsHandler;
-    }
 
     @NotNull
     private Task sync(Runnable runnable, long delay, long period) {
         TaskSync task = new TaskSync(runnable, period, nextId());
-        task.setNextRun(counter + delay);
-        taskQueue.add(task);
-        return task;
+        return addTask(task, delay);
     }
 
     @NotNull
     private Task async(Runnable runnable, long delay, long period) {
         TaskAsync task = new TaskAsync(runnable, period, nextId());
+        return addTask(task, delay);
+    }
+
+    @NotNull
+    @Contract("_, _ -> param1")
+    private Task addTask(@NotNull Task task, long delay) {
         task.setNextRun(counter + delay);
         taskQueue.add(task);
         return task;
-    }
-
-    public final void addTask(Task task) {
-        taskQueue.add(task);
-    }
-
-    public int taskCount() {
-        return taskQueue.size();
-    }
-
-    public RoflanBlockingQueue getTaskQueue() {
-        return taskQueue;
     }
 
     private int nextId() {
@@ -119,5 +110,9 @@ public class BotScheduler {
 
     public int getCounter() {
         return counter;
+    }
+
+    public TimingsHandler getTimingsHandler() {
+        return handler;
     }
 }

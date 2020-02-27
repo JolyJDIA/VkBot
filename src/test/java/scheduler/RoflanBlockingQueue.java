@@ -1,9 +1,9 @@
+/*
 package scheduler;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -13,10 +13,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class RoflanBlockingQueue extends AbstractQueue<Task> implements BlockingQueue<Task> {
     private static final int INITIAL_CAPACITY = 16;
     private Task[] queue = new Task[INITIAL_CAPACITY];
-    private final ReentrantLock reentrantLock = new ReentrantLock();
-    @Nullable private Thread leader;
+    private final ReentrantLock lock = new ReentrantLock();
     private int size;
-    private final Condition available = reentrantLock.newCondition();
+    @Nullable private Thread leader;
+    private final Condition available = lock.newCondition();
 
     private void siftUp(int k, Task key) {
         while (k > 0) {
@@ -32,6 +32,7 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
         queue[k] = key;
         key.setHeapIndex(k);
     }
+    
     private void siftDown(int k, Task key) {
         int half = size >>> 1;
         while (k < half) {
@@ -51,7 +52,7 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
         queue[k] = key;
         key.setHeapIndex(k);
     }
-
+    
     private void grow() {
         int oldCapacity = queue.length;
         int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
@@ -60,7 +61,7 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
         }
         queue = Arrays.copyOf(queue, newCapacity);
     }
-
+    
     private int indexOf(Object x) {
         if (x != null) {
             if (x instanceof Task) {
@@ -74,16 +75,16 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
     }
     @Override
     public final boolean contains(Object x) {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return indexOf(x) != -1;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
     @Override
     public final boolean remove(Object x) {
-        reentrantLock.lock();
+        lock.lock();
         try {
             int i = indexOf(x);
             if (i < 0) {
@@ -101,17 +102,21 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
             }
             return true;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
     @Override
     public final int size() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return size;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
+    }
+    @Override
+    public final boolean isEmpty() {
+        return size() == 0;
     }
     @Override
     public final int remainingCapacity() {
@@ -119,16 +124,16 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
     }
     @Override
     public final Task peek() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return queue[0];
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
     @Override
     public final boolean offer(@NotNull Task e) {
-        reentrantLock.lock();
+        lock.lock();
         try {
             int i = size;
             if (i >= queue.length) {
@@ -146,7 +151,7 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
                 available.signalAll();
             }
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
         return true;
     }
@@ -158,37 +163,37 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
     public final boolean add(@NotNull Task e) {
         return offer(e);
     }
+
     @Override
     public final boolean offer(Task e, long timeout, @NotNull TimeUnit unit) {
         return offer(e);
     }
+    
     @NotNull
     @Contract("_ -> param1")
     private Task finishPoll(Task f) {
-        --size;
-        Task x = queue[size];
-        queue[size] = null;
-        if (size != 0) {
-            siftDown(0, x);
-        }
-        f.setHeapIndex(-1);
-        return f;
+        queue[0].setNextRun(System.currentTimeMillis()+f.getNextRun());
+        siftDown(0, queue[0]);
+        return queue[0];
     }
+
     @Nullable
     @Override
     public final Task poll() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             Task first = queue[0];
+            //System.out.println(first.getDelay() > 0);
             return (first == null || first.getDelay() > 0) ? null : finishPoll(first);
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
+
     @NotNull
     @Override
     public final Task take() throws InterruptedException {
-        reentrantLock.lockInterruptibly();
+        lock.lockInterruptibly();
         try {
             for (;;) {
                 Task first = queue[0];
@@ -218,14 +223,14 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
             if (leader == null && queue[0] != null) {
                 available.signalAll();
             }
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
+
     @Nullable
-    @Override
     public final Task poll(long timeout, @NotNull TimeUnit unit) throws InterruptedException {
         long nanos = unit.toNanos(timeout);
-        reentrantLock.lockInterruptibly();
+        lock.lockInterruptibly();
         try {
             for (;;) {
                 Task first = queue[0];
@@ -263,14 +268,15 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
             if (leader == null && queue[0] != null) {
                 available.signalAll();
             }
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
+
     @Override
     public final void clear() {
-        reentrantLock.lock();
+        lock.lock();
         try {
-            for (int i = 0; i < size; ++i) {
+            for (int i = 0; i < size; i++) {
                 Task t = queue[i];
                 if (t != null) {
                     queue[i] = null;
@@ -279,7 +285,7 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
             }
             size = 0;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
     @Override
@@ -295,7 +301,7 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
         if (maxElements <= 0) {
             return 0;
         }
-        reentrantLock.lock();
+        lock.lock();
         try {
             int n = 0;
             for (Task first; n < maxElements && (first = queue[0]) != null && first.getDelay() <= 0;) {
@@ -305,24 +311,24 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
             }
             return n;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
     @NotNull
     @Override
     public final Object[] toArray() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return Arrays.copyOf(queue, size, Object[].class);
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
-
+    
     @NotNull
-    @SuppressWarnings("unchecked")
+    @Override
     public final <T> T[] toArray(@NotNull T[] a) {
-        reentrantLock.lock();
+        lock.lock();
         try {
             if (a.length < size) {
                 return (T[]) Arrays.copyOf(queue, size, a.getClass());
@@ -333,28 +339,28 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
             }
             return a;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
     @NotNull
     @Override
     public final Iterator<Task> iterator() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return new Itr(this, Arrays.copyOf(queue, size));
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
-
+    
     private static class Itr implements Iterator<Task> {
-        final RoflanBlockingQueue queue;
         final Task[] array;
+        final RoflanBlockingQueue runnables;
         int cursor;
         int lastRet = -1;
 
         Itr(RoflanBlockingQueue queue, Task[] array) {
-            this.queue = queue;
+            this.runnables = queue;
             this.array = array;
         }
         @Override
@@ -373,8 +379,8 @@ public class RoflanBlockingQueue extends AbstractQueue<Task> implements Blocking
             if (lastRet < 0) {
                 throw new IllegalStateException();
             }
-            queue.remove(array[lastRet]);
+            runnables.remove(array[lastRet]);
             lastRet = -1;
         }
     }
-}
+}*/

@@ -72,11 +72,6 @@ public class ActivityLoad implements Module, Listener {
                 this.index = index == STATS.size()-1 ? 0 : ++index;
                 Bot.getVkApiClient().status()
                         .set(VkUtils.ZAVR)
-                       /* .text(
-                                "Runnable tasks: "+Bot.getScheduler().taskCount()+
-                                " Threads: "+Runtime.getRuntime().availableProcessors()+
-                                " Timings: "+Bot.getScheduler().getTimingsHandler().getAverageTPS()[0] +
-                                ' ' +Bot.getScheduler().getTimingsHandler().memoryUsed())*/
                         .text(getActivityProcesses())
                         .execute();
             } catch (Exception e) {

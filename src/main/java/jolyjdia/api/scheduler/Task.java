@@ -1,6 +1,5 @@
 package jolyjdia.api.scheduler;
 
-import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Task implements Runnable, Comparable<Task> {
@@ -56,9 +55,6 @@ public abstract class Task implements Runnable, Comparable<Task> {
         return uid;
     }
 
-    public final long getDelay() {
-        return nextRun - Bot.getScheduler().getCounter();
-    }
 
     @Override
     public final int hashCode() {

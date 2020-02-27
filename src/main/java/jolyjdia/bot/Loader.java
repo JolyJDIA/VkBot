@@ -1,7 +1,6 @@
 package jolyjdia.bot;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import jolyjdia.vk.api.callback.longpoll.CallbackApiLongPoll;
 import jolyjdia.vk.api.exceptions.ApiException;
 import jolyjdia.vk.api.exceptions.ClientException;
 import jolyjdia.vk.api.objects.callback.longpoll.responses.GetLongPollEventsResponse;
@@ -26,7 +25,6 @@ public final class Loader {
      * @throws ClientException
      */
     public static void main(String[] args) {
-        final CallbackApiLongPoll longPoll = new CallbackApiLongPollHandler(Bot.getVkApiClient(), Bot.getGroupActor());
         final LongPollServer longPollServer = Bot.getVkApiClient()
                 .groupsLongPoll()
                 .getLongPollServer(Bot.getGroupActor(), Bot.getGroupId())
@@ -42,14 +40,16 @@ public final class Loader {
                 try {
                     GetLongPollEventsResponse response = future.get();
                     if(response != null) {
-                        response.getUpdates().forEach(longPoll::parse);
+                        response.getUpdates().forEach(e -> {
+                            Bot.getLongPoll().parse(e.getAsJsonObject());
+                        });
                     }
                     future = asyncResponse.submitAsync();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
             }
-            Bot.getScheduler().mainThreadHeartbeat();
+            Bot.getScheduler().mainLoop();
             try {
                 Thread.sleep(50L);
             } catch (InterruptedException e) {

@@ -1,9 +1,9 @@
-package jolyjdia.api.scheduler;
+package scheduler;
 
 import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class RoflanBlockingQueue  {
+public class TaskQueue {
     private static final int INITIAL_CAPACITY = 16;
     private Task[] queue = new Task[INITIAL_CAPACITY];
     private int size;

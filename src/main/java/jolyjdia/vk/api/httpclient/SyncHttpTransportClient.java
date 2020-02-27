@@ -17,21 +17,25 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SyncHttpTransportClient implements TransportClient {
+    private static final String ENCODING = "UTF-8";
     private static final String FORM_CONTENT_TYPE = "application/x-www-form-urlencoded";
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
+    private static final String USER_AGENT = "Java VK SDK/1.0";
+
     private static final String EMPTY_PAYLOAD = "-";
-    private static final int FULL_CONNECTION_TIMEOUT_S = 60;
-    private final HttpClient httpClient;
+
+    private static SyncHttpTransportClient instance;
+    private static HttpClient httpClient;
 
     private final int retryInvalidCount;
 
@@ -42,13 +46,19 @@ public class SyncHttpTransportClient implements TransportClient {
     public SyncHttpTransportClient(int retryInvalidCount) {
         this.retryInvalidCount = retryInvalidCount;
 
-        this.httpClient = HttpClients.custom()
+        httpClient = HttpClients.custom()
                 .setConnectionManager(new PoolingHttpClientConnectionManager())
                 .build();
     }
 
 
-    @NotNull
+    public static SyncHttpTransportClient getInstance() {
+        if (instance == null) {
+            instance = new SyncHttpTransportClient();
+        }
+        return instance;
+    }
+
     private static Map<String, String> getHeaders(Header[] headers) {
         Map<String, String> result = new HashMap<>();
         for (Header header : headers) {
@@ -63,8 +73,8 @@ public class SyncHttpTransportClient implements TransportClient {
         int attempts = 0;
 
         do {
-            response = this.call(request);
-            ++attempts;
+            response = call(request);
+            attempts++;
         } while (attempts < retryInvalidCount && isInvalidGatewayStatus(response.getStatusCode()));
 
         return response;
@@ -74,19 +84,24 @@ public class SyncHttpTransportClient implements TransportClient {
         return status == HttpStatus.SC_BAD_GATEWAY || status == HttpStatus.SC_GATEWAY_TIMEOUT;
     }
 
-    @NotNull
     private ClientResponse call(HttpRequestBase request) throws IOException {
-        HttpResponse response = httpClient.execute(request);
+        SocketException exception = null;
+        for (int i = 0; i < retryInvalidCount; i++) {
+            try {
+                HttpResponse response = httpClient.execute(request);
 
-        try (InputStream content = response.getEntity().getContent()) {
-            String result = IOUtils.toString(content, StandardCharsets.UTF_8);
-     //       Map<String, String> responseHeaders = getHeaders(response.getAllHeaders());
-            return new ClientResponse(response.getStatusLine().getStatusCode(), result, null);
-        } finally {
-            request.abort();
+                try (InputStream content = response.getEntity().getContent()) {
+                    String result = IOUtils.toString(content, ENCODING);
+                    Map<String, String> responseHeaders = getHeaders(response.getAllHeaders());
+                    return new ClientResponse(response.getStatusLine().getStatusCode(), result, responseHeaders);
+                }
+            } catch (SocketException e) {
+                exception = e;
+            }
         }
-    }
 
+        throw exception;
+    }
 
     private String getRequestPayload(HttpRequestBase request) throws IOException {
         if (!(request instanceof HttpPost)) {
@@ -107,7 +122,6 @@ public class SyncHttpTransportClient implements TransportClient {
 
         return IOUtils.toString(postRequest.getEntity().getContent(), StandardCharsets.UTF_8);
     }
-
 
     @Override
     public ClientResponse get(String url) throws IOException {

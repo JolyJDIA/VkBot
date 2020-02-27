@@ -6,14 +6,11 @@ import org.jetbrains.annotations.NotNull;
 public abstract class RoflanRunnable implements Runnable {
     private Task task;
 
-    public final void removeTask() {
-        Bot.getScheduler().removeTask(task);
-    }
     public final void cancel() {
         task.cancel();
     }
     public final Task runTask() {
-        return setupTask(Bot.getScheduler().runTask(this));
+        return setupTask(Bot.getScheduler().runSyncTask(this));
     }
 
     public final void runAsyncTask() {

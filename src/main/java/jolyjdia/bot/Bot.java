@@ -16,11 +16,12 @@ import jolyjdia.bot.smile.SmileLoad;
 import jolyjdia.bot.translator.YandexTraslate;
 import jolyjdia.bot.utils.UtilsModule;
 import jolyjdia.vk.api.actions.Groups;
+import jolyjdia.vk.api.callback.longpoll.CallbackApiLongPoll;
 import jolyjdia.vk.api.client.VkApiClient;
 import jolyjdia.vk.api.client.actors.GroupActor;
 import jolyjdia.vk.api.exceptions.ApiException;
 import jolyjdia.vk.api.exceptions.ClientException;
-import jolyjdia.vk.api.httpclient.AsyncHttpTransportClient;
+import jolyjdia.vk.api.httpclient.SyncHttpTransportClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 public final class Bot {
-    private static final VkApiClient vkApiClient = new VkApiClient(new AsyncHttpTransportClient());
+    private static final VkApiClient vkApiClient = new VkApiClient(new SyncHttpTransportClient());
     private static final BotScheduler scheduler = new BotScheduler();
     private static final BotManager manager = new BotManager();
     private static final Properties properties = new Properties();
@@ -39,6 +40,7 @@ public final class Bot {
     private static final int groupId;
     private static final String accessToken;
     private static final GroupActor groupActor;
+    private static final CallbackApiLongPoll longPoll;
     //static UserActor bolvan = new UserActor(150250636, "3ddf24d5927e346124c52ae9e80e41c94a6d0949184b1d343ab1d2f0662a3878041fa4190efe9368606b8");
 
     static {
@@ -52,7 +54,7 @@ public final class Bot {
         groupId = Integer.parseInt(properties.getProperty("groupId"));
         accessToken = properties.getProperty("accessToken");
         groupActor = new GroupActor(groupId, accessToken);
-
+        longPoll = new CallbackApiLongPollHandler(vkApiClient, groupActor);
         PermissionManager.newInstance();
         userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
                 MySqlBackend.of(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
@@ -127,5 +129,9 @@ public final class Bot {
 
     public static VkApiClient getVkApiClient() {
         return vkApiClient;
+    }
+
+    public static CallbackApiLongPoll getLongPoll() {
+        return longPoll;
     }
 }
