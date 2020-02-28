@@ -1,6 +1,7 @@
 package jolyjdia.api.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import jolyjdia.vk.api.queries.EnumParam;
 import org.jetbrains.annotations.NonNls;
@@ -11,7 +12,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 public final class StringBind {
-    public static final Gson GSON = new Gson();
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private StringBind() {}
 
     public static @NotNull String toString(int start, @NotNull String[] a) {

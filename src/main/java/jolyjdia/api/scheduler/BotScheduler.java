@@ -84,6 +84,10 @@ public class BotScheduler {
         taskQueue.clear();
     }
 
+    public final void removeTask(@NotNull Task task) {
+        taskQueue.remove(task);
+    }
+
     @NotNull
     private Task sync(Runnable runnable, long delay, long period) {
         TaskSync task = new TaskSync(runnable, period, nextId());

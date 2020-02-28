@@ -23,10 +23,13 @@ public class TaskQueue {
                 break;
             }
             queue[k] = c;
+            c.setHeapIndex(k);
             k = child;
         }
         queue[k] = task;
+        task.setHeapIndex(k);
     }
+
     private void siftUp(int k, Task key) {
         while (k > 0) {
             int parent = (k - 1) >>> 1;
@@ -35,9 +38,11 @@ public class TaskQueue {
                 break;
             }
             queue[k] = e;
+            e.setHeapIndex(k);
             k = parent;
         }
         queue[k] = key;
+        key.setHeapIndex(k);
     }
 
     public final int size() {
@@ -66,8 +71,12 @@ public class TaskQueue {
                 grow();
             }
             ++size;
-            queue[i] = task;
-            siftUp(i, task);
+            if (i == 0) {
+                queue[0] = task;
+                task.setHeapIndex(0);
+            } else {
+                siftUp(i, task);
+            }
         } finally {
             reentrantLock.unlock();
         }
@@ -96,12 +105,28 @@ public class TaskQueue {
         }
     }
 
-    public final void quickRemove(int i) {
+    public final void remove(int i) {
         reentrantLock.lock();
         try {
-            assert i <= size;
-            queue[i] = queue[size];
-            queue[size--] = null;
+            if (i <= size) {
+                queue[i].setHeapIndex(-1);
+                queue[i] = queue[size];
+                queue[size--] = null;
+            }
+        } finally {
+            reentrantLock.unlock();
+        }
+    }
+
+    public final void remove(Task task) {
+        reentrantLock.lock();
+        try {
+            int i = task.getHeapIndex();
+            if (i >= 0 && i < size && queue[i] == task) {
+                queue[i].setHeapIndex(-1);
+                queue[i] = queue[size];
+                queue[size--] = null;
+            }
         } finally {
             reentrantLock.unlock();
         }
@@ -124,7 +149,8 @@ public class TaskQueue {
     public final void clear() {
         reentrantLock.lock();
         try {
-            for (int i = 0; i <= size; ++i) {
+            for (int i = 0; i < size; ++i) {
+                queue[i].setHeapIndex(-1);
                 queue[i] = null;
             }
             size = 0;

@@ -8,6 +8,7 @@ public abstract class Task implements Runnable, Comparable<Task> {
     private long nextRun;
     private final Runnable runnable;
     private final int uid;
+    private int heapIndex;
 
     private Task(Runnable runnable, int id) {
         this.runnable = runnable;
@@ -55,6 +56,13 @@ public abstract class Task implements Runnable, Comparable<Task> {
         return uid;
     }
 
+    public int getHeapIndex() {
+        return heapIndex;
+    }
+
+    public void setHeapIndex(int heapIndex) {
+        this.heapIndex = heapIndex;
+    }
 
     @Override
     public final int hashCode() {
