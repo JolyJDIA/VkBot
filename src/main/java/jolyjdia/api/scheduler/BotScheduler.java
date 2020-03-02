@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BotScheduler {
-    private final AtomicInteger ids = new AtomicInteger(1);
+    private final AtomicInteger ids = new AtomicInteger();
     private final RoflanBlockingQueue taskQueue = new RoflanBlockingQueue();
     private final ExecutorService executor = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
