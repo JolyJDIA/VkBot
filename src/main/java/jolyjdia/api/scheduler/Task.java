@@ -74,8 +74,9 @@ public abstract class Task implements Runnable, Comparable<Task> {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         //не юзал компаратор, ибо он вернет 0, когда o == this
-        return nextRun == task.nextRun && uid == task.uid;
+        return uid == task.uid && nextRun == task.nextRun;
     }
+
     @Override
     public final int compareTo(@NotNull Task o) {
         if (o == this) {

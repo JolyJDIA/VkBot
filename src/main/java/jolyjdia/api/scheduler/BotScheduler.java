@@ -28,8 +28,7 @@ public class BotScheduler {
             return;
         }
         Task task = taskQueue.peek();
-        long now = System.currentTimeMillis();
-        if (now >= task.getNextRun()) {
+        if (counter >= task.getNextRun()) {
             if (task.isAsync()) {
                 executor.execute(task);
             } else {
@@ -37,9 +36,10 @@ public class BotScheduler {
             }
             if(task.isCancelled()) {
                 taskQueue.remove();
+                System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted ("+taskQueue.size()+')');
                 return;
             }
-            taskQueue.setNexRun(now+task.getPeriod());
+            taskQueue.setNexRun(counter+task.getPeriod());
         }
         ++counter;
     }
