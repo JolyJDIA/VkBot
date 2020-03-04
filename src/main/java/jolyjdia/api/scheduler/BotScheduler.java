@@ -16,37 +16,32 @@ public class BotScheduler {
     private final RoflanBlockingQueue taskQueue = new RoflanBlockingQueue();
     private final ExecutorService executor = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
-                    .setNameFormat("VkScheduler Thread %d")
+                    .setNameFormat("BotScheduler Thread %d")
                     .build()
     );
     private int counter;
     private final TimingsHandler handler = new TimingsHandler();
 
     public final void mainThreadHeartbeat() {
-        try {
-            handler.tick();
-            if(taskQueue.isEmpty()) {
+        handler.tick();
+        if(taskQueue.isEmpty()) {
+            return;
+        }
+        Task task = taskQueue.peek();
+        if (counter >= task.getNextRun()) {
+            if (task.isAsync()) {
+                executor.execute(task);
+            } else {
+                task.run();
+            }
+            if(task.isCancelled()) {
+                taskQueue.remove();
+                System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted ("+taskQueue.size()+')');
                 return;
             }
-            Task task = taskQueue.peek();
-            if (counter >= task.getNextRun()) {
-                if (task.isAsync()) {
-                    executor.execute(task);
-                } else {
-                    task.run();
-                }
-                if(task.isCancelled()) {
-                    taskQueue.remove();
-                    System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted ("+taskQueue.size()+')');
-                    return;
-                }
-                taskQueue.setNexRun(counter+task.getPeriod());
-            }
-            ++counter;
-        } finally {
-            counter = 0;
-            taskQueue.clear();
+            taskQueue.setNexRun(counter+task.getPeriod());
         }
+        ++counter;
     }
 
     public <T> Future<T> submitAsync(Callable<T> callable) {
@@ -118,7 +113,7 @@ public class BotScheduler {
         return counter;
     }
 
-    public TimingsHandler getTimingsHandler() {
+    public final TimingsHandler getTimingsHandler() {
         return handler;
     }
 }
