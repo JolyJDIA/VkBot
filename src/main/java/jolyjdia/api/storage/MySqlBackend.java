@@ -117,6 +117,22 @@ public final class MySqlBackend implements UserBackend {
                 ex.printStackTrace();
             }
             return loadUserInCache(new User(peerId, userId));
+            /*try {
+                return Bot.getScheduler().submitAsync(() -> {
+                    try (PreparedStatement ps = connection.prepareStatement(SELECT)) {
+                        ps.setInt(1, peerId);
+                        ps.setInt(2, userId);
+                        try (ResultSet rs = ps.executeQuery()) {
+                            return loadUserInCache(rs.next() ? new User(peerId, userId, rs.getString(1)) : new User(peerId, userId));
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    return loadUserInCache(new User(peerId, userId));
+                }).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }*/
         });
     }
     @Override
@@ -186,11 +202,11 @@ public final class MySqlBackend implements UserBackend {
                     }).build(), peerId);
         }
     }
-    public static class CacheMap extends WeakHashMap<Integer, TemporaryCache> {
+    /**public static class CacheMap extends WeakHashMap<Integer, TemporaryCache> {
         @Override
         public final boolean remove(Object key, Object value) {
             get(key).getUsers().stop();
             return super.remove(key, value);
         }
-    }
+    }*/
 }

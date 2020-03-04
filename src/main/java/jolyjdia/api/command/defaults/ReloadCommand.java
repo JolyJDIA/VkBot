@@ -25,7 +25,7 @@ public class ReloadCommand extends Command {
             } else {
                 Bot.getUserBackend().saveAll();
                 Bot.getModuleLoader().reloadModule();
-                sender.getChat().sendMessage("Перезагрузка завершена\nМой планировщик: Привет из Thread-2");
+                sender.getChat().sendMessage("Перезагрузка завершена");
             }
         }
     }

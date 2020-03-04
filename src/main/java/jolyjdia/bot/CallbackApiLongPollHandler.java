@@ -38,7 +38,6 @@ public class CallbackApiLongPollHandler extends CallbackApiLongPoll {
 
     @Override
     public final void messageNew(int groupId, @NotNull Message msg) {
-        System.out.println(msg);
         if(msg.getPeerId() == msg.getFromId() || msg.getFromId() < 0) {
             return;
         }
