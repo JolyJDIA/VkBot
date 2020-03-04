@@ -77,9 +77,8 @@ public class UtilsCommand extends Command {
                     return;
                 }
                 StringBuilder builder = new StringBuilder();
-                String title = StringBind.toString(args);
                 try {
-                    Objects.requireNonNull(Bot.getVkApiClient().videos().search(VkUtils.ZAVR, title)
+                    Objects.requireNonNull(Bot.getVkApiClient().videos().search(VkUtils.ZAVR, StringBind.toString(args))
                             .execute()).getItems()
                             .forEach(v -> builder.append("video").append(v.getOwnerId()).append('_').append(v.getId()).append(','));
                     builder.substring(0, builder.length() - 1);

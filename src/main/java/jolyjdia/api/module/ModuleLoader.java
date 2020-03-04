@@ -16,7 +16,7 @@ public class ModuleLoader {
             e.onLoad();
         });
     }
-    public void enableModule() {
+    public final void enableModule() {
         modules.forEach(Module::onLoad);
     }
     public final void disableModule() {
