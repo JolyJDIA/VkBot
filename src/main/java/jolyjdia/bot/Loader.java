@@ -49,7 +49,7 @@ public final class Loader {
                     e.printStackTrace();
                 }
             }
-            Bot.getScheduler().mainLoop();
+            Bot.getScheduler().mainThreadHeartbeat();
             try {
                 Thread.sleep(50L);
             } catch (InterruptedException e) {

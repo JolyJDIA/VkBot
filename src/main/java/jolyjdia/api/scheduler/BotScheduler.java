@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BotScheduler {
-    private final AtomicInteger ids = new AtomicInteger();
+    private static final AtomicInteger ids = new AtomicInteger();
     private final RoflanBlockingQueue taskQueue = new RoflanBlockingQueue();
     private final ExecutorService executor = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
@@ -22,33 +22,39 @@ public class BotScheduler {
     private int counter;
     private final TimingsHandler handler = new TimingsHandler();
 
-    public final void mainLoop() {
-        handler.tick();
-        if(taskQueue.isEmpty()) {
-            return;
-        }
-        Task task = taskQueue.peek();
-        if (counter >= task.getNextRun()) {
-            if (task.isAsync()) {
-                executor.execute(task);
-            } else {
-                task.run();
-            }
-            if(task.isCancelled()) {
-                taskQueue.remove();
-                System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted ("+taskQueue.size()+')');
+    public final void mainThreadHeartbeat() {
+        try {
+            handler.tick();
+            if(taskQueue.isEmpty()) {
                 return;
             }
-            taskQueue.setNexRun(counter+task.getPeriod());
+            Task task = taskQueue.peek();
+            if (counter >= task.getNextRun()) {
+                if (task.isAsync()) {
+                    executor.execute(task);
+                } else {
+                    task.run();
+                }
+                if(task.isCancelled()) {
+                    taskQueue.remove();
+                    System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted ("+taskQueue.size()+')');
+                    return;
+                }
+                taskQueue.setNexRun(counter+task.getPeriod());
+            }
+            ++counter;
+        } finally {
+            counter = 0;
+            taskQueue.clear();
         }
-        ++counter;
     }
 
     public <T> Future<T> submitAsync(Callable<T> callable) {
         return executor.submit(callable);
     }
 
-    public Task runSyncTask(Runnable runnable) {
+    @NotNull
+    public final Task runSyncTask(Runnable runnable) {
         return this.sync(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
     }
 
@@ -90,13 +96,13 @@ public class BotScheduler {
 
     @NotNull
     private Task sync(Runnable runnable, long delay, long period) {
-        TaskSync task = new TaskSync(runnable, period, nextId());
+        TaskSync task = new TaskSync(runnable, period, ids.getAndIncrement());//incrementGetAnd
         return addTask(task, delay);
     }
 
     @NotNull
     private Task async(Runnable runnable, long delay, long period) {
-        TaskAsync task = new TaskAsync(runnable, period, nextId());
+        TaskAsync task = new TaskAsync(runnable, period, ids.getAndIncrement());
         return addTask(task, delay);
     }
 
@@ -106,10 +112,6 @@ public class BotScheduler {
         task.setNextRun(counter + delay);
         taskQueue.add(task);
         return task;
-    }
-
-    private int nextId() {
-        return ids.incrementAndGet();
     }
 
     public int getCounter() {
