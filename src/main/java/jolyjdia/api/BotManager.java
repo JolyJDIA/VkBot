@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -101,27 +100,11 @@ public final class BotManager {
             }
             consumer.accept(event);
         }
+
         @Override
         public final int compareTo(@NotNull EventPriority handler) {
             return Integer.compare(priority.getSlot(), handler.getSlot());
         }
-        @Override
-        public final int hashCode() {
-            return priority.getSlot();
-        }
-
-        @Override
-        public final boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Handler handler = (Handler) o;
-            return ignoreCancelled == handler.ignoreCancelled &&
-                    Objects.equals(consumer, handler.consumer) &&
-                    priority == handler.priority;
-        }
+        //TODO: hashCode and equals
     }
 }

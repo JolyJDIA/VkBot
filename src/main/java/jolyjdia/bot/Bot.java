@@ -8,6 +8,7 @@ import jolyjdia.api.scheduler.BotScheduler;
 import jolyjdia.api.storage.JsonBackend;
 import jolyjdia.api.storage.MySqlBackend;
 import jolyjdia.api.storage.UserBackend;
+import jolyjdia.bot.activity.ActivityLoad;
 import jolyjdia.bot.calculator.CalculatorManager;
 import jolyjdia.bot.geo.GeoLoad;
 import jolyjdia.bot.puzzle.Puzzle;
@@ -83,7 +84,7 @@ public final class Bot {
         moduleLoader.registerModule(new UtilsModule());
         moduleLoader.registerModule(new SmileLoad());
         moduleLoader.registerModule(new CalculatorManager());
-       // moduleLoader.registerModule(new ActivityLoad());
+        moduleLoader.registerModule(new ActivityLoad());
     }
     private static void loadModule() {
         moduleLoader.enableModule();

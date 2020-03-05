@@ -51,7 +51,8 @@ public class ActivityLoad implements Module, Listener {
     );
     private int index;
     private static final Map<String, String> ACTIVITIES = ImmutableMap.<String, String>builder()
-          //  .put("idea64.exe", "\uD83D\uDCBBCoding in IntelliJ IDEA(среда разработки)")
+            .put("idea64.exe", "\uD83C\uDF20Coding in IntelliJ IDEA")
+            .put("studio64.exe", "♻Android Studio Coding")
             .put("javaw.exe", "Играет в \uD83C\uDF0DMinecraft▦")
             .put("Discord.exe", "\uD83D\uDE08Онлайн в Дискорде")
             .put("Telegram.exe", "✈Онлайн в Телеграме")
@@ -59,6 +60,7 @@ public class ActivityLoad implements Module, Listener {
 
     @Override
     public final void onLoad() {
+        getActivityProcesses();
         Bot.getBotManager().registerEvent(this);
         Bot.getBotManager().registerCommand(new LikesCommand());
         Bot.getBotManager().registerCommand(new CommentCommand());
@@ -67,7 +69,8 @@ public class ActivityLoad implements Module, Listener {
                 Bot.getVkApiClient().status()
                         .set(VkUtils.ZAVR)
                         .groupId(Bot.getGroupId())
-                        .text(STATS.get(index).call())
+                       // .text(STATS.get(index).call())
+                        .text(getActivityProcesses())
                         .execute();
                 this.index = index == STATS.size()-1 ? 0 : ++index;
                 Bot.getVkApiClient().status()
