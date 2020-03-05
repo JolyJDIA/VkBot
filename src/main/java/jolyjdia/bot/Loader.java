@@ -20,7 +20,7 @@ public final class Loader {
             return;
         }
         int lastTimeStamp = Integer.parseInt(longPollServer.getTs());
-        while (!Thread.currentThread().isInterrupted()) {
+        while (true) {
             try {
                 if(longPollServer == null) {
                     return;

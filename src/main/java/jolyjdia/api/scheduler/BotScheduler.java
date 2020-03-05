@@ -22,37 +22,37 @@ public class BotScheduler {
     private int counter;
     private final TimingsHandler handler = new TimingsHandler();
 
-
+    public BotScheduler() {
+        mainThreadHeartbeat();
+    }
     public final void mainThreadHeartbeat() {
         new Thread(() -> {
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    handler.tick();
-                    if (taskQueue.isEmpty()) {
+            while (true) {
+                System.out.println("dsdasd");
+                handler.tick();
+                if (taskQueue.isEmpty()) {
+                    return;
+                }
+                Task task = taskQueue.peek();
+                if (counter >= task.getNextRun()) {
+                    if (task.isAsync()) {
+                        executor.execute(task);
+                    } else {
+                        task.run();
+                    }
+                    if (task.isCancelled()) {
+                        taskQueue.remove();
+                        System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted (" + taskQueue.size() + ')');
                         return;
                     }
-                    Task task = taskQueue.peek();
-                    if (counter >= task.getNextRun()) {
-                        if (task.isAsync()) {
-                            executor.execute(task);
-                        } else {
-                            task.run();
-                        }
-                        if (task.isCancelled()) {
-                            taskQueue.remove();
-                            System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted (" + taskQueue.size() + ')');
-                            return;
-                        }
-                        taskQueue.setNexRun(counter + task.getPeriod());
-                    }
-                    ++counter;
-                    Thread.sleep(50);
+                    taskQueue.setNexRun(counter + task.getPeriod());
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                taskQueue.clear();
-                counter = 0;
+                ++counter;
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
     }
