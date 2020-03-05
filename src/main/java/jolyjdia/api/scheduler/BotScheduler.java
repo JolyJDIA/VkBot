@@ -23,38 +23,42 @@ public class BotScheduler {
     private final TimingsHandler handler = new TimingsHandler();
 
     public BotScheduler() {
-        mainThreadHeartbeat();
-    }
-    public final void mainThreadHeartbeat() {
         new Thread(() -> {
-            while (true) {
-                System.out.println("dsdasd");
-                handler.tick();
-                if (taskQueue.isEmpty()) {
-                    return;
-                }
-                Task task = taskQueue.peek();
-                if (counter >= task.getNextRun()) {
-                    if (task.isAsync()) {
-                        executor.execute(task);
-                    } else {
-                        task.run();
+            try {
+                while (true) {
+                    mainThreadHeartbeat();
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    if (task.isCancelled()) {
-                        taskQueue.remove();
-                        System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted (" + taskQueue.size() + ')');
-                        return;
-                    }
-                    taskQueue.setNexRun(counter + task.getPeriod());
                 }
-                ++counter;
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            } finally {
+                taskQueue.clear();
+                counter = 0;
             }
         }).start();
+    }
+    public final void mainThreadHeartbeat() {
+        handler.tick();
+        if (taskQueue.isEmpty()) {
+            return;
+        }
+        Task task = taskQueue.peek();
+        if (counter >= task.getNextRun()) {
+            if (task.isAsync()) {
+                executor.execute(task);
+            } else {
+                task.run();
+            }
+            if (task.isCancelled()) {
+                taskQueue.remove();
+                System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted (" + taskQueue.size() + ')');
+                return;
+            }
+            taskQueue.setNexRun(counter + task.getPeriod());
+        }
+        ++counter;
     }
 
     public <T> Future<T> submitAsync(Callable<T> callable) {

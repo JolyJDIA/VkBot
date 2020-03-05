@@ -58,7 +58,6 @@ public final class Bot {
         userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
                 MySqlBackend.of(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
                 new JsonBackend(new File("D:\\IdeaProjects\\VkBot\\src\\main\\resources\\users.json"));
-
         Groups groups = vkApiClient.groups();
         try {
             if (!Objects.requireNonNull(groups.getLongPollSettings(groupActor, groupActor.getGroupId()).execute()).getIsEnabled()) {
