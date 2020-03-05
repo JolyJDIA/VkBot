@@ -90,14 +90,20 @@ public class BotScheduler {
     }
 
     @NotNull
-    private Task sync(Runnable runnable, long delay, long period) {
-        TaskSync task = new TaskSync(runnable, period, ids.getAndIncrement());//incrementGetAnd
+    private Task sync(Runnable command, long delay, long period) {
+        if (command == null) {
+            throw new NullPointerException();
+        }
+        TaskSync task = new TaskSync(command, period, ids.getAndIncrement());//incrementGetAnd
         return addTask(task, delay);
     }
 
     @NotNull
-    private Task async(Runnable runnable, long delay, long period) {
-        TaskAsync task = new TaskAsync(runnable, period, ids.getAndIncrement());
+    private Task async(Runnable command, long delay, long period) {
+        if (command == null) {
+            throw new NullPointerException();
+        }
+        TaskAsync task = new TaskAsync(command, period, ids.getAndIncrement());
         return addTask(task, delay);
     }
 
