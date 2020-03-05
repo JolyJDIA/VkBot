@@ -54,7 +54,6 @@ public final class Bot {
         groupId = Integer.parseInt(properties.getProperty("groupId"));
         accessToken = properties.getProperty("accessToken");
         groupActor = new GroupActor(groupId, accessToken);
-        longPoll = new CallbackApiLongPollHandler(vkApiClient, groupActor);
         PermissionManager.newInstance();
         userBackend = properties.getProperty("mysql").equalsIgnoreCase("true") ?
                 MySqlBackend.of(properties.getProperty("username"), properties.getProperty("password"), properties.getProperty("url")) :
@@ -74,6 +73,7 @@ public final class Bot {
         }
         registerModules();
         loadModule();
+        longPoll = new CallbackApiLongPollHandler(vkApiClient, groupActor);
     }
     private Bot() {}
 

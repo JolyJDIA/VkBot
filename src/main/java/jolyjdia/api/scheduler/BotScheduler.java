@@ -22,26 +22,39 @@ public class BotScheduler {
     private int counter;
     private final TimingsHandler handler = new TimingsHandler();
 
+
     public final void mainThreadHeartbeat() {
-        handler.tick();
-        if(taskQueue.isEmpty()) {
-            return;
-        }
-        Task task = taskQueue.peek();
-        if (counter >= task.getNextRun()) {
-            if (task.isAsync()) {
-                executor.execute(task);
-            } else {
-                task.run();
+        new Thread(() -> {
+            try {
+                while (!Thread.currentThread().isInterrupted()) {
+                    handler.tick();
+                    if (taskQueue.isEmpty()) {
+                        return;
+                    }
+                    Task task = taskQueue.peek();
+                    if (counter >= task.getNextRun()) {
+                        if (task.isAsync()) {
+                            executor.execute(task);
+                        } else {
+                            task.run();
+                        }
+                        if (task.isCancelled()) {
+                            taskQueue.remove();
+                            System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted (" + taskQueue.size() + ')');
+                            return;
+                        }
+                        taskQueue.setNexRun(counter + task.getPeriod());
+                    }
+                    ++counter;
+                    Thread.sleep(50);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                taskQueue.clear();
+                counter = 0;
             }
-            if(task.isCancelled()) {
-                taskQueue.remove();
-                System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted ("+taskQueue.size()+')');
-                return;
-            }
-            taskQueue.setNexRun(counter+task.getPeriod());
-        }
-        ++counter;
+        }).start();
     }
 
     public <T> Future<T> submitAsync(Callable<T> callable) {
@@ -50,7 +63,7 @@ public class BotScheduler {
 
     @NotNull
     public final Task runSyncTask(Runnable runnable) {
-        return this.sync(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
+        return sync(runnable, Task.NO_REPEATING, Task.NO_REPEATING);
     }
 
     public final void runAsyncTask(Runnable runnable) {
@@ -59,22 +72,22 @@ public class BotScheduler {
 
     @NotNull
     public final Task runRepeatingSyncTaskAfter(Runnable runnable, int delay, int period) {
-        return this.sync(runnable, delay, period);
+        return sync(runnable, delay, period);
     }
 
     @NotNull
     public final Task runSyncTaskAfter(Runnable runnable, int delay) {
-        return this.sync(runnable, delay, Task.NO_REPEATING);
+        return sync(runnable, delay, Task.NO_REPEATING);
     }
 
     @NotNull
     public final Task runAsyncTaskAfter(Runnable runnable, int delay) {
-        return this.async(runnable, delay, Task.NO_REPEATING);
+        return async(runnable, delay, Task.NO_REPEATING);
     }
 
     @NotNull
     public final Task runRepeatingAsyncTaskAfter(Runnable runnable, int delay, int period) {
-        return this.async(runnable, delay, period);
+        return async(runnable, delay, period);
     }
 
     public final void cancelTask(@NotNull Task task) {
