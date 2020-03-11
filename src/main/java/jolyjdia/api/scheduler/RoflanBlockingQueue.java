@@ -56,21 +56,21 @@ public class RoflanBlockingQueue  {
         }
     }
 
-    private void needGrow() {
+    private void grow() {
         int oldCapacity = queue.length;
-        if (size >= oldCapacity) {
-            int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
-            if (newCapacity < 0) {//переполнение
-                newCapacity = Integer.MAX_VALUE - 8;
-            }
-            queue = Arrays.copyOf(queue, newCapacity);
+        int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
+        if (newCapacity < 0) {//переполнение
+            newCapacity = Integer.MAX_VALUE - 8;
         }
+        queue = Arrays.copyOf(queue, newCapacity);
     }
 
     public final void add(Task task) {
         lock.lock();
         try {
-            needGrow();
+            if (size >= queue.length) {
+                grow();
+            }
             if (size == 0) {
                 queue[0] = task;
                 task.setHeapIndex(0);
