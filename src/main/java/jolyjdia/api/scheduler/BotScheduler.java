@@ -20,7 +20,7 @@ public class BotScheduler {
                     .build()
     );
     private int counter;
-    private final TimingsHandler handler = new TimingsHandler();
+    private final TimingsHandler timingsHandler = new TimingsHandler();
 
     public BotScheduler() {
         new Thread(() -> {
@@ -40,7 +40,7 @@ public class BotScheduler {
         }).start();
     }
     public final void mainThreadHeartbeat() {
-        handler.tick();
+        timingsHandler.tick();
         if (taskQueue.isEmpty()) {
             return;
         }
@@ -137,6 +137,6 @@ public class BotScheduler {
     }
 
     public final TimingsHandler getTimingsHandler() {
-        return handler;
+        return timingsHandler;
     }
 }

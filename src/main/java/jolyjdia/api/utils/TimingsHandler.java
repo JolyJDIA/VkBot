@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public class TimingsHandler {
     private static final int SAMPLE_INTERVAL = 100;
     public static final double ASPIRATION = 20.0;
-    private final double[] recentTps = {20,20,20};
+    private final double[] recentTps = {20, 20, 20};
     private long tickSection = System.currentTimeMillis();
     private long tickCount = 1;
 

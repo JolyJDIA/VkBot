@@ -9,7 +9,7 @@ public class RoflanBlockingQueue  {
     private static final int INITIAL_CAPACITY = 16;
     private Task[] queue = new Task[INITIAL_CAPACITY];
     private int size;
-    private final ReentrantLock reentrantLock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     private void siftDown(Task task) {
         int k = 0;
@@ -48,53 +48,52 @@ public class RoflanBlockingQueue  {
     }
 
     public final int size() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return size;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
-    private void grow() {
+    private void needGrow() {
         int oldCapacity = queue.length;
-        int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
-        if (newCapacity < 0) {
-            newCapacity = Integer.MAX_VALUE;
+        if (size >= oldCapacity) {
+            int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
+            if (newCapacity < 0) {
+                newCapacity = Integer.MAX_VALUE;
+            }
+            queue = Arrays.copyOf(queue, newCapacity);
         }
-        queue = Arrays.copyOf(queue, newCapacity);
     }
 
     public final void add(Task task) {
-        reentrantLock.lock();
+        lock.lock();
         try {
-            int i = size;
-            if (i >= queue.length) {
-                grow();
-            }
-            ++size;
-            if (i == 0) {
+            needGrow();
+            if (size == 0) {
                 queue[0] = task;
                 task.setHeapIndex(0);
             } else {
-                siftUp(i, task);
+                siftUp(size, task);
             }
+            ++size;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     public final Task peek() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return queue[0];
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     public final void remove() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             --size;
             Task replacement = queue[size];
@@ -103,12 +102,12 @@ public class RoflanBlockingQueue  {
                 siftDown(replacement);
             }
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     public final void remove(int i) {
-        reentrantLock.lock();
+        lock.lock();
         try {
             if (i <= size) {
                 queue[i].setHeapIndex(-1);
@@ -116,12 +115,12 @@ public class RoflanBlockingQueue  {
                 queue[size--] = null;
             }
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     public final void remove(@NotNull Task task) {
-        reentrantLock.lock();
+        lock.lock();
         try {
             int i = task.getHeapIndex();
             if (i >= 0 && i < size && queue[i] == task) {
@@ -130,17 +129,17 @@ public class RoflanBlockingQueue  {
                 queue[size--] = null;
             }
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     public final void setNexRun(long newTime) {
-        reentrantLock.lock();
+        lock.lock();
         try {
             queue[0].setNextRun(newTime);
             siftDown(queue[0]);
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
@@ -149,7 +148,7 @@ public class RoflanBlockingQueue  {
     }
 
     public final void clear() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             for (int i = 0; i < size; ++i) {
                 queue[i].setHeapIndex(-1);
@@ -157,7 +156,7 @@ public class RoflanBlockingQueue  {
             }
             size = 0;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 }

@@ -53,7 +53,7 @@ public class ActivityLoad implements Module, Listener {
     private static final Map<String, String> ACTIVITIES = ImmutableMap.<String, String>builder()
             .put("idea64.exe", "\uD83C\uDF20Coding in IntelliJ IDEA")
             .put("studio64.exe", "♻Android Studio Coding")
-            .put("javaw.exe", "Играет в \uD83C\uDF0DMinecraft▦")
+            .put("javaw.exe", "\uD83C\uDF0DИграет в Minecraft Java Edition")
             .put("Discord.exe", "\uD83D\uDE08Онлайн в Дискорде")
             .put("Telegram.exe", "✈Онлайн в Телеграме")
             .build();
