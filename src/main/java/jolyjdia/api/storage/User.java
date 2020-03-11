@@ -1,19 +1,21 @@
 package jolyjdia.api.storage;
 
+import com.google.gson.annotations.Expose;
 import jolyjdia.api.permission.PermissionGroup;
 import jolyjdia.api.permission.PermissionManager;
 import jolyjdia.bot.Bot;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.Serializable;
+public class User {
+    private final Chat<?> chat;
 
-public class User implements Serializable {
-    private static final long serialVersionUID = 4943570635312868405L;
-    private Chat<?> chat;
-    @NonNls private transient int userId;
-    private transient boolean change;
+    @Expose(serialize = false, deserialize = false)
+    @NonNls private final int userId;
+
+    @Expose(serialize = false, deserialize = false)
+    private boolean change;
+
     private PermissionGroup group;
     private boolean owner;
 
@@ -84,17 +86,5 @@ public class User implements Serializable {
                 "Ранг: " + group.getName() + (owner ? "(OWNER)\n" : '\n') +
                 "Префикс: " + group.getPrefix() + '\n' +
                 "Суффикс: " + (group.getSuffix() == null && isStaff() ? "ЛОДОЧНИК" : group.getSuffix());
-    }
-    private void readObject(@NotNull java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        this.chat = (Chat<?>)stream.readObject();
-        this.userId = stream.readInt();
-        this.group = (PermissionGroup)stream.readObject();
-        this.owner = stream.readBoolean();
-        this.change = stream.readBoolean();
-        stream.close();
-    }
-    private void writeObject(@NotNull java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        out.close();
     }
 }
