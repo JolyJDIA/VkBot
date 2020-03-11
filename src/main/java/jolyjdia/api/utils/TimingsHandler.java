@@ -33,20 +33,24 @@ public class TimingsHandler {
     public static @NotNull String format(double tps) {
         return ((tps > ASPIRATION) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
     }
+    @NotNull
     @NonNls
-    public String memoryUsed() {
+    public static String memoryUsed() {
         long totalMemory = Runtime.getRuntime().totalMemory();
         long freeMemory = Runtime.getRuntime().freeMemory();
         return "\nTotal memory: " + humanReadableByteCount(totalMemory) +
                "\nUsed memory: " + humanReadableByteCount((totalMemory - freeMemory)) +
                "\nFree memory: " + humanReadableByteCount(freeMemory);
     }
-    private static String humanReadableByteCount(long bytes) {
-        if (bytes < 1000) {
-            return bytes + " B";
-        }
-        int exp = (int) (Math.log(bytes) / Math.log(1000));
-        String pre = String.valueOf("kMGTPE".charAt(exp - 1));
-        return String.format("%.1f %sB", bytes / Math.pow(1000, exp), pre);
+    public static String humanReadableByteCount(long bytes) {
+        String s = bytes < 0 ? "-" : "";
+        long b = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
+        return b < 1000L ? bytes + " B"
+                : b < 999_950L ? String.format("%s%.1f kB", s, b / 1e3)
+                : (b /= 1000) < 999_950L ? String.format("%s%.1f MB", s, b / 1e3)
+                : (b /= 1000) < 999_950L ? String.format("%s%.1f GB", s, b / 1e3)
+                : (b /= 1000) < 999_950L ? String.format("%s%.1f TB", s, b / 1e3)
+                : (b /= 1000) < 999_950L ? String.format("%s%.1f PB", s, b / 1e3)
+                : String.format("%s%.1f EB", s, b / 1e6);
     }
 }

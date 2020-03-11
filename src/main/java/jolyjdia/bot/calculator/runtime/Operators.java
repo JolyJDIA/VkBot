@@ -1,5 +1,6 @@
 package jolyjdia.bot.calculator.runtime;
 
+import com.google.common.math.BigIntegerMath;
 import org.jetbrains.annotations.NotNull;
 
 public final class Operators {
@@ -51,7 +52,7 @@ public final class Operators {
     }
 
     public static double inv(@NotNull RValue x) {
-        return ~(long) x.getValue();
+        return ~Math.round(x.getValue());
     }
 
     public static double lth(@NotNull RValue lhs, @NotNull RValue rhs) {
@@ -70,13 +71,12 @@ public final class Operators {
         return lhs.getValue() >= rhs.getValue() ? 1.0 : 0.0;
     }
 
-
     public static double equ(@NotNull RValue lhs, @NotNull RValue rhs) {
-        return lhs.getValue() == rhs.getValue() ? 1.0 : 0.0;
+        return Double.doubleToLongBits(lhs.getValue()) == Double.doubleToLongBits(rhs.getValue()) ? 1.0 : 0.0;
     }
 
     public static double neq(@NotNull RValue lhs, @NotNull RValue rhs) {
-        return lhs.getValue() == rhs.getValue() ? 0.0 : 1.0;
+        return Double.doubleToLongBits(lhs.getValue()) == Double.doubleToLongBits(rhs.getValue()) ? 0.0 : 1.0;
     }
 
     public static double near(@NotNull RValue lhs, @NotNull RValue rhs) {
@@ -139,38 +139,19 @@ public final class Operators {
         return oldValue;
     }
 
-    private static final double[] FACTORIALS = new double[171];
-    static {
-        double accum = 1;
-        FACTORIALS[0] = 1;
-        for (int i = 1; i < 171; ++i) {
-            FACTORIALS[i] = accum *= i;
-        }
-    }
-
-    public static double fac(@NotNull RValue x) {
-        final int n = (int) x.getValue();
-
-        if (n < 0) {
-            return 0;
-        }
-
-        if (n >= FACTORIALS.length) {
-            return Double.POSITIVE_INFINITY;
-        }
-
-        return FACTORIALS[n];
+    public static int fac(@NotNull RValue x) {//double
+        return BigIntegerMath.factorial((int)x.getValue()).intValue();
     }
     private static boolean almostEqual2sComplement(double a, double b) {
         long aLong = Double.doubleToRawLongBits(a);
-
-        if (aLong < 0) aLong = 0x8000000000000000L - aLong;
-
+        if (aLong < 0) {
+            aLong = 0x8000000000000000L - aLong;
+        }
         long bLong = Double.doubleToRawLongBits(b);
-        if (bLong < 0) bLong = 0x8000000000000000L - bLong;
-
-        final long longDiff = Math.abs(aLong - bLong);
-        return longDiff <= 450359963;
+        if (bLong < 0) {
+            bLong = 0x8000000000000000L - bLong;
+        }
+        return Math.abs(aLong - bLong) <= 450359963;
     }
 
 }

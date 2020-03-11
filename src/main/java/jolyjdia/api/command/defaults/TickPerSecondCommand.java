@@ -29,7 +29,7 @@ public class TickPerSecondCommand extends Command {
             sender.getChat().sendMessage(
                     builder.substring(0, builder.length()-2) +
                     "\n-------------------------------------"
-                    +Bot.getScheduler().getTimingsHandler().memoryUsed()
+                    + TimingsHandler.memoryUsed()
             );
         }
     }
