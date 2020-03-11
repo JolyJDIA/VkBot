@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class RoflanBlockingQueue  {
+public class RoflanBlockingQueue {
     private Task[] queue = new Task[16];
     private int size;
     private final ReentrantLock lock = new ReentrantLock();
@@ -31,7 +31,8 @@ public class RoflanBlockingQueue  {
         task.setHeapIndex(k);
     }
 
-    private void siftUp(int k, Task key) {
+    private void siftUp(Task key) {
+        int k = size;
         while (k > 0) {
             int parent = (k - 1) >>> 1;
             Task e = queue[parent];
@@ -74,7 +75,7 @@ public class RoflanBlockingQueue  {
                 queue[0] = task;
                 task.setHeapIndex(0);
             } else {
-                siftUp(size, task);
+                siftUp(task);
             }
             ++size;
         } finally {
@@ -90,7 +91,7 @@ public class RoflanBlockingQueue  {
             lock.unlock();
         }
     }
-
+    //TODO: возможно и тут
     public final void remove() {
         lock.lock();
         try {
@@ -104,11 +105,11 @@ public class RoflanBlockingQueue  {
             lock.unlock();
         }
     }
-
+    //TODO: вот тут я обосрався завтра пофиксить!
     public final void remove(int i) {
         lock.lock();
         try {
-            if (i <= size) {
+            if (i < size) {
                 queue[i].setHeapIndex(-1);
                 queue[i] = queue[size];
                 queue[size--] = null;
@@ -117,16 +118,16 @@ public class RoflanBlockingQueue  {
             lock.unlock();
         }
     }
-
+    //TODO: вот тут я обосрався завтра пофиксить!
     public final void remove(@NotNull Task task) {
         lock.lock();
         try {
             int i = task.getHeapIndex();
-            if (i >= 0 && i < size && queue[i] == task) {
+            if (i > 0 && i < size && queue[i] == task) {
                 queue[i].setHeapIndex(-1);
                 queue[i] = queue[size];
-                queue[size--] = null;
             }
+            --size;
         } finally {
             lock.unlock();
         }

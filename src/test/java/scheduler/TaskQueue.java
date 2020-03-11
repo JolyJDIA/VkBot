@@ -1,13 +1,14 @@
 package scheduler;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TaskQueue {
-    private static final int INITIAL_CAPACITY = 16;
-    private Task[] queue = new Task[INITIAL_CAPACITY];
+    private Task[] queue = new Task[16];
     private int size;
-    private final ReentrantLock reentrantLock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     private void siftDown(Task task) {
         int k = 0;
@@ -30,7 +31,8 @@ public class TaskQueue {
         task.setHeapIndex(k);
     }
 
-    private void siftUp(int k, Task key) {
+    private void siftUp(Task key) {
+        int k = size;
         while (k > 0) {
             int parent = (k - 1) >>> 1;
             Task e = queue[parent];
@@ -46,53 +48,52 @@ public class TaskQueue {
     }
 
     public final int size() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return size;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     private void grow() {
         int oldCapacity = queue.length;
-        int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
-        if (newCapacity < 0) {
-            newCapacity = Integer.MAX_VALUE;
+        int newCapacity = oldCapacity + (oldCapacity >> 1); //grow 50%
+        if (newCapacity < 0) {//переполнение
+            newCapacity = Integer.MAX_VALUE - 8;
         }
         queue = Arrays.copyOf(queue, newCapacity);
     }
 
     public final void add(Task task) {
-        reentrantLock.lock();
+        lock.lock();
         try {
-            int i = size;
-            if (i >= queue.length) {
+            if (size >= queue.length) {
                 grow();
             }
-            ++size;
-            if (i == 0) {
+            if (size == 0) {
                 queue[0] = task;
                 task.setHeapIndex(0);
             } else {
-                siftUp(i, task);
+                siftUp(task);
             }
+            ++size;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     public final Task peek() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             return queue[0];
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     public final void remove() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             --size;
             Task replacement = queue[size];
@@ -101,44 +102,46 @@ public class TaskQueue {
                 siftDown(replacement);
             }
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
     public final void remove(int i) {
-        reentrantLock.lock();
+        lock.lock();
         try {
-            if (i <= size) {
+            if (i < size) {
                 queue[i].setHeapIndex(-1);
                 queue[i] = queue[size];
                 queue[size--] = null;
             }
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
-    public final void remove(Task task) {
-        reentrantLock.lock();
+    public final void remove(@NotNull Task task) {
+        lock.lock();
         try {
             int i = task.getHeapIndex();
-            if (i >= 0 && i < size && queue[i] == task) {
-                queue[i].setHeapIndex(-1);
+            if (i > 0 && i < size && queue[i] == task) {
+                //queue[i].setHeapIndex(-1);
                 queue[i] = queue[size];
-                queue[size--] = null;
+                queue[size-1] = null;
             }
+            --size;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
+        System.out.println(Arrays.toString(queue));
     }
 
     public final void setNexRun(long newTime) {
-        reentrantLock.lock();
+        lock.lock();
         try {
             queue[0].setNextRun(newTime);
             siftDown(queue[0]);
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
@@ -147,7 +150,7 @@ public class TaskQueue {
     }
 
     public final void clear() {
-        reentrantLock.lock();
+        lock.lock();
         try {
             for (int i = 0; i < size; ++i) {
                 queue[i].setHeapIndex(-1);
@@ -155,7 +158,7 @@ public class TaskQueue {
             }
             size = 0;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 }
