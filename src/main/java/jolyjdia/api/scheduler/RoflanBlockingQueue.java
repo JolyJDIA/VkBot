@@ -60,8 +60,8 @@ public class RoflanBlockingQueue  {
         int oldCapacity = queue.length;
         if (size >= oldCapacity) {
             int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
-            if (newCapacity < 0) {
-                newCapacity = Integer.MAX_VALUE;
+            if (newCapacity < 0) {//переполнение
+                newCapacity = Integer.MAX_VALUE - 8;
             }
             queue = Arrays.copyOf(queue, newCapacity);
         }
