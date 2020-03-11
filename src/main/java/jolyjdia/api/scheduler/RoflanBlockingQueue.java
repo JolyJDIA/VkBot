@@ -6,8 +6,7 @@ import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RoflanBlockingQueue  {
-    private static final int INITIAL_CAPACITY = 16;
-    private Task[] queue = new Task[INITIAL_CAPACITY];
+    private Task[] queue = new Task[16];
     private int size;
     private final ReentrantLock lock = new ReentrantLock();
 
@@ -58,7 +57,7 @@ public class RoflanBlockingQueue  {
 
     private void grow() {
         int oldCapacity = queue.length;
-        int newCapacity = oldCapacity + (oldCapacity >> 1); // grow 50%
+        int newCapacity = oldCapacity + (oldCapacity >> 1); //grow 50%
         if (newCapacity < 0) {//переполнение
             newCapacity = Integer.MAX_VALUE - 8;
         }
