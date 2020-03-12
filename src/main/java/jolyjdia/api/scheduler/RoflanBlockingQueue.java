@@ -131,7 +131,9 @@ public class RoflanBlockingQueue {
         lock.lock();
         try {
             queue[0].setNextRun(newTime);
-            siftDown(0, queue[0]);
+            if(size > 1) {
+                siftDown(0, queue[0]);
+            }
         } finally {
             lock.unlock();
         }
