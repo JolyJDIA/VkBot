@@ -44,7 +44,7 @@ public class RoflanBlockingQueue {
         queue[k] = key;
         key.setHeapIndex(k);
     }
-
+    //На всякий случай блокирую
     public final int size() {
         lock.lock();
         try {
@@ -126,7 +126,7 @@ public class RoflanBlockingQueue {
             lock.unlock();
         }
     }
-    //чекнуть
+
     public final void setNexRun(long newTime) {
         lock.lock();
         try {
