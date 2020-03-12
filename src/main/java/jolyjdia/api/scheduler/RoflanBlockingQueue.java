@@ -126,7 +126,7 @@ public class RoflanBlockingQueue {
             lock.unlock();
         }
     }
-
+    //чекнуть
     public final void setNexRun(long newTime) {
         lock.lock();
         try {

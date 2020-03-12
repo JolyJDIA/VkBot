@@ -52,7 +52,7 @@ public class BotScheduler {
                 task.run();
             }
             if (task.isCancelled()) {
-                taskQueue.remove();
+                taskQueue.finishPoll();
                 System.out.println((task.isAsync() ? "Async" : "Sync") + "Scheduler: task deleted (" + taskQueue.size() + ')');
                 return;
             }
