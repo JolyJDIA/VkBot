@@ -93,7 +93,7 @@ public final class BotManager {
 
         @Override
         public final void accept(@NotNull Event event) {
-            if (Cancellable.class.isAssignableFrom(event.getClass())) {
+            if (Cancellable.class.isAssignableFrom(event.getClass())) {//TODO:
                 if (((Cancellable) event).isCancelled() && ignoreCancelled) {
                     return;
                 }
@@ -105,6 +105,19 @@ public final class BotManager {
         public final int compareTo(@NotNull EventPriority handler) {
             return Integer.compare(priority.getSlot(), handler.getSlot());
         }
-        //TODO: hashCode and equals
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof Handler && compareTo(((Handler) o).priority) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 1;
+            result = 31 * result + (consumer == null ? 0 : consumer.hashCode());
+            result = 31 * result + (priority == null ? 0 : priority.getSlot());
+            result = 31 * result + (ignoreCancelled ? 1 : 0);
+            return result;
+        }
     }
 }

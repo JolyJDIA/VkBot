@@ -10,6 +10,7 @@ public class RoflanBlockingQueue {
     private int size;
     private final ReentrantLock lock = new ReentrantLock();
 
+
     private void siftUp(int k, Task key) {
         while (k > 0) {
             int parent = (k - 1) >>> 1;
@@ -45,7 +46,7 @@ public class RoflanBlockingQueue {
         key.setHeapIndex(k);
     }
     //На всякий случай блокирую
-    public final int size() {
+    public int size() {
         lock.lock();
         try {
             return size;
@@ -63,7 +64,7 @@ public class RoflanBlockingQueue {
         queue = Arrays.copyOf(queue, newCapacity);
     }
 
-    public final void add(Task task) {
+    public void add(Task task) {
         lock.lock();
         try {
             if (size >= queue.length) {
@@ -81,7 +82,7 @@ public class RoflanBlockingQueue {
         }
     }
 
-    public final Task peek() {
+    public Task peek() {
         lock.lock();
         try {
             return queue[0];
@@ -90,7 +91,7 @@ public class RoflanBlockingQueue {
         }
     }
 
-    public final void finishPoll() {
+    public void finishPoll() {
         lock.lock();
         try {
             queue[0].setHeapIndex(-1);
@@ -105,7 +106,7 @@ public class RoflanBlockingQueue {
         }
     }
 
-    public final void remove(@NotNull Task task) {
+    public void remove(@NotNull Task task) {
         lock.lock();
         try {
             int i = task.getHeapIndex();
@@ -127,7 +128,7 @@ public class RoflanBlockingQueue {
         }
     }
 
-    public final void setNexRun(long newTime) {
+    public void setNexRun(long newTime) {
         lock.lock();
         try {
             queue[0].setNextRun(newTime);
@@ -139,11 +140,11 @@ public class RoflanBlockingQueue {
         }
     }
 
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return size() == 0;
     }
 
-    public final boolean contains(@NotNull Task x) {
+    public boolean contains(@NotNull Task x) {
         lock.lock();
         try {
             return x.getHeapIndex() != -1;
@@ -152,7 +153,7 @@ public class RoflanBlockingQueue {
         }
     }
 
-    public final void clear() {
+    public void clear() {
         lock.lock();
         try {
             for (int i = 0; i < size; ++i) {
